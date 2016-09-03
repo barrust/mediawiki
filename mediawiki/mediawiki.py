@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
-
+'''
+MediaWiki class module
+'''
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
@@ -64,10 +65,7 @@ class MediaWiki(object):
     @rate_limit.setter
     def rate_limit(self, rate_limit):
         ''' set rate limiting of api usage '''
-        if rate_limit:
-            self._rate_limit = True
-        else:
-            self._rate_limit = False
+        self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         # TODO: add cache to project and clear it here
 
@@ -275,9 +273,9 @@ class MediaWiki(object):
         if 'action' not in params:
             params['action'] = 'query'
 
-        rl = self._rate_limit
+        limit = self._rate_limit
         last_call = self._rate_limit_last_call
-        if rl and last_call and last_call + self._min_wait > datetime.now():
+        if limit and last_call and last_call + self._min_wait > datetime.now():
             # call time to quick for rate limited api requests, wait
             wait_time = (last_call + wait) - datetime.now()
             time.sleep(int(wait_time.total_seconds()))
@@ -285,13 +283,13 @@ class MediaWiki(object):
         if self._session is None:
             reset_session()
 
-        r = self._session.get(self._api_url, params=params,
-                              timeout=self._timeout)
+        req = self._session.get(self._api_url, params=params,
+                                timeout=self._timeout)
 
         if self._rate_limit:
             self._rate_limit_last_call = datetime.now()
 
-        return r.json(encoding='utf-8')
+        return req.json(encoding='utf-8')
     # end _wiki_request
 
     def _get_site_info(self):
@@ -365,10 +363,10 @@ class MediaWikiPage(object):
 
     def __repr__(self):
         encoding = sys.stdout.encoding or 'utf-8'
-        u = u'<WikipediaPage \'{0}\'>'.format(self.title)
+        tmp = u'<WikipediaPage \'{0}\'>'.format(self.title)
         if sys.version_info > (3, 0):
-            return u.encode(encoding).decode(encoding)
-        return u.encode(encoding)
+            return tmp.encode(encoding).decode(encoding)
+        return tmp.encode(encoding)
 
     def __eq__(self, other):
         try:

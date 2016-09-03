@@ -1,3 +1,6 @@
+'''
+mediawiki module initialization
+'''
 from .mediawiki import (MediaWiki)
 from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,

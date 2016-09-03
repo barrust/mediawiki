@@ -20,42 +20,49 @@ class MediaWiki(object):
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
-        self.api_url = url
+        self._version = '0.0.1-prealpha'
+        self._api_url = url
         self._lang = lang
         self._timeout = timeout
-        self.user_agent = ('python-mediawiki/VERSION-{0}'
-                           '/(https://github.com/barrust/mediawiki/)'
-                           '/BOT'.format(MediaWiki.get_version()))
-        self.session = None
+        self._user_agent = ('python-mediawiki/VERSION-{0}'
+                            '/(https://github.com/barrust/mediawiki/)'
+                            '/BOT'.format(self._version))
+        self._session = None
         self._rate_limit = rate_limit
         self._rate_limit_last_call = None
-        self.min_wait = rate_limit_wait
-        self.extensions = None
-        self.api_version = None
-        self.api_version_major_minor = None
-        self.version = MediaWiki.get_version()
+        self._min_wait = rate_limit_wait
+        self._extensions = None
+        self._api_version = None
+        self._api_version_major_minor = None
 
         # call helper functions to get everything set up
         self.reset_session()
         self._get_site_info()
 
-    @classmethod
-    def get_version(cls):
+    # non-settable properties
+    @property
+    def version(self):
         ''' Get current version of the library '''
-        return '0.0.1-prealpha'
-
-    def reset_session(self):
-        ''' Set session information '''
-        headers = {'User-Agent': self.user_agent}
-        self.session = requests.Session()
-        self.session.headers.update(headers)
+        return self._version
 
     @property
+    def api_version(self):
+        ''' get site's api version '''
+        return self._api_version
+
+    @property
+    def extensions(self):
+        ''' get site's installed extensions '''
+        return self._extensions
+
+    # settable properties
+    @property
     def rate_limit(self):
+        ''' get if using rate limiting '''
         return self._rate_limit
 
     @rate_limit.setter
-    def set_rate_limiting(self, rate_limit):
+    def rate_limit(self, rate_limit):
         ''' set rate limiting of api usage '''
         if rate_limit:
             self._rate_limit = True
@@ -66,32 +73,27 @@ class MediaWiki(object):
 
     @property
     def rate_limit_min_wait(self):
-        return self.min_wait
+        ''' get minimum wait for rate limiting '''
+        return self._min_wait
 
     @rate_limit_min_wait.setter
     def rate_limit_min_wait(self, min_wait):
-        self.min_wait = min_wait
+        ''' set minimum wait for rate limiting '''
+        self._min_wait = min_wait
         self._rate_limit_last_call = None
 
     @property
     def timeout(self):
+        ''' get timeout setting; None means no timeout '''
         return self._timeout
 
     @timeout.setter
     def timeout(self, timeout):
-        ''' set request timeout in seconds (or fractions of a second) '''
+        '''
+        set request timeout in seconds (or fractions of a second)
+        None means no timeout
+        '''
         self._timeout = timeout
-
-    def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
-                    lang='en'):
-        ''' set the url to the api '''
-        self.api_url = api_url
-        self._lang = lang
-        try:
-            self._get_site_info()
-        except Exception as e:
-            raise MediaWikiAPIURLError(api_url)
-        # TODO: add cache to project and clear it here
 
     @property
     def language(self):
@@ -109,17 +111,46 @@ class MediaWiki(object):
         if self._lang == lang:
             return
 
-        url = self.api_url
+        url = self._api_url
         tmp = url.replace('/{0}.'.format(self._lang), '/{0}.'.format(lang))
 
-        self.api_url = tmp
+        self._api_url = tmp
         self._lang = lang
         # TODO: add cache to project and clear it here
 
+    @property
+    def user_agent(self):
+        ''' get user_agent '''
+        return self._user_agent
+
+    @user_agent.setter
     def set_user_agent(self, user_agent):
         ''' set a new user agent '''
-        self.user_agent = user_agent
+        self._user_agent = user_agent
         self.reset_session()
+
+    @property
+    def api_url(self):
+        ''' get url to the api '''
+        return self._api_url
+
+    # non-properties
+    def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
+                    lang='en'):
+        ''' set the url to the api '''
+        self._api_url = api_url
+        self._lang = lang
+        try:
+            self._get_site_info()
+        except Exception:
+            raise MediaWikiAPIURLError(api_url)
+        # TODO: add cache to project and clear it here
+
+    def reset_session(self):
+        ''' Set session information '''
+        headers = {'User-Agent': self._user_agent}
+        self._session = requests.Session()
+        self._session.headers.update(headers)
 
     # non-setup functions
     def languages(self):
@@ -134,7 +165,6 @@ class MediaWiki(object):
 
     def random(self, pages=1):
         ''' return a random page title or list of titles '''
-
         if pages is None or pages < 1:
             raise ValueError('Number of pages must be greater than 0')
 
@@ -247,16 +277,16 @@ class MediaWiki(object):
 
         rl = self._rate_limit
         last_call = self._rate_limit_last_call
-        if rl and last_call and last_call + self.min_wait > datetime.now():
+        if rl and last_call and last_call + self._min_wait > datetime.now():
             # call time to quick for rate limited api requests, wait
             wait_time = (last_call + wait) - datetime.now()
             time.sleep(int(wait_time.total_seconds()))
 
-        if self.session is None:
+        if self._session is None:
             reset_session()
 
-        r = self.session.get(self.api_url, params=params,
-                             timeout=self._timeout)
+        r = self._session.get(self._api_url, params=params,
+                              timeout=self._timeout)
 
         if self._rate_limit:
             self._rate_limit_last_call = datetime.now()
@@ -275,16 +305,16 @@ class MediaWiki(object):
         })
 
         gen = response['query']['general']['generator']
-        self.api_version = gen.split(" ")[1].split("-")[0]
+        self._api_version = gen.split(" ")[1].split("-")[0]
 
-        major_minor = self.api_version.split('.')
+        major_minor = self._api_version.split('.')
         for i, item in enumerate(major_minor):
             major_minor[i] = int(item)
-        self.api_version_major_minor = major_minor
+        self._api_version_major_minor = major_minor
 
-        self.extensions = set()
+        self._extensions = set()
         for ext in response['query']['extensions']:
-            self.extensions.add(ext['name'])
+            self._extensions.add(ext['name'])
     # end _get_site_info
 
     @staticmethod
@@ -347,7 +377,7 @@ class MediaWikiPage(object):
                 self.title == other.title and
                 self.url == other.url
             )
-        except AttributeError as ex:
+        except AttributeError:
             return False
 
     def __load(self, redirect=True, preload=False):
@@ -358,7 +388,7 @@ class MediaWikiPage(object):
             'ppprop': 'disambiguation',
             'redirects': '',
         }
-        query_params.update(self.__title_query_param)
+        query_params.update(self.__title_query_param())
 
         request = self.mediawiki._wiki_request(query_params)
 
@@ -402,7 +432,7 @@ class MediaWikiPage(object):
                 'rvparse': '',
                 'rvlimit': 1
             }
-            query_params.update(self.__title_query_param)
+            query_params.update(self.__title_query_param())
             request = self.mediawiki._wiki_request(query_params)
             html = request['query']['pages'][pageid]['revisions'][0]['*']
 
@@ -432,7 +462,7 @@ class MediaWikiPage(object):
         '''
         Based on https://www.mediawiki.org/wiki/API:Query#Continuing_queries
         '''
-        query_params.update(self.__title_query_param)
+        query_params.update(self.__title_query_param())
 
         last_continue = dict()
         prop = query_params.get('prop')
@@ -461,7 +491,6 @@ class MediaWikiPage(object):
             last_continue = request['continue']
     # end _continued_query
 
-    @property
     def __title_query_param(self):
         ''' util function to determine which parameter method to use '''
         if getattr(self, 'title', None) is not None:

@@ -3,7 +3,6 @@
 Global MediaWiki Exceptions
 '''
 from __future__ import unicode_literals
-import sys
 
 
 ODD_ERROR_MESSAGE = ("This shouldn't happen. Please report on "

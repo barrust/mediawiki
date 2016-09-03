@@ -6,5 +6,10 @@ python:
     - "3.4"
     - "3.5"
 
+# install python dependencies including this package in the travis
+# virtualenv
+install:
+  - ./provision/python.sh
+  
 script:
     - pep8 mediawiki/

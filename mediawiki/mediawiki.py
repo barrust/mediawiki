@@ -83,12 +83,14 @@ class MediaWiki(object):
 
         Note: use correct language titles with the updated url
         '''
+        lang = lang.lower()
         if self.lang == lang:
             return
-        tmp_url = self.api_url.replace('/{0}.'.format(self.lang),
-                                       "/{0}.".format(lang.lower()))
 
-        self.api_url = tmp_url
+        url = self.api_url
+        tmp = url.replace('/{0}.'.format(self.lang), '/{0}.'.format(lang))
+
+        self.api_url = tmp
         self.lang = lang
         # TODO: add cache to project and clear it here
 
@@ -104,13 +106,8 @@ class MediaWiki(object):
         language code). Result is a <prefix>: <local_lang_name> pairs
         dictionary.
         '''
-        response = self._wiki_request({
-                'meta': 'siteinfo',
-                'siprop': 'languages'
-            })
-
-        return {lang['code']: lang['*'] for
-                lang in response['query']['languages']}
+        res = self._wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
+        return {lang['code']: lang['*'] for lang in res['query']['languages']}
     # end languages
 
     def random(self, pages=1):
@@ -119,11 +116,7 @@ class MediaWiki(object):
         if pages is None or pages < 1:
             raise ValueError('Number of pages must be greater than 0')
 
-        query_params = {
-            'list': 'random',
-            'rnnamespace': 0,
-            'rnlimit': pages,
-        }
+        query_params = {'list': 'random', 'rnnamespace': 0, 'rnlimit': pages}
 
         request = self._wiki_request(query_params)
         titles = [page['title'] for page in request['query']['random']]
@@ -154,13 +147,7 @@ class MediaWiki(object):
 
         raw_results = self._wiki_request(search_params)
 
-        # this should be pushed to its own function
-        if 'error' in raw_results:
-            error_codes = ['HTTP request timed out.', 'Pool queue is full']
-            if raw_results['error']['info'] in error_codes:
-                raise HTTPTimeoutError(query)
-            else:
-                raise MediaWikiException(raw_results['error']['info'])
+        self._check_error_response(raw_results)
 
         search_results = (d['title'] for d in raw_results['query']['search'])
 
@@ -204,28 +191,22 @@ class MediaWiki(object):
     def categorytree(self, category, depth=5):
         raise NotImplementedError
 
-    def page(self, title=None, pageid=None, auto_suggest=True,
-             redirect=True, preload=False):
+    def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
+             preload=False):
         if title is not None and title.strip() != '':
             if auto_suggest:
-                results, suggestion = self.search(title, results=1,
-                                                  suggestion=True)
+                res, suggest = self.search(title, results=1, suggestion=True)
                 try:
-                    # should these be flipped?
-                    print("did i really get here?")
-                    title = suggestion or results[0]
+                    title = suggest or res[0]
                 except IndexError:
-                    # if there is no suggestion or search results,
-                    # the page doesn't exist
-                    raise PageError(title)
-            print(title)
+                    # page doesn't exist if no suggestion or search results
+                    raise PageError(title=title)
             return MediaWikiPage(self, title, redirect=redirect,
                                  preload=preload)
         elif pageid is not None:
             return MediaWikiPage(self, pageid=pageid, preload=preload)
         else:
-            raise ValueError(("Either a title or a pageid must be "
-                              "specified"))
+            raise ValueError("Title or Pageid must be specified")
     # end page
 
     # Private functions
@@ -242,10 +223,9 @@ class MediaWiki(object):
         if 'action' not in params:
             params['action'] = 'query'
 
-        if (
-            self.rate_limit and self.rate_limit_last_call and
-            self.rate_limit_last_call + self.min_wait > datetime.now()
-        ):
+        rl = self.rate_limit
+        last_call = self.rate_limit_last_call
+        if rl and last_call and last_call + self.min_wait > datetime.now():
             # call time to quick for rate limited api requests, wait
             wait_time = (last_call + wait) - datetime.now()
             time.sleep(int(wait_time.total_seconds()))
@@ -284,6 +264,17 @@ class MediaWiki(object):
             self.extensions.add(ext['name'])
     # end _get_site_info
 
+    @staticmethod
+    def _check_error_response(response):
+        if 'error' in response:
+            error_codes = ['HTTP request timed out.', 'Pool queue is full']
+            if response['error']['info'] in error_codes:
+                raise HTTPTimeoutError(query)
+            else:
+                raise MediaWikiException(response['error']['info'])
+        else:
+            return
+
 # end MediaWiki class
 
 
@@ -305,7 +296,7 @@ class MediaWikiPage(object):
             self.pageid = pageid
         else:
             raise ValueError("Either a title or a pageid must be specified")
-        print(title)
+
         self.__load(redirect=redirect, preload=preload)
 
         # if preload:
@@ -347,7 +338,7 @@ class MediaWikiPage(object):
         query_params.update(self.__title_query_param)
 
         request = self.mediawiki._wiki_request(query_params)
-        print(request)
+
         query = request['query']
         pageid = list(query['pages'].keys())[0]
         page = query['pages'][pageid]
@@ -356,14 +347,12 @@ class MediaWikiPage(object):
         # missing is present if the page is missing
         if 'missing' in page:
             if hasattr(self, 'title'):
-                raise PageError(self.title)
+                raise PageError(title=self.title)
             else:
                 raise PageError(pageid=self.pageid)
         # redirects is present in query if page is a redirect
         elif 'redirects' in query:
-            print (" found redirects: {0}".format(redirect))
             if redirect:
-                print("redirects")
                 redirects = query['redirects'][0]
 
                 if 'normalized' in query:
@@ -381,7 +370,6 @@ class MediaWikiPage(object):
                 self.__init__(self.mediawiki, title=redirects['to'],
                               redirect=redirect, preload=preload)
             else:
-                print('huh...')
                 raise RedirectError(getattr(self, 'title', page['title']))
         # if pageprops is returned, it must be a disambiguation error
         elif 'pageprops' in page:
@@ -417,7 +405,7 @@ class MediaWikiPage(object):
             self.url = page['fullurl']
     # end __load
 
-    def __continued_query(self, query_params, key='pages'):
+    def _continued_query(self, query_params, key='pages'):
         '''
         Based on https://www.mediawiki.org/wiki/API:Query#Continuing_queries
         '''
@@ -440,7 +428,7 @@ class MediaWikiPage(object):
                 for datum in pages.values():
                     yield datum
             else:
-                print(query_params)  # just testing this
+                print("yeilding:", query_params)  # just testing this
                 for datum in pages[self.pageid].get(prop, list()):
                     yield datum
 
@@ -448,7 +436,7 @@ class MediaWikiPage(object):
                 break
 
             last_continue = request['continue']
-    # end __continued_query
+    # end _continued_query
 
     @property
     def __title_query_param(self):

@@ -234,9 +234,38 @@ class MediaWiki(object):
                 redirect=True):
         raise NotImplementedError
 
-    def categorymembers(self, category, results=10,
-                        subcategories=True):
-        raise NotImplementedError
+    def categorymembers(self, category, results=10, subcategories=True):
+        ''' get informaton about a category '''
+        if category is None or category.strip() == '':
+            raise ValueError("Category must be specified")
+
+        search_params = {
+            'list': 'categorymembers',
+            'cmprop': 'ids|title|type',
+            'cmtype': ('page|subcat' if subcategories else 'page'),
+            'cmlimit': results,
+            'cmtitle': 'Category:{0}'.format(category)
+        }
+
+        raw_results = self._wiki_request(search_params)
+
+        self._check_error_response(raw_results, category)
+
+        pages = list()
+        subcats = list()
+        for rec in raw_results['query']['categorymembers']:
+            if rec['type'] == 'page':
+                pages.append(rec['title'])
+            elif rec['type'] == 'subcat':
+                tmp = rec['title']
+                if tmp.startswith('Category:'):
+                    tmp = tmp[9:]
+                subcats.append(tmp)
+        if subcategories:
+            return pages, subcats
+        else:
+            return pages
+    # end categorymembers
 
     def categorytree(self, category, depth=5):
         raise NotImplementedError
@@ -285,7 +314,7 @@ class MediaWiki(object):
 
         req = self._session.get(self._api_url, params=params,
                                 timeout=self._timeout)
-
+        print req.url
         if self._rate_limit:
             self._rate_limit_last_call = datetime.now()
 
@@ -329,6 +358,7 @@ class MediaWiki(object):
 # end MediaWiki class
 
 
+# TODO: Should this be in it's own file?
 class MediaWikiPage(object):
     '''
     Instance of a media wiki page

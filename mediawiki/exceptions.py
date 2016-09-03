@@ -6,7 +6,8 @@ from __future__ import unicode_literals
 import sys
 
 
-ODD_ERROR_MESSAGE = "This shouldn't happen. Please report on GitHub: github.com/barrust/mediawiki"
+ODD_ERROR_MESSAGE = ("This shouldn't happen. Please report on "
+                     "GitHub: github.com/barrust/mediawiki")
 
 
 class MediaWikiException(Exception):
@@ -16,7 +17,8 @@ class MediaWikiException(Exception):
         self.error = error
 
     def __unicode__(self):
-        return "An unknown error occured: \"{0}\". Please report it on GitHub!".format(self.error)
+        return ("An unknown error occured: \"{0}\". Please report "
+                "it on GitHub!").format(self.error)
 
     def __str__(self):
         return self.__unicode__()
@@ -33,28 +35,37 @@ class PageError(MediaWikiException):
 
     def __unicode__(self):
         if hasattr(self, 'title'):
-            return u"\"{0}\" does not match any pages. Try another query!".format(self.title)
+            return (u"\"{0}\" does not match any pages. Try another "
+                    "query!").format(self.title)
         else:
-            return u"Page id \"{0}\" does not match any pages. Try another id!".format(self.pageid)
+            return (u"Page id \"{0}\" does not match any pages. Try "
+                    "another id!").format(self.pageid)
 
 
 class RedirectError(MediaWikiException):
-    ''' Exception raised when a page title unexpectedly resolves to a redirect '''
+    '''
+        Exception raised when a page title unexpectedly resolves to
+        a redirect
+    '''
 
     def __init__(self, title):
         self.title = title
 
     def __unicode__(self):
-        return u"\"{0}\" resulted in a redirect. Set the redirect property to True to allow automatic redirects.".format(self.title)
+        return (u"\"{0}\" resulted in a redirect. Set the redirect "
+                "property to True to allow automatic redirects."
+                ).format(self.title)
 
 
 class DisambiguationError(MediaWikiException):
     '''
     Exception raised when a page resolves to a Disambiguation page
 
-    The `options` property contains a list of titles of Wikipedia pages that the query may refer to
+    The `options` property contains a list of titles of Wikipedia
+    pages that the query may refer to
 
-    Note: `options` does not include titles that do not link to a valid Wikipedia page
+    Note: `options` does not include titles that do not link to a
+    valid Wikipedia page
     '''
 
     def __init__(self, title, may_refer_to, details=None):
@@ -63,16 +74,23 @@ class DisambiguationError(MediaWikiException):
         self.details = details
 
     def __unicode__(self):
-        return u"\n\"{0}\" may refer to: \n  {1}".format(self.title, '\n  '.join(self.options))
+        return (u"\n\"{0}\" may refer to: \n  {1}"
+                ).format(self.title, '\n  '.join(self.options))
+
 
 class HTTPTimeoutError(MediaWikiException):
-    ''' Exception raised when a request to the Mediawiki servers times out. '''
+    '''
+    Exception raised when a request to the Mediawiki site times out.
+    '''
 
     def __init__(self, query):
         self.query = query
 
     def __unicode__(self):
-        return u"Searching for \"{0}\" resulted in a timeout. Try again in a few seconds, and make sure you have rate limiting set to True.".format(self.query)
+        return (u"Searching for \"{0}\" resulted in a timeout. Try "
+                "again in a few seconds, and make sure you have rate "
+                "limiting set to True.").format(self.query)
+
 
 class MediaWikiAPIURLError(MediaWikiException):
     ''' Exception raised when the MediaWiki server does not support the API '''

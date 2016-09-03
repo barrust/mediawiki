@@ -8,19 +8,24 @@ import requests
 import sys
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
-from .exceptions import (MediaWikiException, PageError, RedirectError, DisambiguationError,
-    MediaWikiAPIURLError, HTTPTimeoutError, ODD_ERROR_MESSAGE)
-
+from .exceptions import (MediaWikiException, PageError,
+                         RedirectError, DisambiguationError,
+                         MediaWikiAPIURLError, HTTPTimeoutError,
+                         ODD_ERROR_MESSAGE)
 
 
 class MediaWiki(object):
     ''' Base MediaWiki object '''
 
-    def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en', timeout=None, rate_limit=False, rate_limit_wait=timedelta(milliseconds=50) ):
+    def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
+                 timeout=None, rate_limit=False,
+                 rate_limit_wait=timedelta(milliseconds=50)):
         self.api_url = url
         self.lang = lang
         self.timeout = timeout
-        self.user_agent = 'python-mediawiki/VERSION {0} (https://github.com/barrust/mediawiki/) BOT'.format(MediaWiki.get_version())
+        self.user_agent = ('python-mediawiki/VERSION-{0}'
+                           '/(https://github.com/barrust/mediawiki/)'
+                           '/BOT'.format(MediaWiki.get_version()))
         self.session = None
         self.rate_limit = rate_limit
         self.rate_limit_last_call = None
@@ -34,12 +39,10 @@ class MediaWiki(object):
         self.reset_session()
         self._get_site_info()
 
-
     @classmethod
     def get_version(cls):
         ''' Get current version of the library '''
         return '0.0.1-prealpha'
-
 
     def reset_session(self):
         ''' Set session information '''
@@ -47,8 +50,8 @@ class MediaWiki(object):
         self.session = requests.Session()
         self.session.headers.update(headers)
 
-
-    def set_rate_limiting(self, rate_limit, min_wait=timedelta(milliseconds=50)):
+    def set_rate_limiting(self, rate_limit,
+                          min_wait=timedelta(milliseconds=50)):
         ''' set rate limiting of api usage '''
         if not rate_limit:
             self.rate_limit = False
@@ -59,13 +62,12 @@ class MediaWiki(object):
         self.rate_limit_last_call = None
         # TODO: add cache to project and clear it here
 
-
     def set_timeout(self, timeout):
         ''' set request timeout '''
         self.timeout = timeout
 
-
-    def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php', lang='en'):
+    def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
+                    lang='en'):
         ''' set the url to the api '''
         self.api_url = api_url
         self.lang = lang
@@ -75,7 +77,6 @@ class MediaWiki(object):
             raise MediaWikiAPIURLError(api_url)
         # TODO: add cache to project and clear it here
 
-
     def set_language(self, lang):
         '''
         set the language of the url
@@ -84,35 +85,33 @@ class MediaWiki(object):
         '''
         if self.lang == lang:
             return
-        tmp_url = self.api_url.replace('/{0}.'.format(self.lang), "/{0}.".format(lang.lower()))
+        tmp_url = self.api_url.replace('/{0}.'.format(self.lang),
+                                       "/{0}.".format(lang.lower()))
 
         self.api_url = tmp_url
         self.lang = lang
         # TODO: add cache to project and clear it here
-
 
     def set_user_agent(self, user_agent):
         ''' set a new user agent '''
         self.user_agent = user_agent
         self.reset_session()
 
-
     # non-setup functions
     def languages(self):
         '''
-        List all the currently supported language prefixes (usually ISO language code).
-
-        Can be inputted to `set_language` to change the Mediawiki that `wikipedia` requests
-        results from.
-
-        Returns: dict of <prefix>: <local_lang_name> pairs. To get just a list of prefixes,
-        use `wikipedia.languages().keys()`.
+        List all the currently supported language prefixes (usually ISO
+        language code). Result is a <prefix>: <local_lang_name> pairs
+        dictionary.
         '''
-        response = self._wiki_request({'meta': 'siteinfo','siprop': 'languages'})
+        response = self._wiki_request({
+                'meta': 'siteinfo',
+                'siprop': 'languages'
+            })
 
-        return { lang['code']: lang['*'] for lang in response['query']['languages']}
+        return {lang['code']: lang['*'] for
+                lang in response['query']['languages']}
     # end languages
-
 
     def random(self, pages=1):
         ''' return a random page title or list of titles '''
@@ -139,7 +138,8 @@ class MediaWiki(object):
         '''
         Conduct a search for "query" returning "results" results
 
-        If suggestion is True, returns results and suggestions (if any) in a tuple
+        If suggestion is True, returns results and suggestions
+        (if any) in a tuple
         '''
         if query is None or query.strip() == '':
             raise ValueError("Query must be specified")
@@ -154,8 +154,10 @@ class MediaWiki(object):
 
         raw_results = self._wiki_request(search_params)
 
+        # this should be pushed to its own function
         if 'error' in raw_results:
-            if raw_results['error']['info'] in ('HTTP request timed out.', 'Pool queue is full'):
+            error_codes = ['HTTP request timed out.', 'Pool queue is full']
+            if raw_results['error']['info'] in error_codes:
                 raise HTTPTimeoutError(query)
             else:
                 raise MediaWikiException(raw_results['error']['info'])
@@ -164,7 +166,8 @@ class MediaWiki(object):
 
         if suggestion:
             if raw_results['query'].get('searchinfo'):
-                return list(search_results), raw_results['query']['searchinfo']['suggestion']
+                sug = raw_results['query']['searchinfo']['suggestion']
+                return list(search_results), sug
             else:
                 return list(search_results), None
 
@@ -172,12 +175,16 @@ class MediaWiki(object):
     # end search
 
     def suggest(self, query):
-        ''' Gather suggestions based on the provided "query" or None if no suggestions found '''
+        '''
+        Gather suggestions based on the provided "query" or None if
+        no suggestions found
+        '''
         search_results = self.search(query, results=1, suggestion=True)
         return search_results[1]
     # end suggest
 
-    def geosearch(self, latitude, longitude, title=None, results=10, radius=1000):
+    def geosearch(self, latitude, longitude, title=None, results=10,
+                  radius=1000):
         raise NotImplementedError
 
     def opensearch(self, query, results=10, redirect=False):
@@ -186,45 +193,59 @@ class MediaWiki(object):
     def prefexsearch(self, query, results=10):
         raise NotImplementedError
 
-    def summary(self, title, sentences=0, chars=0, auto_suggest=True, redirect=True):
+    def summary(self, title, sentences=0, chars=0, auto_suggest=True,
+                redirect=True):
         raise NotImplementedError
 
-    def categorymembers(self, category, results=10, subcategories=True):
+    def categorymembers(self, category, results=10,
+                        subcategories=True):
         raise NotImplementedError
 
     def categorytree(self, category, depth=5):
         raise NotImplementedError
 
-    def page(self, title=None, pageid=None, auto_suggest=True, redirect=True, preload=False):
+    def page(self, title=None, pageid=None, auto_suggest=True,
+             redirect=True, preload=False):
         if title is not None and title.strip() != '':
             if auto_suggest:
-                results, suggestion = self.search(title, results=1, suggestion=True)
+                results, suggestion = self.search(title, results=1,
+                                                  suggestion=True)
                 try:
-                    title = suggestion or results[0] # should these be flipped?
+                    # should these be flipped?
+                    print("did i really get here?")
+                    title = suggestion or results[0]
                 except IndexError:
-                    # if there is no suggestion or search results, the page doesn't exist
+                    # if there is no suggestion or search results,
+                    # the page doesn't exist
                     raise PageError(title)
-            return MediaWikiPage(self, title, redirect=redirect, preload=preload)
+            print(title)
+            return MediaWikiPage(self, title, redirect=redirect,
+                                 preload=preload)
         elif pageid is not None:
             return MediaWikiPage(self, pageid=pageid, preload=preload)
         else:
-            raise ValueError("Either a title or a pageid must be specified")
+            raise ValueError(("Either a title or a pageid must be "
+                              "specified"))
     # end page
-
 
     # Private functions
     # Not to be called from outside
     def _wiki_request(self, params):
         '''
-        Make a request to the MediaWiki API using the given search parameters
+        Make a request to the MediaWiki API using the given search
+        parameters
+
         Returns a parsed dict of the JSON response
         '''
 
         params['format'] = 'json'
-        if not 'action' in params:
+        if 'action' not in params:
             params['action'] = 'query'
 
-        if self.rate_limit and self.rate_limit_last_call and self.rate_limit_last_call + self.min_wait > datetime.now():
+        if (
+            self.rate_limit and self.rate_limit_last_call and
+            self.rate_limit_last_call + self.min_wait > datetime.now()
+        ):
             # call time to quick for rate limited api requests, wait
             wait_time = (last_call + wait) - datetime.now()
             time.sleep(int(wait_time.total_seconds()))
@@ -242,30 +263,39 @@ class MediaWiki(object):
 
     def _get_site_info(self):
         '''
-        Parse out the Wikimedia site information including API Version and Extensions
+        Parse out the Wikimedia site information including
+        API Version and Extensions
         '''
         response = self._wiki_request({
             'meta': 'siteinfo',
             'siprop': 'extensions|general'
         })
-        self.api_version = response['query']['general']['generator'].split(" ")[1].split("-")[0]
+
+        gen = response['query']['general']['generator']
+        self.api_version = gen.split(" ")[1].split("-")[0]
+
         major_minor = self.api_version.split('.')
         for i, item in enumerate(major_minor):
             major_minor[i] = int(item)
         self.api_version_major_minor = major_minor
+
         self.extensions = set()
         for ext in response['query']['extensions']:
             self.extensions.add(ext['name'])
     # end _get_site_info
 
+# end MediaWiki class
+
+
 class MediaWikiPage(object):
     '''
     Instance of a media wiki page
 
-    Note: This should never need to be called directly by the user!!!
+    Note: This should never need to be called directly by the user!
     '''
 
-    def __init__(self, mediawiki, title=None, pageid=None, redirect=True, preload=False, original_title=''):
+    def __init__(self, mediawiki, title=None, pageid=None,
+                 redirect=True, preload=False, original_title=''):
         self.mediawiki = mediawiki
 
         if title is not None:
@@ -275,14 +305,17 @@ class MediaWikiPage(object):
             self.pageid = pageid
         else:
             raise ValueError("Either a title or a pageid must be specified")
-
+        print(title)
         self.__load(redirect=redirect, preload=preload)
 
         # if preload:
-        #     for prop in ('content', 'summary', 'images', 'references', 'links', 'sections', 'redirects', 'coordinates', 'backlinks', 'categories'):
+        #     for prop in ('content', 'summary', 'images',
+        #                  'references', 'links', 'sections',
+        #                  'redirects', 'coordinates', 'backlinks',
+        #                  'categories'):
         #         try:
         #             getattr(self, prop)
-        #         except Exception: # should be more specific to those that matter
+        #         except Exception:
         #             pass
         # end __init__
 
@@ -290,15 +323,15 @@ class MediaWikiPage(object):
         encoding = sys.stdout.encoding or 'utf-8'
         u = u'<WikipediaPage \'{0}\'>'.format(self.title)
         if sys.version_info > (3, 0):
-          return u.encode(encoding).decode(encoding)
+            return u.encode(encoding).decode(encoding)
         return u.encode(encoding)
 
     def __eq__(self, other):
         try:
             return (
-                self.pageid == other.pageid
-                and self.title == other.title
-                and self.url == other.url
+                self.pageid == other.pageid and
+                self.title == other.title and
+                self.url == other.url
             )
         except AttributeError as ex:
             return False
@@ -314,19 +347,23 @@ class MediaWikiPage(object):
         query_params.update(self.__title_query_param)
 
         request = self.mediawiki._wiki_request(query_params)
-
+        print(request)
         query = request['query']
         pageid = list(query['pages'].keys())[0]
         page = query['pages'][pageid]
 
         # determine result of the request
-        if 'missing' in page: # missing is present if the page is missing
+        # missing is present if the page is missing
+        if 'missing' in page:
             if hasattr(self, 'title'):
                 raise PageError(self.title)
             else:
                 raise PageError(pageid=self.pageid)
-        elif 'redirects' in query: # redirects is present in query if page is a redirect
+        # redirects is present in query if page is a redirect
+        elif 'redirects' in query:
+            print (" found redirects: {0}".format(redirect))
             if redirect:
+                print("redirects")
                 redirects = query['redirects'][0]
 
                 if 'normalized' in query:
@@ -341,8 +378,10 @@ class MediaWikiPage(object):
                 assert redirects['from'] == from_title, ODD_ERROR_MESSAGE
 
                 # change the title and reload the whole object
-                self.__init__(self.mediawiki, title=redirects['to'], redirect=redirect, preload=preload)
+                self.__init__(self.mediawiki, title=redirects['to'],
+                              redirect=redirect, preload=preload)
             else:
+                print('huh...')
                 raise RedirectError(getattr(self, 'title', page['title']))
         # if pageprops is returned, it must be a disambiguation error
         elif 'pageprops' in page:
@@ -357,8 +396,10 @@ class MediaWikiPage(object):
             html = request['query']['pages'][pageid]['revisions'][0]['*']
 
             lis = BeautifulSoup(html, 'html.parser').find_all('li')
-            filtered_lis = [li for li in lis if not 'tocsection' in ''.join(li.get('class', list()))]
-            may_refer_to = [li.a.get_text() for li in filtered_lis if li.a]
+            filtered_lis = [li for li in lis if 'tocsection' not in
+                            ''.join(li.get('class', list()))]
+            may_refer_to = [li.a.get_text()
+                            for li in filtered_lis if li.a]
             disambiguation = list()
             for lis_item in filtered_lis:
                 item = lis_item.find_all("a")[0]
@@ -367,8 +408,9 @@ class MediaWikiPage(object):
                     one_disambiguation["title"] = item["title"]
                     one_disambiguation["description"] = lis_item.text
                     disambiguation.append(one_disambiguation)
-            raise DisambiguationError(getattr(self, 'title', page['title']), may_refer_to, disambiguation)
-
+            raise DisambiguationError(getattr(self, 'title',
+                                      page['title']), may_refer_to,
+                                      disambiguation)
         else:
             self.pageid = pageid
             self.title = page['title']
@@ -395,9 +437,10 @@ class MediaWikiPage(object):
 
             pages = request['query'][key]
             if 'generator' in query_params:
-                for datum in pages.values():    # in python 3.3+: "yield from pages.values()"
+                for datum in pages.values():
                     yield datum
             else:
+                print(query_params)  # just testing this
                 for datum in pages[self.pageid].get(prop, list()):
                     yield datum
 
@@ -406,7 +449,6 @@ class MediaWikiPage(object):
 
             last_continue = request['continue']
     # end __continued_query
-
 
     @property
     def __title_query_param(self):

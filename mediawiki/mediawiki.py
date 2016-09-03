@@ -7,6 +7,7 @@ MediaWiki class module
 from __future__ import unicode_literals
 import requests
 import sys
+import time
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from .exceptions import (MediaWikiException, PageError,
@@ -34,7 +35,6 @@ class MediaWiki(object):
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
-        self._api_version_major_minor = None
 
         # call helper functions to get everything set up
         self.reset_session()
@@ -49,7 +49,7 @@ class MediaWiki(object):
     @property
     def api_version(self):
         ''' get site's api version '''
-        return self._api_version
+        return '.'.join([str(x) for x in self._api_version])
 
     @property
     def extensions(self):
@@ -197,7 +197,7 @@ class MediaWiki(object):
 
         raw_results = self._wiki_request(search_params)
 
-        self._check_error_response(raw_results)
+        self._check_error_response(raw_results, query)
 
         search_results = (d['title'] for d in raw_results['query']['search'])
 
@@ -277,11 +277,11 @@ class MediaWiki(object):
         last_call = self._rate_limit_last_call
         if limit and last_call and last_call + self._min_wait > datetime.now():
             # call time to quick for rate limited api requests, wait
-            wait_time = (last_call + wait) - datetime.now()
+            wait_time = (last_call + self._min_wait) - datetime.now()
             time.sleep(int(wait_time.total_seconds()))
 
         if self._session is None:
-            reset_session()
+            self.reset_session()
 
         req = self._session.get(self._api_url, params=params,
                                 timeout=self._timeout)
@@ -303,12 +303,12 @@ class MediaWiki(object):
         })
 
         gen = response['query']['general']['generator']
-        self._api_version = gen.split(" ")[1].split("-")[0]
+        api_version = gen.split(" ")[1].split("-")[0]
 
-        major_minor = self._api_version.split('.')
+        major_minor = api_version.split('.')
         for i, item in enumerate(major_minor):
             major_minor[i] = int(item)
-        self._api_version_major_minor = major_minor
+        self._api_version = tuple(major_minor)
 
         self._extensions = set()
         for ext in response['query']['extensions']:
@@ -316,7 +316,7 @@ class MediaWiki(object):
     # end _get_site_info
 
     @staticmethod
-    def _check_error_response(response):
+    def _check_error_response(response, query):
         if 'error' in response:
             error_codes = ['HTTP request timed out.', 'Pool queue is full']
             if response['error']['info'] in error_codes:
@@ -339,7 +339,7 @@ class MediaWikiPage(object):
     def __init__(self, mediawiki, title=None, pageid=None,
                  redirect=True, preload=False, original_title=''):
         self.mediawiki = mediawiki
-
+        self.url = None
         if title is not None:
             self.title = title
             self.original_title = original_title or title
@@ -403,6 +403,7 @@ class MediaWikiPage(object):
                 raise PageError(pageid=self.pageid)
         # redirects is present in query if page is a redirect
         elif 'redirects' in query:
+            # TODO: Refactor into own function
             if redirect:
                 redirects = query['redirects'][0]
 
@@ -424,6 +425,7 @@ class MediaWikiPage(object):
                 raise RedirectError(getattr(self, 'title', page['title']))
         # if pageprops is returned, it must be a disambiguation error
         elif 'pageprops' in page:
+            # TODO: Refactor this into own function
             query_params = {
                 'prop': 'revisions',
                 'rvprop': 'content',
@@ -469,7 +471,7 @@ class MediaWikiPage(object):
             params = query_params.copy()
             params.update(last_continue)
 
-            request = self._wiki_request(params)
+            request = self.mediawiki._wiki_request(params)
 
             if 'query' not in request:
                 break

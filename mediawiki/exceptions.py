@@ -27,7 +27,7 @@ class MediaWikiException(Exception):
 class PageError(MediaWikiException):
     ''' Exception raised when no MediaWiki page matched a query '''
 
-    def __init__(self, title=None, pageid=None, *args):
+    def __init__(self, title=None, pageid=None):
         if title:
             self.title = title
         elif pageid:

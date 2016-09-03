@@ -21,14 +21,14 @@ class MediaWiki(object):
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
         self.api_url = url
-        self.lang = lang
-        self.timeout = timeout
+        self._lang = lang
+        self._timeout = timeout
         self.user_agent = ('python-mediawiki/VERSION-{0}'
                            '/(https://github.com/barrust/mediawiki/)'
                            '/BOT'.format(MediaWiki.get_version()))
         self.session = None
-        self.rate_limit = rate_limit
-        self.rate_limit_last_call = None
+        self._rate_limit = rate_limit
+        self._rate_limit_last_call = None
         self.min_wait = rate_limit_wait
         self.extensions = None
         self.api_version = None
@@ -50,48 +50,70 @@ class MediaWiki(object):
         self.session = requests.Session()
         self.session.headers.update(headers)
 
-    def set_rate_limiting(self, rate_limit,
-                          min_wait=timedelta(milliseconds=50)):
+    @property
+    def rate_limit(self):
+        return self._rate_limit
+
+    @rate_limit.setter
+    def set_rate_limiting(self, rate_limit):
         ''' set rate limiting of api usage '''
-        if not rate_limit:
-            self.rate_limit = False
-            self.min_wait = None
+        if rate_limit:
+            self._rate_limit = True
         else:
-            self.rate_limit = True
-            self.min_wait = min_wait
-        self.rate_limit_last_call = None
+            self._rate_limit = False
+        self._rate_limit_last_call = None
         # TODO: add cache to project and clear it here
 
-    def set_timeout(self, timeout):
-        ''' set request timeout '''
-        self.timeout = timeout
+    @property
+    def rate_limit_min_wait(self):
+        return self.min_wait
+
+    @rate_limit_min_wait.setter
+    def rate_limit_min_wait(self, min_wait):
+        self.min_wait = min_wait
+        self._rate_limit_last_call = None
+
+    @property
+    def timeout(self):
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, timeout):
+        ''' set request timeout in seconds (or fractions of a second) '''
+        self._timeout = timeout
 
     def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
                     lang='en'):
         ''' set the url to the api '''
         self.api_url = api_url
-        self.lang = lang
+        self._lang = lang
         try:
             self._get_site_info()
         except Exception as e:
             raise MediaWikiAPIURLError(api_url)
         # TODO: add cache to project and clear it here
 
-    def set_language(self, lang):
+    @property
+    def language(self):
+        ''' return current language '''
+        return self._lang
+
+    @language.setter
+    def language(self, lang):
         '''
         set the language of the url
 
         Note: use correct language titles with the updated url
         '''
         lang = lang.lower()
-        if self.lang == lang:
+        if self._lang == lang:
             return
 
         url = self.api_url
-        tmp = url.replace('/{0}.'.format(self.lang), '/{0}.'.format(lang))
+        tmp = url.replace('/{0}.'.format(self._lang), '/{0}.'.format(lang))
 
         self.api_url = tmp
-        self.lang = lang
+        self._lang = lang
         # TODO: add cache to project and clear it here
 
     def set_user_agent(self, user_agent):
@@ -223,8 +245,8 @@ class MediaWiki(object):
         if 'action' not in params:
             params['action'] = 'query'
 
-        rl = self.rate_limit
-        last_call = self.rate_limit_last_call
+        rl = self._rate_limit
+        last_call = self._rate_limit_last_call
         if rl and last_call and last_call + self.min_wait > datetime.now():
             # call time to quick for rate limited api requests, wait
             wait_time = (last_call + wait) - datetime.now()
@@ -233,10 +255,11 @@ class MediaWiki(object):
         if self.session is None:
             reset_session()
 
-        r = self.session.get(self.api_url, params=params, timeout=self.timeout)
+        r = self.session.get(self.api_url, params=params,
+                             timeout=self._timeout)
 
-        if self.rate_limit:
-            self.rate_limit_last_call = datetime.now()
+        if self._rate_limit:
+            self._rate_limit_last_call = datetime.now()
 
         return r.json(encoding='utf-8')
     # end _wiki_request

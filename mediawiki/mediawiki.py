@@ -15,16 +15,18 @@ from .exceptions import (MediaWikiException, PageError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          ODD_ERROR_MESSAGE)
 
+
 def parse_test(fn):
     """ parse_test decorator """
     def wrapper(*args, **kwargs):
-      new_params = args[1:]
-      # print it before we add anything else in like action and format
-      print(tuple(sorted(new_params[0].items())), ": ")
-      res = fn(*args, **kwargs)
-      print(res)
-      return res
+        new_params = args[1:]
+        # print it before we add anything else in like action and format
+        print(tuple(sorted(new_params[0].items())), ": ")
+        res = fn(*args, **kwargs)
+        print(res)
+        return res
     return wrapper
+
 
 class MediaWiki(object):
     ''' Base MediaWiki object '''

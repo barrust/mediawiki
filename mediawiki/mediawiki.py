@@ -15,6 +15,16 @@ from .exceptions import (MediaWikiException, PageError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          ODD_ERROR_MESSAGE)
 
+def parse_test(fn):
+    """ parse_test decorator """
+    def wrapper(*args, **kwargs):
+      new_params = args[1:]
+      # print it before we add anything else in like action and format
+      print(tuple(sorted(new_params[0].items())), ": ")
+      res = fn(*args, **kwargs)
+      print(res)
+      return res
+    return wrapper
 
 class MediaWiki(object):
     ''' Base MediaWiki object '''
@@ -127,7 +137,7 @@ class MediaWiki(object):
         return self._user_agent
 
     @user_agent.setter
-    def set_user_agent(self, user_agent):
+    def user_agent(self, user_agent):
         ''' set a new user agent '''
         self._user_agent = user_agent
         self.reset_session()
@@ -295,6 +305,7 @@ class MediaWiki(object):
 
     # Private functions
     # Not to be called from outside
+    @parse_test
     def _wiki_request(self, params):
         '''
         Make a request to the MediaWiki API using the given search
@@ -397,7 +408,7 @@ class MediaWikiPage(object):
 
     def __repr__(self):
         encoding = sys.stdout.encoding or 'utf-8'
-        tmp = u'<WikipediaPage \'{0}\'>'.format(self.title)
+        tmp = u'<MediaWikiPage \'{0}\'>'.format(self.title)
         if sys.version_info > (3, 0):
             return tmp.encode(encoding).decode(encoding)
         return tmp.encode(encoding)

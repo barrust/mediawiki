@@ -22,7 +22,7 @@ class MediaWiki(object):
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
-        self._version = '0.0.1-prealpha'
+        self._version = MediaWiki.get_version()
         self._api_url = url
         self._lang = lang
         self._timeout = timeout
@@ -45,6 +45,11 @@ class MediaWiki(object):
     def version(self):
         ''' Get current version of the library '''
         return self._version
+
+    @classmethod
+    def get_version(cls):
+        ''' get the version information '''
+        return '0.0.1-prealpha'
 
     @property
     def api_version(self):

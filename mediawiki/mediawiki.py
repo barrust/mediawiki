@@ -272,7 +272,9 @@ class MediaWiki(object):
 
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
              preload=False):
-        if title is not None and title.strip() != '':
+        if (title is None or title.strip() == '') and pageid is None:
+            raise ValueError("Title or Pageid must be specified")
+        elif title:
             if auto_suggest:
                 res, suggest = self.search(title, results=1, suggestion=True)
                 try:
@@ -282,10 +284,8 @@ class MediaWiki(object):
                     raise PageError(title=title)
             return MediaWikiPage(self, title, redirect=redirect,
                                  preload=preload)
-        elif pageid is not None:
+        else:  # must be pageid
             return MediaWikiPage(self, pageid=pageid, preload=preload)
-        else:
-            raise ValueError("Title or Pageid must be specified")
     # end page
 
     # Private functions
@@ -314,7 +314,7 @@ class MediaWiki(object):
 
         req = self._session.get(self._api_url, params=params,
                                 timeout=self._timeout)
-        print req.url
+
         if self._rate_limit:
             self._rate_limit_last_call = datetime.now()
 
@@ -380,15 +380,14 @@ class MediaWikiPage(object):
 
         self.__load(redirect=redirect, preload=preload)
 
-        # if preload:
-        #     for prop in ('content', 'summary', 'images',
-        #                  'references', 'links', 'sections',
-        #                  'redirects', 'coordinates', 'backlinks',
-        #                  'categories'):
-        #         try:
-        #             getattr(self, prop)
-        #         except Exception:
-        #             pass
+        if preload:
+            for prop in ('content', 'summary', 'images', 'references', 'links',
+                         'sections', 'redirects', 'coordinates', 'backlinks',
+                         'categories'):
+                try:
+                    getattr(self, prop)
+                except Exception:
+                    pass
         # end __init__
 
     def __repr__(self):
@@ -408,6 +407,77 @@ class MediaWikiPage(object):
         except AttributeError:
             return False
 
+    # Properties
+    def _pull_content_revision_parent(self):
+        ''' combine the pulling of these three properties '''
+        if not getattr(self, '_content', False):
+            query_params = {
+                'prop': 'extracts|revisions',
+                'explaintext': '',
+                'rvprop': 'ids'
+            }
+            query_params.update(self.__title_query_param())
+            request = self.mediawiki._wiki_request(query_params)
+            page_info = request['query']['pages'][self.pageid]
+            self._content = page_info['extract']
+            self._revision_id = page_info['revisions'][0]['revid']
+            self._parent_id = page_info['revisions'][0]['parentid']
+        return self._content, self._revision_id, self._parent_id
+
+    @property
+    def content(self):
+        ''' get content, revision_id and parent_id '''
+        if not getattr(self, '_content', False):
+            self._pull_content_revision_parent()
+        return self._content
+
+    @property
+    def revision_id(self):
+        ''' Get current revision id '''
+        if not getattr(self, '_revision_id', False):
+            self._pull_content_revision_parent()
+        return self._revision_id
+
+    @property
+    def parent_id(self):
+        ''' Get current revision id '''
+        if not getattr(self, '_parent_id', False):
+            self._pull_content_revision_parent()
+        return self._parent_id
+
+    @property
+    def images(self):
+        ''' List of URLs of images on the page '''
+        if not getattr(self, '_images', False):
+            self._images = list()
+            params = {
+                'generator': 'images',
+                'gimlimit': 'max',
+                'prop': 'imageinfo',
+                'iiprop': 'url'
+                }
+            for page in self._continued_query(params):
+                if 'imageinfo' in page:
+                    self._images.append(page['imageinfo'][0]['url'])
+
+        return self._images
+
+    @property
+    def references(self):
+        ''' List of URLs of external links on a page '''
+        if not getattr(self, '_references', False):
+            params = {'prop': 'extlinks', 'ellimit': 'max'}
+            self._references = list()
+            for link in self._continued_query(params):
+                if link['*'].startswith('http'):
+                    url = link['*']
+                else:
+                    url = 'http:{0}'.format(link['*'])
+                self._references.append(url)
+
+        return self._references
+
+    # Protected Methods
     def __load(self, redirect=True, preload=False):
         ''' load the basic page information '''
         query_params = {
@@ -427,66 +497,76 @@ class MediaWikiPage(object):
         # determine result of the request
         # missing is present if the page is missing
         if 'missing' in page:
-            if hasattr(self, 'title'):
-                raise PageError(title=self.title)
-            else:
-                raise PageError(pageid=self.pageid)
+            self._raise_page_error()
         # redirects is present in query if page is a redirect
         elif 'redirects' in query:
-            # TODO: Refactor into own function
-            if redirect:
-                redirects = query['redirects'][0]
-
-                if 'normalized' in query:
-                    normalized = query['normalized'][0]
-                    assert normalized['from'] == self.title, ODD_ERROR_MESSAGE
-                    from_title = normalized['to']
-                else:
-                    if not getattr(self, 'title', None):
-                        self.title = redirects['from']
-                        delattr(self, 'pageid')
-                    from_title = self.title
-                assert redirects['from'] == from_title, ODD_ERROR_MESSAGE
-
-                # change the title and reload the whole object
-                self.__init__(self.mediawiki, title=redirects['to'],
-                              redirect=redirect, preload=preload)
-            else:
-                raise RedirectError(getattr(self, 'title', page['title']))
+            self._handle_redirect(redirect, preload, query, page)
         # if pageprops is returned, it must be a disambiguation error
         elif 'pageprops' in page:
-            # TODO: Refactor this into own function
-            query_params = {
-                'prop': 'revisions',
-                'rvprop': 'content',
-                'rvparse': '',
-                'rvlimit': 1
-            }
-            query_params.update(self.__title_query_param())
-            request = self.mediawiki._wiki_request(query_params)
-            html = request['query']['pages'][pageid]['revisions'][0]['*']
-
-            lis = BeautifulSoup(html, 'html.parser').find_all('li')
-            filtered_lis = [li for li in lis if 'tocsection' not in
-                            ''.join(li.get('class', list()))]
-            may_refer_to = [li.a.get_text()
-                            for li in filtered_lis if li.a]
-            disambiguation = list()
-            for lis_item in filtered_lis:
-                item = lis_item.find_all("a")[0]
-                if item:
-                    one_disambiguation = dict()
-                    one_disambiguation["title"] = item["title"]
-                    one_disambiguation["description"] = lis_item.text
-                    disambiguation.append(one_disambiguation)
-            raise DisambiguationError(getattr(self, 'title',
-                                      page['title']), may_refer_to,
-                                      disambiguation)
+            self._raise_disambiguation_error(page, pageid)
         else:
             self.pageid = pageid
             self.title = page['title']
             self.url = page['fullurl']
     # end __load
+
+    def _raise_page_error(self):
+        ''' raise the correct type of page error '''
+        if hasattr(self, 'title'):
+            raise PageError(title=self.title)
+        else:
+            raise PageError(pageid=self.pageid)
+
+    def _raise_disambiguation_error(self, page, pageid):
+        ''' parse and throw a disambiguation error '''
+        query_params = {
+            'prop': 'revisions',
+            'rvprop': 'content',
+            'rvparse': '',
+            'rvlimit': 1
+        }
+        query_params.update(self.__title_query_param())
+        request = self.mediawiki._wiki_request(query_params)
+        html = request['query']['pages'][pageid]['revisions'][0]['*']
+
+        lis = BeautifulSoup(html, 'html.parser').find_all('li')
+        filtered_lis = [li for li in lis if 'tocsection' not in
+                        ''.join(li.get('class', list()))]
+        may_refer_to = [li.a.get_text()
+                        for li in filtered_lis if li.a]
+        disambiguation = list()
+        for lis_item in filtered_lis:
+            item = lis_item.find_all("a")[0]
+            if item:
+                one_disambiguation = dict()
+                one_disambiguation["title"] = item["title"]
+                one_disambiguation["description"] = lis_item.text
+                disambiguation.append(one_disambiguation)
+        raise DisambiguationError(getattr(self, 'title', page['title']),
+                                  may_refer_to,
+                                  disambiguation)
+
+    def _handle_redirect(self, redirect, preload, query, page):
+        ''' handle redirect '''
+        if redirect:
+            redirects = query['redirects'][0]
+
+            if 'normalized' in query:
+                normalized = query['normalized'][0]
+                assert normalized['from'] == self.title, ODD_ERROR_MESSAGE
+                from_title = normalized['to']
+            else:
+                if not getattr(self, 'title', None):
+                    self.title = redirects['from']
+                    delattr(self, 'pageid')
+                from_title = self.title
+            assert redirects['from'] == from_title, ODD_ERROR_MESSAGE
+
+            # change the title and reload the whole object
+            self.__init__(self.mediawiki, title=redirects['to'],
+                          redirect=redirect, preload=preload)
+        else:
+            raise RedirectError(getattr(self, 'title', page['title']))
 
     def _continued_query(self, query_params, key='pages'):
         '''

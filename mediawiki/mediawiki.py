@@ -14,18 +14,7 @@ from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          ODD_ERROR_MESSAGE)
-
-
-def parse_test(fn):
-    """ parse_test decorator """
-    def wrapper(*args, **kwargs):
-        new_params = args[1:]
-        # print it before we add anything else in like action and format
-        print(tuple(sorted(new_params[0].items())), ": ")
-        res = fn(*args, **kwargs)
-        print(res)
-        return res
-    return wrapper
+from .utilities import capture_for_unittest
 
 
 class MediaWiki(object):
@@ -131,6 +120,8 @@ class MediaWiki(object):
 
         self._api_url = tmp
         self._lang = lang
+
+        self._get_site_info()
         # TODO: add cache to project and clear it here
 
     @property
@@ -307,7 +298,7 @@ class MediaWiki(object):
 
     # Private functions
     # Not to be called from outside
-    @parse_test
+    @capture_for_unittest
     def _wiki_request(self, params):
         '''
         Make a request to the MediaWiki API using the given search

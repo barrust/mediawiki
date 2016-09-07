@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 
 
 ODD_ERROR_MESSAGE = ("This shouldn't happen. Please report on "
-                     "GitHub if the site is available: "
+                     "GitHub if the MediaWiki site is available: "
                      "github.com/barrust/mediawiki")
 
 

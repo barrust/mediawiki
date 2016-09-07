@@ -14,7 +14,7 @@ from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          ODD_ERROR_MESSAGE)
-from .utilities import capture_for_unittest
+from .utilities import (stdout)
 
 
 class MediaWiki(object):
@@ -120,8 +120,6 @@ class MediaWiki(object):
 
         self._api_url = tmp
         self._lang = lang
-
-        self._get_site_info()
         # TODO: add cache to project and clear it here
 
     @property
@@ -298,7 +296,6 @@ class MediaWiki(object):
 
     # Private functions
     # Not to be called from outside
-    @capture_for_unittest
     def _wiki_request(self, params):
         '''
         Make a request to the MediaWiki API using the given search
@@ -400,11 +397,7 @@ class MediaWikiPage(object):
         # end __init__
 
     def __repr__(self):
-        encoding = sys.stdout.encoding or 'utf-8'
-        tmp = u'<MediaWikiPage \'{0}\'>'.format(self.title)
-        if sys.version_info > (3, 0):
-            return tmp.encode(encoding).decode(encoding)
-        return tmp.encode(encoding)
+        return stdout(u'<MediaWikiPage \'{0}\'>'.format(self.title))
 
     def __eq__(self, other):
         try:

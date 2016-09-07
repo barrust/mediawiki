@@ -5,10 +5,13 @@ from mediawiki import (MediaWiki)
 # from .api_url_mock import api_url_mock
 import unittest
 import pickle
+from datetime import datetime, timedelta
 
 
 class MediaWikiOverloaded(MediaWiki):
-    def __init__(self):
+    def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
+                 timeout=None, rate_limit=False,
+                 rate_limit_wait=timedelta(milliseconds=50)):
         with open('./tests/mock_api_data.p', 'rb') as f:
             self.data = pickle.load(f)
         MediaWiki.__init__(self)
@@ -81,12 +84,12 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded()
         self.assertEqual(site.random(pages=10), site.data[site.api_url]['data']['random_10'])
 
-    def test_random_22(self):
-        ''' test pulling random pages '''
+    def test_random_202(self):
+        ''' test pulling 202 random pages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(set(site.random(pages=202)), set(site.data[site.api_url]['data']['random_22']))
-        print("\nNOTE: This is supposed to be limited to 20 by the API, per the documentation, but it isn't")
-        self.assertEqual(len(site.data[site.api_url]['data']['random_22']), 202)  # limit to 20
+        self.assertEqual(set(site.random(pages=202)), set(site.data[site.api_url]['data']['random_202']))
+        print("\nNOTE: This is supposed to be limited to 20 by the API, per the documentation, but it isn't...")
+        self.assertEqual(len(site.data[site.api_url]['data']['random_202']), 202)  # limit to 20
 
     ##########################################
     # TEST SEARCH FUNCTIONALITY

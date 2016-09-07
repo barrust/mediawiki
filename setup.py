@@ -4,15 +4,15 @@ import setuptools
 import sys
 sys.dont_write_bytecode = True
 
-from mediawiki import (__version__, MediaWiki)
+from mediawiki import (__version__, __author__, __license__, __email__, MediaWiki)
 
 setuptools.setup(
     name = "mediawiki",
     version = __version__,
-    author = "Tyler Barrus",
-    author_email = "barrust@gmail.com",
+    author = __author__,
+    author_email = __email__,
     description = "MediaWiki API for Python",
-    license = "MIT",
+    license = __license__,
     keywords = "python mediawiki wikipedia API",
     url = "https://github.com/barrust/mediawiki",
     install_requires = ['beautifulsoup4', 'requests>=2.0.0,<3.0.0'],

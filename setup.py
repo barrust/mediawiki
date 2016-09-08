@@ -1,10 +1,12 @@
-
+'''
+Module Installation script
+'''
 import setuptools
 
 import sys
 sys.dont_write_bytecode = True
 
-from mediawiki import (__version__, __author__, __license__, __email__, MediaWiki)
+from mediawiki import (__version__, __author__, __license__, __email__)
 
 setuptools.setup(
     name = "mediawiki",

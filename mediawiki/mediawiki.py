@@ -49,7 +49,7 @@ class MediaWiki(object):
     @classmethod
     def get_version(cls):
         ''' get the version information '''
-        return '0.0.1-prealpha'
+        return '0.2.0-alpha'
 
     @property
     def api_version(self):
@@ -162,7 +162,7 @@ class MediaWiki(object):
         language code). Result is a <prefix>: <local_lang_name> pairs
         dictionary.
         '''
-        res = self._wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
+        res = self.wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
         return {lang['code']: lang['*'] for lang in res['query']['languages']}
     # end languages
 
@@ -173,7 +173,7 @@ class MediaWiki(object):
 
         query_params = {'list': 'random', 'rnnamespace': 0, 'rnlimit': pages}
 
-        request = self._wiki_request(query_params)
+        request = self.wiki_request(query_params)
         titles = [page['title'] for page in request['query']['random']]
 
         if len(titles) == 1:
@@ -200,7 +200,7 @@ class MediaWiki(object):
         if suggestion:
             search_params['srinfo'] = 'suggestion'
 
-        raw_results = self._wiki_request(search_params)
+        raw_results = self.wiki_request(search_params)
 
         self._check_error_response(raw_results, query)
 
@@ -240,7 +240,11 @@ class MediaWiki(object):
         raise NotImplementedError
 
     def categorymembers(self, category, results=10, subcategories=True):
-        ''' get informaton about a category '''
+        '''
+        Get informaton about a category
+
+        Note: set results to None to get all
+        '''
         if category is None or category.strip() == '':
             raise ValueError("Category must be specified")
 
@@ -248,24 +252,42 @@ class MediaWiki(object):
             'list': 'categorymembers',
             'cmprop': 'ids|title|type',
             'cmtype': ('page|subcat' if subcategories else 'page'),
-            'cmlimit': results,
+            'cmlimit': (results if results is not None else 5000),
             'cmtitle': 'Category:{0}'.format(category)
         }
-
-        raw_results = self._wiki_request(search_params)
-
-        self._check_error_response(raw_results, category)
-
         pages = list()
         subcats = list()
-        for rec in raw_results['query']['categorymembers']:
-            if rec['type'] == 'page':
-                pages.append(rec['title'])
-            elif rec['type'] == 'subcat':
-                tmp = rec['title']
-                if tmp.startswith('Category:'):
-                    tmp = tmp[9:]
-                subcats.append(tmp)
+        returned_results = 0
+        finished = False
+        last_continue = dict()
+        while not finished:
+            params = search_params.copy()
+            params.update(last_continue)
+            raw_results = self.wiki_request(params)
+
+            self._check_error_response(raw_results, category)
+
+            current_pull = len(raw_results['query']['categorymembers'])
+            for rec in raw_results['query']['categorymembers']:
+                if rec['type'] == 'page':
+                    pages.append(rec['title'])
+                elif rec['type'] == 'subcat':
+                    tmp = rec['title']
+                    if tmp.startswith('Category:'):
+                        tmp = tmp[9:]
+                    subcats.append(tmp)
+
+            if 'continue' not in raw_results:
+                print 'lets break'
+                break
+
+            returned_results = returned_results + current_pull
+            if results is None or (results - returned_results > 0):
+                last_continue = raw_results['continue']
+            else:
+                finished = True
+
+        # end while loop
         if subcategories:
             return pages, subcats
         else:
@@ -295,7 +317,7 @@ class MediaWiki(object):
 
     # Private functions
     # Not to be called from outside
-    def _wiki_request(self, params):
+    def wiki_request(self, params):
         '''
         Make a request to the MediaWiki API using the given search
         parameters
@@ -324,14 +346,14 @@ class MediaWiki(object):
             self._rate_limit_last_call = datetime.now()
 
         return req.json(encoding='utf8')
-    # end _wiki_request
+    # end wiki_request
 
     def _get_site_info(self):
         '''
         Parse out the Wikimedia site information including
         API Version and Extensions
         '''
-        response = self._wiki_request({
+        response = self.wiki_request({
             'meta': 'siteinfo',
             'siprop': 'extensions|general'
         })
@@ -418,7 +440,7 @@ class MediaWikiPage(object):
                 'rvprop': 'ids'
             }
             query_params.update(self.__title_query_param())
-            request = self.mediawiki._wiki_request(query_params)
+            request = self.mediawiki.wiki_request(query_params)
             page_info = request['query']['pages'][self.pageid]
             self._content = page_info['extract']
             self._revision_id = page_info['revisions'][0]['revid']
@@ -478,6 +500,24 @@ class MediaWikiPage(object):
 
         return self._references
 
+    @property
+    def categories(self):
+        ''' list all categories to which a page belongs '''
+        if not getattr(self, '_categories', False):
+            self._categories = list()
+            params = {
+                'prop': 'categories',
+                'cllimit': 'max',
+                'clshow': '!hidden'
+                }
+            for link in self._continued_query(params):
+                if link['title'].startswith('Category:'):
+                    self._categories.append(link['title'][9:])
+                else:
+                    self._categories.append(link['title'])
+
+        return self._categories
+
     # Protected Methods
     def __load(self, redirect=True, preload=False):
         ''' load the basic page information '''
@@ -489,7 +529,7 @@ class MediaWikiPage(object):
         }
         query_params.update(self.__title_query_param())
 
-        request = self.mediawiki._wiki_request(query_params)
+        request = self.mediawiki.wiki_request(query_params)
 
         query = request['query']
         pageid = list(query['pages'].keys())[0]
@@ -527,7 +567,7 @@ class MediaWikiPage(object):
             'rvlimit': 1
         }
         query_params.update(self.__title_query_param())
-        request = self.mediawiki._wiki_request(query_params)
+        request = self.mediawiki.wiki_request(query_params)
         html = request['query']['pages'][pageid]['revisions'][0]['*']
 
         lis = BeautifulSoup(html, 'html.parser').find_all('li')
@@ -582,7 +622,7 @@ class MediaWikiPage(object):
             params = query_params.copy()
             params.update(last_continue)
 
-            request = self.mediawiki._wiki_request(params)
+            request = self.mediawiki.wiki_request(params)
 
             if 'query' not in request:
                 break

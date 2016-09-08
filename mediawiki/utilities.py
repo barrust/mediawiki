@@ -32,6 +32,7 @@ def capture_for_unittest(func):
 
 
 def stdout(text, default='UTF8'):
+    ''' Ensure that output to stdout is correctly handled '''
     encoding = sys.stdout.encoding or default
     if sys.version_info > (3, 0):
         return text.encode(encoding).decode(encoding)

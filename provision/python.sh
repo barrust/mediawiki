@@ -10,8 +10,8 @@ fi
 
 
 # Install the requirements for this package as well as this module.
-pip install -r requirements/python
+pip install --user -r requirements/python
 # pip install .
 
 # Install the requirements for this package in development
-pip install -r requirements/python-dev
+pip install --user -r requirements/python-dev

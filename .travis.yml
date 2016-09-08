@@ -10,6 +10,7 @@ python:
 # virtualenv
 install:
   - ./provision/python.sh
-  
+
 script:
     - pep8 mediawiki/
+    - python setup.py test

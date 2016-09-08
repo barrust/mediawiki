@@ -6,7 +6,6 @@ MediaWiki class module
 
 from __future__ import unicode_literals
 import requests
-import sys
 import time
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -324,7 +323,7 @@ class MediaWiki(object):
         if self._rate_limit:
             self._rate_limit_last_call = datetime.now()
 
-        return req.json(encoding='utf-8')
+        return req.json(encoding='utf8')
     # end _wiki_request
 
     def _get_site_info(self):

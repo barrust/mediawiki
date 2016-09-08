@@ -1,14 +1,16 @@
 '''
 Unittest class
 '''
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from mediawiki import (MediaWiki)
-# from .api_url_mock import api_url_mock
 import unittest
 import pickle
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 
 class MediaWikiOverloaded(MediaWiki):
+    ''' Overload the MediaWiki class to change how _wiki_request works '''
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
@@ -98,18 +100,22 @@ class TestMediaWiki(unittest.TestCase):
         ''' test searching without suggestion '''
         site = MediaWikiOverloaded()
         # test that default is suggestion False
-        self.assertEqual(site.search('chest set'), site.data[site.api_url]['data']['search_without_suggestion'])
-        self.assertEqual(site.search('chest set', suggestion=False), site.data[site.api_url]['data']['search_without_suggestion'])
+        api_url = site.data[site.api_url]['data']['search_without_suggestion']
+        sws = site.data[site.api_url]['data']['search_without_suggestion']
+        self.assertEqual(site.search('chest set'), api_url)
+        self.assertEqual(site.search('chest set', suggestion=False), sws)
 
     def test_search_suggest_found(self):
         ''' test searching with suggestion where found '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.search('chest set', suggestion=True), site.data[site.api_url]['data']['search_with_suggestion_found'])
+        sws = site.data[site.api_url]['data']['search_with_suggestion_found']
+        self.assertEqual(site.search('chest set', suggestion=True), sws)
 
     def test_search_suggest_not_found(self):
         ''' test searching with suggestion where not found '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.search('chess set', suggestion=True), site.data[site.api_url]['data']['search_with_suggestion_not_found'])
+        swsnf = site.data[site.api_url]['data']['search_with_suggestion_not_found']
+        self.assertEqual(site.search('chess set', suggestion=True), swsnf)
 
     def test_search_suggest_not_found_number(self):
         ''' test searching with suggestion where not found but limited to the correct number'''

@@ -3,11 +3,11 @@
 Global MediaWiki Exceptions
 '''
 from __future__ import unicode_literals
-import sys
 
 
 ODD_ERROR_MESSAGE = ("This shouldn't happen. Please report on "
-                     "GitHub: github.com/barrust/mediawiki")
+                     "GitHub if the MediaWiki site is available: "
+                     "github.com/barrust/mediawiki")
 
 
 class MediaWikiException(Exception):
@@ -27,11 +27,13 @@ class MediaWikiException(Exception):
 class PageError(MediaWikiException):
     ''' Exception raised when no MediaWiki page matched a query '''
 
-    def __init__(self, pageid=None, *args):
-        if pageid:
+    def __init__(self, title=None, pageid=None):
+        if title:
+            self.title = title
+        elif pageid:
             self.pageid = pageid
         else:
-            self.title = args[0]
+            self.title = ""
 
     def __unicode__(self):
         if hasattr(self, 'title'):

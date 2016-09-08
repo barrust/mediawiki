@@ -396,7 +396,7 @@ class MediaWikiPage(object):
         # end __init__
 
     def __repr__(self):
-        return stdout(u"<MediaWikiPage '{0}'>".format(self.title))
+        return stdout(u"""<MediaWikiPage '{0}'>""".format(self.title))
 
     def __eq__(self, other):
         try:

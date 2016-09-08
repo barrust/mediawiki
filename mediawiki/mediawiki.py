@@ -278,7 +278,6 @@ class MediaWiki(object):
                     subcats.append(tmp)
 
             if 'continue' not in raw_results:
-                print 'lets break'
                 break
 
             returned_results = returned_results + current_pull
@@ -315,8 +314,6 @@ class MediaWiki(object):
             return MediaWikiPage(self, pageid=pageid, preload=preload)
     # end page
 
-    # Private functions
-    # Not to be called from outside
     def wiki_request(self, params):
         '''
         Make a request to the MediaWiki API using the given search
@@ -348,6 +345,7 @@ class MediaWiki(object):
         return req.json(encoding='utf8')
     # end wiki_request
 
+    # Protected functions
     def _get_site_info(self):
         '''
         Parse out the Wikimedia site information including

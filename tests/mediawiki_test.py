@@ -10,21 +10,24 @@ from datetime import timedelta
 
 
 class MediaWikiOverloaded(MediaWiki):
-    ''' Overload the MediaWiki class to change how _wiki_request works '''
+    ''' Overload the MediaWiki class to change how wiki_request works '''
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
         with open('./tests/mock_api_data.p', 'rb') as f:
             self.data = pickle.load(f)
-        MediaWiki.__init__(self)
+        MediaWiki.__init__(self, url=url, lang=lang, timeout=timeout,
+                           rate_limit=rate_limit,
+                           rate_limit_wait=rate_limit_wait)
 
-    def _wiki_request(self, params):
+    def wiki_request(self, params):
         ''' override the wiki requests to pull from the mock data '''
         new_params = tuple(sorted(params.items()))
         return self.data[self.api_url]['query'][new_params]
 
 
 class TestMediaWiki(unittest.TestCase):
+    ''' Test the Media Wiki Class '''
     ##########################################
     # BASIC MediaWiki SITE FUNCTIONALITY TESTS
     ##########################################
@@ -32,6 +35,13 @@ class TestMediaWiki(unittest.TestCase):
         ''' test the original api '''
         site = MediaWikiOverloaded()
         self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
+
+    def test_api_url_set(self):
+        ''' test the api url being set at creation time '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.api_version, site.data[site.api_url]['data']['api_version'])
+        self.assertEqual(site.extensions, site.data[site.api_url]['data']['extensions'])
 
     def test_change_lang(self):
         ''' test changing the language '''
@@ -125,4 +135,32 @@ class TestMediaWiki(unittest.TestCase):
 
     ##########################################
     # TEST CATEGORYMEMBERS FUNCTIONALITY
+    ##########################################
+    def test_category_members_with_subcategories(self):
+        ''' test categorymember with subcategories '''
+        site = MediaWikiOverloaded()
+        res = site.data[site.api_url]['data']['category_members_with_subcategories']
+        self.assertEqual(site.categorymembers("Chess", results=15, subcategories=True), res)
+
+    def test_category_members_subcategory_default(self):
+        ''' test categorymember with default subcategories (True) '''
+        site = MediaWikiOverloaded()
+        res = site.data[site.api_url]['data']['category_members_with_subcategories']
+        self.assertEqual(site.categorymembers("Chess", results=15), res)
+
+    def test_category_members_without_subcategories(self):
+        ''' test categorymember without subcategories '''
+        site = MediaWikiOverloaded()
+        res = site.data[site.api_url]['data']['category_members_without_subcategories']
+        self.assertEqual(site.categorymembers("Chess", results=15, subcategories=False), res)
+
+    def test_category_members_with_subcategories_limited(self):
+        ''' test categorymember without subcategories limited '''
+        site = MediaWikiOverloaded()
+        res = site.data[site.api_url]['data']['category_members_without_subcategories_5']
+        self.assertEqual(site.categorymembers("Chess", results=5, subcategories=False), res)
+        self.assertEqual(len(res), 5)
+
+    ##########################################
+    # TEST EXCEPTIONS FUNCTIONALITY
     ##########################################

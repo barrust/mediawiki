@@ -503,7 +503,11 @@ class MediaWikiPage(object):
 
     @property
     def references(self):
-        ''' List of URLs of external links on a page '''
+        '''
+        List of URLs of external links on a page.
+        May include external links within page that aren't technically cited
+        anywhere.
+        '''
         if not getattr(self, '_references', False):
             params = {'prop': 'extlinks', 'ellimit': 'max'}
             self._references = list()
@@ -518,7 +522,7 @@ class MediaWikiPage(object):
 
     @property
     def categories(self):
-        ''' list all categories to which a page belongs '''
+        ''' List of non-hidden categories of a page '''
         if not getattr(self, '_categories', False):
             self._categories = list()
             params = {
@@ -536,6 +540,11 @@ class MediaWikiPage(object):
 
     @property
     def coordinates(self):
+        '''
+        Tuple of Decimals in the form of (lat, lon) or None
+
+        Note: Requires the GeoData extension to be installed
+        '''
         if not getattr(self, '_coordinates', False):
             self._coordinates = None
             params = {
@@ -549,6 +558,53 @@ class MediaWikiPage(object):
                 self._coordinates = (Decimal(res['coordinates'][0]['lat']),
                                      Decimal(res['coordinates'][0]['lon']))
         return self._coordinates
+
+    @property
+    def links(self):
+        ''' List of titles of MediaWiki page links on a page '''
+        if not getattr(self, '_links', False):
+            self._links = list()
+            params = {
+                'prop': 'links',
+                'plnamespace': 0,
+                'pllimit': 'max'
+                }
+            for link in self._continued_query(params):
+                self._links.append(link['title'])
+        return self._links
+
+    @property
+    def redirects(self):
+        ''' List of all redirects to the page '''
+        if not getattr(self, '_redirects', False):
+            self._redirects = list()
+            params = {
+                'prop': 'redirects',
+                'rdprop': 'title',
+                'rdlimit': 'max'
+                }
+            for link in self._continued_query(params):
+                self._redirects.append(link['title'])
+
+        return self._redirects
+
+    @property
+    def backlinks(self):
+        if not getattr(self, '_backlinks', False):
+            self._backlinks = list()
+            params = {
+                'action': 'query',
+                'list': 'backlinks',
+                'bltitle': self.title,
+                'bllimit': 'max',
+                'blfilterredir': 'nonredirects',
+                'blcontinue': dict(),
+                'blnamespace': 0
+                }
+            for link in self._continued_query(params, 'backlinks'):
+                self._backlinks.append(link['title'])
+
+        return self._backlinks
 
     # Protected Methods
     def __load(self, redirect=True, preload=False):
@@ -648,7 +704,7 @@ class MediaWikiPage(object):
         query_params.update(self.__title_query_param())
 
         last_continue = dict()
-        prop = query_params.get('prop')
+        prop = query_params.get('prop', None)
 
         while True:
             params = query_params.copy()
@@ -663,8 +719,10 @@ class MediaWikiPage(object):
             if 'generator' in query_params:
                 for datum in pages.values():
                     yield datum
+            elif isinstance(pages, list):
+                for datum in list(enumerate(pages)):
+                    yield datum[1]
             else:
-                print("yeilding:", query_params)  # just testing this
                 for datum in pages[self.pageid].get(prop, list()):
                     yield datum
 

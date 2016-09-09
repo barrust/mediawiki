@@ -8,7 +8,8 @@ from __future__ import unicode_literals
 import requests
 import time
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import (datetime, timedelta)
+from decimal import Decimal
 from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
@@ -467,6 +468,23 @@ class MediaWikiPage(object):
         return self._parent_id
 
     @property
+    def html(self):
+        ''' get the html for the page '''
+        if not getattr(self, '_html', False):
+            self._html = None
+            query_params = {
+                'prop': 'revisions',
+                'rvprop': 'content',
+                'rvlimit': 1,
+                'rvparse': '',
+                'titles': self.title
+            }
+            request = self.mediawiki.wiki_request(query_params)
+            page = request['query']['pages'][self.pageid]
+            self._html = page['revisions'][0]['*']
+        return self._html
+
+    @property
     def images(self):
         ''' List of URLs of images on the page '''
         if not getattr(self, '_images', False):
@@ -515,6 +533,22 @@ class MediaWikiPage(object):
                     self._categories.append(link['title'])
 
         return self._categories
+
+    @property
+    def coordinates(self):
+        if not getattr(self, '_coordinates', False):
+            self._coordinates = None
+            params = {
+                'prop': 'coordinates',
+                'colimit': 'max',
+                'titles': self.title
+                }
+            request = self.mediawiki.wiki_request(params)
+            res = request['query']['pages'][self.pageid]
+            if 'query' in request and 'coordinates' in res:
+                self._coordinates = (Decimal(res['coordinates'][0]['lat']),
+                                     Decimal(res['coordinates'][0]['lon']))
+        return self._coordinates
 
     # Protected Methods
     def __load(self, redirect=True, preload=False):

@@ -20,10 +20,7 @@ def capture_for_unittest(func):
             mock_data[args[0].api_url]['data'] = dict()
 
         new_params = tuple(sorted(args[1].items()))
-        # print it before we add anything else in like action and format
-        # print(args[0].api_url, tuple(sorted(new_params[0].items())), ": ")
         res = func(*args, **kwargs)
-        # print(res)
         mock_data[args[0].api_url]['query'][new_params] = res
         with open(file_path, 'wb') as mock:
             pickle.dump(mock_data, mock, -1)

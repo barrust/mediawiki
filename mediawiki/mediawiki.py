@@ -8,12 +8,13 @@ from __future__ import unicode_literals
 import requests
 import time
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import (datetime, timedelta)
+from decimal import Decimal
 from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          ODD_ERROR_MESSAGE)
-from .utilities import (stdout)
+from .utilities import (Memoize, stdout)
 
 
 class MediaWiki(object):
@@ -35,6 +36,7 @@ class MediaWiki(object):
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
+        self.cache = dict()
 
         # call helper functions to get everything set up
         self.reset_session()
@@ -46,10 +48,10 @@ class MediaWiki(object):
         ''' Get current version of the library '''
         return self._version
 
-    @classmethod
-    def get_version(cls):
+    @staticmethod
+    def get_version():
         ''' get the version information '''
-        return '0.0.1-prealpha'
+        return '0.2.0-alpha'
 
     @property
     def api_version(self):
@@ -72,7 +74,7 @@ class MediaWiki(object):
         ''' set rate limiting of api usage '''
         self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
-        # TODO: add cache to project and clear it here
+        self.clear_memoized()
 
     @property
     def rate_limit_min_wait(self):
@@ -119,7 +121,7 @@ class MediaWiki(object):
 
         self._api_url = tmp
         self._lang = lang
-        # TODO: add cache to project and clear it here
+        self.clear_memoized()
 
     @property
     def user_agent(self):
@@ -137,6 +139,11 @@ class MediaWiki(object):
         ''' get url to the api '''
         return self._api_url
 
+    @property
+    def memoized(self):
+        ''' return the memoize cache '''
+        return self.cache
+
     # non-properties
     def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
                     lang='en'):
@@ -147,13 +154,17 @@ class MediaWiki(object):
             self._get_site_info()
         except Exception:
             raise MediaWikiAPIURLError(api_url)
-        # TODO: add cache to project and clear it here
+        self.clear_memoized()
 
     def reset_session(self):
         ''' Set session information '''
         headers = {'User-Agent': self._user_agent}
         self._session = requests.Session()
         self._session.headers.update(headers)
+
+    def clear_memoized(self):
+        ''' clear memoized (cached) values '''
+        self.cache = dict()
 
     # non-setup functions
     def languages(self):
@@ -162,7 +173,7 @@ class MediaWiki(object):
         language code). Result is a <prefix>: <local_lang_name> pairs
         dictionary.
         '''
-        res = self._wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
+        res = self.wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
         return {lang['code']: lang['*'] for lang in res['query']['languages']}
     # end languages
 
@@ -173,7 +184,7 @@ class MediaWiki(object):
 
         query_params = {'list': 'random', 'rnnamespace': 0, 'rnlimit': pages}
 
-        request = self._wiki_request(query_params)
+        request = self.wiki_request(query_params)
         titles = [page['title'] for page in request['query']['random']]
 
         if len(titles) == 1:
@@ -182,6 +193,7 @@ class MediaWiki(object):
         return titles
     # end random
 
+    @Memoize
     def search(self, query, results=10, suggestion=False):
         '''
         Conduct a search for "query" returning "results" results
@@ -200,7 +212,7 @@ class MediaWiki(object):
         if suggestion:
             search_params['srinfo'] = 'suggestion'
 
-        raw_results = self._wiki_request(search_params)
+        raw_results = self.wiki_request(search_params)
 
         self._check_error_response(raw_results, query)
 
@@ -216,6 +228,7 @@ class MediaWiki(object):
         return list(search_results)
     # end search
 
+    @Memoize
     def suggest(self, query):
         '''
         Gather suggestions based on the provided "query" or None if
@@ -239,8 +252,13 @@ class MediaWiki(object):
                 redirect=True):
         raise NotImplementedError
 
+    @Memoize
     def categorymembers(self, category, results=10, subcategories=True):
-        ''' get informaton about a category '''
+        '''
+        Get informaton about a category
+
+        Note: set results to None to get all
+        '''
         if category is None or category.strip() == '':
             raise ValueError("Category must be specified")
 
@@ -248,24 +266,41 @@ class MediaWiki(object):
             'list': 'categorymembers',
             'cmprop': 'ids|title|type',
             'cmtype': ('page|subcat' if subcategories else 'page'),
-            'cmlimit': results,
+            'cmlimit': (results if results is not None else 5000),
             'cmtitle': 'Category:{0}'.format(category)
         }
-
-        raw_results = self._wiki_request(search_params)
-
-        self._check_error_response(raw_results, category)
-
         pages = list()
         subcats = list()
-        for rec in raw_results['query']['categorymembers']:
-            if rec['type'] == 'page':
-                pages.append(rec['title'])
-            elif rec['type'] == 'subcat':
-                tmp = rec['title']
-                if tmp.startswith('Category:'):
-                    tmp = tmp[9:]
-                subcats.append(tmp)
+        returned_results = 0
+        finished = False
+        last_continue = dict()
+        while not finished:
+            params = search_params.copy()
+            params.update(last_continue)
+            raw_results = self.wiki_request(params)
+
+            self._check_error_response(raw_results, category)
+
+            current_pull = len(raw_results['query']['categorymembers'])
+            for rec in raw_results['query']['categorymembers']:
+                if rec['type'] == 'page':
+                    pages.append(rec['title'])
+                elif rec['type'] == 'subcat':
+                    tmp = rec['title']
+                    if tmp.startswith('Category:'):
+                        tmp = tmp[9:]
+                    subcats.append(tmp)
+
+            if 'continue' not in raw_results:
+                break
+
+            returned_results = returned_results + current_pull
+            if results is None or (results - returned_results > 0):
+                last_continue = raw_results['continue']
+            else:
+                finished = True
+
+        # end while loop
         if subcategories:
             return pages, subcats
         else:
@@ -293,9 +328,7 @@ class MediaWiki(object):
             return MediaWikiPage(self, pageid=pageid, preload=preload)
     # end page
 
-    # Private functions
-    # Not to be called from outside
-    def _wiki_request(self, params):
+    def wiki_request(self, params):
         '''
         Make a request to the MediaWiki API using the given search
         parameters
@@ -324,14 +357,15 @@ class MediaWiki(object):
             self._rate_limit_last_call = datetime.now()
 
         return req.json(encoding='utf8')
-    # end _wiki_request
+    # end wiki_request
 
+    # Protected functions
     def _get_site_info(self):
         '''
         Parse out the Wikimedia site information including
         API Version and Extensions
         '''
-        response = self._wiki_request({
+        response = self.wiki_request({
             'meta': 'siteinfo',
             'siprop': 'extensions|general'
         })
@@ -418,7 +452,7 @@ class MediaWikiPage(object):
                 'rvprop': 'ids'
             }
             query_params.update(self.__title_query_param())
-            request = self.mediawiki._wiki_request(query_params)
+            request = self.mediawiki.wiki_request(query_params)
             page_info = request['query']['pages'][self.pageid]
             self._content = page_info['extract']
             self._revision_id = page_info['revisions'][0]['revid']
@@ -447,6 +481,23 @@ class MediaWikiPage(object):
         return self._parent_id
 
     @property
+    def html(self):
+        ''' get the html for the page '''
+        if not getattr(self, '_html', False):
+            self._html = None
+            query_params = {
+                'prop': 'revisions',
+                'rvprop': 'content',
+                'rvlimit': 1,
+                'rvparse': '',
+                'titles': self.title
+            }
+            request = self.mediawiki.wiki_request(query_params)
+            page = request['query']['pages'][self.pageid]
+            self._html = page['revisions'][0]['*']
+        return self._html
+
+    @property
     def images(self):
         ''' List of URLs of images on the page '''
         if not getattr(self, '_images', False):
@@ -465,7 +516,11 @@ class MediaWikiPage(object):
 
     @property
     def references(self):
-        ''' List of URLs of external links on a page '''
+        '''
+        List of URLs of external links on a page.
+        May include external links within page that aren't technically cited
+        anywhere.
+        '''
         if not getattr(self, '_references', False):
             params = {'prop': 'extlinks', 'ellimit': 'max'}
             self._references = list()
@@ -478,6 +533,93 @@ class MediaWikiPage(object):
 
         return self._references
 
+    @property
+    def categories(self):
+        ''' List of non-hidden categories of a page '''
+        if not getattr(self, '_categories', False):
+            self._categories = list()
+            params = {
+                'prop': 'categories',
+                'cllimit': 'max',
+                'clshow': '!hidden'
+                }
+            for link in self._continued_query(params):
+                if link['title'].startswith('Category:'):
+                    self._categories.append(link['title'][9:])
+                else:
+                    self._categories.append(link['title'])
+
+        return self._categories
+
+    @property
+    def coordinates(self):
+        '''
+        Tuple of Decimals in the form of (lat, lon) or None
+
+        Note: Requires the GeoData extension to be installed
+        '''
+        if not getattr(self, '_coordinates', False):
+            self._coordinates = None
+            params = {
+                'prop': 'coordinates',
+                'colimit': 'max',
+                'titles': self.title
+                }
+            request = self.mediawiki.wiki_request(params)
+            res = request['query']['pages'][self.pageid]
+            if 'query' in request and 'coordinates' in res:
+                self._coordinates = (Decimal(res['coordinates'][0]['lat']),
+                                     Decimal(res['coordinates'][0]['lon']))
+        return self._coordinates
+
+    @property
+    def links(self):
+        ''' List of titles of MediaWiki page links on a page '''
+        if not getattr(self, '_links', False):
+            self._links = list()
+            params = {
+                'prop': 'links',
+                'plnamespace': 0,
+                'pllimit': 'max'
+                }
+            for link in self._continued_query(params):
+                self._links.append(link['title'])
+        return self._links
+
+    @property
+    def redirects(self):
+        ''' List of all redirects to the page '''
+        if not getattr(self, '_redirects', False):
+            self._redirects = list()
+            params = {
+                'prop': 'redirects',
+                'rdprop': 'title',
+                'rdlimit': 'max'
+                }
+            for link in self._continued_query(params):
+                self._redirects.append(link['title'])
+
+        return self._redirects
+
+    @property
+    def backlinks(self):
+        ''' List all pages that link to this page '''
+        if not getattr(self, '_backlinks', False):
+            self._backlinks = list()
+            params = {
+                'action': 'query',
+                'list': 'backlinks',
+                'bltitle': self.title,
+                'bllimit': 'max',
+                'blfilterredir': 'nonredirects',
+                'blcontinue': dict(),
+                'blnamespace': 0
+                }
+            for link in self._continued_query(params, 'backlinks'):
+                self._backlinks.append(link['title'])
+
+        return self._backlinks
+
     # Protected Methods
     def __load(self, redirect=True, preload=False):
         ''' load the basic page information '''
@@ -489,7 +631,7 @@ class MediaWikiPage(object):
         }
         query_params.update(self.__title_query_param())
 
-        request = self.mediawiki._wiki_request(query_params)
+        request = self.mediawiki.wiki_request(query_params)
 
         query = request['query']
         pageid = list(query['pages'].keys())[0]
@@ -527,7 +669,7 @@ class MediaWikiPage(object):
             'rvlimit': 1
         }
         query_params.update(self.__title_query_param())
-        request = self.mediawiki._wiki_request(query_params)
+        request = self.mediawiki.wiki_request(query_params)
         html = request['query']['pages'][pageid]['revisions'][0]['*']
 
         lis = BeautifulSoup(html, 'html.parser').find_all('li')
@@ -582,7 +724,7 @@ class MediaWikiPage(object):
             params = query_params.copy()
             params.update(last_continue)
 
-            request = self.mediawiki._wiki_request(params)
+            request = self.mediawiki.wiki_request(params)
 
             if 'query' not in request:
                 break
@@ -591,8 +733,10 @@ class MediaWikiPage(object):
             if 'generator' in query_params:
                 for datum in pages.values():
                     yield datum
+            elif isinstance(pages, list):
+                for datum in list(enumerate(pages)):
+                    yield datum[1]
             else:
-                print("yeilding:", query_params)  # just testing this
                 for datum in pages[self.pageid].get(prop, list()):
                     yield datum
 

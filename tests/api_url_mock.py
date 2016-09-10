@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''
+Mock data
+'''
 from __future__ import unicode_literals
 
 api_url_mock = {

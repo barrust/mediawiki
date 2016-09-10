@@ -141,6 +141,7 @@ class MediaWiki(object):
 
     @property
     def memoized(self):
+        ''' return the memoize cache '''
         return self.cache
 
     # non-properties
@@ -602,6 +603,7 @@ class MediaWikiPage(object):
 
     @property
     def backlinks(self):
+        ''' List all pages that link to this page '''
         if not getattr(self, '_backlinks', False):
             self._backlinks = list()
             params = {

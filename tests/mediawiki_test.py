@@ -14,8 +14,8 @@ class MediaWikiOverloaded(MediaWiki):
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
-        with open('./tests/mock_api_data.p', 'rb') as f:
-            self.data = pickle.load(f)
+        with open('./tests/mock_api_data.p', 'rb') as file_handle:
+            self.data = pickle.load(file_handle)
         MediaWiki.__init__(self, url=url, lang=lang, timeout=timeout,
                            rate_limit=rate_limit,
                            rate_limit_wait=rate_limit_wait)
@@ -106,7 +106,7 @@ class TestMediaWiki(unittest.TestCase):
     ##########################################
     # TEST SEARCH FUNCTIONALITY
     ##########################################
-    def test_search_no_suggest(self):
+    def test_search_no_sug(self):
         ''' test searching without suggestion '''
         site = MediaWikiOverloaded()
         # test that default is suggestion False
@@ -115,19 +115,19 @@ class TestMediaWiki(unittest.TestCase):
         self.assertEqual(site.search('chest set'), api_url)
         self.assertEqual(site.search('chest set', suggestion=False), sws)
 
-    def test_search_suggest_found(self):
+    def test_search_sug_found(self):
         ''' test searching with suggestion where found '''
         site = MediaWikiOverloaded()
         sws = site.data[site.api_url]['data']['search_with_suggestion_found']
         self.assertEqual(site.search('chest set', suggestion=True), sws)
 
-    def test_search_suggest_not_found(self):
+    def test_search_sug_not_found(self):
         ''' test searching with suggestion where not found '''
         site = MediaWikiOverloaded()
         swsnf = site.data[site.api_url]['data']['search_with_suggestion_not_found']
         self.assertEqual(site.search('chess set', suggestion=True), swsnf)
 
-    def test_search_suggest_not_found_number(self):
+    def test_search_sug_not_found_num(self):
         ''' test searching with suggestion where not found but limited to the correct number'''
         site = MediaWikiOverloaded()
         self.assertEqual(site.search('chess set', results=505, suggestion=False), site.data[site.api_url]['data']['search_with_suggestion_not_found_number'])
@@ -136,25 +136,25 @@ class TestMediaWiki(unittest.TestCase):
     ##########################################
     # TEST CATEGORYMEMBERS FUNCTIONALITY
     ##########################################
-    def test_category_members_with_subcategories(self):
+    def test_cat_mems_with_subcats(self):
         ''' test categorymember with subcategories '''
         site = MediaWikiOverloaded()
         res = site.data[site.api_url]['data']['category_members_with_subcategories']
         self.assertEqual(site.categorymembers("Chess", results=15, subcategories=True), res)
 
-    def test_category_members_subcategory_default(self):
+    def test_cat_mems_subcat_default(self):
         ''' test categorymember with default subcategories (True) '''
         site = MediaWikiOverloaded()
         res = site.data[site.api_url]['data']['category_members_with_subcategories']
         self.assertEqual(site.categorymembers("Chess", results=15), res)
 
-    def test_category_members_without_subcategories(self):
+    def test_cat_mems_wo_subcats(self):
         ''' test categorymember without subcategories '''
         site = MediaWikiOverloaded()
         res = site.data[site.api_url]['data']['category_members_without_subcategories']
         self.assertEqual(site.categorymembers("Chess", results=15, subcategories=False), res)
 
-    def test_category_members_with_subcategories_limited(self):
+    def test_cat_mems_w_subcats_lim(self):
         ''' test categorymember without subcategories limited '''
         site = MediaWikiOverloaded()
         res = site.data[site.api_url]['data']['category_members_without_subcategories_5']

@@ -14,7 +14,7 @@ from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          ODD_ERROR_MESSAGE)
-from .utilities import (stdout)
+from .utilities import (Memoize, stdout)
 
 
 class MediaWiki(object):
@@ -73,7 +73,7 @@ class MediaWiki(object):
         ''' set rate limiting of api usage '''
         self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
-        # TODO: add cache to project and clear it here
+        self._clear_memoized()
 
     @property
     def rate_limit_min_wait(self):
@@ -120,7 +120,7 @@ class MediaWiki(object):
 
         self._api_url = tmp
         self._lang = lang
-        # TODO: add cache to project and clear it here
+        self._clear_memoized()
 
     @property
     def user_agent(self):
@@ -138,6 +138,10 @@ class MediaWiki(object):
         ''' get url to the api '''
         return self._api_url
 
+    @property
+    def cache(self):
+        return self._cache
+
     # non-properties
     def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
                     lang='en'):
@@ -148,13 +152,17 @@ class MediaWiki(object):
             self._get_site_info()
         except Exception:
             raise MediaWikiAPIURLError(api_url)
-        # TODO: add cache to project and clear it here
+        self._clear_memoized()
 
     def reset_session(self):
         ''' Set session information '''
         headers = {'User-Agent': self._user_agent}
         self._session = requests.Session()
         self._session.headers.update(headers)
+
+    def _clear_memoized(self):
+        ''' clear memoized values '''
+        self._cache = dict()
 
     # non-setup functions
     def languages(self):
@@ -183,6 +191,7 @@ class MediaWiki(object):
         return titles
     # end random
 
+    @Memoize
     def search(self, query, results=10, suggestion=False):
         '''
         Conduct a search for "query" returning "results" results
@@ -217,6 +226,7 @@ class MediaWiki(object):
         return list(search_results)
     # end search
 
+    @Memoize
     def suggest(self, query):
         '''
         Gather suggestions based on the provided "query" or None if
@@ -240,6 +250,7 @@ class MediaWiki(object):
                 redirect=True):
         raise NotImplementedError
 
+    @Memoize
     def categorymembers(self, category, results=10, subcategories=True):
         '''
         Get informaton about a category

@@ -36,6 +36,7 @@ class MediaWiki(object):
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
+        self.cache = dict()
 
         # call helper functions to get everything set up
         self.reset_session()
@@ -47,8 +48,8 @@ class MediaWiki(object):
         ''' Get current version of the library '''
         return self._version
 
-    @classmethod
-    def get_version(cls):
+    @staticmethod
+    def get_version():
         ''' get the version information '''
         return '0.2.0-alpha'
 
@@ -73,7 +74,7 @@ class MediaWiki(object):
         ''' set rate limiting of api usage '''
         self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
-        self._clear_memoized()
+        self.clear_memoized()
 
     @property
     def rate_limit_min_wait(self):
@@ -120,7 +121,7 @@ class MediaWiki(object):
 
         self._api_url = tmp
         self._lang = lang
-        self._clear_memoized()
+        self.clear_memoized()
 
     @property
     def user_agent(self):
@@ -139,8 +140,8 @@ class MediaWiki(object):
         return self._api_url
 
     @property
-    def cache(self):
-        return self._cache
+    def memoized(self):
+        return self.cache
 
     # non-properties
     def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
@@ -152,7 +153,7 @@ class MediaWiki(object):
             self._get_site_info()
         except Exception:
             raise MediaWikiAPIURLError(api_url)
-        self._clear_memoized()
+        self.clear_memoized()
 
     def reset_session(self):
         ''' Set session information '''
@@ -160,9 +161,9 @@ class MediaWiki(object):
         self._session = requests.Session()
         self._session.headers.update(headers)
 
-    def _clear_memoized(self):
-        ''' clear memoized values '''
-        self._cache = dict()
+    def clear_memoized(self):
+        ''' clear memoized (cached) values '''
+        self.cache = dict()
 
     # non-setup functions
     def languages(self):
@@ -715,7 +716,7 @@ class MediaWikiPage(object):
         query_params.update(self.__title_query_param())
 
         last_continue = dict()
-        prop = query_params.get('prop', None)
+        prop = query_params.get('prop')
 
         while True:
             params = query_params.copy()

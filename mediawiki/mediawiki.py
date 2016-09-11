@@ -516,7 +516,7 @@ class MediaWikiPage(object):
             for page in self._continued_query(params):
                 if 'imageinfo' in page:
                     self._images.append(page['imageinfo'][0]['url'])
-
+            self._images = sorted(self._images)
         return self._images
 
     @property
@@ -535,7 +535,7 @@ class MediaWikiPage(object):
                 else:
                     url = 'http:{0}'.format(link['*'])
                 self._references.append(url)
-
+            self._references = sorted(self._references)
         return self._references
 
     @property
@@ -553,7 +553,7 @@ class MediaWikiPage(object):
                     self._categories.append(link['title'][9:])
                 else:
                     self._categories.append(link['title'])
-
+            self._categories = sorted(self._categories)
         return self._categories
 
     @property
@@ -589,6 +589,7 @@ class MediaWikiPage(object):
                 }
             for link in self._continued_query(params):
                 self._links.append(link['title'])
+            self._links = sorted(self._links)
         return self._links
 
     @property
@@ -599,11 +600,11 @@ class MediaWikiPage(object):
             params = {
                 'prop': 'redirects',
                 'rdprop': 'title',
-                'rdlimit': 'max'
+                'rdlimit': '50'
                 }
             for link in self._continued_query(params):
                 self._redirects.append(link['title'])
-
+            self._redirects = sorted(self._redirects)
         return self._redirects
 
     @property
@@ -617,12 +618,11 @@ class MediaWikiPage(object):
                 'bltitle': self.title,
                 'bllimit': 'max',
                 'blfilterredir': 'nonredirects',
-                'blcontinue': dict(),
                 'blnamespace': 0
                 }
             for link in self._continued_query(params, 'backlinks'):
                 self._backlinks.append(link['title'])
-
+            self._backlinks = sorted(self._backlinks)
         return self._backlinks
 
     @property
@@ -652,6 +652,41 @@ class MediaWikiPage(object):
         request = self.mediawiki.wiki_request(query_params)
         summary = request['query']['pages'][self.pageid]['extract']
         return summary
+
+    @property
+    def sections(self):
+        ''' list sections from the table of contents '''
+        if not getattr(self, '_sections', False):
+            query_params = {'action': 'parse', 'prop': 'sections'}
+            if not getattr(self, 'title', None):
+                query_params['pageid'] = self.pageid
+            else:
+                query_params['page'] = self.title
+            request = self.mediawiki.wiki_request(query_params)
+            sections = request['parse']['sections']
+            self._sections = [section['line'] for section in sections]
+
+        return self._sections
+
+    def section(self, section_title):
+        '''
+        Get the plain text content of a section from `self.sections`.
+        Returns None if `section_title` isn't found, otherwise returns a
+        whitespace stripped string. Only text between title and next
+        section or sub-section title is returned.
+        '''
+        section = u"== {0} ==".format(section_title)
+        try:
+            index = self.content.index(section) + len(section)
+        except ValueError:
+            return None
+
+        try:
+            next_index = self.content.index("==", index)
+        except ValueError:
+            next_index = len(self.content)
+
+        return self.content[index:next_index].lstrip("=").strip()
 
     # Protected Methods
     def __load(self, redirect=True, preload=False):

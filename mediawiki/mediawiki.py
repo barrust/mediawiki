@@ -600,7 +600,7 @@ class MediaWikiPage(object):
             params = {
                 'prop': 'redirects',
                 'rdprop': 'title',
-                'rdlimit': '50'
+                'rdlimit': 'max'
                 }
             for link in self._continued_query(params):
                 self._redirects.append(link['title'])

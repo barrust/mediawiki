@@ -39,7 +39,7 @@ class MediaWiki(object):
         self.cache = dict()
 
         # call helper functions to get everything set up
-        self.reset_session()
+        self._reset_session()
         self._get_site_info()
 
     # non-settable properties
@@ -132,7 +132,7 @@ class MediaWiki(object):
     def user_agent(self, user_agent):
         ''' set a new user agent '''
         self._user_agent = user_agent
-        self.reset_session()
+        self._reset_session()
 
     @property
     def api_url(self):
@@ -156,7 +156,7 @@ class MediaWiki(object):
             raise MediaWikiAPIURLError(api_url)
         self.clear_memoized()
 
-    def reset_session(self):
+    def _reset_session(self):
         ''' Set session information '''
         headers = {'User-Agent': self._user_agent}
         self._session = requests.Session()
@@ -248,9 +248,13 @@ class MediaWiki(object):
     def prefexsearch(self, query, results=10):
         raise NotImplementedError
 
+    @Memoize
     def summary(self, title, sentences=0, chars=0, auto_suggest=True,
                 redirect=True):
-        raise NotImplementedError
+        ''' Get the summary for the title in question '''
+        page_info = self.page(title, auto_suggest=auto_suggest,
+                              redirect=redirect)
+        return page_info.summarize(sentences, chars)
 
     @Memoize
     def categorymembers(self, category, results=10, subcategories=True):
@@ -309,6 +313,7 @@ class MediaWiki(object):
 
     def categorytree(self, category, depth=5):
         raise NotImplementedError
+    # end categorytree
 
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
              preload=False):
@@ -348,7 +353,7 @@ class MediaWiki(object):
             time.sleep(int(wait_time.total_seconds()))
 
         if self._session is None:
-            self.reset_session()
+            self._reset_session()
 
         req = self._session.get(self._api_url, params=params,
                                 timeout=self._timeout)
@@ -619,6 +624,34 @@ class MediaWikiPage(object):
                 self._backlinks.append(link['title'])
 
         return self._backlinks
+
+    @property
+    def summary(self):
+        ''' the default summary of this page '''
+        if not getattr(self, '_summary', False):
+            self._summary = self.summarize()
+        return self._summary
+
+    def summarize(self, sentences=0, chars=0):
+        '''
+        summarize an article either by number of sentences, chars, or first
+        section
+        '''
+        query_params = {
+            'prop': 'extracts',
+            'explaintext': '',
+            'titles': self.title
+        }
+        if sentences:
+            query_params['exsentences'] = (10 if sentences > 10 else sentences)
+        elif chars:
+            query_params['exchars'] = (1 if chars < 1 else chars)
+        else:
+            query_params['exintro'] = ''
+
+        request = self.mediawiki.wiki_request(query_params)
+        summary = request['query']['pages'][self.pageid]['extract']
+        return summary
 
     # Protected Methods
     def __load(self, redirect=True, preload=False):

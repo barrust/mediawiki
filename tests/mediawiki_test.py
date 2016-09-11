@@ -3,7 +3,8 @@ Unittest class
 '''
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from mediawiki import (MediaWiki)
+from mediawiki import (MediaWiki, PageError, RedirectError,
+                       DisambiguationError)
 import unittest
 import pickle
 from datetime import timedelta
@@ -164,3 +165,47 @@ class TestMediaWiki(unittest.TestCase):
     ##########################################
     # TEST EXCEPTIONS FUNCTIONALITY
     ##########################################
+    def test_page_error(self):
+        ''' Test that page error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        error = lambda: site.page('gobbilygook')
+        self.assertRaises(PageError, error)
+
+    def test_page_error_message(self):
+        ''' Test that page error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        error = lambda: site.page('gobbilygook')
+        try:
+            error()
+        except PageError as ex:
+            self.assertEqual(ex.message, site.data[site.api_url]['data']['page_error_msg'])
+
+    def test_redirect_error(self):
+        ''' Test that redirect error is thrown correctly '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        error = lambda: site.page('arya', auto_suggest=False, redirect=False)
+        self.assertRaises(RedirectError, error)
+
+    def test_redirect_error_msg(self):
+        ''' Test that redirect error is thrown correctly '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        error = lambda: site.page('arya', auto_suggest=False, redirect=False)
+        try:
+            error()
+        except RedirectError as ex:
+            self.assertEqual(ex.message, site.data[site.api_url]['data']['redirect_error_msg'])
+
+    def test_disambiguation_error(self):
+        ''' Test that disambiguation error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        error = lambda: site.page('bush')
+        self.assertRaises(DisambiguationError, error)
+
+    def test_disambiguation_error_msg(self):
+        ''' Test that disambiguation error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        error = lambda: site.page('bush')
+        try:
+            error()
+        except DisambiguationError as ex:
+            self.assertEqual(ex.message, site.data[site.api_url]['data']['disambiguation_error_msg'])

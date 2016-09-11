@@ -51,7 +51,7 @@ class MediaWiki(object):
     @staticmethod
     def get_version():
         ''' get the version information '''
-        return '0.2.0-alpha'
+        return '0.3.0'
 
     @property
     def api_version(self):

@@ -29,7 +29,6 @@ class Memoize(object):
         # builld out the default parameters dictionary
         for i, item in enumerate(have_defaults):
             self._default_params[item] = defaults[i]
-        # print(self._default_params)
 
     def __call__(self, *args, **kwargs):
         ''' define the __call__ method '''
@@ -62,7 +61,6 @@ class Memoize(object):
 
     def __get__(self, obj, objtype):
         """Support instance methods."""
-        # print "Get", obj, objtype
         func = functools.partial(self.__call__, obj)
         if not hasattr(obj, 'cache'):
             obj.cache = dict()

@@ -3,7 +3,8 @@ Unittest class
 '''
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from mediawiki import (MediaWiki)
+from mediawiki import (MediaWiki, PageError, RedirectError,
+                       DisambiguationError)
 import unittest
 import pickle
 from datetime import timedelta
@@ -164,3 +165,70 @@ class TestMediaWiki(unittest.TestCase):
     ##########################################
     # TEST EXCEPTIONS FUNCTIONALITY
     ##########################################
+    def test_page_error(self):
+        ''' Test that page error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        error = lambda: site.page('gobbilygook')
+        self.assertRaises(PageError, error)
+
+    def test_page_error_message(self):
+        ''' Test that page error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        error = lambda: site.page('gobbilygook')
+        try:
+            error()
+        except PageError as ex:
+            self.assertEqual(ex.message, site.data[site.api_url]['data']['page_error_msg'])
+
+    def test_redirect_error(self):
+        ''' Test that redirect error is thrown correctly '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        error = lambda: site.page('arya', auto_suggest=False, redirect=False)
+        self.assertRaises(RedirectError, error)
+
+    def test_redirect_error_msg(self):
+        ''' Test that redirect error is thrown correctly '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        error = lambda: site.page('arya', auto_suggest=False, redirect=False)
+        try:
+            error()
+        except RedirectError as ex:
+            self.assertEqual(ex.message, site.data[site.api_url]['data']['redirect_error_msg'])
+
+    def test_disambiguation_error(self):
+        ''' Test that disambiguation error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        error = lambda: site.page('bush')
+        self.assertRaises(DisambiguationError, error)
+
+    def test_disambiguation_error_msg(self):
+        ''' Test that disambiguation error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        error = lambda: site.page('bush')
+        try:
+            error()
+        except DisambiguationError as ex:
+            self.assertEqual(ex.message, site.data[site.api_url]['data']['disambiguation_error_msg'])
+
+    ##########################################
+    # TEST PAGE FUNCTIONALITY
+    ##########################################
+    def test_page_and_properties(self):
+        ''' Test a page from ASOIAF wiki with all properties '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        pg = site.page('arya')
+        self.assertEqual(pg.title, site.data[site.api_url]['data']['arya_title'])
+        self.assertEqual(pg.pageid, site.data[site.api_url]['data']['arya_pageid'])
+        self.assertEqual(pg.url, site.data[site.api_url]['data']['arya_url'])
+        self.assertEqual(pg.backlinks, site.data[site.api_url]['data']['arya_backlinks'])
+        self.assertEqual(pg.images, site.data[site.api_url]['data']['arya_images'])
+        self.assertEqual(pg.redirects, site.data[site.api_url]['data']['arya_redirects'])
+        self.assertEqual(pg.links, site.data[site.api_url]['data']['arya_links'])
+        self.assertEqual(pg.categories, site.data[site.api_url]['data']['arya_categories'])
+        self.assertEqual(pg.references, site.data[site.api_url]['data']['arya_references'])
+        self.assertEqual(pg.content, site.data[site.api_url]['data']['arya_content'])
+        self.assertEqual(pg.parent_id, site.data[site.api_url]['data']['arya_parent_id'])
+        self.assertEqual(pg.revision_id, site.data[site.api_url]['data']['arya_revision_id'])
+        self.assertEqual(pg.coordinates, site.data[site.api_url]['data']['arya_coordinates'])
+        self.assertEqual(pg.sections, site.data[site.api_url]['data']['arya_sections'])
+        self.assertEqual(pg.section("A Game of Thrones"), site.data[site.api_url]['data']['arya_a_game_of_thrones'])

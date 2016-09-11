@@ -39,7 +39,7 @@ class MediaWiki(object):
         self.cache = dict()
 
         # call helper functions to get everything set up
-        self.reset_session()
+        self._reset_session()
         self._get_site_info()
 
     # non-settable properties
@@ -51,7 +51,7 @@ class MediaWiki(object):
     @staticmethod
     def get_version():
         ''' get the version information '''
-        return '0.2.0-alpha'
+        return '0.3.0'
 
     @property
     def api_version(self):
@@ -132,7 +132,7 @@ class MediaWiki(object):
     def user_agent(self, user_agent):
         ''' set a new user agent '''
         self._user_agent = user_agent
-        self.reset_session()
+        self._reset_session()
 
     @property
     def api_url(self):
@@ -156,7 +156,7 @@ class MediaWiki(object):
             raise MediaWikiAPIURLError(api_url)
         self.clear_memoized()
 
-    def reset_session(self):
+    def _reset_session(self):
         ''' Set session information '''
         headers = {'User-Agent': self._user_agent}
         self._session = requests.Session()
@@ -248,9 +248,13 @@ class MediaWiki(object):
     def prefexsearch(self, query, results=10):
         raise NotImplementedError
 
+    @Memoize
     def summary(self, title, sentences=0, chars=0, auto_suggest=True,
                 redirect=True):
-        raise NotImplementedError
+        ''' Get the summary for the title in question '''
+        page_info = self.page(title, auto_suggest=auto_suggest,
+                              redirect=redirect)
+        return page_info.summarize(sentences, chars)
 
     @Memoize
     def categorymembers(self, category, results=10, subcategories=True):
@@ -309,6 +313,7 @@ class MediaWiki(object):
 
     def categorytree(self, category, depth=5):
         raise NotImplementedError
+    # end categorytree
 
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
              preload=False):
@@ -348,7 +353,7 @@ class MediaWiki(object):
             time.sleep(int(wait_time.total_seconds()))
 
         if self._session is None:
-            self.reset_session()
+            self._reset_session()
 
         req = self._session.get(self._api_url, params=params,
                                 timeout=self._timeout)
@@ -511,7 +516,7 @@ class MediaWikiPage(object):
             for page in self._continued_query(params):
                 if 'imageinfo' in page:
                     self._images.append(page['imageinfo'][0]['url'])
-
+            self._images = sorted(self._images)
         return self._images
 
     @property
@@ -530,7 +535,7 @@ class MediaWikiPage(object):
                 else:
                     url = 'http:{0}'.format(link['*'])
                 self._references.append(url)
-
+            self._references = sorted(self._references)
         return self._references
 
     @property
@@ -548,7 +553,7 @@ class MediaWikiPage(object):
                     self._categories.append(link['title'][9:])
                 else:
                     self._categories.append(link['title'])
-
+            self._categories = sorted(self._categories)
         return self._categories
 
     @property
@@ -584,6 +589,7 @@ class MediaWikiPage(object):
                 }
             for link in self._continued_query(params):
                 self._links.append(link['title'])
+            self._links = sorted(self._links)
         return self._links
 
     @property
@@ -598,7 +604,7 @@ class MediaWikiPage(object):
                 }
             for link in self._continued_query(params):
                 self._redirects.append(link['title'])
-
+            self._redirects = sorted(self._redirects)
         return self._redirects
 
     @property
@@ -612,13 +618,75 @@ class MediaWikiPage(object):
                 'bltitle': self.title,
                 'bllimit': 'max',
                 'blfilterredir': 'nonredirects',
-                'blcontinue': dict(),
                 'blnamespace': 0
                 }
             for link in self._continued_query(params, 'backlinks'):
                 self._backlinks.append(link['title'])
-
+            self._backlinks = sorted(self._backlinks)
         return self._backlinks
+
+    @property
+    def summary(self):
+        ''' the default summary of this page '''
+        if not getattr(self, '_summary', False):
+            self._summary = self.summarize()
+        return self._summary
+
+    def summarize(self, sentences=0, chars=0):
+        '''
+        summarize an article either by number of sentences, chars, or first
+        section
+        '''
+        query_params = {
+            'prop': 'extracts',
+            'explaintext': '',
+            'titles': self.title
+        }
+        if sentences:
+            query_params['exsentences'] = (10 if sentences > 10 else sentences)
+        elif chars:
+            query_params['exchars'] = (1 if chars < 1 else chars)
+        else:
+            query_params['exintro'] = ''
+
+        request = self.mediawiki.wiki_request(query_params)
+        summary = request['query']['pages'][self.pageid]['extract']
+        return summary
+
+    @property
+    def sections(self):
+        ''' list sections from the table of contents '''
+        if not getattr(self, '_sections', False):
+            query_params = {'action': 'parse', 'prop': 'sections'}
+            if not getattr(self, 'title', None):
+                query_params['pageid'] = self.pageid
+            else:
+                query_params['page'] = self.title
+            request = self.mediawiki.wiki_request(query_params)
+            sections = request['parse']['sections']
+            self._sections = [section['line'] for section in sections]
+
+        return self._sections
+
+    def section(self, section_title):
+        '''
+        Get the plain text content of a section from `self.sections`.
+        Returns None if `section_title` isn't found, otherwise returns a
+        whitespace stripped string. Only text between title and next
+        section or sub-section title is returned.
+        '''
+        section = u"== {0} ==".format(section_title)
+        try:
+            index = self.content.index(section) + len(section)
+        except ValueError:
+            return None
+
+        try:
+            next_index = self.content.index("==", index)
+        except ValueError:
+            next_index = len(self.content)
+
+        return self.content[index:next_index].lstrip("=").strip()
 
     # Protected Methods
     def __load(self, redirect=True, preload=False):

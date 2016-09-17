@@ -51,7 +51,7 @@ class MediaWiki(object):
     @staticmethod
     def get_version():
         ''' get the version information '''
-        return '0.3.0'
+        return '0.3.1'
 
     @property
     def api_version(self):
@@ -242,6 +242,7 @@ class MediaWiki(object):
         return title
     # end suggest
 
+    @Memoize
     def geosearch(self, latitude=None, longitude=None, radius=1000,
                   title=None, auto_suggest=True, results=10):
         ''' Do a search for pages that relate to the provided area '''
@@ -279,8 +280,37 @@ class MediaWiki(object):
 
         return list(res)
 
-    def opensearch(self, query, results=10, redirect=False):
-        raise NotImplementedError
+    @Memoize
+    def opensearch(self, query, results=10, redirect=True):
+        '''
+        Execute a MediaWiki opensearch request, similar to search box
+        suggestions and conforming to the OpenSearch specification.
+
+        Returns:
+            List of tuples: Title, Summary, and URL
+        '''
+
+        if query is None or query.strip() == '':
+            raise ValueError("Query must be specified")
+
+        query_params = {
+            'action': 'opensearch',
+            'search': query,
+            'limit': (100 if results > 100 else results),
+            'redirects': ('resolve' if redirect else 'return'),
+            'warningsaserror': True,
+            'namespace': ''
+        }
+
+        results = self.wiki_request(query_params)
+
+        self._check_error_response(results, query)
+
+        res = list()
+        for i, item in enumerate(results[1]):
+            res.append((item, results[2][i], results[3][i],))
+
+        return res
 
     def prefexsearch(self, query, results=10):
         raise NotImplementedError

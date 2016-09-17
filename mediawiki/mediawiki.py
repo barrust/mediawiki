@@ -313,7 +313,7 @@ class MediaWiki(object):
         return res
 
     @Memoize
-    def prefexsearch(self, query, results=10):
+    def prefixsearch(self, query, results=10):
         ''' A prefix based search like the Wikipedia search box results '''
 
         if query is None or query.strip() == '':

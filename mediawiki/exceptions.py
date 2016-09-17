@@ -111,3 +111,14 @@ class MediaWikiAPIURLError(MediaWikiBaseException):
         self.api_url = api_url
         msg = "{0} is not a valid MediaWiki API URL".format(self.api_url)
         super(MediaWikiAPIURLError, self).__init__(msg)
+
+
+class MediaWikiGeoCoordError(MediaWikiBaseException):
+    ''' Exceptions to handle GeoData exceptions '''
+
+    def __init__(self, error):
+        self.error = error
+        msg = ('GeoData search resulted in the following '
+               'error: {0} - Please use valid coordinates or a proper '
+               'page title.').format(self.error)
+        super(MediaWikiGeoCoordError, self).__init__(msg)

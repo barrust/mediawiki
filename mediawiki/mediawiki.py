@@ -9,11 +9,11 @@ import requests
 import time
 from bs4 import BeautifulSoup
 from datetime import (datetime, timedelta)
-from decimal import Decimal
+from decimal import (Decimal, DecimalException)
 from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
-                         ODD_ERROR_MESSAGE)
+                         MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
 from .utilities import (Memoize, stdout)
 
 
@@ -234,13 +234,50 @@ class MediaWiki(object):
         Gather suggestions based on the provided "query" or None if
         no suggestions found
         '''
-        search_results = self.search(query, results=1, suggestion=True)
-        return search_results[1]
+        res, suggest = self.search(query, results=1, suggestion=True)
+        try:
+            title = suggest or res[0]
+        except IndexError:  # page doesn't exist
+            title = None
+        return title
     # end suggest
 
-    def geosearch(self, latitude, longitude, title=None, results=10,
-                  radius=1000):
-        raise NotImplementedError
+    def geosearch(self, latitude=None, longitude=None, radius=1000,
+                  title=None, auto_suggest=True, results=10):
+        ''' Do a search for pages that relate to the provided area '''
+
+        def test_lat_long(val):
+            ''' handle testing lat and long '''
+            if type(val) is not Decimal:
+                error = "Latitude and Longitude must be specified"
+                try:
+                    return Decimal(val)
+                except (DecimalException, TypeError):
+                    raise ValueError(error)
+            return val
+        # end local function
+
+        params = {
+            'list': 'geosearch',
+            'gsradius': radius,
+            'gslimit': results
+        }
+        if title is not None:
+            if auto_suggest:
+                title = self.suggest(title)
+            params['gspage'] = title
+        else:
+            lat = test_lat_long(latitude)
+            lon = test_lat_long(longitude)
+            params['gscoord'] = '{0}|{1}'.format(lat, lon)
+
+        raw_results = self.wiki_request(params)
+
+        self._check_error_response(raw_results, title)
+
+        res = (d['title'] for d in raw_results['query']['geosearch'])
+
+        return list(res)
 
     def opensearch(self, query, results=10, redirect=False):
         raise NotImplementedError
@@ -321,12 +358,11 @@ class MediaWiki(object):
             raise ValueError("Title or Pageid must be specified")
         elif title:
             if auto_suggest:
-                res, suggest = self.search(title, results=1, suggestion=True)
-                try:
-                    title = suggest or res[0]
-                except IndexError:
-                    # page doesn't exist if no suggestion or search results
+                temp_title = self.suggest(title)
+                if temp_title is None:  # page doesn't exist
                     raise PageError(title=title)
+                else:
+                    title = temp_title
             return MediaWikiPage(self, title, redirect=redirect,
                                  preload=preload)
         else:  # must be pageid
@@ -390,10 +426,17 @@ class MediaWiki(object):
 
     @staticmethod
     def _check_error_response(response, query):
+        ''' check for default error messages and throw correct exception '''
         if 'error' in response:
-            error_codes = ['HTTP request timed out.', 'Pool queue is full']
-            if response['error']['info'] in error_codes:
+            http_error = ['HTTP request timed out.', 'Pool queue is full']
+            geo_error = ['Page coordinates unknown',
+                         ('One of the parameters '
+                          'gscoord, gspage, gsbbox is required',
+                          'Invalid coordinate provided')]
+            if response['error']['info'] in http_error:
                 raise HTTPTimeoutError(query)
+            elif response['error']['info'] in geo_error:
+                raise MediaWikiGeoCoordError("Invalid geosearch")
             else:
                 raise MediaWikiException(response['error']['info'])
         else:

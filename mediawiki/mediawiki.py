@@ -51,7 +51,7 @@ class MediaWiki(object):
     @staticmethod
     def get_version():
         ''' get the version information '''
-        return '0.3.0'
+        return '0.3.2'
 
     @property
     def api_version(self):
@@ -242,6 +242,7 @@ class MediaWiki(object):
         return title
     # end suggest
 
+    @Memoize
     def geosearch(self, latitude=None, longitude=None, radius=1000,
                   title=None, auto_suggest=True, results=10):
         ''' Do a search for pages that relate to the provided area '''
@@ -279,11 +280,63 @@ class MediaWiki(object):
 
         return list(res)
 
-    def opensearch(self, query, results=10, redirect=False):
-        raise NotImplementedError
+    @Memoize
+    def opensearch(self, query, results=10, redirect=True):
+        '''
+        Execute a MediaWiki opensearch request, similar to search box
+        suggestions and conforming to the OpenSearch specification.
 
-    def prefexsearch(self, query, results=10):
-        raise NotImplementedError
+        Returns:
+            List of tuples: Title, Summary, and URL
+        '''
+
+        if query is None or query.strip() == '':
+            raise ValueError("Query must be specified")
+
+        query_params = {
+            'action': 'opensearch',
+            'search': query,
+            'limit': (100 if results > 100 else results),
+            'redirects': ('resolve' if redirect else 'return'),
+            'warningsaserror': True,
+            'namespace': ''
+        }
+
+        results = self.wiki_request(query_params)
+
+        self._check_error_response(results, query)
+
+        res = list()
+        for i, item in enumerate(results[1]):
+            res.append((item, results[2][i], results[3][i],))
+
+        return res
+
+    @Memoize
+    def prefixsearch(self, query, results=10):
+        ''' A prefix based search like the Wikipedia search box results '''
+
+        if query is None or query.strip() == '':
+            raise ValueError("Query must be specified")
+
+        query_params = {
+            'action': 'query',
+            'list': 'prefixsearch',
+            'pssearch': query,
+            'pslimit': ('max' if results > 500 else results),
+            'psnamespace': 0,
+            'psoffset': 0  # parameterize to skip to later in the list
+        }
+
+        raw_results = self.wiki_request(query_params)
+
+        self._check_error_response(raw_results, query)
+
+        res = list()
+        for rec in raw_results['query']['prefixsearch']:
+            res.append(rec['title'])
+
+        return res
 
     @Memoize
     def summary(self, title, sentences=0, chars=0, auto_suggest=True,

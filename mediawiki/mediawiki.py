@@ -51,7 +51,7 @@ class MediaWiki(object):
     @staticmethod
     def get_version():
         ''' get the version information '''
-        return '0.3.1'
+        return '0.3.2'
 
     @property
     def api_version(self):
@@ -312,8 +312,31 @@ class MediaWiki(object):
 
         return res
 
+    @Memoize
     def prefexsearch(self, query, results=10):
-        raise NotImplementedError
+        ''' A prefix based search like the Wikipedia search box results '''
+
+        if query is None or query.strip() == '':
+            raise ValueError("Query must be specified")
+
+        query_params = {
+            'action': 'query',
+            'list': 'prefixsearch',
+            'pssearch': query,
+            'pslimit': ('max' if results > 500 else results),
+            'psnamespace': 0,
+            'psoffset': 0  # parameterize to skip to later in the list
+        }
+
+        raw_results = self.wiki_request(query_params)
+
+        self._check_error_response(raw_results, query)
+
+        res = list()
+        for rec in raw_results['query']['prefixsearch']:
+            res.append(rec['title'])
+
+        return res
 
     @Memoize
     def summary(self, title, sentences=0, chars=0, auto_suggest=True,

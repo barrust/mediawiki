@@ -10,7 +10,7 @@ import time
 from bs4 import BeautifulSoup
 from datetime import (datetime, timedelta)
 from decimal import (Decimal, DecimalException)
-from .exceptions import (MediaWikiException, PageError,
+from .exceptions import (MediaWikiBaseException, MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
@@ -51,7 +51,7 @@ class MediaWiki(object):
     @staticmethod
     def get_version():
         ''' get the version information '''
-        return '0.3.2'
+        return '0.3.3'
 
     @property
     def api_version(self):
@@ -61,7 +61,7 @@ class MediaWiki(object):
     @property
     def extensions(self):
         ''' get site's installed extensions '''
-        return self._extensions
+        return self._extensions  # should return as a list
 
     # settable properties
     @property
@@ -196,13 +196,14 @@ class MediaWiki(object):
     @Memoize
     def search(self, query, results=10, suggestion=False):
         '''
-        Conduct a search for "query" returning "results" results
+        Conduct a search for 'query' returning 'results' results
 
         If suggestion is True, returns results and suggestions
         (if any) in a tuple
         '''
-        if query is None or query.strip() == '':
-            raise ValueError("Query must be specified")
+
+        self._check_query(query, 'Query must be specified')
+
         search_params = {
             'list': 'search',
             'srprop': '',
@@ -231,7 +232,7 @@ class MediaWiki(object):
     @Memoize
     def suggest(self, query):
         '''
-        Gather suggestions based on the provided "query" or None if
+        Gather suggestions based on the provided 'query' or None if
         no suggestions found
         '''
         res, suggest = self.search(query, results=1, suggestion=True)
@@ -249,8 +250,10 @@ class MediaWiki(object):
 
         def test_lat_long(val):
             ''' handle testing lat and long '''
-            if type(val) is not Decimal:
-                error = "Latitude and Longitude must be specified"
+            if not isinstance(val, Decimal):
+                error = ('Latitude and Longitude must be specified either as '
+                         'a Decimal or in a format that can be coerced into '
+                         'a Decimal.')
                 try:
                     return Decimal(val)
                 except (DecimalException, TypeError):
@@ -290,8 +293,7 @@ class MediaWiki(object):
             List of tuples: Title, Summary, and URL
         '''
 
-        if query is None or query.strip() == '':
-            raise ValueError("Query must be specified")
+        self._check_query(query, 'Query must be specified')
 
         query_params = {
             'action': 'opensearch',
@@ -316,8 +318,7 @@ class MediaWiki(object):
     def prefixsearch(self, query, results=10):
         ''' A prefix based search like the Wikipedia search box results '''
 
-        if query is None or query.strip() == '':
-            raise ValueError("Query must be specified")
+        self._check_query(query, 'Query must be specified')
 
         query_params = {
             'action': 'query',
@@ -353,8 +354,7 @@ class MediaWiki(object):
 
         Note: set results to None to get all
         '''
-        if category is None or category.strip() == '':
-            raise ValueError("Category must be specified")
+        self._check_query(category, 'Category must be specified')
 
         search_params = {
             'list': 'categorymembers',
@@ -407,8 +407,13 @@ class MediaWiki(object):
 
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
              preload=False):
+        '''
+        get MediaWiki page based on title or pageid. Auto suggest
+        allows for the site to try and correct if no page is found while
+        redirect follows the redirect of a page.
+        '''
         if (title is None or title.strip() == '') and pageid is None:
-            raise ValueError("Title or Pageid must be specified")
+            raise ValueError('Title or Pageid must be specified')
         elif title:
             if auto_suggest:
                 temp_title = self.suggest(title)
@@ -465,7 +470,7 @@ class MediaWiki(object):
         })
 
         gen = response['query']['general']['generator']
-        api_version = gen.split(" ")[1].split("-")[0]
+        api_version = gen.split(' ')[1].split('-')[0]
 
         major_minor = api_version.split('.')
         for i, item in enumerate(major_minor):
@@ -486,14 +491,22 @@ class MediaWiki(object):
                          ('One of the parameters '
                           'gscoord, gspage, gsbbox is required',
                           'Invalid coordinate provided')]
-            if response['error']['info'] in http_error:
+            err = response['error']['info']
+            if err in http_error:
                 raise HTTPTimeoutError(query)
             elif response['error']['info'] in geo_error:
-                raise MediaWikiGeoCoordError("Invalid geosearch")
+                raise MediaWikiGeoCoordError(err)
             else:
-                raise MediaWikiException(response['error']['info'])
+                raise MediaWikiException(err)
         else:
             return
+
+    @staticmethod
+    def _check_query(value, message):
+        ''' check if the query is 'valid' '''
+        if value is None or value.strip() == '':
+            raise ValueError(message)
+
 
 # end MediaWiki class
 
@@ -503,7 +516,7 @@ class MediaWikiPage(object):
     '''
     Instance of a media wiki page
 
-    Note: This should never need to be called directly by the user!
+    Note: This should never need to be used directly!
     '''
 
     def __init__(self, mediawiki, title=None, pageid=None,
@@ -516,7 +529,7 @@ class MediaWikiPage(object):
         elif pageid is not None:
             self.pageid = pageid
         else:
-            raise ValueError("Either a title or a pageid must be specified")
+            raise ValueError('Either a title or a pageid must be specified')
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -526,12 +539,12 @@ class MediaWikiPage(object):
                          'categories'):
                 try:
                     getattr(self, prop)
-                except Exception:
+                except MediaWikiBaseException:
                     pass
         # end __init__
 
     def __repr__(self):
-        return stdout(u"""<MediaWikiPage '{0}'>""".format(self.title))
+        return stdout(u'''<MediaWikiPage '{0}'>'''.format(self.title))
 
     def __eq__(self, other):
         try:
@@ -771,18 +784,18 @@ class MediaWikiPage(object):
         whitespace stripped string. Only text between title and next
         section or sub-section title is returned.
         '''
-        section = u"== {0} ==".format(section_title)
+        section = u'== {0} =='.format(section_title)
         try:
             index = self.content.index(section) + len(section)
         except ValueError:
             return None
 
         try:
-            next_index = self.content.index("==", index)
+            next_index = self.content.index('==', index)
         except ValueError:
             next_index = len(self.content)
 
-        return self.content[index:next_index].lstrip("=").strip()
+        return self.content[index:next_index].lstrip('=').strip()
 
     # Protected Methods
     def __load(self, redirect=True, preload=False):
@@ -843,11 +856,11 @@ class MediaWikiPage(object):
                         for li in filtered_lis if li.a]
         disambiguation = list()
         for lis_item in filtered_lis:
-            item = lis_item.find_all("a")[0]
+            item = lis_item.find_all('a')[0]
             if item:
                 one_disambiguation = dict()
-                one_disambiguation["title"] = item["title"]
-                one_disambiguation["description"] = lis_item.text
+                one_disambiguation['title'] = item['title']
+                one_disambiguation['description'] = lis_item.text
                 disambiguation.append(one_disambiguation)
         raise DisambiguationError(getattr(self, 'title', page['title']),
                                   may_refer_to,
@@ -860,14 +873,18 @@ class MediaWikiPage(object):
 
             if 'normalized' in query:
                 normalized = query['normalized'][0]
-                assert normalized['from'] == self.title, ODD_ERROR_MESSAGE
+                if normalized['from'] != self.title:
+                    raise MediaWikiException(ODD_ERROR_MESSAGE)
+                # assert normalized['from'] == self.title, ODD_ERROR_MESSAGE
                 from_title = normalized['to']
             else:
                 if not getattr(self, 'title', None):
                     self.title = redirects['from']
                     delattr(self, 'pageid')
                 from_title = self.title
-            assert redirects['from'] == from_title, ODD_ERROR_MESSAGE
+            if redirects['from'] != from_title:
+                raise MediaWikiException(ODD_ERROR_MESSAGE)
+            # assert redirects['from'] == from_title, ODD_ERROR_MESSAGE
 
             # change the title and reload the whole object
             self.__init__(self.mediawiki, title=redirects['to'],

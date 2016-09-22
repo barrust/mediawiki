@@ -42,7 +42,7 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_version, site.data[site.api_url]['data']['api_version'])
-        self.assertEqual(site.extensions, site.data[site.api_url]['data']['extensions'])
+        self.assertEqual(site.extensions, sorted(list(site.data[site.api_url]['data']['extensions'])))
 
     def test_change_lang(self):
         ''' test changing the language '''
@@ -59,19 +59,19 @@ class TestMediaWiki(unittest.TestCase):
     def test_extensions(self):
         ''' test parsing extensions correctly '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.extensions, site.data[site.api_url]['data']['extensions'])
+        self.assertEqual(site.extensions, sorted(list(site.data[site.api_url]['data']['extensions'])))
 
     def test_change_api_url(self):
         ''' test switching the api url '''
         site = MediaWikiOverloaded()
         self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
         self.assertEqual(site.api_version, site.data[site.api_url]['data']['api_version'])
-        self.assertEqual(site.extensions, site.data[site.api_url]['data']['extensions'])
+        self.assertEqual(site.extensions, sorted(list(site.data[site.api_url]['data']['extensions'])))
 
         site.set_api_url('http://awoiaf.westeros.org/api.php', lang='en')
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_version, site.data[site.api_url]['data']['api_version'])
-        self.assertEqual(site.extensions, site.data[site.api_url]['data']['extensions'])
+        self.assertEqual(site.extensions, sorted(list(site.data[site.api_url]['data']['extensions'])))
 
     def test_change_user_agent(self):
         ''' test changing the user agent '''

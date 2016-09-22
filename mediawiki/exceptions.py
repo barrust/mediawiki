@@ -99,7 +99,7 @@ class HTTPTimeoutError(MediaWikiBaseException):
     def __init__(self, query):
         self.query = query
         msg = (u'Searching for "{0}" resulted in a timeout. Try '
-               'again in a few seconds, and make sure you have rate '
+               'again in a few seconds, and ensure you have rate '
                'limiting set to True.').format(self.query)
         super(HTTPTimeoutError, self).__init__(msg)
 

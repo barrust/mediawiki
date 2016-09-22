@@ -61,7 +61,7 @@ class MediaWiki(object):
     @property
     def extensions(self):
         ''' get site's installed extensions '''
-        return self._extensions  # should return as a list
+        return sorted(list(self._extensions))
 
     # settable properties
     @property
@@ -252,7 +252,7 @@ class MediaWiki(object):
             ''' handle testing lat and long '''
             if not isinstance(val, Decimal):
                 error = ('Latitude and Longitude must be specified either as '
-                         'a Decimal or in a format that can be coerced into '
+                         'a Decimal or in formats that can be coerced into '
                          'a Decimal.')
                 try:
                     return Decimal(val)

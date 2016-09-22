@@ -56,11 +56,11 @@ class Memoize(object):
         return value
 
     def __repr__(self):
-        """Return the function's docstring."""
+        '''Return the function's docstring.'''
         return self.func.__doc__
 
     def __get__(self, obj, objtype):
-        """Support instance methods."""
+        '''Support instance methods.'''
         func = functools.partial(self.__call__, obj)
         if not hasattr(obj, 'cache'):
             obj.cache = dict()
@@ -69,7 +69,7 @@ class Memoize(object):
 
 
 def capture_for_unittest(func):
-    """ capture_for_unittest decorator """
+    ''' capture_for_unittest decorator '''
     def wrapper(*args, **kwargs):
         ''' define the actions '''
         file_path = path.abspath('./tests/mock_api_data.p')

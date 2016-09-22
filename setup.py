@@ -6,7 +6,8 @@ import setuptools
 import sys
 sys.dont_write_bytecode = True
 
-from mediawiki import (__version__, __author__, __license__, __email__)
+from mediawiki import (__version__, __author__, __license__, __email__,
+                       __url__)
 
 setuptools.setup(
     name = "mediawiki",
@@ -16,7 +17,7 @@ setuptools.setup(
     description = "MediaWiki API for Python",
     license = __license__,
     keywords = "python mediawiki wikipedia API",
-    url = "https://github.com/barrust/mediawiki",
+    url = __url__,
     install_requires = ['beautifulsoup4', 'requests>=2.0.0,<3.0.0'],
     packages = ['mediawiki'],
     long_description = 'NEED TO WRITE A LONG DESCRIPTION',

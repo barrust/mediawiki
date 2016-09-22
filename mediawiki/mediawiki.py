@@ -16,6 +16,9 @@ from .exceptions import (MediaWikiBaseException, MediaWikiException, PageError,
                          MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
 from .utilities import (Memoize, stdout)
 
+URL = 'https://github.com/barrust/mediawiki'
+VERSION = '0.3.3'
+
 
 class MediaWiki(object):
     ''' Base MediaWiki object '''
@@ -23,13 +26,12 @@ class MediaWiki(object):
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
-        self._version = MediaWiki.get_version()
+        self._version = VERSION
         self._api_url = url
         self._lang = lang
         self._timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
-                            '/(https://github.com/barrust/mediawiki/)'
-                            '/BOT'.format(self._version))
+                            '/({1})/BOT').format(VERSION, URL)
         self._session = None
         self._rate_limit = rate_limit
         self._rate_limit_last_call = None
@@ -43,16 +45,6 @@ class MediaWiki(object):
         self._get_site_info()
 
     # non-settable properties
-    @property
-    def version(self):
-        ''' Get current version of the library '''
-        return self._version
-
-    @staticmethod
-    def get_version():
-        ''' get the version information '''
-        return '0.3.3'
-
     @property
     def api_version(self):
         ''' get site's api version '''

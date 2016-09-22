@@ -10,13 +10,13 @@ from mediawiki import (__version__, __author__, __license__, __email__,
                        __url__)
 
 setuptools.setup(
-    name = "mediawiki",
+    name = 'mediawiki',
     version = __version__,
     author = __author__,
     author_email = __email__,
-    description = "MediaWiki API for Python",
+    description = 'MediaWiki API for Python',
     license = __license__,
-    keywords = "python mediawiki wikipedia API",
+    keywords = 'python mediawiki wikipedia API',
     url = __url__,
     install_requires = ['beautifulsoup4', 'requests>=2.0.0,<3.0.0'],
     packages = ['mediawiki'],
@@ -28,5 +28,5 @@ setuptools.setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3'
     ],
-    test_suite="tests"
+    test_suite='tests'
 )

@@ -1,10 +1,10 @@
 '''
 Utility functions
 '''
-import pickle
+import json
 import sys
 import functools
-from os import path
+import os
 import inspect
 
 
@@ -68,24 +68,28 @@ class Memoize(object):
         return func
 
 
-def capture_for_unittest(func):
-    ''' capture_for_unittest decorator '''
+def capture_response(func):
+    ''' capture_response decorator to be used for tests '''
     def wrapper(*args, **kwargs):
         ''' define the actions '''
-        file_path = path.abspath('./tests/mock_api_data.p')
-        with open(file_path, 'rb') as mock:
-            mock_data = pickle.load(mock)
+        file_path = os.path.abspath('./tests/mock_requests.json')
+        if os.path.isfile(file_path):
+            with open(file_path, 'r') as mock:
+                mock_data = json.load(mock)
+        else:
+            mock_data = dict()
+
         # build out parts of the dictionary
         if args[0].api_url not in mock_data:
             mock_data[args[0].api_url] = dict()
             mock_data[args[0].api_url]['query'] = dict()
             mock_data[args[0].api_url]['data'] = dict()
 
-        new_params = tuple(sorted(args[1].items()))
+        new_params = json.dumps(tuple(sorted(args[1].items())))
         res = func(*args, **kwargs)
-        mock_data[args[0].api_url]['query'][new_params] = res
-        with open(file_path, 'wb') as mock:
-            pickle.dump(mock_data, mock, -1)
+        mock_data[args[0].api_url][new_params] = res
+        with open(file_path, 'w') as mock:
+            json.dump(mock_data, mock, ensure_ascii=False, indent=4)
         return res
     return wrapper
 

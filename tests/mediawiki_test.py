@@ -2,11 +2,12 @@
 Unittest class
 '''
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+# from __future__ import unicode_literals
 from mediawiki import (MediaWiki, PageError, RedirectError,
                        DisambiguationError)
 import unittest
-import pickle
+import json
+import sys
 from datetime import timedelta
 
 
@@ -15,16 +16,20 @@ class MediaWikiOverloaded(MediaWiki):
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
-        with open('./tests/mock_api_data.p', 'rb') as file_handle:
-            self.data = pickle.load(file_handle)
+        ''' new init '''
+
+        with open('./tests/mock_requests.json', 'r') as file_handle:
+            self.requests = json.load(file_handle)
+        with open('./tests/mock_responses.json', 'r') as file_handle:
+            self.responses = json.load(file_handle)
         MediaWiki.__init__(self, url=url, lang=lang, timeout=timeout,
                            rate_limit=rate_limit,
                            rate_limit_wait=rate_limit_wait)
 
     def wiki_request(self, params):
         ''' override the wiki requests to pull from the mock data '''
-        new_params = tuple(sorted(params.items()))
-        return self.data[self.api_url]['query'][new_params]
+        new_params = json.dumps(tuple(sorted(params.items())))
+        return self.requests[self.api_url][new_params]
 
 
 class TestMediaWiki(unittest.TestCase):
@@ -41,8 +46,8 @@ class TestMediaWiki(unittest.TestCase):
         ''' test the api url being set at creation time '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
-        self.assertEqual(site.api_version, site.data[site.api_url]['data']['api_version'])
-        self.assertEqual(site.extensions, sorted(list(site.data[site.api_url]['data']['extensions'])))
+        self.assertEqual(site.api_version, site.responses[site.api_url]['api_version'])
+        self.assertEqual(site.extensions, site.responses[site.api_url]['extensions'])
 
     def test_change_lang(self):
         ''' test changing the language '''
@@ -54,24 +59,24 @@ class TestMediaWiki(unittest.TestCase):
     def test_api_version(self):
         ''' test api version parsed correctly'''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.api_version, site.data[site.api_url]['data']['api_version'])
+        self.assertEqual(site.api_version, site.responses[site.api_url]['api_version'])
 
     def test_extensions(self):
         ''' test parsing extensions correctly '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.extensions, sorted(list(site.data[site.api_url]['data']['extensions'])))
+        self.assertEqual(site.extensions, site.responses[site.api_url]['extensions'])
 
     def test_change_api_url(self):
         ''' test switching the api url '''
         site = MediaWikiOverloaded()
         self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
-        self.assertEqual(site.api_version, site.data[site.api_url]['data']['api_version'])
-        self.assertEqual(site.extensions, sorted(list(site.data[site.api_url]['data']['extensions'])))
+        self.assertEqual(site.api_version, site.responses[site.api_url]['api_version'])
+        self.assertEqual(site.extensions, sorted(list(site.responses[site.api_url]['extensions'])))
 
         site.set_api_url('http://awoiaf.westeros.org/api.php', lang='en')
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
-        self.assertEqual(site.api_version, site.data[site.api_url]['data']['api_version'])
-        self.assertEqual(site.extensions, sorted(list(site.data[site.api_url]['data']['extensions'])))
+        self.assertEqual(site.api_version, site.responses[site.api_url]['api_version'])
+        self.assertEqual(site.extensions, sorted(list(site.responses[site.api_url]['extensions'])))
 
     def test_change_user_agent(self):
         ''' test changing the user agent '''
@@ -82,7 +87,7 @@ class TestMediaWiki(unittest.TestCase):
     def test_languages(self):
         ''' test pulling wikimedia supported languages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.languages(), site.data[site.api_url]['data']['languages'])
+        self.assertEqual(site.languages(), site.responses[site.api_url]['languages'])
 
     ##########################################
     # TEST RANDOM FUNCTIONALITY
@@ -90,19 +95,19 @@ class TestMediaWiki(unittest.TestCase):
     def test_random_2(self):
         ''' test pulling random pages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.random(pages=2), site.data[site.api_url]['data']['random_2'])
+        self.assertEqual(site.random(pages=2), site.responses[site.api_url]['random_2'])
 
     def test_random_10(self):
         ''' test pulling random pages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.random(pages=10), site.data[site.api_url]['data']['random_10'])
+        self.assertEqual(site.random(pages=10), site.responses[site.api_url]['random_10'])
 
     def test_random_202(self):
         ''' test pulling 202 random pages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(set(site.random(pages=202)), set(site.data[site.api_url]['data']['random_202']))
+        self.assertEqual(set(site.random(pages=202)), set(site.responses[site.api_url]['random_202']))
         print("\nNOTE: This is supposed to be limited to 20 by the API, per the documentation, but it isn't...")
-        self.assertEqual(len(site.data[site.api_url]['data']['random_202']), 202)  # limit to 20
+        self.assertEqual(len(site.responses[site.api_url]['random_202']), 202)  # limit to 20
 
     ##########################################
     # TEST SEARCH FUNCTIONALITY
@@ -111,28 +116,28 @@ class TestMediaWiki(unittest.TestCase):
         ''' test searching without suggestion '''
         site = MediaWikiOverloaded()
         # test that default is suggestion False
-        api_url = site.data[site.api_url]['data']['search_without_suggestion']
-        sws = site.data[site.api_url]['data']['search_without_suggestion']
+        api_url = site.responses[site.api_url]['search_without_suggestion']
+        sws = site.responses[site.api_url]['search_without_suggestion']
         self.assertEqual(site.search('chest set'), api_url)
         self.assertEqual(site.search('chest set', suggestion=False), sws)
 
     def test_search_sug_found(self):
         ''' test searching with suggestion where found '''
         site = MediaWikiOverloaded()
-        sws = site.data[site.api_url]['data']['search_with_suggestion_found']
-        self.assertEqual(site.search('chest set', suggestion=True), sws)
+        sws = site.responses[site.api_url]['search_with_suggestion_found']
+        self.assertEqual(list(site.search('chest set', suggestion=True)), sws)
 
     def test_search_sug_not_found(self):
         ''' test searching with suggestion where not found '''
         site = MediaWikiOverloaded()
-        swsnf = site.data[site.api_url]['data']['search_with_suggestion_not_found']
-        self.assertEqual(site.search('chess set', suggestion=True), swsnf)
+        swsnf = site.responses[site.api_url]['search_with_suggestion_not_found']
+        self.assertEqual(list(site.search('chess set', suggestion=True)), swsnf)
 
     def test_search_sug_not_found_num(self):
         ''' test searching with suggestion where not found but limited to the correct number'''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.search('chess set', results=505, suggestion=False), site.data[site.api_url]['data']['search_with_suggestion_not_found_number'])
-        self.assertEqual(len(site.data[site.api_url]['data']['search_with_suggestion_not_found_number']), 500)  # limit to 500
+        self.assertEqual(site.search('chess set', results=505, suggestion=False), site.responses[site.api_url]['search_with_suggestion_not_found_number'])
+        self.assertEqual(len(site.responses[site.api_url]['search_with_suggestion_not_found_number']), 500)  # limit to 500
 
     ##########################################
     # TEST CATEGORYMEMBERS FUNCTIONALITY
@@ -140,26 +145,26 @@ class TestMediaWiki(unittest.TestCase):
     def test_cat_mems_with_subcats(self):
         ''' test categorymember with subcategories '''
         site = MediaWikiOverloaded()
-        res = site.data[site.api_url]['data']['category_members_with_subcategories']
-        self.assertEqual(site.categorymembers("Chess", results=15, subcategories=True), res)
+        res = site.responses[site.api_url]['category_members_with_subcategories']
+        self.assertEqual(list(site.categorymembers("Chess", results=15, subcategories=True)), res)
 
     def test_cat_mems_subcat_default(self):
         ''' test categorymember with default subcategories (True) '''
         site = MediaWikiOverloaded()
-        res = site.data[site.api_url]['data']['category_members_with_subcategories']
-        self.assertEqual(site.categorymembers("Chess", results=15), res)
+        res = site.responses[site.api_url]['category_members_with_subcategories']
+        self.assertEqual(list(site.categorymembers("Chess", results=15)), res)
 
     def test_cat_mems_wo_subcats(self):
         ''' test categorymember without subcategories '''
         site = MediaWikiOverloaded()
-        res = site.data[site.api_url]['data']['category_members_without_subcategories']
-        self.assertEqual(site.categorymembers("Chess", results=15, subcategories=False), res)
+        res = site.responses[site.api_url]['category_members_without_subcategories']
+        self.assertEqual(list(site.categorymembers("Chess", results=15, subcategories=False)), res)
 
     def test_cat_mems_w_subcats_lim(self):
         ''' test categorymember without subcategories limited '''
         site = MediaWikiOverloaded()
-        res = site.data[site.api_url]['data']['category_members_without_subcategories_5']
-        self.assertEqual(site.categorymembers("Chess", results=5, subcategories=False), res)
+        res = site.responses[site.api_url]['category_members_without_subcategories_5']
+        self.assertEqual(list(site.categorymembers("Chess", results=5, subcategories=False)), res)
         self.assertEqual(len(res), 5)
 
     ##########################################
@@ -178,7 +183,7 @@ class TestMediaWiki(unittest.TestCase):
         try:
             error()
         except PageError as ex:
-            self.assertEqual(ex.message, site.data[site.api_url]['data']['page_error_msg'])
+            self.assertEqual(ex.message, site.responses[site.api_url]['page_error_msg'])
 
     def test_redirect_error(self):
         ''' Test that redirect error is thrown correctly '''
@@ -193,7 +198,7 @@ class TestMediaWiki(unittest.TestCase):
         try:
             error()
         except RedirectError as ex:
-            self.assertEqual(ex.message, site.data[site.api_url]['data']['redirect_error_msg'])
+            self.assertEqual(ex.message, site.responses[site.api_url]['redirect_error_msg'])
 
     def test_disambiguation_error(self):
         ''' Test that disambiguation error is thrown correctly '''
@@ -208,7 +213,7 @@ class TestMediaWiki(unittest.TestCase):
         try:
             error()
         except DisambiguationError as ex:
-            self.assertEqual(ex.message, site.data[site.api_url]['data']['disambiguation_error_msg'])
+            self.assertEqual(ex.message, site.responses[site.api_url]['disambiguation_error_msg'])
 
     ##########################################
     # TEST PAGE FUNCTIONALITY
@@ -217,18 +222,18 @@ class TestMediaWiki(unittest.TestCase):
         ''' Test a page from ASOIAF wiki with all properties '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
         pg = site.page('arya')
-        self.assertEqual(pg.title, site.data[site.api_url]['data']['arya_title'])
-        self.assertEqual(pg.pageid, site.data[site.api_url]['data']['arya_pageid'])
-        self.assertEqual(pg.url, site.data[site.api_url]['data']['arya_url'])
-        self.assertEqual(pg.backlinks, site.data[site.api_url]['data']['arya_backlinks'])
-        self.assertEqual(pg.images, site.data[site.api_url]['data']['arya_images'])
-        self.assertEqual(pg.redirects, site.data[site.api_url]['data']['arya_redirects'])
-        self.assertEqual(pg.links, site.data[site.api_url]['data']['arya_links'])
-        self.assertEqual(pg.categories, site.data[site.api_url]['data']['arya_categories'])
-        self.assertEqual(pg.references, site.data[site.api_url]['data']['arya_references'])
-        self.assertEqual(pg.content, site.data[site.api_url]['data']['arya_content'])
-        self.assertEqual(pg.parent_id, site.data[site.api_url]['data']['arya_parent_id'])
-        self.assertEqual(pg.revision_id, site.data[site.api_url]['data']['arya_revision_id'])
-        self.assertEqual(pg.coordinates, site.data[site.api_url]['data']['arya_coordinates'])
-        self.assertEqual(pg.sections, site.data[site.api_url]['data']['arya_sections'])
-        self.assertEqual(pg.section("A Game of Thrones"), site.data[site.api_url]['data']['arya_a_game_of_thrones'])
+        self.assertEqual(pg.title, site.responses[site.api_url]['arya']['title'])
+        self.assertEqual(pg.pageid, site.responses[site.api_url]['arya']['pageid'])
+        self.assertEqual(pg.url, site.responses[site.api_url]['arya']['url'])
+        self.assertEqual(pg.backlinks, site.responses[site.api_url]['arya']['backlinks'])
+        self.assertEqual(pg.images, site.responses[site.api_url]['arya']['images'])
+        self.assertEqual(pg.redirects, site.responses[site.api_url]['arya']['redirects'])
+        self.assertEqual(pg.links, site.responses[site.api_url]['arya']['links'])
+        self.assertEqual(pg.categories, site.responses[site.api_url]['arya']['categories'])
+        self.assertEqual(pg.references, site.responses[site.api_url]['arya']['references'])
+        self.assertEqual(pg.content, site.responses[site.api_url]['arya']['content'])
+        self.assertEqual(pg.parent_id, site.responses[site.api_url]['arya']['parent_id'])
+        self.assertEqual(pg.revision_id, site.responses[site.api_url]['arya']['revision_id'])
+        self.assertEqual(pg.coordinates, site.responses[site.api_url]['arya']['coordinates'])
+        self.assertEqual(pg.sections, site.responses[site.api_url]['arya']['sections'])
+        self.assertEqual(pg.section("A Game of Thrones"), site.responses[site.api_url]['arya']['section_a_game_of_thrones'])

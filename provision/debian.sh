@@ -17,4 +17,4 @@ base=$(pwd)
 # Install all of the dependencies required in the examples.
 # http://docs.travis-ci.com/user/installing-dependencies/#Installing-Ubuntu-packages
 apt-get update -qq
-sed 's/\(.*\)\#.*/\1/' < $base/requirements/debian | xargs apt-get install -y --fix-missing
+sed 's/\(.*\)\#.*/\1/' < $base/requirements/debian-dev | xargs apt-get install -y --fix-missing

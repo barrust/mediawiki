@@ -284,6 +284,8 @@ class MediaWiki(object):
         Execute a MediaWiki opensearch request, similar to search box
         suggestions and conforming to the OpenSearch specification.
 
+        If redirect is false, redirect returns the redirect itself
+
         Returns:
             List of tuples: Title, Summary, and URL
         '''

@@ -249,7 +249,48 @@ class TestMediaWikiGeoSearch(unittest.TestCase):
         self.assertEqual(res, response['geosearch_page'])
         self.assertEqual(len(res), 1)
 
-# class TestMediaWikiOpenSearch(unittest.TestCase):
+
+class TestMediaWikiOpenSearch(unittest.TestCase):
+    ''' Test OpenSearch Functionality '''
+    def test_opensearch(self):
+        ''' test opensearch with default values '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.opensearch('new york')
+        for i, item in enumerate(res):
+            res[i] = list(item)
+        self.assertEqual(res, response['opensearch_new_york'])
+        self.assertEqual(len(res), 10)
+
+    def test_opensearch_result(self):
+        ''' test opensearch with result set '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.opensearch('new york', results=5)
+        for i, item in enumerate(res):
+            res[i] = list(item)
+        self.assertEqual(res, response['opensearch_new_york_result'])
+        self.assertEqual(len(res), 5)
+
+    def test_opensearch_redirect(self):
+        ''' test opensearch with redirect set '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.opensearch('new york', redirect=False)
+        for i, item in enumerate(res):
+            res[i] = list(item)
+        self.assertEqual(res, response['opensearch_new_york_redirect'])
+        self.assertEqual(len(res), 10)
+
+    def test_opensearch_res_red_set(self):
+        ''' test opensearch with result and redirect set '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.opensearch('new york', results=5, redirect=False)
+        for i, item in enumerate(res):
+            res[i] = list(item)
+        self.assertEqual(res, response['opensearch_new_york_result_redirect'])
+        self.assertEqual(len(res), 5)
 
 
 # class TestMediaWikiPrefixSearch(unittest.TestCase):

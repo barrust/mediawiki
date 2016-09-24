@@ -485,9 +485,8 @@ class MediaWiki(object):
         if 'error' in response:
             http_error = ['HTTP request timed out.', 'Pool queue is full']
             geo_error = ['Page coordinates unknown',
-                         ('One of the parameters '
-                          'gscoord, gspage, gsbbox is required'),
-                          'Invalid coordinate provided']
+                         ('One of the parameters gscoord, gspage, gsbbox is '
+                          'required'), 'Invalid coordinate provided']
             err = response['error']['info']
             if err in http_error:
                 raise HTTPTimeoutError(query)

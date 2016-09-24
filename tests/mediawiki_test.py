@@ -4,10 +4,12 @@ Unittest class
 # -*- coding: utf-8 -*-
 from __future__ import (unicode_literals, print_function)
 from mediawiki import (MediaWiki, PageError, RedirectError,
-                       DisambiguationError, MediaWikiAPIURLError)
+                       DisambiguationError, MediaWikiAPIURLError,
+                       MediaWikiGeoCoordError)
 import unittest
 import json
 from datetime import timedelta
+from decimal import Decimal
 
 
 class MediaWikiOverloaded(MediaWiki):
@@ -194,8 +196,58 @@ class TestMediaWikiSuggest(unittest.TestCase):
         site = MediaWikiOverloaded()
         self.assertEqual(site.suggest('gobbilygook'), None)
 
-# class TestMediaWikiGeoSearch(unittest.TestCase):
 
+class TestMediaWikiGeoSearch(unittest.TestCase):
+    ''' Test GeoSearch Functionality '''
+    def test_geosearch_decimals(self):
+        ''' test geosearch with Decimals lat / long '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        self.assertEqual(site.geosearch(latitude=Decimal('0.0'),
+                                        longitude=Decimal('0.0')),
+                         response['geosearch_decimals'])
+
+    def test_geosearch_mix_types(self):
+        ''' test geosearch with mix type lat / long '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        self.assertEqual(site.geosearch(latitude=Decimal('0.0'),
+                                        longitude='0.0'),
+                         response['geosearch_mix_types'])
+
+    def test_geo_page_inv_lat_long(self):
+        ''' test geosearch using page with invalid lat / long '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        self.assertEqual(site.geosearch(title='new york',
+                                        latitude=Decimal('-9999999999.999'),
+                                        longitude=Decimal('0.0'), results=22,
+                                        radius=10000),
+                         response['geosearch_page_invalid_lat_long'])
+
+    def test_geo_page_rad_res_set(self):
+        ''' test geosearch with radius and result set '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.geosearch(title='new york', results=22, radius=10000)
+        self.assertEqual(res, response['geosearch_page_radius_results_set'])
+        self.assertEqual(len(res), 22)
+
+    def test_geo_page_rad_res(self):
+        ''' test geosearch with radius set '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.geosearch(title='new york', radius=10000)
+        self.assertEqual(res, response['geosearch_page_radius_results'])
+        self.assertEqual(len(res), 10)
+
+    def test_geo_page(self):
+        ''' test geosearch using just page '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.geosearch(title='new york')
+        self.assertEqual(res, response['geosearch_page'])
+        self.assertEqual(len(res), 1)
 
 # class TestMediaWikiOpenSearch(unittest.TestCase):
 
@@ -290,14 +342,42 @@ class TestMediaWikiExceptions(unittest.TestCase):
         except DisambiguationError as ex:
             self.assertEqual(ex.message, response['disambiguation_error_msg'])
 
-    # def test_geocoord_error(self):
-    #     pass
-    # def test_geocoord_error_msg(self):
-    #     pass
-    # def test_geocoord_value_error(self):
-    #     pass
-    # def test_geocoord_value_error_msg(self):
-    #     pass
+    def test_geocoord_error(self):
+        ''' test geocoord error thrown '''
+        site = MediaWikiOverloaded()
+        invalid = Decimal('-9999999999.999')
+        self.assertRaises(MediaWikiGeoCoordError,
+                          lambda: site.geosearch(latitude=invalid,
+                                                 longitude=Decimal('0.0'),
+                                                 results=22, radius=10000))
+
+    def test_geocoord_error_msg(self):
+        ''' test that the error geo error message is correct '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        try:
+            site.geosearch(latitude=Decimal('-9999999999.999'),
+                           longitude=Decimal('0.0'), results=22, radius=10000)
+        except MediaWikiGeoCoordError as ex:
+            self.assertEqual(ex.message, response['invalid_lat_long_geo_msg'])
+
+    def test_geocoord_value_error(self):
+        ''' test value error being thrown correctly '''
+        site = MediaWikiOverloaded()
+        self.assertRaises(ValueError,
+                          lambda: site.geosearch(latitude=None,
+                                                 longitude=Decimal('0.0'),
+                                                 results=22, radius=10000))
+
+    def test_geocoord_value_error_msg(self):
+        ''' test that the error value error message is correct '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        try:
+            site.geosearch(latitude=None, longitude=Decimal('0.0'),
+                           results=22, radius=10000)
+        except ValueError as ex:
+            self.assertEqual(str(ex), response['invalid_lat_long_value_msg'])
 
     def test_api_url_error(self):
         ''' test changing api url to invalid throws exception '''

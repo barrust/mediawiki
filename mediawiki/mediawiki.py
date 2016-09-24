@@ -53,6 +53,7 @@ class MediaWiki(object):
         ''' Get current version of the library '''
         return self._version
 
+    @property
     def api_version(self):
         ''' get site's api version '''
         return '.'.join([str(x) for x in self._api_version])

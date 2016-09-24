@@ -79,17 +79,18 @@ def capture_response(func):
         else:
             mock_data = dict()
 
+        new_params = json.dumps(tuple(sorted(args[1].items())))
         # build out parts of the dictionary
         if args[0].api_url not in mock_data:
             mock_data[args[0].api_url] = dict()
-            mock_data[args[0].api_url]['query'] = dict()
-            mock_data[args[0].api_url]['data'] = dict()
-
-        new_params = json.dumps(tuple(sorted(args[1].items())))
-        res = func(*args, **kwargs)
+        try:
+            res = func(*args, **kwargs)
+        except:
+            res = dict()
         mock_data[args[0].api_url][new_params] = res
         with open(file_path, 'w') as mock:
-            json.dump(mock_data, mock, ensure_ascii=False, indent=4)
+            json.dump(mock_data, mock, ensure_ascii=False, indent=1,
+                      sort_keys=True)
         return res
     return wrapper
 

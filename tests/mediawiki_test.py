@@ -2,9 +2,9 @@
 Unittest class
 '''
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import (unicode_literals, print_function)
 from mediawiki import (MediaWiki, PageError, RedirectError,
-                       DisambiguationError)
+                       DisambiguationError, MediaWikiAPIURLError)
 import unittest
 import json
 from datetime import timedelta
@@ -151,7 +151,8 @@ class TestMediaWikiSearch(unittest.TestCase):
         ssnf = response['search_with_suggestion_not_found']
         self.assertEqual(list(site.search('chess set', suggestion=True)), ssnf)
 
-    def test_search_sug_not_found_small_limit(self):
+    def test_search_sug_not_found_sm(self):
+        ''' test searching with small result limit test '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         self.assertEqual(
@@ -161,7 +162,7 @@ class TestMediaWikiSearch(unittest.TestCase):
         num_res = len(response['search_with_suggestion_not_found_small'])
         self.assertEqual(num_res, 3)  # limit to 500
 
-    def test_search_sug_not_found_large_limit(self):
+    def test_search_sug_not_found_lg(self):
         '''
         test searching with suggestion where not found but limited to the
         correct number
@@ -176,8 +177,22 @@ class TestMediaWikiSearch(unittest.TestCase):
         self.assertEqual(num_res, 500)  # limit to 500
 
 
-# class TestMediaWikiSuggest(unittest.TestCase):
+class TestMediaWikiSuggest(unittest.TestCase):
+    ''' test the suggest functionality '''
+    def test_suggest(self):
+        ''' test suggest fixes capitalization '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.suggest('new york'), 'New York')
 
+    def test_suggest_yonkers(self):
+        ''' test suggest finds page '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.suggest('yonkers'), 'Yonkers, New York')
+
+    def test_suggest_no_results(self):
+        ''' test suggest finds no results '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.suggest('gobbilygook'), None)
 
 # class TestMediaWikiGeoSearch(unittest.TestCase):
 
@@ -283,16 +298,39 @@ class TestMediaWikiExceptions(unittest.TestCase):
     #     pass
     # def test_geocoord_value_error_msg(self):
     #     pass
-    # def test_api_url_error(self):
-    #     pass
-    # def test_api_url_error_msg(self):
-    #     pass
-    # def test_api_url_on_init_error(self):
-    #     pass
-    # def test_api_url_on_init_error_msg(self):
-    #     pass
 
+    def test_api_url_error(self):
+        ''' test changing api url to invalid throws exception '''
+        site = MediaWikiOverloaded()
+        url = 'http://french.wikipedia.org/w/api.php'
+        self.assertRaises(MediaWikiAPIURLError,
+                          lambda: site.set_api_url(api_url=url, lang='fr'))
 
+    def test_api_url_error_msg(self):
+        ''' test api url error message on set '''
+        site = MediaWikiOverloaded()
+        url = 'http://french.wikipedia.org/w/api.php'
+        try:
+            site.set_api_url(api_url=url, lang='fr')
+        except MediaWikiAPIURLError as ex:
+            response = site.responses[site.api_url]
+            self.assertEqual(ex.message, response['api_url_error_msg'])
+
+    def test_api_url_on_init_error(self):
+        ''' test api url error on init '''
+        url = 'http://french.wikipedia.org/w/api.php'
+        self.assertRaises(MediaWikiAPIURLError,
+                          lambda: MediaWikiOverloaded(url=url, lang='fr'))
+
+    def test_api_url_on_init_error_msg(self):
+        ''' test api url error message on init '''
+        site = MediaWikiOverloaded()  # something to use to lookup results
+        url = 'http://french.wikipedia.org/w/api.php'
+        try:
+            MediaWikiOverloaded(url=url, lang='fr')
+        except MediaWikiAPIURLError as ex:
+            response = site.responses[url]
+            self.assertEqual(ex.message, response['api_url_error_msg'])
 
 
 class TestMediaWikiPage(unittest.TestCase):

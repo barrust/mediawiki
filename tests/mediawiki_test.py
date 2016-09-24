@@ -293,7 +293,39 @@ class TestMediaWikiOpenSearch(unittest.TestCase):
         self.assertEqual(len(res), 5)
 
 
-# class TestMediaWikiPrefixSearch(unittest.TestCase):
+class TestMediaWikiPrefixSearch(unittest.TestCase):
+    ''' Test PrefixSearch Functionality '''
+    def test_prefix_search(self):
+        ''' test basic prefix search '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.prefixsearch('ar')
+        self.assertEqual(res, response['prefixsearch_ar'])
+        self.assertEqual(len(res), 10)
+
+    def test_prefix_search_ba(self):
+        ''' test prefix search results 10 '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.prefixsearch('ba', results=10)
+        self.assertEqual(res, response['prefixsearch_ba'])
+        self.assertEqual(len(res), 10)
+
+    def test_prefix_search_5(self):
+        ''' test prefix search results 5 '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.prefixsearch('ba', results=5)
+        self.assertEqual(res, response['prefixsearch_ba_5'])
+        self.assertEqual(len(res), 5)
+
+    def test_prefix_search_30(self):
+        ''' test prefix search results 30 '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = site.prefixsearch('ba', results=30)
+        self.assertEqual(res, response['prefixsearch_ba_30'])
+        self.assertEqual(len(res), 30)
 
 
 # class TestMediaWikiSummary(unittest.TestCase):

@@ -313,7 +313,14 @@ class MediaWiki(object):
 
     @Memoize
     def prefixsearch(self, query, results=10):
-        ''' A prefix based search like the Wikipedia search box results '''
+        '''
+        A prefix based search like the Wikipedia search box results
+
+        "The purpose of this module is similar to action=opensearch: to take
+        user input and provide the best-matching titles. Depending on the
+        search engine backend, this might include typo correction, redirect
+        avoidance, or other heuristics."
+        '''
 
         self._check_query(query, 'Query must be specified')
 
@@ -323,7 +330,7 @@ class MediaWiki(object):
             'pssearch': query,
             'pslimit': ('max' if results > 500 else results),
             'psnamespace': 0,
-            'psoffset': 0  # parameterize to skip to later in the list
+            'psoffset': 0  # parameterize to skip to later in the list?
         }
 
         raw_results = self.wiki_request(query_params)

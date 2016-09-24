@@ -42,7 +42,10 @@ class MediaWiki(object):
 
         # call helper functions to get everything set up
         self._reset_session()
-        self._get_site_info()
+        try:
+            self._get_site_info()
+        except Exception:
+            raise MediaWikiAPIURLError(url)
 
     # non-settable properties
     @property
@@ -460,6 +463,8 @@ class MediaWiki(object):
             'meta': 'siteinfo',
             'siprop': 'extensions|general'
         })
+
+        # shouldn't a check for success be done here?
 
         gen = response['query']['general']['generator']
         api_version = gen.split(' ')[1].split('-')[0]

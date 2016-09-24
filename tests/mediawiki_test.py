@@ -2,12 +2,11 @@
 Unittest class
 '''
 # -*- coding: utf-8 -*-
-# from __future__ import unicode_literals
+from __future__ import unicode_literals
 from mediawiki import (MediaWiki, PageError, RedirectError,
                        DisambiguationError)
 import unittest
 import json
-import sys
 from datetime import timedelta
 
 
@@ -28,15 +27,13 @@ class MediaWikiOverloaded(MediaWiki):
 
     def wiki_request(self, params):
         ''' override the wiki requests to pull from the mock data '''
+        # json dumping to make python 2.7 tests work correctly
         new_params = json.dumps(tuple(sorted(params.items())))
         return self.requests[self.api_url][new_params]
 
 
 class TestMediaWiki(unittest.TestCase):
-    ''' Test the Media Wiki Class '''
-    ##########################################
-    # BASIC MediaWiki SITE FUNCTIONALITY TESTS
-    ##########################################
+    ''' Test the MediaWiki Class Basic functionality '''
     def test_api_url(self):
         ''' test the original api '''
         site = MediaWikiOverloaded()
@@ -45,9 +42,10 @@ class TestMediaWiki(unittest.TestCase):
     def test_api_url_set(self):
         ''' test the api url being set at creation time '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        response = site.responses[site.api_url]
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
-        self.assertEqual(site.api_version, site.responses[site.api_url]['api_version'])
-        self.assertEqual(site.extensions, site.responses[site.api_url]['extensions'])
+        self.assertEqual(site.api_version, response['api_version'])
+        self.assertEqual(site.extensions, response['extensions'])
 
     def test_change_lang(self):
         ''' test changing the language '''
@@ -56,27 +54,38 @@ class TestMediaWiki(unittest.TestCase):
         self.assertEqual(site.language, 'fr')
         self.assertEqual(site.api_url, 'http://fr.wikipedia.org/w/api.php')
 
+    def test_change_lang_no_change(self):
+        ''' test changing the language when url will not change '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        site.language = 'FR'
+        self.assertEqual(site.language, 'fr')
+        self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
+
     def test_api_version(self):
         ''' test api version parsed correctly'''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.api_version, site.responses[site.api_url]['api_version'])
+        response = site.responses[site.api_url]
+        self.assertEqual(site.api_version, response['api_version'])
 
     def test_extensions(self):
         ''' test parsing extensions correctly '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.extensions, site.responses[site.api_url]['extensions'])
+        response = site.responses[site.api_url]
+        self.assertEqual(site.extensions, response['extensions'])
 
     def test_change_api_url(self):
         ''' test switching the api url '''
         site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
         self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
-        self.assertEqual(site.api_version, site.responses[site.api_url]['api_version'])
-        self.assertEqual(site.extensions, sorted(list(site.responses[site.api_url]['extensions'])))
+        self.assertEqual(site.api_version, response['api_version'])
+        self.assertEqual(site.extensions, response['extensions'])
 
         site.set_api_url('http://awoiaf.westeros.org/api.php', lang='en')
+        response = site.responses[site.api_url]
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
-        self.assertEqual(site.api_version, site.responses[site.api_url]['api_version'])
-        self.assertEqual(site.extensions, sorted(list(site.responses[site.api_url]['extensions'])))
+        self.assertEqual(site.api_version, response['api_version'])
+        self.assertEqual(site.extensions, response['extensions'])
 
     def test_change_user_agent(self):
         ''' test changing the user agent '''
@@ -87,153 +96,225 @@ class TestMediaWiki(unittest.TestCase):
     def test_languages(self):
         ''' test pulling wikimedia supported languages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.languages(), site.responses[site.api_url]['languages'])
+        response = site.responses[site.api_url]
+        self.assertEqual(site.languages(), response['languages'])
 
-    ##########################################
-    # TEST RANDOM FUNCTIONALITY
-    ##########################################
+
+class TestMediaWikiRandom(unittest.TestCase):
+    ''' Test Random Functionality '''
     def test_random_2(self):
         ''' test pulling random pages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.random(pages=2), site.responses[site.api_url]['random_2'])
+        response = site.responses[site.api_url]
+        self.assertEqual(site.random(pages=2), response['random_2'])
 
     def test_random_10(self):
         ''' test pulling random pages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.random(pages=10), site.responses[site.api_url]['random_10'])
+        response = site.responses[site.api_url]
+        self.assertEqual(site.random(pages=10), response['random_10'])
 
     def test_random_202(self):
         ''' test pulling 202 random pages '''
         site = MediaWikiOverloaded()
-        self.assertEqual(set(site.random(pages=202)), set(site.responses[site.api_url]['random_202']))
-        print("\nNOTE: This is supposed to be limited to 20 by the API, per the documentation, but it isn't...")
-        self.assertEqual(len(site.responses[site.api_url]['random_202']), 202)  # limit to 20
+        response = site.responses[site.api_url]
+        self.assertEqual(site.random(pages=202), response['random_202'])
+        msg = ("\nNOTE: This is supposed to be limited to 20 by the API, per "
+               "the documentation, but it isn't...")
+        print(msg)
+        self.assertEqual(len(response['random_202']), 202)  # limit to 20
 
-    ##########################################
-    # TEST SEARCH FUNCTIONALITY
-    ##########################################
+
+class TestMediaWikiSearch(unittest.TestCase):
+    ''' Test MediaWiki Page Search Functionality '''
     def test_search_no_sug(self):
         ''' test searching without suggestion '''
         site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
         # test that default is suggestion False
-        api_url = site.responses[site.api_url]['search_without_suggestion']
-        sws = site.responses[site.api_url]['search_without_suggestion']
+        api_url = response['search_without_suggestion']
+        sws = response['search_without_suggestion']
         self.assertEqual(site.search('chest set'), api_url)
         self.assertEqual(site.search('chest set', suggestion=False), sws)
 
     def test_search_sug_found(self):
         ''' test searching with suggestion where found '''
         site = MediaWikiOverloaded()
-        sws = site.responses[site.api_url]['search_with_suggestion_found']
+        response = site.responses[site.api_url]
+        sws = response['search_with_suggestion_found']
         self.assertEqual(list(site.search('chest set', suggestion=True)), sws)
 
     def test_search_sug_not_found(self):
         ''' test searching with suggestion where not found '''
         site = MediaWikiOverloaded()
-        swsnf = site.responses[site.api_url]['search_with_suggestion_not_found']
-        self.assertEqual(list(site.search('chess set', suggestion=True)), swsnf)
+        response = site.responses[site.api_url]
+        ssnf = response['search_with_suggestion_not_found']
+        self.assertEqual(list(site.search('chess set', suggestion=True)), ssnf)
 
-    def test_search_sug_not_found_num(self):
-        ''' test searching with suggestion where not found but limited to the correct number'''
+    def test_search_sug_not_found_small_limit(self):
         site = MediaWikiOverloaded()
-        self.assertEqual(site.search('chess set', results=505, suggestion=False), site.responses[site.api_url]['search_with_suggestion_not_found_number'])
-        self.assertEqual(len(site.responses[site.api_url]['search_with_suggestion_not_found_number']), 500)  # limit to 500
+        response = site.responses[site.api_url]
+        self.assertEqual(
+                         site.search('chess set', results=3,
+                                     suggestion=False),
+                         response['search_with_suggestion_not_found_small'])
+        num_res = len(response['search_with_suggestion_not_found_small'])
+        self.assertEqual(num_res, 3)  # limit to 500
 
-    ##########################################
-    # TEST CATEGORYMEMBERS FUNCTIONALITY
-    ##########################################
+    def test_search_sug_not_found_large_limit(self):
+        '''
+        test searching with suggestion where not found but limited to the
+        correct number
+        '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        self.assertEqual(
+                         site.search('chess set', results=505,
+                                     suggestion=False),
+                         response['search_with_suggestion_not_found_large'])
+        num_res = len(response['search_with_suggestion_not_found_large'])
+        self.assertEqual(num_res, 500)  # limit to 500
+
+
+# class TestMediaWikiSuggest(unittest.TestCase):
+
+
+# class TestMediaWikiGeoSearch(unittest.TestCase):
+
+
+# class TestMediaWikiOpenSearch(unittest.TestCase):
+
+
+# class TestMediaWikiPrefixSearch(unittest.TestCase):
+
+
+# class TestMediaWikiSummary(unittest.TestCase):
+
+
+# class TestMediaWikiCategoryTree(unittest.TestCase):
+
+
+class TestMediaWikiCategoryMembers(unittest.TestCase):
+    ''' Test CategoryMember Functionality '''
     def test_cat_mems_with_subcats(self):
         ''' test categorymember with subcategories '''
         site = MediaWikiOverloaded()
-        res = site.responses[site.api_url]['category_members_with_subcategories']
-        self.assertEqual(list(site.categorymembers("Chess", results=15, subcategories=True)), res)
+        response = site.responses[site.api_url]
+        res = response['category_members_with_subcategories']
+        ctm = site.categorymembers("Chess", results=15, subcategories=True)
+        self.assertEqual(list(ctm), res)  # list since json doesn't keep tuple
 
     def test_cat_mems_subcat_default(self):
         ''' test categorymember with default subcategories (True) '''
         site = MediaWikiOverloaded()
-        res = site.responses[site.api_url]['category_members_with_subcategories']
+        response = site.responses[site.api_url]
+        res = response['category_members_with_subcategories']
         self.assertEqual(list(site.categorymembers("Chess", results=15)), res)
 
     def test_cat_mems_wo_subcats(self):
         ''' test categorymember without subcategories '''
         site = MediaWikiOverloaded()
-        res = site.responses[site.api_url]['category_members_without_subcategories']
-        self.assertEqual(list(site.categorymembers("Chess", results=15, subcategories=False)), res)
+        response = site.responses[site.api_url]
+        res = response['category_members_without_subcategories']
+        ctm = site.categorymembers("Chess", results=15, subcategories=False)
+        self.assertEqual(list(ctm), res)
 
     def test_cat_mems_w_subcats_lim(self):
         ''' test categorymember without subcategories limited '''
         site = MediaWikiOverloaded()
-        res = site.responses[site.api_url]['category_members_without_subcategories_5']
-        self.assertEqual(list(site.categorymembers("Chess", results=5, subcategories=False)), res)
+        response = site.responses[site.api_url]
+        res = response['category_members_without_subcategories_5']
+        ctm = site.categorymembers("Chess", results=5, subcategories=False)
+        self.assertEqual(list(ctm), res)
         self.assertEqual(len(res), 5)
 
-    ##########################################
-    # TEST EXCEPTIONS FUNCTIONALITY
-    ##########################################
+
+class TestMediaWikiExceptions(unittest.TestCase):
+    ''' Test MediaWiki Exceptions '''
     def test_page_error(self):
         ''' Test that page error is thrown correctly '''
         site = MediaWikiOverloaded()
-        error = lambda: site.page('gobbilygook')
-        self.assertRaises(PageError, error)
+        self.assertRaises(PageError, lambda: site.page('gobbilygook'))
 
     def test_page_error_message(self):
         ''' Test that page error is thrown correctly '''
         site = MediaWikiOverloaded()
-        error = lambda: site.page('gobbilygook')
+        response = site.responses[site.api_url]
         try:
-            error()
+            site.page('gobbilygook')
         except PageError as ex:
-            self.assertEqual(ex.message, site.responses[site.api_url]['page_error_msg'])
+            self.assertEqual(ex.message, response['page_error_msg'])
 
     def test_redirect_error(self):
         ''' Test that redirect error is thrown correctly '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
-        error = lambda: site.page('arya', auto_suggest=False, redirect=False)
-        self.assertRaises(RedirectError, error)
+        self.assertRaises(RedirectError,
+                          lambda: site.page('arya', auto_suggest=False,
+                                            redirect=False))
 
     def test_redirect_error_msg(self):
         ''' Test that redirect error is thrown correctly '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
-        error = lambda: site.page('arya', auto_suggest=False, redirect=False)
+        response = site.responses[site.api_url]
         try:
-            error()
+            site.page('arya', auto_suggest=False, redirect=False)
         except RedirectError as ex:
-            self.assertEqual(ex.message, site.responses[site.api_url]['redirect_error_msg'])
+            self.assertEqual(ex.message, response['redirect_error_msg'])
 
     def test_disambiguation_error(self):
         ''' Test that disambiguation error is thrown correctly '''
         site = MediaWikiOverloaded()
-        error = lambda: site.page('bush')
-        self.assertRaises(DisambiguationError, error)
+        self.assertRaises(DisambiguationError, lambda: site.page('bush'))
 
     def test_disambiguation_error_msg(self):
         ''' Test that disambiguation error is thrown correctly '''
         site = MediaWikiOverloaded()
-        error = lambda: site.page('bush')
+        response = site.responses[site.api_url]
         try:
-            error()
+            site.page('bush')
         except DisambiguationError as ex:
-            self.assertEqual(ex.message, site.responses[site.api_url]['disambiguation_error_msg'])
+            self.assertEqual(ex.message, response['disambiguation_error_msg'])
 
-    ##########################################
-    # TEST PAGE FUNCTIONALITY
-    ##########################################
+    # def test_geocoord_error(self):
+    #     pass
+    # def test_geocoord_error_msg(self):
+    #     pass
+    # def test_geocoord_value_error(self):
+    #     pass
+    # def test_geocoord_value_error_msg(self):
+    #     pass
+    # def test_api_url_error(self):
+    #     pass
+    # def test_api_url_error_msg(self):
+    #     pass
+    # def test_api_url_on_init_error(self):
+    #     pass
+    # def test_api_url_on_init_error_msg(self):
+    #     pass
+
+
+
+
+class TestMediaWikiPage(unittest.TestCase):
+    ''' Test MediaWiki Pages '''
     def test_page_and_properties(self):
         ''' Test a page from ASOIAF wiki with all properties '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
-        pg = site.page('arya')
-        self.assertEqual(pg.title, site.responses[site.api_url]['arya']['title'])
-        self.assertEqual(pg.pageid, site.responses[site.api_url]['arya']['pageid'])
-        self.assertEqual(pg.url, site.responses[site.api_url]['arya']['url'])
-        self.assertEqual(pg.backlinks, site.responses[site.api_url]['arya']['backlinks'])
-        self.assertEqual(pg.images, site.responses[site.api_url]['arya']['images'])
-        self.assertEqual(pg.redirects, site.responses[site.api_url]['arya']['redirects'])
-        self.assertEqual(pg.links, site.responses[site.api_url]['arya']['links'])
-        self.assertEqual(pg.categories, site.responses[site.api_url]['arya']['categories'])
-        self.assertEqual(pg.references, site.responses[site.api_url]['arya']['references'])
-        self.assertEqual(pg.content, site.responses[site.api_url]['arya']['content'])
-        self.assertEqual(pg.parent_id, site.responses[site.api_url]['arya']['parent_id'])
-        self.assertEqual(pg.revision_id, site.responses[site.api_url]['arya']['revision_id'])
-        self.assertEqual(pg.coordinates, site.responses[site.api_url]['arya']['coordinates'])
-        self.assertEqual(pg.sections, site.responses[site.api_url]['arya']['sections'])
-        self.assertEqual(pg.section("A Game of Thrones"), site.responses[site.api_url]['arya']['section_a_game_of_thrones'])
+        response = site.responses[site.api_url]
+        pag = site.page('arya')
+        self.assertEqual(pag.title, response['arya']['title'])
+        self.assertEqual(pag.pageid, response['arya']['pageid'])
+        self.assertEqual(pag.url, response['arya']['url'])
+        self.assertEqual(pag.backlinks, response['arya']['backlinks'])
+        self.assertEqual(pag.images, response['arya']['images'])
+        self.assertEqual(pag.redirects, response['arya']['redirects'])
+        self.assertEqual(pag.links, response['arya']['links'])
+        self.assertEqual(pag.categories, response['arya']['categories'])
+        self.assertEqual(pag.references, response['arya']['references'])
+        self.assertEqual(pag.content, response['arya']['content'])
+        self.assertEqual(pag.parent_id, response['arya']['parent_id'])
+        self.assertEqual(pag.revision_id, response['arya']['revision_id'])
+        self.assertEqual(pag.coordinates, response['arya']['coordinates'])
+        self.assertEqual(pag.sections, response['arya']['sections'])
+        self.assertEqual(pag.section("A Game of Thrones"),
+                         response['arya']['section_a_game_of_thrones'])

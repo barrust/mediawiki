@@ -1,18 +1,19 @@
 '''
 mediawiki module initialization
 '''
-from .mediawiki import (MediaWiki)
-from .exceptions import (MediaWikiException, PageError,
+from .mediawiki import (MediaWiki, URL, VERSION)
+from .exceptions import (MediaWikiException, PageError, MediaWikiGeoCoordError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError)
 
-__author__ = "Tyler Barrus"
-__maintainer__ = "Tyler Barrus"
-__email__ = "barrust@gmail.com"
-__license__ = "MIT"
-__version__ = MediaWiki.get_version()
-__credits__ = ["Jonathan Goldsmith"]
+__author__ = 'Tyler Barrus'
+__maintainer__ = 'Tyler Barrus'
+__email__ = 'barrust@gmail.com'
+__license__ = 'MIT'
+__version__ = VERSION
+__credits__ = ['Jonathan Goldsmith']
+__url__ = URL
 
-__all__ = ['MediaWiki', 'PageError', 'RedirectError',
+__all__ = ['MediaWiki', 'PageError', 'RedirectError', 'MediaWikiException',
            'DisambiguationError', 'MediaWikiAPIURLError',
-           'HTTPTimeoutError']
+           'HTTPTimeoutError', 'MediaWikiGeoCoordError']

@@ -6,9 +6,9 @@ from __future__ import unicode_literals
 import sys
 
 
-ODD_ERROR_MESSAGE = ("This shouldn't happen. Please report on "
-                     "GitHub if the MediaWiki site is available: "
-                     "github.com/barrust/mediawiki")
+ODD_ERROR_MESSAGE = ('This should not happen. Please report on '
+                     'GitHub if the MediaWiki site is available: '
+                     'github.com/barrust/mediawiki')
 
 
 class MediaWikiBaseException(Exception):
@@ -32,8 +32,8 @@ class MediaWikiException(MediaWikiBaseException):
 
     def __init__(self, error):
         self.error = error
-        msg = ("An unknown error occured: \"{0}\". Please report "
-               "it on GitHub!").format(self.error)
+        msg = ('An unknown error occured: "{0}". Please report '
+               'it on GitHub!').format(self.error)
         super(MediaWikiException, self).__init__(msg)
 
 
@@ -43,16 +43,16 @@ class PageError(MediaWikiBaseException):
     def __init__(self, title=None, pageid=None):
         if title:
             self.title = title
-            msg = (u"\"{0}\" does not match any pages. Try another "
-                   "query!").format(self.title)
+            msg = (u'"{0}" does not match any pages. Try another '
+                   'query!').format(self.title)
         elif pageid:
             self.pageid = pageid
-            msg = (u"Page id \"{0}\" does not match any pages. Try "
-                   "another id!").format(self.pageid)
+            msg = (u'Page id "{0}" does not match any pages. Try '
+                   'another id!').format(self.pageid)
         else:
-            self.title = ""
-            msg = (u"\"{0}\" does not match any pages. Try another "
-                   "query!").format(self.title)
+            self.title = ''
+            msg = (u'"{0}" does not match any pages. Try another '
+                   'query!').format(self.title)
         super(PageError, self).__init__(msg)
 
 
@@ -64,9 +64,9 @@ class RedirectError(MediaWikiBaseException):
 
     def __init__(self, title):
         self.title = title
-        msg = (u"\"{0}\" resulted in a redirect. Set the redirect "
-               "property to True to allow automatic "
-               "redirects.").format(self.title)
+        msg = (u'"{0}" resulted in a redirect. Set the redirect '
+               'property to True to allow automatic '
+               'redirects.').format(self.title)
 
         super(RedirectError, self).__init__(msg)
 
@@ -86,7 +86,7 @@ class DisambiguationError(MediaWikiBaseException):
         self.title = title
         self.options = sorted(may_refer_to)
         self.details = details
-        msg = (u"\n\"{0}\" may refer to: \n  {1}"
+        msg = (u'\n"{0}" may refer to: \n  {1}'
                ).format(self.title, '\n  '.join(self.options))
         super(DisambiguationError, self).__init__(msg)
 
@@ -98,9 +98,9 @@ class HTTPTimeoutError(MediaWikiBaseException):
 
     def __init__(self, query):
         self.query = query
-        msg = (u"Searching for \"{0}\" resulted in a timeout. Try "
-               "again in a few seconds, and make sure you have rate "
-               "limiting set to True.").format(self.query)
+        msg = (u'Searching for "{0}" resulted in a timeout. Try '
+               'again in a few seconds, and ensure you have rate '
+               'limiting set to True.').format(self.query)
         super(HTTPTimeoutError, self).__init__(msg)
 
 
@@ -109,7 +109,7 @@ class MediaWikiAPIURLError(MediaWikiBaseException):
 
     def __init__(self, api_url):
         self.api_url = api_url
-        msg = "{0} is not a valid MediaWiki API URL".format(self.api_url)
+        msg = '{0} is not a valid MediaWiki API URL'.format(self.api_url)
         super(MediaWikiAPIURLError, self).__init__(msg)
 
 

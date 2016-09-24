@@ -49,6 +49,10 @@ class MediaWiki(object):
 
     # non-settable properties
     @property
+    def version(self):
+        ''' Get current version of the library '''
+        return self._version
+
     def api_version(self):
         ''' get site's api version '''
         return '.'.join([str(x) for x in self._api_version])

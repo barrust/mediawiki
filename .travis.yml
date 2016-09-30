@@ -17,4 +17,4 @@ install:
 script:
     - pep8 mediawiki/
     - python setup.py test
-    - pylint mediawiki || 0
+    - ./scripts/py-lint.sh

@@ -5,9 +5,6 @@ python:
     - "3.4"
     - "3.5"
 
-virtualenv:
-    system_site_packages: true
-
 # install system dependencies here with apt-get.
 # before_install:
 #   - sudo ./provision/debian.sh

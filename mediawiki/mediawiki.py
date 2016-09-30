@@ -5,11 +5,11 @@ MediaWiki class module
 # Author: Tyler Barrus (barrust@gmail.com)
 
 from __future__ import unicode_literals
-import requests
-import time
-from bs4 import BeautifulSoup
 from datetime import (datetime, timedelta)
+import time
 from decimal import (Decimal, DecimalException)
+import requests
+from bs4 import BeautifulSoup
 from .exceptions import (MediaWikiBaseException, MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,

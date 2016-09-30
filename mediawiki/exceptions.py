@@ -85,7 +85,7 @@ class DisambiguationError(MediaWikiBaseException):
         self.options = sorted(may_refer_to)
         self.details = details
         msg = (u'\n"{0}" may refer to: \n  {1}'
-               ).format(self.title, '\n  '.join(self.options))
+              ).format(self.title, '\n  '.join(self.options))
         super(DisambiguationError, self).__init__(msg)
 
 

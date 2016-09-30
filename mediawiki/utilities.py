@@ -15,6 +15,8 @@ class Memoize(object):
         ''' init the class here '''
         self.func = func
         self.name = func.__name__
+        self.__doc__ = func.__doc__
+        self.__name__ = func.__name__
         self._cache = None
         self._default_params = dict()
 
@@ -85,7 +87,7 @@ def capture_response(func):
             mock_data[args[0].api_url] = dict()
         try:
             res = func(*args, **kwargs)
-        except:
+        except Exception:
             res = dict()
         mock_data[args[0].api_url][new_params] = res
         with open(file_path, 'w') as mock:

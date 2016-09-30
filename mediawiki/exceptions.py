@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 '''
-Global MediaWiki Exceptions
+MediaWiki Exceptions
 '''
 from __future__ import unicode_literals
 import sys
@@ -75,11 +74,10 @@ class DisambiguationError(MediaWikiBaseException):
     '''
     Exception raised when a page resolves to a Disambiguation page
 
-    The `options` property contains a list of titles of Wikipedia
+    The `options` property contains a list of titles of Wikipedia  
     pages that the query may refer to
 
-    Note: `options` does not include titles that do not link to a
-    valid Wikipedia page
+    .. note:: `options` only includes titles that link to valid MediaWiki pages
     '''
 
     def __init__(self, title, may_refer_to, details=None):

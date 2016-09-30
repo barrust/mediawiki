@@ -9,6 +9,7 @@ python:
 # virtualenv
 install:
   - ./provision/python.sh
+  - ./provision/debian.sh
 
 script:
     - pep8 mediawiki/

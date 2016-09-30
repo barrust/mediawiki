@@ -74,7 +74,7 @@ class DisambiguationError(MediaWikiBaseException):
     '''
     Exception raised when a page resolves to a Disambiguation page
 
-    The `options` property contains a list of titles of Wikipedia  
+    The `options` property contains a list of titles of Wikipedia
     pages that the query may refer to
 
     .. note:: `options` only includes titles that link to valid MediaWiki pages

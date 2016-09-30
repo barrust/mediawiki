@@ -3,3 +3,4 @@ pep8
 isort
 astroid
 pylint
+coveralls

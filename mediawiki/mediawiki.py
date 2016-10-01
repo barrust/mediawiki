@@ -50,67 +50,69 @@ class MediaWiki(object):
     # non-settable properties
     @property
     def version(self):
-        ''' Get current version of the library '''
+        ''' Get current version of the MediaWiki library '''
         return self._version
 
     @property
     def api_version(self):
-        ''' get site's api version '''
+        ''' Return the MediaWiki site api version '''
         return '.'.join([str(x) for x in self._api_version])
 
     @property
     def extensions(self):
-        ''' get site's installed extensions '''
+        ''' Return a list of installed extensions '''
         return sorted(list(self._extensions))
 
     # settable properties
     @property
     def rate_limit(self):
-        ''' get if using rate limiting '''
+        ''' Return if rate limiting is used '''
         return self._rate_limit
 
     @rate_limit.setter
     def rate_limit(self, rate_limit):
-        ''' set rate limiting of api usage '''
+        ''' Turn on or off rate limiting '''
         self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         self.clear_memoized()
 
     @property
     def rate_limit_min_wait(self):
-        ''' get minimum wait for rate limiting '''
+        ''' Return minimum wait between calls
+
+        .. note::  Only used if rate_limit is **True**
+        '''
         return self._min_wait
 
     @rate_limit_min_wait.setter
     def rate_limit_min_wait(self, min_wait):
-        ''' set minimum wait for rate limiting '''
+        ''' Set minimum wait to use for rate limiting '''
         self._min_wait = min_wait
         self._rate_limit_last_call = None
 
     @property
     def timeout(self):
-        ''' get timeout setting; None means no timeout '''
+        ''' Return timeout setting; **None** means no timeout '''
         return self._timeout
 
     @timeout.setter
     def timeout(self, timeout):
-        '''
-        set request timeout in seconds (or fractions of a second)
-        None means no timeout
+        ''' Set request timeout in seconds (or fractions of a second)
+
+        .. note:: **None** means no timeout
         '''
         self._timeout = timeout
 
     @property
     def language(self):
-        ''' return current language '''
+        ''' Return current API URL language '''
         return self._lang
 
     @language.setter
     def language(self, lang):
-        '''
-        set the language of the url
+        ''' Set the language to use; attempts to change the API URL
 
-        Note: use correct language titles with the updated url
+        .. note:: Use correct language titles with the updated API URL
         '''
         lang = lang.lower()
         if self._lang == lang:
@@ -125,29 +127,32 @@ class MediaWiki(object):
 
     @property
     def user_agent(self):
-        ''' get user_agent '''
+        ''' Return the user agent string '''
         return self._user_agent
 
     @user_agent.setter
     def user_agent(self, user_agent):
-        ''' set a new user agent '''
+        ''' Set the new user agent string '''
         self._user_agent = user_agent
         self._reset_session()
 
     @property
     def api_url(self):
-        ''' get url to the api '''
+        ''' Return the API URL of the MediaWiki site '''
         return self._api_url
 
     @property
     def memoized(self):
-        ''' return the memoize cache '''
+        ''' Return the memoize cache '''
         return self.cache
 
     # non-properties
     def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
                     lang='en'):
-        ''' set the url to the api '''
+        ''' Set the API URL
+
+        :raises MediaWikiAPIURLError: if the url is not a valid MediaWiki site
+        '''
         self._api_url = api_url
         self._lang = lang
         try:
@@ -163,22 +168,22 @@ class MediaWiki(object):
         self._session.headers.update(headers)
 
     def clear_memoized(self):
-        ''' clear memoized (cached) values '''
-        self.cache = dict()
+        ''' Clear memoized (cached) values '''
+        self.cache.clear()
 
     # non-setup functions
     def languages(self):
         '''
         List all the currently supported language prefixes (usually ISO
-        language code). Result is a <prefix>: <local_lang_name> pairs
-        dictionary.
+        language code). Result is a dictonary in the form of
+        <prefix>: <local_lang_name> pairs
         '''
         res = self.wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
         return {lang['code']: lang['*'] for lang in res['query']['languages']}
     # end languages
 
     def random(self, pages=1):
-        ''' return a random page title or list of titles '''
+        ''' Return a random page title or list of titles '''
         if pages is None or pages < 1:
             raise ValueError('Number of pages must be greater than 0')
 

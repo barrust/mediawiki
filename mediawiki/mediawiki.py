@@ -50,23 +50,44 @@ class MediaWiki(object):
     # non-settable properties
     @property
     def version(self):
-        ''' Get current version of the MediaWiki library '''
+        ''' Version of the MediaWiki library
+
+        :getter: Returns the version of the MediaWiki library
+        :setter: Not settable
+        :type: string
+        '''
         return self._version
 
     @property
     def api_version(self):
-        ''' Return the MediaWiki site api version '''
+        ''' API Version of the MediaWiki site
+
+        :getter: Returns the API version of the MediaWiki site
+        :setter: Not settable
+        :type: string
+        '''
         return '.'.join([str(x) for x in self._api_version])
 
     @property
     def extensions(self):
-        ''' Return a list of installed extensions '''
+        '''Extensions installed on the MediaWiki site
+
+        :getter: Returns a list of all extensions installed on the MediaWiki \
+        site
+        :setter: Not settable
+        :type: list
+        '''
         return sorted(list(self._extensions))
 
     # settable properties
     @property
     def rate_limit(self):
-        ''' Return if rate limiting is used '''
+        ''' Turn on or off Rate Limiting
+
+        :getter: Returns if rate limiting is used
+        :setter: Turns on (True) or off (False) rate limiting
+        :type: Boolean
+        '''
         return self._rate_limit
 
     @rate_limit.setter
@@ -78,9 +99,13 @@ class MediaWiki(object):
 
     @property
     def rate_limit_min_wait(self):
-        ''' Return minimum wait between calls
+        ''' Time to wait between calls
 
-        .. note::  Only used if rate_limit is **True**
+        :getter: Returns the timedelta used to wait between API calls
+        :setter: Sets the amount of time to wait between calls
+        :type: timedelta
+
+        .. note:: Only used if rate_limit is **True**
         '''
         return self._min_wait
 
@@ -92,28 +117,39 @@ class MediaWiki(object):
 
     @property
     def timeout(self):
-        ''' Return timeout setting; **None** means no timeout '''
+        ''' Response timeout for API requests
+
+        :getter: Returns the number of seconds to wait for a resonse
+        :setter: Sets the number of seconds to wait for a response
+        :type: integer or None
+
+        .. note:: Use **None** for no response timeout
+        '''
         return self._timeout
 
     @timeout.setter
     def timeout(self, timeout):
-        ''' Set request timeout in seconds (or fractions of a second)
-
-        .. note:: **None** means no timeout
-        '''
+        ''' Set request timeout in seconds (or fractions of a second) '''
         self._timeout = timeout
 
     @property
     def language(self):
-        ''' Return current API URL language '''
+        ''' API URL language
+
+        :getter: Returns the set language of the API URL
+        :setter: Changes the API URL to use the provided language code
+        :type: string
+
+        .. note:: Use correct language titles with the updated API URL
+
+        .. note:: Some API URLs do not encode language; unable to update if \
+        this is the case
+        '''
         return self._lang
 
     @language.setter
     def language(self, lang):
-        ''' Set the language to use; attempts to change the API URL
-
-        .. note:: Use correct language titles with the updated API URL
-        '''
+        ''' Set the language to use; attempts to change the API URL '''
         lang = lang.lower()
         if self._lang == lang:
             return
@@ -127,7 +163,15 @@ class MediaWiki(object):
 
     @property
     def user_agent(self):
-        ''' Return the user agent string '''
+        ''' User agent string
+
+        :getter: Returns the user agent string used in requests
+        :setter: Sets the user agent string; resets session
+        :type: string
+
+        .. note:: If using in as part of another project, this should be \
+        changed
+        '''
         return self._user_agent
 
     @user_agent.setter
@@ -138,7 +182,12 @@ class MediaWiki(object):
 
     @property
     def api_url(self):
-        ''' Return the API URL of the MediaWiki site '''
+        '''API URL of the MediaWiki site
+
+        :getter: Returns the API URL
+        :setter: Not settable; use :py:func:`mediawiki.MediaWiki.set_api_url`
+        :type: string
+        '''
         return self._api_url
 
     @property

@@ -15,8 +15,10 @@ Functions and Classes
 ===============================
 
 .. autoclass:: mediawiki.MediaWiki
-  :members:
+    :members:
 
+.. autoclass:: mediawiki.MediaWikiPage
+    :members:
 
 Exceptions
 ===============================

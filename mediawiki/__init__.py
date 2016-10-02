@@ -1,7 +1,7 @@
 '''
 mediawiki module initialization
 '''
-from .mediawiki import (MediaWiki, URL, VERSION)
+from .mediawiki import (MediaWiki, MediaWikiPage, URL, VERSION)
 from .exceptions import (MediaWikiException, PageError, MediaWikiGeoCoordError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError)

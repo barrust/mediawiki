@@ -224,7 +224,8 @@ class MediaWiki(object):
 
     def clear_memoized(self):
         ''' Clear memoized (cached) values '''
-        self._cache.clear()
+        if hasattr(self, '_cache'):
+            self._cache.clear()
 
     # non-setup functions
     def languages(self):

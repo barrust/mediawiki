@@ -28,7 +28,6 @@ def memoize(func):
 
         # pull from the cache if it is available
         if key not in cache[func.__name__]:
-            print('first')
             cache[func.__name__][key] = func(*args, **kwargs)
         return cache[func.__name__][key]
     return wrapper

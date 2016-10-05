@@ -14,7 +14,7 @@ from .exceptions import (MediaWikiBaseException, MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
-from .utilities import (Memoize, stdout)
+from .utilities import (memoize, stdout)
 
 URL = 'https://github.com/barrust/mediawiki'
 VERSION = '0.3.3'
@@ -185,22 +185,29 @@ class MediaWiki(object):
         '''API URL of the MediaWiki site
 
         :getter: Returns the API URL
-        :setter: Not settable; use :py:func:`mediawiki.MediaWiki.set_api_url`
+        :setter: Not settable; see :py:func:`mediawiki.MediaWiki.set_api_url`
         :type: string
         '''
         return self._api_url
 
     @property
     def memoized(self):
-        ''' Return the memoize cache '''
-        return self.cache
+        ''' Return the memoize cache
+
+        :getter: Returns the cache used for memoization
+        :setter: Not settable; see \
+        :py:func:`mediawiki.MediaWiki.clear_memoized`
+        :return: dict
+        '''
+        return self.__cache
 
     # non-properties
     def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
                     lang='en'):
-        ''' Set the API URL
+        ''' Set the API URL and language
 
-        :raises MediaWikiAPIURLError: if the url is not a valid MediaWiki site
+        :raises `mediawiki.exceptions.MediaWikiAPIURLError`: \
+        if the url is not a valid MediaWiki site
         '''
         self._api_url = api_url
         self._lang = lang
@@ -218,21 +225,27 @@ class MediaWiki(object):
 
     def clear_memoized(self):
         ''' Clear memoized (cached) values '''
-        self.cache.clear()
+        self.__cache.clear()
 
     # non-setup functions
     def languages(self):
-        '''
-        List all the currently supported language prefixes (usually ISO
-        language code). Result is a dictonary in the form of
+        ''' All supported language prefixes on the MediaWiki site
+
+        :getter: Returns all supported language prefixes: dict of \
         <prefix>: <local_lang_name> pairs
+        :setter: Not settable
+        :returns: dict
         '''
         res = self.wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
         return {lang['code']: lang['*'] for lang in res['query']['languages']}
     # end languages
 
     def random(self, pages=1):
-        ''' Return a random page title or list of titles '''
+        ''' Return a random page title or list of titles
+
+        :returns: A list of random page titles or a random page title \
+        if pages = 1
+        '''
         if pages is None or pages < 1:
             raise ValueError('Number of pages must be greater than 0')
 
@@ -247,7 +260,7 @@ class MediaWiki(object):
         return titles
     # end random
 
-    @Memoize
+    @memoize
     def search(self, query, results=10, suggestion=False):
         '''
         Conduct a search for 'query' returning 'results' results
@@ -283,7 +296,7 @@ class MediaWiki(object):
         return list(search_results)
     # end search
 
-    @Memoize
+    @memoize
     def suggest(self, query):
         '''
         Gather suggestions based on the provided 'query' or None if
@@ -297,7 +310,7 @@ class MediaWiki(object):
         return title
     # end suggest
 
-    @Memoize
+    @memoize
     def geosearch(self, latitude=None, longitude=None, radius=1000,
                   title=None, auto_suggest=True, results=10):
         ''' Do a search for pages that relate to the provided area '''
@@ -337,7 +350,7 @@ class MediaWiki(object):
 
         return list(res)
 
-    @Memoize
+    @memoize
     def opensearch(self, query, results=10, redirect=True):
         '''
         Execute a MediaWiki opensearch request, similar to search box
@@ -370,7 +383,7 @@ class MediaWiki(object):
 
         return res
 
-    @Memoize
+    @memoize
     def prefixsearch(self, query, results=10):
         '''
         A prefix based search like the Wikipedia search box results
@@ -402,7 +415,7 @@ class MediaWiki(object):
 
         return res
 
-    @Memoize
+    @memoize
     def summary(self, title, sentences=0, chars=0, auto_suggest=True,
                 redirect=True):
         ''' Get the summary for the title in question '''
@@ -410,7 +423,7 @@ class MediaWiki(object):
                               redirect=redirect)
         return page_info.summarize(sentences, chars)
 
-    @Memoize
+    @memoize
     def categorymembers(self, category, results=10, subcategories=True):
         '''
         Get informaton about a category
@@ -495,7 +508,7 @@ class MediaWiki(object):
         Make a request to the MediaWiki API using the given search
         parameters
 
-        Returns a parsed dict of the JSON response
+        :returns: A parsed dict of the JSON response
         '''
 
         params['format'] = 'json'

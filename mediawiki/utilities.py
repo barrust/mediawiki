@@ -8,66 +8,29 @@ import os
 import inspect
 
 
-# http://stackoverflow.com/a/8629441
-class Memoize(object):
-    ''' cache or memoize the data '''
-    def __init__(self, func):
-        ''' init the class here '''
-        self.func = func
-        self.name = func.__name__
-        self.__doc__ = func.__doc__
-        self.__name__ = func.__name__
-        self._cache = None
-        self._default_params = dict()
+def memoize(func):
+    ''' quick memoize decorator for class instance methods '''
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        ''' wrap it up and store info in a cache '''
+        # add it to the class if needed
+        if not hasattr(args[0], '__cache'):
+            args[0].__cache = dict()
+        cache = args[0].__cache
+        if func.__name__ not in cache:
+            cache[func.__name__] = dict()
+        # build a key; should also consist of the default values
+        tmp = list()
+        tmp.extend(args[1:])
+        for k in sorted(kwargs.keys()):
+            tmp.append('({0}: {1})' .format(k, kwargs[k]))
+        key = ' - '.join(tmp)
 
-        # inspect the function for parameters and default values
-        fun_insp = inspect.getargspec(func)
-        args = fun_insp[0]
-        defaults = fun_insp[3]
-        if defaults:
-            have_defaults = args[-len(defaults):]
-        else:
-            have_defaults = list()
-        # builld out the default parameters dictionary
-        for i, item in enumerate(have_defaults):
-            self._default_params[item] = defaults[i]
-
-    def __call__(self, *args, **kwargs):
-        ''' define the __call__ method '''
-        if self.name not in self._cache:
-            self._cache[self.name] = dict()
-        # ensure that we always have all parameters in the key
-        all_params = kwargs.copy()
-        for item in self._default_params:
-            if item not in all_params:
-                all_params[item] = self._default_params[item]
-        # build the full key
-        key = list()
-        key.extend(args[1:])
-        for k in sorted(all_params.keys()):
-            key.append('({0}: {1})' .format(k, all_params[k]))
-        key = ' - '.join(key)
-
-        # do the caching
-        if key in self._cache[self.name]:
-            # print('get stored version')
-            value = self._cache[self.name][key]
-        else:
-            # print('get it the first time')
-            self._cache[self.name][key] = value = self.func(*args, **kwargs)
-        return value
-
-    def __repr__(self):
-        '''Return the function's docstring.'''
-        return self.func.__doc__
-
-    def __get__(self, obj, objtype):
-        '''Support instance methods.'''
-        func = functools.partial(self.__call__, obj)
-        if not hasattr(obj, 'cache'):
-            obj.cache = dict()
-        self._cache = obj.cache
-        return func
+        # pull from the cache if it is available
+        if key not in cache[func.__name__]:
+            cache[func.__name__][key] = func(*args, **kwargs)
+        return cache[func.__name__][key]
+    return wrapper
 
 
 def capture_response(func):

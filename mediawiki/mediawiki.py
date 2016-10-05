@@ -38,7 +38,6 @@ class MediaWiki(object):
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
-        self.cache = dict()
 
         # call helper functions to get everything set up
         self._reset_session()
@@ -199,7 +198,7 @@ class MediaWiki(object):
         :py:func:`mediawiki.MediaWiki.clear_memoized`
         :return: dict
         '''
-        return self.__cache
+        return self._cache
 
     # non-properties
     def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
@@ -225,7 +224,7 @@ class MediaWiki(object):
 
     def clear_memoized(self):
         ''' Clear memoized (cached) values '''
-        self.__cache.clear()
+        self._cache.clear()
 
     # non-setup functions
     def languages(self):

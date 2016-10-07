@@ -39,6 +39,9 @@ class MediaWiki(object):
         self._extensions = None
         self._api_version = None
 
+        # for memoized results
+        self._cache = dict()
+
         # call helper functions to get everything set up
         self._reset_session()
         try:
@@ -84,7 +87,7 @@ class MediaWiki(object):
         ''' Turn on or off Rate Limiting
 
         :getter: Returns if rate limiting is used
-        :setter: Turns on (True) or off (False) rate limiting
+        :setter: Turns on (**True**) or off (**False**) rate limiting
         :type: Boolean
         '''
         return self._rate_limit
@@ -205,6 +208,11 @@ class MediaWiki(object):
                     lang='en'):
         ''' Set the API URL and language
 
+        :param api_url: API URL to use
+        :type pages: string
+        :param lang: Language of the API URL
+        :type pages: string
+
         :raises `mediawiki.exceptions.MediaWikiAPIURLError`: \
         if the url is not a valid MediaWiki site
         '''
@@ -231,18 +239,19 @@ class MediaWiki(object):
     def languages(self):
         ''' All supported language prefixes on the MediaWiki site
 
-        :getter: Returns all supported language prefixes: dict of \
-        <prefix>: <local_lang_name> pairs
+        :getter: Returns all supported language prefixes
         :setter: Not settable
-        :returns: dict
+        :returns: dict: prefix - local language name pairs
         '''
         res = self.wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
         return {lang['code']: lang['*'] for lang in res['query']['languages']}
     # end languages
 
     def random(self, pages=1):
-        ''' Return a random page title or list of titles
+        ''' Request a random page title or list of random titles
 
+        :param pages: number of random pages to returns
+        :type pages: integer
         :returns: A list of random page titles or a random page title \
         if pages = 1
         '''
@@ -262,11 +271,15 @@ class MediaWiki(object):
 
     @memoize
     def search(self, query, results=10, suggestion=False):
-        '''
-        Conduct a search for 'query' returning 'results' results
+        ''' Search for similar titles
 
-        If suggestion is True, returns results and suggestions
-        (if any) in a tuple
+        :param query: Page title
+        :param results: Number of pages to returns
+        :type results: integer
+        :param suggestion: Use suggestion
+        :type suggestion: Boolean
+        :returns: tuple (list results, suggestion) if suggestion is **True**; \
+        list of results otherwise
         '''
 
         self._check_query(query, 'Query must be specified')
@@ -298,9 +311,11 @@ class MediaWiki(object):
 
     @memoize
     def suggest(self, query):
-        '''
-        Gather suggestions based on the provided 'query' or None if
+        ''' Gather suggestions based on the provided title or None if
         no suggestions found
+
+        :param query: Page title
+        :returns: string or None
         '''
         res, suggest = self.search(query, results=1, suggestion=True)
         try:
@@ -313,7 +328,24 @@ class MediaWiki(object):
     @memoize
     def geosearch(self, latitude=None, longitude=None, radius=1000,
                   title=None, auto_suggest=True, results=10):
-        ''' Do a search for pages that relate to the provided area '''
+        ''' Search for pages that relate to the provided geocoords or near
+        the page
+
+        :param latitude: Latitude geocoord
+        :type latitude: Decimal, type that can be coaxed as Decimal, or None
+        :param longitude: Longitude geocoord
+        :type longitude: Decimal, type that can be coaxed as Decimal, or None
+        :param radius: Radius around page or geocoords to pull back; in meters
+        :type radius: integer
+        :param title: Page title to use as a geocoordinate; this has \
+        precedence over lat/long
+        :type title: string
+        :param auto_suggest: Auto-suggest the page title
+        :type auto_suggest: Boolean
+        :param results: Number of pages within the radius to return
+        :type results: integer
+        :returns: List of page titles
+        '''
 
         def test_lat_long(val):
             ''' handle testing lat and long '''
@@ -352,14 +384,17 @@ class MediaWiki(object):
 
     @memoize
     def opensearch(self, query, results=10, redirect=True):
-        '''
-        Execute a MediaWiki opensearch request, similar to search box
-        suggestions and conforming to the OpenSearch specification.
+        ''' Execute a MediaWiki opensearch request, similar to search box
+        suggestions and conforming to the OpenSearch specification
 
-        If redirect is false, redirect returns the redirect itself
-
-        Returns:
-            List of tuples: Title, Summary, and URL
+        :param query: string to search for
+        :type query: string
+        :param results: number of pages within the radius to return
+        :type results: integer
+        :param redirect: If **False** return the redirect itself, otherwise \
+        resolve redirects
+        :type redirect: Boolean
+        :returns: List of tuples: (Title, Summary, URL)
         '''
 
         self._check_query(query, 'Query must be specified')
@@ -384,22 +419,27 @@ class MediaWiki(object):
         return res
 
     @memoize
-    def prefixsearch(self, query, results=10):
-        '''
-        A prefix based search like the Wikipedia search box results
+    def prefixsearch(self, prefix, results=10):
+        ''' Perform a prefix search using the provided prefix string
 
-        "The purpose of this module is similar to action=opensearch: to take
-        user input and provide the best-matching titles. Depending on the
-        search engine backend, this might include typo correction, redirect
-        avoidance, or other heuristics."
+        **Per the documentation:** "The purpose of this module is similar to
+        action=opensearch: to take user input and provide the best-matching
+        titles. Depending on the search engine backend, this might include
+        typo correction, redirect avoidance, or other heuristics."
+
+        :param prefix: prefix string to use for search
+        :type prefix: string
+        :param results: number of pages within the radius to return
+        :type results: integer
+        :returns: List of page titles
         '''
 
-        self._check_query(query, 'Query must be specified')
+        self._check_query(prefix, 'Prefix must be specified')
 
         query_params = {
             'action': 'query',
             'list': 'prefixsearch',
-            'pssearch': query,
+            'pssearch': prefix,
             'pslimit': ('max' if results > 500 else results),
             'psnamespace': 0,
             'psoffset': 0  # parameterize to skip to later in the list?
@@ -407,7 +447,7 @@ class MediaWiki(object):
 
         raw_results = self.wiki_request(query_params)
 
-        self._check_error_response(raw_results, query)
+        self._check_error_response(raw_results, prefix)
 
         res = list()
         for rec in raw_results['query']['prefixsearch']:
@@ -418,17 +458,40 @@ class MediaWiki(object):
     @memoize
     def summary(self, title, sentences=0, chars=0, auto_suggest=True,
                 redirect=True):
-        ''' Get the summary for the title in question '''
+        ''' Get the summary for the title in question
+
+        :param title: Page title to summarize
+        :type title: string
+        :param sentences: Number of sentences to return in summary
+        :type sentences: integer
+        :param chars: Number of characters to return in summary
+        :type chars: integer
+        :param auto_suggest: Run auto-suggest on title before summarizing
+        :type auto_suggest: Boolean
+        :param redirect: Use page redirect on title before summarizing
+        :type redirect: Boolean
+        :returns: string
+
+        .. note:: Precedence for parameters: sentences then chars; \
+        if both are 0 then the entire first section is returned
+        '''
         page_info = self.page(title, auto_suggest=auto_suggest,
                               redirect=redirect)
         return page_info.summarize(sentences, chars)
 
     @memoize
     def categorymembers(self, category, results=10, subcategories=True):
-        '''
-        Get informaton about a category
+        ''' Get informaton about a category: pages and subcategories
 
-        Note: set results to None to get all
+        :param category: Category name
+        :type category: string
+        :param results: Number of result
+        :type results: integer or None
+        :param subcategories: Include subcategories (**True**) or not \
+        (**False**)
+        :type subcategories: Boolean
+
+        .. note:: Set results to **None** to get all results
         '''
         self._check_query(category, 'Category must be specified')
 
@@ -477,8 +540,14 @@ class MediaWiki(object):
             return pages
     # end categorymembers
 
-    def categorytree(self, category, depth=5):
-        raise NotImplementedError
+    # def categorytree(self, category, depth=5):
+    #     ''' Generate the Category Tree data
+    #
+    #     :raises `NotImplementedError`: not implemented
+    #
+    #     .. todo:: implement
+    #     '''
+    #     raise NotImplementedError
     # end categorytree
 
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,

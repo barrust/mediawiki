@@ -66,7 +66,7 @@ downloaded folder:
 Quickstart
 ------------------
 
-Setup and run a simple search:
+Import mediawiki and run a standard search against Wikipedia:
 
 .. code:: python
 
@@ -74,7 +74,29 @@ Setup and run a simple search:
     >>> wikipedia = MediaWiki()
     >>> wikipedia.search('washington')
 
+Run more advanced searches:
 
+.. code:: python
+
+    >>> wikipedia.opensearch('washington')
+    >>> wikipedia.geosearch(title='washington, d.c.')
+    >>> wikipedia.geosearch(latitude='0.0', longitude='0.0')
+    >>> wikipedia.prefixsearch('arm')
+    >>> wikipedia.random(pages=10)
+
+Pull a MediaWiki page and some of the page properties:
+
+.. code:: python
+
+    >>> p = wikipedia.page('Chess')
+    >>> p.title
+    >>> p.summary
+    >>> p.categories
+    >>> p.images
+    >>> p.links
+
+See the
+`Documentation for more examples! <https://pythonhosted.org/pymediawiki/>`__
 
 
 

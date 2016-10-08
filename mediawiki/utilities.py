@@ -2,10 +2,8 @@
 Utility functions
 '''
 import json
-import sys
 import functools
 import os
-import inspect
 
 
 def memoize(func):
@@ -58,11 +56,3 @@ def capture_response(func):
                       sort_keys=True)
         return res
     return wrapper
-
-
-def stdout(text, default='UTF8'):
-    ''' Ensure that output to stdout is correctly handled '''
-    encoding = sys.stdout.encoding or default
-    if sys.version_info > (3, 0):
-        return text.encode(encoding).decode(encoding)
-    return text.encode(encoding)

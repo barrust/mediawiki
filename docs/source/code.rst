@@ -14,8 +14,15 @@ Contents:
 Functions and Classes
 ===============================
 
+MediaWiki
++++++++++++++++++++++++++++++++
+
 .. autoclass:: mediawiki.MediaWiki
     :members:
+
+
+MediaWikiPage
++++++++++++++++++++++++++++++++
 
 .. autoclass:: mediawiki.MediaWikiPage
     :members:

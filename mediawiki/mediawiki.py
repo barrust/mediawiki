@@ -5,6 +5,7 @@ MediaWiki class module
 # Author: Tyler Barrus (barrust@gmail.com)
 
 from __future__ import unicode_literals
+import sys
 from datetime import (datetime, timedelta)
 import time
 from decimal import (Decimal, DecimalException)
@@ -14,21 +15,35 @@ from .exceptions import (MediaWikiBaseException, MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
-from .utilities import (memoize, stdout)
+from .utilities import memoize
 
 URL = 'https://github.com/barrust/mediawiki'
 VERSION = '0.3.3'
 
 
 class MediaWiki(object):
-    ''' Base MediaWiki object '''
+    ''' MediaWiki API Wrapper Instance
+
+    :param url: API URL of the MediaWiki site; defaults to Wikipedia
+    :type url: string
+    :param lang: Language of the MediaWiki site; used to help change \
+    API URL
+    :type lang: string
+    :param timeout: HTTP timeout setting; None means no timeout
+    :type timeout: integer - seconds
+    :param rate_limit: Use rate limiting to limit calls to the site
+    :type rate_limit: Boolean
+    :param rate_limit_wait: Amount of time to wait between requests
+    :type rate_limit_wait: timedelta
+     '''
 
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
+        ''' Init Function '''
         self._version = VERSION
         self._api_url = url
-        self._lang = lang
+        self._lang = lang  # should this call self.language = lang?
         self._timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
                             '/({1})/BOT').format(VERSION, URL)
@@ -552,10 +567,20 @@ class MediaWiki(object):
 
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
              preload=False):
-        '''
-        get MediaWiki page based on title or pageid. Auto suggest
-        allows for the site to try and correct if no page is found while
-        redirect follows the redirect of a page.
+        ''' Get MediaWiki page based on the provided title or pageid
+
+        :param title: Page title
+        :type title: string or None
+        :param pageid: MediaWiki page identifier
+        :type pageid: integer or None
+        :param auto-suggest: **True:** Allow page title auto-suggest
+        :type auto_suggest: Boolean
+        :param redirect: **True:** Follow page redirects
+        :type redirect: Boolean
+        :param preload: **True:** Load most page properties
+        :type preload: Boolean
+
+        .. note:: Title takes precedence over pageid if both are provided
         '''
         if (title is None or title.strip() == '') and pageid is None:
             raise ValueError('Title or Pageid must be specified')
@@ -573,11 +598,15 @@ class MediaWiki(object):
     # end page
 
     def wiki_request(self, params):
-        '''
-        Make a request to the MediaWiki API using the given search
+        ''' Make a request to the MediaWiki API using the given search
         parameters
 
+        :param params: Dictionary of request parameters
+        :type params: dict
         :returns: A parsed dict of the JSON response
+
+        .. note:: Useful when wanting to query the MediaWiki site for some \
+        value that is not part of the wrapper API
         '''
 
         params['format'] = 'json'
@@ -652,17 +681,36 @@ class MediaWiki(object):
         ''' check if the query is 'valid' '''
         if value is None or value.strip() == '':
             raise ValueError(message)
-
-
 # end MediaWiki class
 
 
 # TODO: Should this be in it's own file?
 class MediaWikiPage(object):
     '''
-    Instance of a media wiki page
+    MediaWiki Page Instance
 
-    Note: This should never need to be used directly!
+    :param mediawiki: MediWiki class object from which to pull information
+    :type mediawiki: MediaWiki class object
+    :param title: Title of page to retrieve
+    :type title: string or None
+    :param pageid: MediaWiki site pageid to retrieve
+    :type pageid: integer or None
+    :param redirect: **True:** Follow redirects
+    :type redirect: Boolean
+    :param preload: **True:** Load most properties after getting page
+    :type preload: Boolean
+    :param original_title: Not to be used from the caller; used to help \
+    follow redirects
+    :type original_title: String
+
+    :raises `mediawiki.exceptions.PageError`: if page provided does not exist
+    :raises `mediawiki.exceptions.DisambiguationError`: if page provided \
+    is a disambiguation page
+    :raises `mediawiki.exceptions.RedirectError`: if redirect is **False** \
+    and the pageid or title provided redirects to another page
+
+    .. warning:: This should never need to be used directly! Please use \
+    :func:`mediawiki.MediaWiki.page`
     '''
 
     def __init__(self, mediawiki, title=None, pageid=None,
@@ -690,9 +738,15 @@ class MediaWikiPage(object):
         # end __init__
 
     def __repr__(self):
-        return stdout(u'''<MediaWikiPage '{0}'>'''.format(self.title))
+        ''' base repr function '''
+        text = u'''<MediaWikiPage '{0}'>'''.format(self.title)
+        encoding = sys.stdout.encoding or 'utf-8'
+        if sys.version_info > (3, 0):
+            return text.encode(encoding).decode(encoding)
+        return text.encode(encoding)
 
     def __eq__(self, other):
+        ''' base eq function '''
         try:
             return (
                 self.pageid == other.pageid and
@@ -721,28 +775,56 @@ class MediaWikiPage(object):
 
     @property
     def content(self):
-        ''' get content, revision_id and parent_id '''
+        ''' Page content
+
+        :getter: Returns the page content
+        :setter: Not settable
+        :type: string
+
+        .. note:: Side effect is to also get revision_id and parent_id
+        '''
         if not getattr(self, '_content', False):
             self._pull_content_revision_parent()
         return self._content
 
     @property
     def revision_id(self):
-        ''' Get current revision id '''
+        ''' Current revision id
+
+        :getter: Returns the current revision id of the page
+        :setter: Not settable
+        :type: integer
+
+        .. note:: Side effect is to also get content and parent_id
+        '''
         if not getattr(self, '_revision_id', False):
             self._pull_content_revision_parent()
         return self._revision_id
 
     @property
     def parent_id(self):
-        ''' Get current revision id '''
+        ''' Current parent id
+
+        :getter: Returns the parent id of the page
+        :setter: Not settable
+        :type: integer
+
+        .. note:: Side effect is to also get content and revision_id
+        '''
         if not getattr(self, '_parent_id', False):
             self._pull_content_revision_parent()
         return self._parent_id
 
     @property
     def html(self):
-        ''' get the html for the page '''
+        ''' Page HTML
+
+        :getter: Returns the HTML of the page
+        :setter: Not settable
+        :type: string
+
+        .. warning:: This can be slow for very large pages
+        '''
         if not getattr(self, '_html', False):
             self._html = None
             query_params = {
@@ -759,7 +841,12 @@ class MediaWikiPage(object):
 
     @property
     def images(self):
-        ''' List of URLs of images on the page '''
+        ''' Images on the page
+
+        :getter: Returns the list of all image URLs on the page
+        :setter: Not settable
+        :type: list
+        '''
         if not getattr(self, '_images', False):
             self._images = list()
             params = {
@@ -776,10 +863,14 @@ class MediaWikiPage(object):
 
     @property
     def references(self):
-        '''
-        List of URLs of external links on a page.
-        May include external links within page that aren't technically cited
-        anywhere.
+        ''' External links, or references, listed on the page
+
+        :getter: Returns the list of all external links
+        :setter: Not settable
+        :type: list
+
+        .. note:: May include external links within page that are not \
+        technically cited anywhere.
         '''
         if not getattr(self, '_references', False):
             params = {'prop': 'extlinks', 'ellimit': 'max'}
@@ -795,7 +886,12 @@ class MediaWikiPage(object):
 
     @property
     def categories(self):
-        ''' List of non-hidden categories of a page '''
+        ''' Non-hidden categories on the page
+
+        :getter: Returns the list of all non-hidden categories on the page
+        :setter: Not settable
+        :type: list
+        '''
         if not getattr(self, '_categories', False):
             self._categories = list()
             params = {
@@ -813,10 +909,14 @@ class MediaWikiPage(object):
 
     @property
     def coordinates(self):
-        '''
-        Tuple of Decimals in the form of (lat, lon) or None
+        ''' GeoCoordinates of the place referenced
 
-        Note: Requires the GeoData extension to be installed
+        :getter: Returns the geocoordinates of the place that the page \
+        references
+        :setter: Not settable
+        :type: Tuple (Latitude, Logitude) or None if no geocoordinates present
+
+        .. note: Requires the GeoData extension to be installed
         '''
         if not getattr(self, '_coordinates', False):
             self._coordinates = None
@@ -834,7 +934,12 @@ class MediaWikiPage(object):
 
     @property
     def links(self):
-        ''' List of titles of MediaWiki page links on a page '''
+        ''' MediaWiki page links on a page
+
+        :getter: Returns the list of all MediaWiki page links on this page
+        :setter: Not settable
+        :type: list
+        '''
         if not getattr(self, '_links', False):
             self._links = list()
             params = {
@@ -849,7 +954,13 @@ class MediaWikiPage(object):
 
     @property
     def redirects(self):
-        ''' List of all redirects to the page '''
+        ''' Redirects to the page
+
+        :getter: Returns the list of all redirects to this page; \
+        **i.e.,** the titles listed here will redirect to this page title
+        :setter: Not settable
+        :type: list
+        '''
         if not getattr(self, '_redirects', False):
             self._redirects = list()
             params = {
@@ -864,7 +975,12 @@ class MediaWikiPage(object):
 
     @property
     def backlinks(self):
-        ''' List all pages that link to this page '''
+        ''' Pages that link to this page
+
+        :getter: Returns the list of all pages that link to this page
+        :setter: Not settable
+        :type: list
+        '''
         if not getattr(self, '_backlinks', False):
             self._backlinks = list()
             params = {
@@ -882,15 +998,30 @@ class MediaWikiPage(object):
 
     @property
     def summary(self):
-        ''' the default summary of this page '''
+        ''' Default page summary
+
+        :getter: Returns the first section of the MediaWiki page
+        :setter: Not settable
+        :type: string
+        '''
         if not getattr(self, '_summary', False):
             self._summary = self.summarize()
         return self._summary
 
     def summarize(self, sentences=0, chars=0):
-        '''
-        summarize an article either by number of sentences, chars, or first
-        section
+        ''' Summarize page either by number of sentences, chars, or first
+        section (**default**)
+
+        :param sentences: Number of sentences to use in summary \
+        (first `x` sentences)
+        :type sentences: integer
+        :param chars: Number of characters to use in summary \
+        (first `x` characters)
+        :type chars: integer
+        :returns: string
+
+        .. note:: Precedence for parameters: sentences then chars; \
+        if both are 0 then the entire first section is returned
         '''
         query_params = {
             'prop': 'extracts',
@@ -910,7 +1041,12 @@ class MediaWikiPage(object):
 
     @property
     def sections(self):
-        ''' list sections from the table of contents '''
+        ''' Table of contents sections
+
+        :getter: Returns the sections listed in the table of contents
+        :setter: Not settable
+        :type: list
+        '''
         if not getattr(self, '_sections', False):
             query_params = {'action': 'parse', 'prop': 'sections'}
             if not getattr(self, 'title', None):
@@ -924,11 +1060,15 @@ class MediaWikiPage(object):
         return self._sections
 
     def section(self, section_title):
-        '''
-        Get the plain text content of a section from `self.sections`.
-        Returns None if `section_title` isn't found, otherwise returns a
-        whitespace stripped string. Only text between title and next
-        section or sub-section title is returned.
+        ''' Plain text section content
+
+        :param section_title: Name of the section to pull
+        :type section_title: string
+        :returns: string or None if section title is not found
+
+        .. note:: Returns **None** if section title is not found; \
+        only text between title and next section or sub-section title \
+        is returned.
         '''
         section = u'== {0} =='.format(section_title)
         try:

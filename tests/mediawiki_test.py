@@ -5,7 +5,9 @@ Unittest class
 from __future__ import (unicode_literals, print_function)
 from mediawiki import (MediaWiki, PageError, RedirectError,
                        DisambiguationError, MediaWikiAPIURLError,
-                       MediaWikiGeoCoordError)
+                       MediaWikiGeoCoordError, HTTPTimeoutError,
+                       MediaWikiException)
+import mediawiki
 import unittest
 import json
 from datetime import timedelta
@@ -36,6 +38,11 @@ class MediaWikiOverloaded(MediaWiki):
 
 class TestMediaWiki(unittest.TestCase):
     ''' Test the MediaWiki Class Basic functionality '''
+    def test_version(self):
+        ''' test version information '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.version, mediawiki.__version__)
+
     def test_api_url(self):
         ''' test the original api '''
         site = MediaWikiOverloaded()
@@ -485,11 +492,33 @@ class TestMediaWikiExceptions(unittest.TestCase):
             response = site.responses[url]
             self.assertEqual(ex.message, response['api_url_error_msg'])
 
+    def test_http_timeout_msg(self):
+        ''' test the http timeout message '''
+        query = 'gobbilygook'
+        try:
+            raise HTTPTimeoutError(query)
+        except HTTPTimeoutError as ex:
+            msg = ('Searching for "{0}" resulted in a timeout. Try '
+                   'again in a few seconds, and ensure you have rate '
+                   'limiting set to True.').format(query)
+            self.assertEqual(ex.message, msg)
+
+    def test_http_mediawiki_error_msg(self):
+        ''' test the mediawiki error message '''
+        error = 'Unknown Error'
+        try:
+            raise MediaWikiException(error)
+        except MediaWikiException as ex:
+            msg = ('An unknown error occured: "{0}". Please report '
+                   'it on GitHub!').format(error)
+            self.assertEqual(ex.message, msg)
+
 
 class TestMediaWikiPage(unittest.TestCase):
     ''' Test MediaWiki Pages '''
     def test_page_and_properties(self):
         ''' Test a page from ASOIAF wiki with all properties '''
+        # TODO: break up into several tests
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
         response = site.responses[site.api_url]
         pag = site.page('arya')

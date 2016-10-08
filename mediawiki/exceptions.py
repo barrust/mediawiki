@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 '''
-Global MediaWiki Exceptions
+MediaWiki Exceptions
 '''
 from __future__ import unicode_literals
 import sys
@@ -78,16 +77,15 @@ class DisambiguationError(MediaWikiBaseException):
     The `options` property contains a list of titles of Wikipedia
     pages that the query may refer to
 
-    Note: `options` does not include titles that do not link to a
-    valid Wikipedia page
+    .. note:: `options` only includes titles that link to valid MediaWiki pages
     '''
 
     def __init__(self, title, may_refer_to, details=None):
         self.title = title
         self.options = sorted(may_refer_to)
         self.details = details
-        msg = (u'\n"{0}" may refer to: \n  {1}'
-               ).format(self.title, '\n  '.join(self.options))
+        msg = (u'\n"{0}" may refer to: \n  '
+               '{1}').format(self.title, '\n  '.join(self.options))
         super(DisambiguationError, self).__init__(msg)
 
 

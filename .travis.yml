@@ -12,4 +12,9 @@ install:
 
 script:
     - pep8 mediawiki/
-    - python setup.py test
+    - coverage run --source=mediawiki setup.py test
+    - ./scripts/py-lint.sh
+
+# commands to run after the tests successfully complete
+after_success:
+  - coveralls

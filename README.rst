@@ -68,7 +68,7 @@ Quickstart
 
 Setup and run a simple search:
 
-::
+.. code:: python
 
     >>> from mediawiki import MediaWiki
     >>> wikipedia = MediaWiki()

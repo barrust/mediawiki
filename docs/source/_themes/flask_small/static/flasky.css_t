@@ -29,7 +29,7 @@ div.documentwrapper {
 
 div.bodywrapper {
     margin: 40px auto 0 auto;
-    width: 50%;
+    width: 700px;
 }
 
 hr {

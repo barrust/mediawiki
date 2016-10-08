@@ -1,10 +1,7 @@
-.. _index:
+.. _home:
 
 MediaWiki
 =========
-
-MediaWiki
-*********
 
 MediaWiki is a python library to help pull information from MediaWiki sites
 using the MediaWiki API. It provides a simple and, hopefully, intuitive
@@ -20,6 +17,9 @@ not getting it.
 >>> wikipedia = MediaWiki()
 >>> wikipedia.summary('Wikipedia')
 # Wikipedia (/ˌwɪkɨˈpiːdiə/ or /ˌwɪkiˈpiːdiə/ WIK-i-PEE-dee-ə) is a collaboratively edited, multilingual, free Internet encyclopedia supported by the non-profit Wikimedia Foundation...
+
+
+Go to the :ref:`quickstart` to start using ``mediawiki`` now, or see the :ref:`api`.
 
 Indices and tables
 ******************

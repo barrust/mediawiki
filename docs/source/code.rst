@@ -36,6 +36,7 @@ Exceptions
 Indices and tables
 ==================
 
+* :ref:`home`
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`

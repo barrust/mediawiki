@@ -20,8 +20,6 @@ be considerate of the MediaWiki infrastructure.
 
 Installation
 ------------------
-To installing `mediawiki`, simply clone the `repository on GitHub
-<https://github.com/barrust/mediawiki>`__, then run from the folder:
 
 Pip Installation:
 
@@ -29,7 +27,10 @@ Pip Installation:
 
     $ pip install pymediawiki
 
-From source
+To install from source:
+
+To install `mediawiki`, simply clone the `repository on GitHub
+<https://github.com/barrust/mediawiki>`__, then run from the folder:
 
 ::
 
@@ -37,29 +38,45 @@ From source
 
 `mediawiki` supports python versions 2.7 and 3.3 - 3.5
 
-
-Automated Tests
-------------------
-To run automated tests, one must simply run the following command from the
-downloaded folder:
-
-::
-
-    $ python setup.py test
-
 Documentation
 -------------
 
-Documentation of the latest release can be found
-`online <https://pythonhosted.org/pymediawiki/>`__
+Documentation of the latest release is hosted on
+`pythonhosted.org <https://pythonhosted.org/pymediawiki/>`__
 
 To build the documentation yourself run:
 
 ::
 
-  $ pip install sphinx
-  $ cd docs/
-  $ make html
+    $ pip install sphinx
+    $ cd docs/
+    $ make html
+
+Automated Tests
+------------------
+
+To run automated tests, one must simply run the following command from the
+downloaded folder:
+
+::
+
+  $ python setup.py test
+
+
+Quickstart
+------------------
+
+Setup and run a simple search:
+
+::
+
+    >>> from mediawiki import MediaWiki
+    >>> wikipedia = MediaWiki()
+    >>> wikipedia.search('washington')
+
+
+
+
 
 Changelog
 ------------------

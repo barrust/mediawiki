@@ -23,14 +23,19 @@ Installation
 To installing `mediawiki`, simply clone the `repository on GitHub
 <https://github.com/barrust/mediawiki>`__, then run from the folder:
 
+Pip Installation:
+
+::
+
+    $ pip install pymediawiki
+
+From source
+
 ::
 
     $ python setup.py install
 
 `mediawiki` supports python versions 2.7 and 3.3 - 3.5
-
-In the future, it would be great if `mediawiki` were available to install
-using pip!
 
 
 Automated Tests
@@ -44,6 +49,9 @@ downloaded folder:
 
 Documentation
 -------------
+
+Documentation of the latest release can be found
+`online <https://pythonhosted.org/pymediawiki/>`__
 
 To build the documentation yourself run:
 

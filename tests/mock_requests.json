@@ -5434,6 +5434,22 @@
     ]
    }
   },
+  "[[\"list\", \"random\"], [\"rnlimit\", 1], [\"rnnamespace\", 0]]": {
+   "batchcomplete": "",
+   "continue": {
+    "continue": "-||",
+    "rncontinue": "0.696712169950|0.69671392003|23515217|0"
+   },
+   "query": {
+    "random": [
+     {
+      "id": 18667334,
+      "ns": 0,
+      "title": "Wiżajny"
+     }
+    ]
+   }
+  },
   "[[\"list\", \"random\"], [\"rnlimit\", 202], [\"rnnamespace\", 0]]": {
    "batchcomplete": "",
    "continue": {
@@ -10579,7 +10595,7 @@
       300,
       400
      ],
-     "time": "2016-10-09T00:05:51Z",
+     "time": "2016-10-09T00:15:45Z",
      "timeoffset": 0,
      "timezone": "UTC",
      "titleconversion": "",
@@ -14002,7 +14018,7 @@
       300,
       400
      ],
-     "time": "2016-10-09T00:05:52Z",
+     "time": "2016-10-09T00:15:45Z",
      "timeoffset": 120,
      "timezone": "Europe/Paris",
      "titleconversion": "",

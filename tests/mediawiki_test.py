@@ -63,6 +63,14 @@ class TestMediaWiki(unittest.TestCase):
         self.assertEqual(site.language, 'fr')
         self.assertEqual(site.api_url, 'http://fr.wikipedia.org/w/api.php')
 
+    def test_change_lang_same(self):
+        ''' test changing the language to the same lang '''
+        site = MediaWikiOverloaded(url='http://fr.wikipedia.org/w/api.php',
+                                   lang='fr')
+        site.language = 'FR'
+        self.assertEqual(site.language, 'fr')
+        self.assertEqual(site.api_url, 'http://fr.wikipedia.org/w/api.php')
+
     def test_change_lang_no_change(self):
         ''' test changing the language when url will not change '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
@@ -111,6 +119,12 @@ class TestMediaWiki(unittest.TestCase):
 
 class TestMediaWikiRandom(unittest.TestCase):
     ''' Test Random Functionality '''
+    def test_random(self):
+        ''' test pulling random pages '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        self.assertEqual(site.random(pages=1), response['random_1'])
+
     def test_random_2(self):
         ''' test pulling random pages '''
         site = MediaWikiOverloaded()
@@ -132,6 +146,22 @@ class TestMediaWikiRandom(unittest.TestCase):
                "the documentation, but it isn't...")
         print(msg)
         self.assertEqual(len(response['random_202']), 202)  # limit to 20
+
+    def test_random_value_err_msg(self):
+        ''' test that ValueError message thrown from random'''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        try:
+            site.random(pages=None)
+        except ValueError as ex:
+            msg = 'Number of pages must be greater than 0'
+            self.assertEqual(str(ex), msg)
+
+    def test_random_value_err(self):
+        ''' test that ValueError is thrown from random'''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        self.assertRaises(ValueError, lambda: site.random(pages=None))
 
 
 class TestMediaWikiSearch(unittest.TestCase):
@@ -555,7 +585,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
                    'it on GitHub!').format(error)
             self.assertEqual(ex.message, msg)
 
-    def test_mediawiki_exception_msg_str(self):
+    def test_mediawiki_except_msg_str(self):
         ''' test that base msg is retained '''
         error = 'Unknown Error'
         try:
@@ -566,8 +596,30 @@ class TestMediaWikiExceptions(unittest.TestCase):
             self.assertEqual(str(ex), msg)
 
 
+# class TestMediaWikiPage(unittest.TestCase):
+#     ''' test the actual wiki_request '''
+#     def test_wiki_request(self):
+#         ''' test wiki request NOT SURE HOW! '''
+
+
 class TestMediaWikiPage(unittest.TestCase):
     ''' Test MediaWiki Pages '''
+    def test_page_value_err_msg(self):
+        ''' test that ValueError message thrown from random'''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        try:
+            site.page()
+        except ValueError as ex:
+            msg = 'Title or Pageid must be specified'
+            self.assertEqual(str(ex), msg)
+
+    def test_page_value_err(self):
+        ''' test that ValueError is thrown from random'''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        self.assertRaises(ValueError, lambda: site.page())
+
     def test_page_and_properties(self):
         ''' Test a page from ASOIAF wiki with all properties '''
         # TODO: break up into several tests

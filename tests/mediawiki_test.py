@@ -392,6 +392,29 @@ class TestMediaWikiExceptions(unittest.TestCase):
         except PageError as ex:
             self.assertEqual(ex.message, response['page_error_msg'])
 
+    def test_page_error_pageid(self):
+        ''' Test that page error is thrown correctly pageid'''
+        site = MediaWikiOverloaded()
+        self.assertRaises(PageError, lambda: site.page(pageid=-1))
+
+    def test_page_error_message_pageid(self):
+        ''' Test that page error is thrown correctly '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        try:
+            site.page(pageid=-1)
+        except PageError as ex:
+            self.assertEqual(ex.message, response['page_error_msg_pageid'])
+
+    def test_page_error_none_message(self):
+        ''' test if neither pageid or title is present '''
+        try:
+            raise PageError(pageid=None, title=None)
+        except PageError as ex:
+            msg = (u'"{0}" does not match any pages. Try another '
+                   'query!').format('')
+            self.assertEqual(ex.message, msg)
+
     def test_redirect_error(self):
         ''' Test that redirect error is thrown correctly '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
@@ -507,11 +530,40 @@ class TestMediaWikiExceptions(unittest.TestCase):
         ''' test the mediawiki error message '''
         error = 'Unknown Error'
         try:
+            raise HTTPTimeoutError(error)
+        except HTTPTimeoutError as ex:
+            msg = (u'Searching for "{0}" resulted in a timeout. Try '
+                   'again in a few seconds, and ensure you have rate '
+                   'limiting set to True.').format(error)
+            self.assertEqual(ex.message, msg)
+
+    def test_mediawiki_exception(self):
+        ''' throw MediaWikiBaseException '''
+        def func():
+            ''' test function '''
+            raise MediaWikiException('new except!')
+        self.assertRaises(MediaWikiException,
+                          func)
+
+    def test_mediawiki_exception_msg(self):
+        ''' test that base msg is retained '''
+        error = 'Unknown Error'
+        try:
             raise MediaWikiException(error)
         except MediaWikiException as ex:
             msg = ('An unknown error occured: "{0}". Please report '
                    'it on GitHub!').format(error)
             self.assertEqual(ex.message, msg)
+
+    def test_mediawiki_exception_msg_str(self):
+        ''' test that base msg is retained '''
+        error = 'Unknown Error'
+        try:
+            raise MediaWikiException(error)
+        except MediaWikiException as ex:
+            msg = ('An unknown error occured: "{0}". Please report '
+                   'it on GitHub!').format(error)
+            self.assertEqual(str(ex), msg)
 
 
 class TestMediaWikiPage(unittest.TestCase):

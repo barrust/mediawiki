@@ -3357,7 +3357,7 @@
       250,
       300
      ],
-     "time": "2016-09-24T16:32:25Z",
+     "time": "2016-10-09T00:05:52Z",
      "timeoffset": 0,
      "timezone": "UTC",
      "titleconversion": "",
@@ -5335,6 +5335,17 @@
       "title": "Ilion, New York"
      }
     ]
+   }
+  },
+  "[[\"inprop\", \"url\"], [\"pageids\", -1], [\"ppprop\", \"disambiguation\"], [\"prop\", \"info|pageprops\"], [\"redirects\", \"\"]]": {
+   "batchcomplete": "",
+   "query": {
+    "pages": {
+     "-1": {
+      "missing": "",
+      "pageid": -1
+     }
+    }
    }
   },
   "[[\"inprop\", \"url\"], [\"ppprop\", \"disambiguation\"], [\"prop\", \"info|pageprops\"], [\"redirects\", \"\"], [\"titles\", \"Bush\"]]": {
@@ -8783,10 +8794,10 @@
       "namemsg": "timedmediahandler-extensionname",
       "type": "media",
       "url": "https://www.mediawiki.org/wiki/Extension:TimedMediaHandler",
-      "vcs-date": "2016-09-19T21:01:21Z",
+      "vcs-date": "2016-10-03T18:55:33Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TimedMediaHandler.git;4176b390c31bee865b36ced6d5e76ebda8537c0a",
-      "vcs-version": "4176b390c31bee865b36ced6d5e76ebda8537c0a",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TimedMediaHandler.git;301f80fc1cf267f51fc13c8cc4d8f93b21a20fb3",
+      "vcs-version": "301f80fc1cf267f51fc13c8cc4d8f93b21a20fb3",
       "version": "0.5.0"
      },
      {
@@ -8810,10 +8821,10 @@
       "name": "VipsScaler",
       "type": "media",
       "url": "https://www.mediawiki.org/wiki/Extension:VipsScaler",
-      "vcs-date": "2016-09-19T21:02:44Z",
+      "vcs-date": "2016-10-02T08:43:32Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/VipsScaler.git;1c7fbb41835843869575310214e7ef3794081098",
-      "vcs-version": "1c7fbb41835843869575310214e7ef3794081098"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/VipsScaler.git;a89c9c9e54c56c0aef3e4725cdf791eacc99ba34",
+      "vcs-version": "a89c9c9e54c56c0aef3e4725cdf791eacc99ba34"
      },
      {
       "author": "Aaron Schulz, Joerg Baach",
@@ -8823,10 +8834,10 @@
       "name": "Flagged Revisions",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:FlaggedRevs",
-      "vcs-date": "2016-09-19T20:54:30Z",
+      "vcs-date": "2016-10-02T08:37:55Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/FlaggedRevs.git;4506b1de9c7caa45125f23775a31cd2a2ef4b503",
-      "vcs-version": "4506b1de9c7caa45125f23775a31cd2a2ef4b503"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/FlaggedRevs.git;519d2c86b91684760533940b3832e280085917a5",
+      "vcs-version": "519d2c86b91684760533940b3832e280085917a5"
      },
      {
       "author": "PediaPress GmbH, Siebrand Mazeland, Marcin Cieślak",
@@ -8836,10 +8847,10 @@
       "name": "Collection",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Collection",
-      "vcs-date": "2016-09-20T16:01:38Z",
+      "vcs-date": "2016-10-03T20:11:13Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Collection.git;b140b0c25b0d420c10eac13c891241405a51084d",
-      "vcs-version": "b140b0c25b0d420c10eac13c891241405a51084d",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Collection.git;84061a31d17f36252805c41ee55df5ab0e4fc60a",
+      "vcs-version": "84061a31d17f36252805c41ee55df5ab0e4fc60a",
       "version": "1.7.0"
      },
      {
@@ -8850,10 +8861,10 @@
       "name": "PageTriage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:PageTriage",
-      "vcs-date": "2016-09-19T20:58:57Z",
+      "vcs-date": "2016-10-04T06:52:13Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/PageTriage.git;bfa9884cf05e09d39cf4a8dc6ffa0f118d4336f4",
-      "vcs-version": "bfa9884cf05e09d39cf4a8dc6ffa0f118d4336f4",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/PageTriage.git;10ddf5f34ca39eb58cbebaead0d29df4174c8057",
+      "vcs-version": "10ddf5f34ca39eb58cbebaead0d29df4174c8057",
       "version": "0.2.1"
      },
      {
@@ -8864,10 +8875,10 @@
       "name": "Echo",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Echo",
-      "vcs-date": "2016-09-20T20:38:11Z",
+      "vcs-date": "2016-10-04T10:19:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Echo.git;0e1a70da649ba275ef53aad0b9615812e68ef638",
-      "vcs-version": "0e1a70da649ba275ef53aad0b9615812e68ef638"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Echo.git;50384e2f30663271f31891c2ef649f1061926835",
+      "vcs-version": "50384e2f30663271f31891c2ef649f1061926835"
      },
      {
       "author": "Tim Starling, Brion Vibber, Victor Vasiliev, Alexandre Emsenhuber, Sam Reed",
@@ -8877,10 +8888,10 @@
       "name": "SiteMatrix",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:SiteMatrix",
-      "vcs-date": "2016-09-20T19:32:16Z",
+      "vcs-date": "2016-09-26T20:42:32Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SiteMatrix.git;899f4bb4c4390582eec0c090662b72ada3c81103",
-      "vcs-version": "899f4bb4c4390582eec0c090662b72ada3c81103",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SiteMatrix.git;b4565282e1852aa777f6907a5cbfe16daf43dbf7",
+      "vcs-version": "b4565282e1852aa777f6907a5cbfe16daf43dbf7",
       "version": "1.4.0"
      },
      {
@@ -8891,10 +8902,10 @@
       "name": "CiteThisPage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:CiteThisPage",
-      "vcs-date": "2016-09-19T22:06:20Z",
+      "vcs-date": "2016-10-02T08:35:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CiteThisPage.git;32a47712b363c4eb78b01d1f0879b481f9f1a252",
-      "vcs-version": "32a47712b363c4eb78b01d1f0879b481f9f1a252"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CiteThisPage.git;729a55c3640224f17fa44ea422810beb59a78063",
+      "vcs-version": "729a55c3640224f17fa44ea422810beb59a78063"
      },
      {
       "author": "Yuvi Panda, Prateek Saxena, Tim Starling, Kunal Mehta",
@@ -8918,10 +8929,10 @@
       "name": "Renameuser",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Renameuser",
-      "vcs-date": "2016-08-24T08:36:08Z",
+      "vcs-date": "2016-09-22T21:41:05Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Renameuser.git;5581c47e06db2ac37a311c2279963e95e74fc79a",
-      "vcs-version": "5581c47e06db2ac37a311c2279963e95e74fc79a"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Renameuser.git;db120ad118fc2c8ce5d15626f58d7bd42a2de354",
+      "vcs-version": "db120ad118fc2c8ce5d15626f58d7bd42a2de354"
      },
      {
       "author": "Brion Vibber, Jeroen De Dauw",
@@ -8931,10 +8942,10 @@
       "name": "Nuke",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Nuke",
-      "vcs-date": "2016-09-19T20:58:20Z",
+      "vcs-date": "2016-09-28T03:32:25Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Nuke.git;be7fb7edc1d01fca4115a0789784f0e0fe857885",
-      "vcs-version": "be7fb7edc1d01fca4115a0789784f0e0fe857885",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Nuke.git;d4e5fff8dc1b9d6758f0051a80db31c1e1e024b4",
+      "vcs-version": "d4e5fff8dc1b9d6758f0051a80db31c1e1e024b4",
       "version": "1.2.0"
      },
      {
@@ -8945,10 +8956,10 @@
       "name": "Central Auth",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Brad Jorsch",
@@ -8958,10 +8969,10 @@
       "name": "ApiFeatureUsage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:ApiFeatureUsage",
-      "vcs-date": "2016-09-19T20:49:23Z",
+      "vcs-date": "2016-10-02T08:52:48Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ApiFeatureUsage.git;ef2c1a65898b7775ea7e92dd36c2c0e9d4e154b3",
-      "vcs-version": "ef2c1a65898b7775ea7e92dd36c2c0e9d4e154b3",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ApiFeatureUsage.git;c9c565c90e67f2ac0c60bd764d07d34b11d8c244",
+      "vcs-version": "c9c565c90e67f2ac0c60bd764d07d34b11d8c244",
       "version": "1.0"
      },
      {
@@ -8972,10 +8983,10 @@
       "name": "Global Usage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:GlobalUsage",
-      "vcs-date": "2016-09-20T21:00:43Z",
+      "vcs-date": "2016-10-02T08:38:25Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalUsage.git;3909c122329b0d38984bc786f42a01dd6c2680bf",
-      "vcs-version": "3909c122329b0d38984bc786f42a01dd6c2680bf",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalUsage.git;296358d8ed06f47d691e43283d9d914bcd6e46ca",
+      "vcs-version": "296358d8ed06f47d691e43283d9d914bcd6e46ca",
       "version": "2.1.0"
      },
      {
@@ -8986,10 +8997,10 @@
       "name": "MassMessage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:MassMessage",
-      "vcs-date": "2016-09-20T19:32:12Z",
+      "vcs-date": "2016-10-04T06:39:01Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MassMessage.git;38ee06aadf85f6737e64fba5993172c8e0481e9a",
-      "vcs-version": "38ee06aadf85f6737e64fba5993172c8e0481e9a",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MassMessage.git;8f9c023f96cba4a97a930d49b5c57d6eeb69b10b",
+      "vcs-version": "8f9c023f96cba4a97a930d49b5c57d6eeb69b10b",
       "version": "0.4.0"
      },
      {
@@ -9000,10 +9011,10 @@
       "name": "Interwiki",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Interwiki",
-      "vcs-date": "2016-09-19T20:56:04Z",
+      "vcs-date": "2016-09-29T21:00:45Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Interwiki.git;df3cb183ba50f25f35c66409f492befddbd9a0d6",
-      "vcs-version": "df3cb183ba50f25f35c66409f492befddbd9a0d6",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Interwiki.git;609843a4dec55ec267830131082cc81bc1ea5c06",
+      "vcs-version": "609843a4dec55ec267830131082cc81bc1ea5c06",
       "version": "3.1 20160307"
      },
      {
@@ -9014,10 +9025,10 @@
       "name": "UserMerge",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:UserMerge",
-      "vcs-date": "2016-09-07T06:52:04Z",
+      "vcs-date": "2016-10-03T21:20:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/UserMerge.git;81ab6781aea7ef11e252f533430ae2ea4b1e10ae",
-      "vcs-version": "81ab6781aea7ef11e252f533430ae2ea4b1e10ae",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/UserMerge.git;e0af3a26c2f5a3872e037df6718aa0c99fd5cccd",
+      "vcs-version": "e0af3a26c2f5a3872e037df6718aa0c99fd5cccd",
       "version": "1.10.0"
      },
      {
@@ -9029,10 +9040,10 @@
       "name": "ContentTranslation",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:ContentTranslation",
-      "vcs-date": "2016-09-19T20:52:46Z",
+      "vcs-date": "2016-10-03T03:42:23Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ContentTranslation.git;266f1fa3d70f576f9f1927b2d7e131c00259f8f2",
-      "vcs-version": "266f1fa3d70f576f9f1927b2d7e131c00259f8f2"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ContentTranslation.git;25cb86eb1071660cf3b22e3c8d63f6980217b748",
+      "vcs-version": "25cb86eb1071660cf3b22e3c8d63f6980217b748"
      },
      {
       "author": "Brad Jorsch",
@@ -9042,10 +9053,10 @@
       "name": "TemplateSandbox",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:TemplateSandbox",
-      "vcs-date": "2016-09-15T21:48:53Z",
+      "vcs-date": "2016-09-25T20:25:27Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TemplateSandbox.git;c1c70643e40936e03fbfb4a45ae3d6388d790504",
-      "vcs-version": "c1c70643e40936e03fbfb4a45ae3d6388d790504",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TemplateSandbox.git;96c32ac9a098a13596843f6f50081734653c3f90",
+      "vcs-version": "96c32ac9a098a13596843f6f50081734653c3f90",
       "version": "1.1.0"
      },
      {
@@ -9056,10 +9067,10 @@
       "name": "CheckUser",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:CheckUser",
-      "vcs-date": "2016-09-20T20:37:47Z",
+      "vcs-date": "2016-09-28T20:23:27Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CheckUser.git;da6dc2963b178d8f373f5ec6dca13594ccd20b54",
-      "vcs-version": "da6dc2963b178d8f373f5ec6dca13594ccd20b54",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CheckUser.git;13ced2faa611a2b5603acddf30fcf999a631e76c",
+      "vcs-version": "13ced2faa611a2b5603acddf30fcf999a631e76c",
       "version": "2.4"
      },
      {
@@ -9070,10 +9081,10 @@
       "name": "Renameuser for CentralAuth",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Bryan Davis",
@@ -9083,10 +9094,10 @@
       "name": "GlobalRenameRequest",
       "type": "specialpage",
       "url": "//www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Bryan Davis",
@@ -9096,10 +9107,10 @@
       "name": "GlobalRenameQueue",
       "type": "specialpage",
       "url": "//www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Nik Everett, Chad Horohoe, Erik Bernhardson",
@@ -9110,10 +9121,10 @@
       "name": "CirrusSearch",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:CirrusSearch",
-      "vcs-date": "2016-09-20T20:38:56Z",
+      "vcs-date": "2016-10-04T12:04:15Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CirrusSearch.git;9b004544a5d48fab861905e6650f1d4ceaeb6a27",
-      "vcs-version": "9b004544a5d48fab861905e6650f1d4ceaeb6a27",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CirrusSearch.git;b9662227f36e720fb307b4a5eeccdd07f39c936e",
+      "vcs-version": "b9662227f36e720fb307b4a5eeccdd07f39c936e",
       "version": "0.2"
      },
      {
@@ -9124,10 +9135,10 @@
       "name": "ZeroBanner",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:ZeroBanner",
-      "vcs-date": "2016-09-09T17:25:40Z",
+      "vcs-date": "2016-09-22T21:44:33Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ZeroBanner.git;37a3bc488eb91585a20140e9e5705a1ddf609f09",
-      "vcs-version": "37a3bc488eb91585a20140e9e5705a1ddf609f09",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ZeroBanner.git;33d6598baf6c791649d617bff7dd1cfd7ca4ad99",
+      "vcs-version": "33d6598baf6c791649d617bff7dd1cfd7ca4ad99",
       "version": "1.0.0"
      },
      {
@@ -9138,10 +9149,10 @@
       "name": "Education Program",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Education_Program",
-      "vcs-date": "2016-09-11T20:49:38Z",
+      "vcs-date": "2016-10-02T08:37:32Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/EducationProgram.git;4e29102132f41df32e86a9a14e1e6c05560a3f0b",
-      "vcs-version": "4e29102132f41df32e86a9a14e1e6c05560a3f0b",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/EducationProgram.git;181133c226d8767a68bebef2f3f28c18c95ac3ee",
+      "vcs-version": "181133c226d8767a68bebef2f3f28c18c95ac3ee",
       "version": "0.5.0 alpha"
      },
      {
@@ -9152,10 +9163,10 @@
       "name": "Flow",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Flow",
-      "vcs-date": "2016-09-20T20:38:31Z",
+      "vcs-date": "2016-10-04T03:37:49Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Flow.git;f22df21e044d70c42b81bbe0813634725b9b943c",
-      "vcs-version": "f22df21e044d70c42b81bbe0813634725b9b943c",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Flow.git;6f32e9047e37daaa740968c761d9c5636d186511",
+      "vcs-version": "6f32e9047e37daaa740968c761d9c5636d186511",
       "version": "1.1"
      },
      {
@@ -9184,10 +9195,10 @@
       "name": "Gadgets",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Gadgets",
-      "vcs-date": "2016-09-19T20:55:11Z",
+      "vcs-date": "2016-09-30T10:47:03Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Gadgets.git;83236f356b0341707712595f20e324ffa400d70d",
-      "vcs-version": "83236f356b0341707712595f20e324ffa400d70d"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Gadgets.git;ce32e6586cdb8e5c5d49f10111b41e2ded1aef81",
+      "vcs-version": "ce32e6586cdb8e5c5d49f10111b41e2ded1aef81"
      },
      {
       "author": "Michael Dale",
@@ -9211,10 +9222,10 @@
       "name": "GlobalBlocking",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:GlobalBlocking",
-      "vcs-date": "2016-09-20T21:03:39Z",
+      "vcs-date": "2016-09-26T20:40:12Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalBlocking.git;3c4e3f3ff4d4e30dfafdef5129a90c148fee700f",
-      "vcs-version": "3c4e3f3ff4d4e30dfafdef5129a90c148fee700f"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalBlocking.git;6f0f05bcdd5e7835cfe4866fb8609163a893278b",
+      "vcs-version": "6f0f05bcdd5e7835cfe4866fb8609163a893278b"
      },
      {
       "author": "Tim Starling",
@@ -9238,10 +9249,10 @@
       "name": "SecurePoll",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:SecurePoll",
-      "vcs-date": "2016-09-19T21:34:16Z",
+      "vcs-date": "2016-10-02T08:41:34Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SecurePoll.git;1898a85d6e151c3d02388fd9422cd462f62088ea",
-      "vcs-version": "1898a85d6e151c3d02388fd9422cd462f62088ea"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SecurePoll.git;632cfaa68ef68e28cc30c31745b07b1bd7e9ea30",
+      "vcs-version": "632cfaa68ef68e28cc30c31745b07b1bd7e9ea30"
      },
      {
       "author": "Tim Starling",
@@ -9251,10 +9262,10 @@
       "name": "Pool Counter Client",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:PoolCounter",
-      "vcs-date": "2016-08-31T20:37:17Z",
+      "vcs-date": "2016-10-03T09:41:08Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/PoolCounter.git;3d302a0cb458e3fc55cf6938e9297dc92ca0bbea",
-      "vcs-version": "3d302a0cb458e3fc55cf6938e9297dc92ca0bbea"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/PoolCounter.git;fd92105bf5b702427553352ef2694b7c6393cb45",
+      "vcs-version": "fd92105bf5b702427553352ef2694b7c6393cb45"
      },
      {
       "author": "Nik Everett, Chad Horohoe",
@@ -9293,10 +9304,10 @@
       "name": "GlobalUserPage",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:GlobalUserPage",
-      "vcs-date": "2016-09-19T20:55:39Z",
+      "vcs-date": "2016-09-27T03:24:36Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalUserPage.git;5ecc2dcbbd552e38aec3cb7c5a42c4778fdda16c",
-      "vcs-version": "5ecc2dcbbd552e38aec3cb7c5a42c4778fdda16c",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalUserPage.git;c223342847c64796f0c3014d8ef4350ea78e95ce",
+      "vcs-version": "c223342847c64796f0c3014d8ef4350ea78e95ce",
       "version": "0.11.0"
      },
      {
@@ -9322,10 +9333,10 @@
       "name": "CentralNotice",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:CentralNotice",
-      "vcs-date": "2016-09-08T21:42:48Z",
+      "vcs-date": "2016-09-22T17:52:00Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralNotice.git;ca450900a9b6598d1ef121dda98b2694b6072cfd",
-      "vcs-version": "ca450900a9b6598d1ef121dda98b2694b6072cfd",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralNotice.git;b190667ec59222f08de94d9c2dd210132bbf2319",
+      "vcs-version": "b190667ec59222f08de94d9c2dd210132bbf2319",
       "version": "2.6.0"
      },
      {
@@ -9336,10 +9347,10 @@
       "name": "WikimediaMessages",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:WikimediaMessages",
-      "vcs-date": "2016-09-20T20:42:25Z",
+      "vcs-date": "2016-10-02T08:44:42Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikimediaMessages.git;9e74dd2d3af6cd80eb9118456c4a15ae99f08619",
-      "vcs-version": "9e74dd2d3af6cd80eb9118456c4a15ae99f08619"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikimediaMessages.git;8875929672a9be1acaf037f4d04354592e81176d",
+      "vcs-version": "8875929672a9be1acaf037f4d04354592e81176d"
      },
      {
       "author": "Derk-Jan Hartman, Trevor Parscal, Roan Kattouw, Nimish Gautam, Adam Miller",
@@ -9349,10 +9360,10 @@
       "name": "WikiEditor",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:WikiEditor",
-      "vcs-date": "2016-09-15T21:06:12Z",
+      "vcs-date": "2016-10-03T11:52:05Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikiEditor.git;26941229c90cff40e7904a6356a2c98357953c17",
-      "vcs-version": "26941229c90cff40e7904a6356a2c98357953c17",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikiEditor.git;2570abc7df38d3e039a6b65f8c36f462034ae8b3",
+      "vcs-version": "2570abc7df38d3e039a6b65f8c36f462034ae8b3",
       "version": "0.5.0"
      },
      {
@@ -9378,10 +9389,10 @@
       "name": "SandboxLink",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:SandboxLink",
-      "vcs-date": "2016-09-10T21:30:35Z",
+      "vcs-date": "2016-09-29T21:02:03Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SandboxLink.git;5aafc83d70d63b9958cdf9d5253bc5e9c712250f",
-      "vcs-version": "5aafc83d70d63b9958cdf9d5253bc5e9c712250f"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SandboxLink.git;4a30d6cc5c6f5a06a68b86a2076fa9b46ebde164",
+      "vcs-version": "4a30d6cc5c6f5a06a68b86a2076fa9b46ebde164"
      },
      {
       "author": "MarkTraceur (Mark Holmquist)",
@@ -9392,10 +9403,10 @@
       "name": "BetaFeatures",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:BetaFeatures",
-      "vcs-date": "2016-09-20T19:32:01Z",
+      "vcs-date": "2016-09-28T20:22:08Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/BetaFeatures.git;fb4ecd289f7451eb6015afeb3d1e69fa8ce5c107",
-      "vcs-version": "fb4ecd289f7451eb6015afeb3d1e69fa8ce5c107",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/BetaFeatures.git;20ac734ae457967ea88bde4946e0032a5660f769",
+      "vcs-version": "20ac734ae457967ea88bde4946e0032a5660f769",
       "version": "0.1"
      },
      {
@@ -9420,10 +9431,10 @@
       "name": "MultimediaViewer",
       "type": "other",
       "url": "https://mediawiki.org/wiki/Extension:MultimediaViewer",
-      "vcs-date": "2016-09-17T21:21:19Z",
+      "vcs-date": "2016-10-02T08:40:25Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MultimediaViewer.git;2a038d520c1816cb345ded2e8e6b1aafa5ff9966",
-      "vcs-version": "2a038d520c1816cb345ded2e8e6b1aafa5ff9966"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MultimediaViewer.git;1fc8aafe3ce39b92c309b115ccc8b809bee96449",
+      "vcs-version": "1fc8aafe3ce39b92c309b115ccc8b809bee96449"
      },
      {
       "author": "Alex Monk, Bartosz Dziewoński, Christian Williams, Ed Sanders, Inez Korczyński, James D. Forrester, Moriel Schottlender, Roan Kattouw, Rob Moen, Timo Tijhof, Trevor Parscal, ...",
@@ -9434,10 +9445,10 @@
       "name": "VisualEditor",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:VisualEditor",
-      "vcs-date": "2016-09-20T20:51:22Z",
+      "vcs-date": "2016-10-04T16:24:00Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/VisualEditor.git;080d0ba8e1157862afda45a25c9baae3efb626fd",
-      "vcs-version": "080d0ba8e1157862afda45a25c9baae3efb626fd",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/VisualEditor.git;9da0eaef03e6a628d43902938a6684727a811307",
+      "vcs-version": "9da0eaef03e6a628d43902938a6684727a811307",
       "version": "0.1.0"
      },
      {
@@ -9448,10 +9459,10 @@
       "name": "Citoid",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Citoid",
-      "vcs-date": "2016-09-19T20:51:31Z",
+      "vcs-date": "2016-09-30T16:56:58Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Citoid.git;fa8cf23acb16d1c976402487ae038ef933768630",
-      "vcs-version": "fa8cf23acb16d1c976402487ae038ef933768630",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Citoid.git;a78298139690df4d096d78c5c5e1bf59803ecc57",
+      "vcs-version": "a78298139690df4d096d78c5c5e1bf59803ecc57",
       "version": "0.1.0"
      },
      {
@@ -9477,10 +9488,10 @@
       "name": "WikiLove",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:WikiLove",
-      "vcs-date": "2016-09-20T19:32:24Z",
+      "vcs-date": "2016-09-29T13:35:35Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikiLove.git;2d34d562e6bd4fade477a0816fb95bd003909e9c",
-      "vcs-version": "2d34d562e6bd4fade477a0816fb95bd003909e9c",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikiLove.git;bab50878ffe1bfec77119d6609531d849f68b9ad",
+      "vcs-version": "bab50878ffe1bfec77119d6609531d849f68b9ad",
       "version": "1.3.0"
      },
      {
@@ -9491,10 +9502,10 @@
       "name": "GuidedTour",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:GuidedTour",
-      "vcs-date": "2016-09-08T02:26:03Z",
+      "vcs-date": "2016-09-25T20:23:24Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GuidedTour.git;f54808c2986e4718e379c4b0a623342ff6d67242",
-      "vcs-version": "f54808c2986e4718e379c4b0a623342ff6d67242",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GuidedTour.git;5c0aa39e5c5ea7fa1669d53d1960bfabc8c5b091",
+      "vcs-version": "5c0aa39e5c5ea7fa1669d53d1960bfabc8c5b091",
       "version": "2.0"
      },
      {
@@ -9505,10 +9516,10 @@
       "name": "MobileApp",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:MobileApp",
-      "vcs-date": "2016-09-17T21:20:44Z",
+      "vcs-date": "2016-10-04T13:17:51Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MobileApp.git;33ba1c20e59b8f585ffe2cc4031b289141a76774",
-      "vcs-version": "33ba1c20e59b8f585ffe2cc4031b289141a76774"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MobileApp.git;cb3c60a3df12df000db46da39df6f29f102a38a4",
+      "vcs-version": "cb3c60a3df12df000db46da39df6f29f102a38a4"
      },
      {
       "author": "Patrick Reilly, Max Semenik, Jon Robson, Arthur Richards, Brion Vibber, Juliusz Gonera, Ryan Kaldari, Florian Schmidt, Rob Moen, Sam Smith",
@@ -9519,10 +9530,10 @@
       "name": "MobileFrontend",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:MobileFrontend",
-      "vcs-date": "2016-09-20T20:39:38Z",
+      "vcs-date": "2016-10-04T15:55:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MobileFrontend.git;a3a73c40cf74e07ce8a72977a5e17995ac4b1650",
-      "vcs-version": "a3a73c40cf74e07ce8a72977a5e17995ac4b1650",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MobileFrontend.git;d632acbe2f984cf003d44f4504df429b654e0696",
+      "vcs-version": "d632acbe2f984cf003d44f4504df429b654e0696",
       "version": "1.0.0"
      },
      {
@@ -9533,10 +9544,10 @@
       "name": "JsonConfig",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:JsonConfig",
-      "vcs-date": "2016-09-19T20:56:10Z",
+      "vcs-date": "2016-09-28T20:25:21Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/JsonConfig.git;1ce57eb6c2586546b4f1f71cc9f507fb7079f381",
-      "vcs-version": "1ce57eb6c2586546b4f1f71cc9f507fb7079f381",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/JsonConfig.git;b8454129fc68a33da2df75aa1c29c19b6770d945",
+      "vcs-version": "b8454129fc68a33da2df75aa1c29c19b6770d945",
       "version": "1.1.0"
      },
      {
@@ -9547,10 +9558,10 @@
       "name": "TextExtracts",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:TextExtracts",
-      "vcs-date": "2016-09-20T20:55:30Z",
+      "vcs-date": "2016-09-26T22:28:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TextExtracts.git;8235368c66a5262fa561f4caa499d00c1efcadd8",
-      "vcs-version": "8235368c66a5262fa561f4caa499d00c1efcadd8"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TextExtracts.git;94b5782ec5ed90ed0d4626f7f2d2f36cc54a25d9",
+      "vcs-version": "94b5782ec5ed90ed0d4626f7f2d2f36cc54a25d9"
      },
      {
       "author": "Tony Thomas, Kunal Mehta, Jeff Green, Sam Reed",
@@ -9574,10 +9585,10 @@
       "name": "FeaturedFeeds",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:FeaturedFeeds",
-      "vcs-date": "2016-09-20T19:32:07Z",
+      "vcs-date": "2016-09-27T20:36:26Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/FeaturedFeeds.git;02310add21a7b552861abf26d46f19ac6424d0cd",
-      "vcs-version": "02310add21a7b552861abf26d46f19ac6424d0cd"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/FeaturedFeeds.git;44f9b1e2c6b1732a29fbc084d641ba1280ef9256",
+      "vcs-version": "44f9b1e2c6b1732a29fbc084d641ba1280ef9256"
      },
      {
       "author": "Max Semenik",
@@ -9587,10 +9598,10 @@
       "name": "GeoData",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:GeoData",
-      "vcs-date": "2016-09-12T22:30:00Z",
+      "vcs-date": "2016-09-23T02:20:34Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GeoData.git;886a379c7ade38360be1e9bb2bdc34198b958db8",
-      "vcs-version": "886a379c7ade38360be1e9bb2bdc34198b958db8"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GeoData.git;1a38418a2a1a5c74facdbe3af3b56a363f52bcf7",
+      "vcs-version": "1a38418a2a1a5c74facdbe3af3b56a363f52bcf7"
      },
      {
       "author": "Ryan Kaldari, Benjamin Chen, Wctaiwan",
@@ -9600,10 +9611,10 @@
       "name": "Thanks",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Thanks",
-      "vcs-date": "2016-09-20T20:52:29Z",
+      "vcs-date": "2016-10-02T08:42:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Thanks.git;60bd089fd21fc9ef50bb5b64f6df436e30fe4eb1",
-      "vcs-version": "60bd089fd21fc9ef50bb5b64f6df436e30fe4eb1",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Thanks.git;db7c723891f3cfa0a7fc3cebd80a97db80849ed7",
+      "vcs-version": "db7c723891f3cfa0a7fc3cebd80a97db80849ed7",
       "version": "1.2.0"
      },
      {
@@ -9628,10 +9639,10 @@
       "name": "CodeEditor",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:CodeEditor",
-      "vcs-date": "2016-08-22T08:26:28Z",
+      "vcs-date": "2016-09-26T19:36:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CodeEditor.git;9018acb6fe186ffc815e8ee1f0ddbe0e16793854",
-      "vcs-version": "9018acb6fe186ffc815e8ee1f0ddbe0e16793854"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CodeEditor.git;46d76471e1c56c1ea7fe53dffc7b2f2eeeb60c59",
+      "vcs-version": "46d76471e1c56c1ea7fe53dffc7b2f2eeeb60c59"
      },
      {
       "author": "Reading Web",
@@ -9639,10 +9650,10 @@
       "name": "Cards",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Cards",
-      "vcs-date": "2016-09-19T19:28:24Z",
+      "vcs-date": "2016-09-26T20:36:25Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Cards.git;757b770befad3203b355eaefb759bd0c0b7d2af5",
-      "vcs-version": "757b770befad3203b355eaefb759bd0c0b7d2af5",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Cards.git;123dbc983be6474353b68828f0711626d8f26e19",
+      "vcs-version": "123dbc983be6474353b68828f0711626d8f26e19",
       "version": "0.4.0"
      },
      {
@@ -9652,10 +9663,10 @@
       "namemsg": "revisionslider",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:RevisionSlider",
-      "vcs-date": "2016-09-20T20:40:37Z",
+      "vcs-date": "2016-10-02T08:41:11Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/RevisionSlider.git;2a716772f0855506008c07785b9c1a0509ce03a4",
-      "vcs-version": "2a716772f0855506008c07785b9c1a0509ce03a4",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/RevisionSlider.git;1f8f43e27e6e1ce9243cca673836cc8b55ad924b",
+      "vcs-version": "1f8f43e27e6e1ce9243cca673836cc8b55ad924b",
       "version": "1.0.0"
      },
      {
@@ -9681,10 +9692,10 @@
       "name": "Campaigns",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Campaigns",
-      "vcs-date": "2016-09-17T21:16:25Z",
+      "vcs-date": "2016-09-22T21:34:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Campaigns.git;5fe208a42dfffb999130a228ecb35795ebeaa0df",
-      "vcs-version": "5fe208a42dfffb999130a228ecb35795ebeaa0df",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Campaigns.git;98d99a3a1d620856891abeb35d3d979eb8d81abd",
+      "vcs-version": "98d99a3a1d620856891abeb35d3d979eb8d81abd",
       "version": "0.2.0"
      },
      {
@@ -9695,10 +9706,10 @@
       "name": "WikimediaEvents",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:WikimediaEvents",
-      "vcs-date": "2016-09-19T19:31:46Z",
+      "vcs-date": "2016-09-27T16:22:45Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikimediaEvents.git;10e5d3bb6a9a0cc65543503cef02c41a4e1650dd",
-      "vcs-version": "10e5d3bb6a9a0cc65543503cef02c41a4e1650dd",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikimediaEvents.git;f57ed2be731506ad693af5b7db4341ee8dfdefb6",
+      "vcs-version": "f57ed2be731506ad693af5b7db4341ee8dfdefb6",
       "version": "1.1.0"
      },
      {
@@ -9736,10 +9747,10 @@
       "name": "UniversalLanguageSelector",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector",
-      "vcs-date": "2016-09-20T12:22:51Z",
+      "vcs-date": "2016-10-02T08:43:08Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/UniversalLanguageSelector.git;fda55e2ab18beba6bf5462dd4fcb71d49ba8184d",
-      "vcs-version": "fda55e2ab18beba6bf5462dd4fcb71d49ba8184d",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/UniversalLanguageSelector.git;f8af863a56a557acbef6ae93ef104c19a606dc07",
+      "vcs-version": "f8af863a56a557acbef6ae93ef104c19a606dc07",
       "version": "2016-04-06"
      },
      {
@@ -9750,10 +9761,10 @@
       "name": "Graph",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Graph",
-      "vcs-date": "2016-09-20T04:06:20Z",
+      "vcs-date": "2016-09-27T16:00:21Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Graph.git;96d39993e349026c0f6b2b8d4ffd5e9c4ad282b0",
-      "vcs-version": "96d39993e349026c0f6b2b8d4ffd5e9c4ad282b0"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Graph.git;ce2d0ae072fb5e72824fd1dfd3d7cd2590aa5a29",
+      "vcs-version": "ce2d0ae072fb5e72824fd1dfd3d7cd2590aa5a29"
      },
      {
       "author": "Aaron Schulz, Chris Steipp, Brad Jorsch",
@@ -9763,10 +9774,10 @@
       "name": "OAuth",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:OAuth",
-      "vcs-date": "2016-09-19T20:58:30Z",
+      "vcs-date": "2016-10-03T15:29:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/OAuth.git;f68d3e9bb36ad2a39a3f598daf2de818e2f9244e",
-      "vcs-version": "f68d3e9bb36ad2a39a3f598daf2de818e2f9244e"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/OAuth.git;a440157fdf87d6d8d8efd1d2694a7de45c86e7e9",
+      "vcs-version": "a440157fdf87d6d8d8efd1d2694a7de45c86e7e9"
      },
      {
       "author": "Tim Starling",
@@ -9788,10 +9799,10 @@
       "name": "OATHAuth",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:OATHAuth",
-      "vcs-date": "2016-09-17T18:05:17Z",
+      "vcs-date": "2016-10-02T12:25:59Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/OATHAuth.git;3dc8dc3b1e5ff0b9488b6f1786cbd6e9d61db65d",
-      "vcs-version": "3dc8dc3b1e5ff0b9488b6f1786cbd6e9d61db65d",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/OATHAuth.git;52686c04b7405e54f9a74af77ef229fce8084944",
+      "vcs-version": "52686c04b7405e54f9a74af77ef229fce8084944",
       "version": "0.2.1"
      },
      {
@@ -9802,10 +9813,10 @@
       "name": "ORES",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:ORES",
-      "vcs-date": "2016-09-17T08:07:40Z",
+      "vcs-date": "2016-10-03T16:34:05Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ORES.git;079c38dc877278614c7e8a970745a72a74a1cce2",
-      "vcs-version": "079c38dc877278614c7e8a970745a72a74a1cce2"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ORES.git;eb497a1621cda9d5c1bc6ecda3b17dbb873c1726",
+      "vcs-version": "eb497a1621cda9d5c1bc6ecda3b17dbb873c1726"
      },
      {
       "author": "Sumit Asthana",
@@ -9814,10 +9825,10 @@
       "namemsg": "wikidatapagebanner-extensionname",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:WikidataPageBanner",
-      "vcs-date": "2016-09-10T21:32:57Z",
+      "vcs-date": "2016-09-28T03:33:10Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikidataPageBanner.git;d47695cfd833aafabcb6c006215350050cfc5fc1",
-      "vcs-version": "d47695cfd833aafabcb6c006215350050cfc5fc1",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikidataPageBanner.git;8b4b7c69def3fa3f2d2faff9657d8f2bddaedaa7",
+      "vcs-version": "8b4b7c69def3fa3f2d2faff9657d8f2bddaedaa7",
       "version": "0.0.1"
      },
      {
@@ -9826,10 +9837,10 @@
       "name": "QuickSurveys",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:QuickSurveys",
-      "vcs-date": "2016-09-16T14:47:39Z",
+      "vcs-date": "2016-09-27T20:38:49Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/QuickSurveys.git;df20e909adefca45481e10bad12ef422a2af8dff",
-      "vcs-version": "df20e909adefca45481e10bad12ef422a2af8dff",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/QuickSurveys.git;e08cfd44bd842091e1ca2061b392d3dc7ee073ce",
+      "vcs-version": "e08cfd44bd842091e1ca2061b392d3dc7ee073ce",
       "version": "1.2.0"
      },
      {
@@ -9844,7 +9855,7 @@
       "vcs-system": "git",
       "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/EventBus.git;d055bde0bba8787598b0833cc6c11c5daa7074a0",
       "vcs-version": "d055bde0bba8787598b0833cc6c11c5daa7074a0",
-      "version": "0.2.10"
+      "version": "0.2.11"
      },
      {
       "author": "Yuri Astrakhan, Max Semenik, Ed Sanders, Julien Girault",
@@ -9855,10 +9866,10 @@
       "name": "Kartographer",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Kartographer",
-      "vcs-date": "2016-09-20T20:39:19Z",
+      "vcs-date": "2016-10-03T18:41:14Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Kartographer.git;31fef4e688a8c0bc0be9a87cdc3fced1c7235dff",
-      "vcs-version": "31fef4e688a8c0bc0be9a87cdc3fced1c7235dff"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Kartographer.git;75343fd7b7091baddb50d5744411c96d6eedf043",
+      "vcs-version": "75343fd7b7091baddb50d5744411c96d6eedf043"
      },
      {
       "author": "Victor Vasiliev, Tim Starling, Brad Jorsch",
@@ -9868,10 +9879,10 @@
       "name": "Scribunto",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:Scribunto",
-      "vcs-date": "2016-09-16T01:38:15Z",
+      "vcs-date": "2016-10-02T08:41:24Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Scribunto.git;7d676c3bd27e7e1a7421cb0a8315f5a215b68a03",
-      "vcs-version": "7d676c3bd27e7e1a7421cb0a8315f5a215b68a03"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Scribunto.git;c922051e4c8e2dcb3ac3085f44c932c67d2e5a08",
+      "vcs-version": "c922051e4c8e2dcb3ac3085f44c932c67d2e5a08"
      },
      {
       "author": "Erik Zachte",
@@ -9881,10 +9892,10 @@
       "name": "EasyTimeline",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:EasyTimeline",
-      "vcs-date": "2016-08-10T00:38:25Z",
+      "vcs-date": "2016-09-28T22:13:04Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/timeline.git;8b5a52f36d0e3f6018011a9a965b26b2dbf5dc6a",
-      "vcs-version": "8b5a52f36d0e3f6018011a9a965b26b2dbf5dc6a"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/timeline.git;4f7b63f6d56bf841cca262c866d83e4dde67df7f",
+      "vcs-version": "4f7b63f6d56bf841cca262c866d83e4dde67df7f"
      },
      {
       "author": "Guillaume Blanchard, Max Semenik",
@@ -9921,10 +9932,10 @@
       "name": "ParserFunctions",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:ParserFunctions",
-      "vcs-date": "2016-09-10T21:30:14Z",
+      "vcs-date": "2016-09-26T20:41:39Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ParserFunctions.git;c417f26c85ed5944f2df23ef0c761ee7794f17f7",
-      "vcs-version": "c417f26c85ed5944f2df23ef0c761ee7794f17f7",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ParserFunctions.git;33e2948d2b76ea61d641f77dd42ec6a9d3a87927",
+      "vcs-version": "33e2948d2b76ea61d641f77dd42ec6a9d3a87927",
       "version": "1.6.0"
      },
      {
@@ -9936,10 +9947,10 @@
       "name": "Cite",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:Cite",
-      "vcs-date": "2016-09-20T20:55:42Z",
+      "vcs-date": "2016-10-03T20:00:30Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Cite.git;fdb25a79aac2e5b9a77ae9271c1883f2ce580934",
-      "vcs-version": "fdb25a79aac2e5b9a77ae9271c1883f2ce580934"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Cite.git;85fc76a12be8e181c1dd6cff4f660a19578f4305",
+      "vcs-version": "85fc76a12be8e181c1dd6cff4f660a19578f4305"
      },
      {
       "author": "Erik Moeller, Leonardo Pimenta, Rob Church, Trevor Parscal, DaSch",
@@ -9964,10 +9975,10 @@
       "name": "ImageMap",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:ImageMap",
-      "vcs-date": "2016-08-28T20:37:47Z",
+      "vcs-date": "2016-09-28T03:31:48Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ImageMap.git;aef77622ee2dbde07412250e4f8b356229676b77",
-      "vcs-version": "aef77622ee2dbde07412250e4f8b356229676b77"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ImageMap.git;95ab6978be94c48a07248ad7988953531b5617ee",
+      "vcs-version": "95ab6978be94c48a07248ad7988953531b5617ee"
      },
      {
       "author": "Brion Vibber, Tim Starling, Rob Church, Niklas Laxström, Ori Livneh, Ed Sanders",
@@ -9977,10 +9988,10 @@
       "name": "SyntaxHighlight",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi",
-      "vcs-date": "2016-09-06T20:46:58Z",
+      "vcs-date": "2016-10-02T08:42:08Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SyntaxHighlight_GeSHi.git;5d7c0037ce9a3ca7f67c8120c5ca7eb44d30ed81",
-      "vcs-version": "5d7c0037ce9a3ca7f67c8120c5ca7eb44d30ed81",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SyntaxHighlight_GeSHi.git;41b3de6845add440a9321d9d4473f363d1a7a9c0",
+      "vcs-version": "41b3de6845add440a9321d9d4473f363d1a7a9c0",
       "version": "2.0"
      },
      {
@@ -10004,10 +10015,10 @@
       "name": "CategoryTree",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:CategoryTree",
-      "vcs-date": "2016-09-19T20:50:40Z",
+      "vcs-date": "2016-09-28T20:23:00Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CategoryTree.git;d896dc10283094b87e195a40588c6b2b81c70c50",
-      "vcs-version": "d896dc10283094b87e195a40588c6b2b81c70c50"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CategoryTree.git;0c3c9513be46f8691085fd5d733caa0c9a3f0438",
+      "vcs-version": "0c3c9513be46f8691085fd5d733caa0c9a3f0438"
      },
      {
       "author": "Steve Sanbeg",
@@ -10030,10 +10041,10 @@
       "name": "TemplateData",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:TemplateData",
-      "vcs-date": "2016-09-20T19:32:18Z",
+      "vcs-date": "2016-09-27T20:39:23Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TemplateData.git;1ff0c37b70efd035971676b6266c5588b9dd0e00",
-      "vcs-version": "1ff0c37b70efd035971676b6266c5588b9dd0e00",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TemplateData.git;ca2970db0e543430ad94adf4e0a9fd841f2843ab",
+      "vcs-version": "ca2970db0e543430ad94adf4e0a9fd841f2843ab",
       "version": "0.1.1"
      },
      {
@@ -10044,10 +10055,10 @@
       "name": "Math",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:Math",
-      "vcs-date": "2016-09-19T20:57:17Z",
+      "vcs-date": "2016-10-02T08:39:46Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Math.git;6e006f8632c130f4321023bb4c96dbd8d39e75ec",
-      "vcs-version": "6e006f8632c130f4321023bb4c96dbd8d39e75ec",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Math.git;7845c00d3127d3025291eb941c67991b9bb466ba",
+      "vcs-version": "7845c00d3127d3025291eb941c67991b9bb466ba",
       "version": "3.0.0"
      },
      {
@@ -10058,11 +10069,25 @@
       "name": "Babel",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:Babel",
-      "vcs-date": "2016-09-20T20:37:15Z",
+      "vcs-date": "2016-10-04T07:07:45Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Babel.git;8428be6e1bd466f0ee06b6254365b891c559217d",
-      "vcs-version": "8428be6e1bd466f0ee06b6254365b891c559217d",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Babel.git;cd7d1a809af412d5c593574915b0b07dc01b9b16",
+      "vcs-version": "cd7d1a809af412d5c593574915b0b07dc01b9b16",
       "version": "1.10.0"
+     },
+     {
+      "author": "Niharika Kohli, Frances Hocutt",
+      "descriptionmsg": "pageassessments-desc",
+      "license": "/wiki/Special:Version/License/PageAssessments",
+      "license-name": "GPL-2.0+",
+      "name": "PageAssessments",
+      "type": "parserhook",
+      "url": "https://www.mediawiki.org/wiki/Extension:PageAssessments",
+      "vcs-date": "2016-09-13T03:51:34Z",
+      "vcs-system": "git",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/PageAssessments.git;737ce15b43d6812862892cc3b7fd8b7337ecdbed",
+      "vcs-version": "737ce15b43d6812862892cc3b7fd8b7337ecdbed",
+      "version": "1.0.0"
      },
      {
       "author": "[https://www.mediawiki.org/wiki/User:Jeroen_De_Dauw Jeroen De Dauw]",
@@ -10144,7 +10169,7 @@
       "name": "Purtle",
       "type": "purtle",
       "url": "https://mediawiki.org/wiki/Purtle",
-      "version": "1.0"
+      "version": "1.0.3"
      },
      {
       "author": "[http://www.snater.com H. Snater]",
@@ -10154,7 +10179,7 @@
       "name": "Wikibase Serialization JavaScript",
       "type": "wikibase",
       "url": "https://github.com/wmde/WikibaseSerializationJavaScript",
-      "version": "2.0.7"
+      "version": "2.0.8"
      },
      {
       "author": "[http://www.snater.com H. Snater]",
@@ -10228,7 +10253,7 @@
       "name": "Wikibase DataModel JavaScript",
       "type": "wikibase",
       "url": "https://github.com/wmde/WikibaseDataModelJavascript",
-      "version": "3.0.0"
+      "version": "3.0.1"
      },
      {
       "author": "[https://www.mediawiki.org/wiki/User:Jeroen_De_Dauw Jeroen De Dauw]",
@@ -10271,10 +10296,10 @@
       "name": "GettingStarted",
       "type": "api",
       "url": "https://www.mediawiki.org/wiki/Extension:GettingStarted",
-      "vcs-date": "2016-09-17T21:19:14Z",
+      "vcs-date": "2016-10-01T10:04:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GettingStarted.git;3c8e871db83ffd48c8bfbc418fb8383a738e60d8",
-      "vcs-version": "3c8e871db83ffd48c8bfbc418fb8383a738e60d8",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GettingStarted.git;15bbc2868124860f0b84f8a1ede49f729c409a83",
+      "vcs-version": "15bbc2868124860f0b84f8a1ede49f729c409a83",
       "version": "1.1.0"
      },
      {
@@ -10286,10 +10311,10 @@
       "namemsg": "skinname-vector",
       "type": "skin",
       "url": "https://www.mediawiki.org/wiki/Skin:Vector",
-      "vcs-date": "2016-09-20T20:07:07Z",
+      "vcs-date": "2016-10-03T20:17:40Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/Vector.git;f396bb29ffca1f386294d818c9b38c19b6796b81",
-      "vcs-version": "f396bb29ffca1f386294d818c9b38c19b6796b81"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/Vector.git;2ffc504184d9ce3b410ad1f9010c39a0e1e02cd0",
+      "vcs-version": "2ffc504184d9ce3b410ad1f9010c39a0e1e02cd0"
      },
      {
       "author": "Gabriel Wicke, ...",
@@ -10300,10 +10325,10 @@
       "namemsg": "skinname-monobook",
       "type": "skin",
       "url": "https://www.mediawiki.org/wiki/Skin:MonoBook",
-      "vcs-date": "2016-09-11T20:29:17Z",
+      "vcs-date": "2016-09-24T20:10:58Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/MonoBook.git;880def44bdddbf63013ccab227b70e34168afa78",
-      "vcs-version": "880def44bdddbf63013ccab227b70e34168afa78"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/MonoBook.git;758f8f36cf9891ee4b41e52a2f51cfaa028b8a0c",
+      "vcs-version": "758f8f36cf9891ee4b41e52a2f51cfaa028b8a0c"
      },
      {
       "author": "River Tarnell, ...",
@@ -10314,10 +10339,10 @@
       "namemsg": "skinname-modern",
       "type": "skin",
       "url": "https://www.mediawiki.org/wiki/Skin:Modern",
-      "vcs-date": "2016-09-11T20:29:13Z",
+      "vcs-date": "2016-09-24T20:10:55Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/Modern.git;96d515495749bc068519dfa818dc85015d0ae199",
-      "vcs-version": "96d515495749bc068519dfa818dc85015d0ae199"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/Modern.git;d60d5a5392845c56c3b7f68b0017ca466cc6e443",
+      "vcs-version": "d60d5a5392845c56c3b7f68b0017ca466cc6e443"
      },
      {
       "author": "Lee Daniel Crocker, ...",
@@ -10328,10 +10353,10 @@
       "namemsg": "skinname-cologneblue",
       "type": "skin",
       "url": "https://www.mediawiki.org/wiki/Skin:Cologne_Blue",
-      "vcs-date": "2016-09-11T20:29:06Z",
+      "vcs-date": "2016-09-24T20:10:15Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/CologneBlue.git;e7dfba7382435b7eb526dae5b2289a80595bf24d",
-      "vcs-version": "e7dfba7382435b7eb526dae5b2289a80595bf24d"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/CologneBlue.git;3f1db83b4d2b5102ef9eb030bce3d0f6014d1611",
+      "vcs-version": "3f1db83b4d2b5102ef9eb030bce3d0f6014d1611"
      },
      {
       "author": "Tim Starling, John Du Hart, Daniel Kinzler",
@@ -10341,10 +10366,10 @@
       "name": "SpamBlacklist",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:SpamBlacklist",
-      "vcs-date": "2016-09-20T19:32:17Z",
+      "vcs-date": "2016-09-29T14:14:01Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SpamBlacklist.git;7763a5b090a7a26c6dd1dd2a2203bb710efca589",
-      "vcs-version": "7763a5b090a7a26c6dd1dd2a2203bb710efca589"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SpamBlacklist.git;637a7435cebb7e25693387469c03fbe2221c4692",
+      "vcs-version": "637a7435cebb7e25693387469c03fbe2221c4692"
      },
      {
       "author": "Victor Vasiliev, Fran Rogers",
@@ -10354,10 +10379,10 @@
       "name": "TitleBlacklist",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:TitleBlacklist",
-      "vcs-date": "2016-09-20T19:32:21Z",
+      "vcs-date": "2016-09-26T20:43:22Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TitleBlacklist.git;75a8813c863f5a1b7688448708ae2c91b798e603",
-      "vcs-version": "75a8813c863f5a1b7688448708ae2c91b798e603",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TitleBlacklist.git;2429c84002157d5c09339aa3c86f7e68ba06426e",
+      "vcs-version": "2429c84002157d5c09339aa3c86f7e68ba06426e",
       "version": "1.5.0"
      },
      {
@@ -10368,10 +10393,10 @@
       "name": "TorBlock",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:TorBlock",
-      "vcs-date": "2016-09-19T21:01:49Z",
+      "vcs-date": "2016-09-27T22:33:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TorBlock.git;16e1ccb7d5c37b5b6ac8003de4381a9ccd022fd2",
-      "vcs-version": "16e1ccb7d5c37b5b6ac8003de4381a9ccd022fd2",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TorBlock.git;e528a4872cb4c4d1a250e743305a4e9ab2936771",
+      "vcs-version": "e528a4872cb4c4d1a250e743305a4e9ab2936771",
       "version": "1.1.0"
      },
      {
@@ -10383,10 +10408,10 @@
       "name": "ConfirmEdit",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:ConfirmEdit",
-      "vcs-date": "2016-09-20T19:32:05Z",
+      "vcs-date": "2016-10-04T05:36:43Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ConfirmEdit.git;ac97e69999be149137a278b6bb096ee09cbdf430",
-      "vcs-version": "ac97e69999be149137a278b6bb096ee09cbdf430",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ConfirmEdit.git;ed9886f6fd13eae4d318d022eef040c51ebd5971",
+      "vcs-version": "ed9886f6fd13eae4d318d022eef040c51ebd5971",
       "version": "1.4.0"
      },
      {
@@ -10404,10 +10429,10 @@
       "name": "AntiSpoof",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:AntiSpoof",
-      "vcs-date": "2016-09-20T19:57:27Z",
+      "vcs-date": "2016-09-29T22:35:06Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/AntiSpoof.git;c4c7e4b1ef6f4ce112253a8849bbe0321f1ed960",
-      "vcs-version": "c4c7e4b1ef6f4ce112253a8849bbe0321f1ed960"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/AntiSpoof.git;d6115849c313d75bbffb334e0399e0299bdda309",
+      "vcs-version": "d6115849c313d75bbffb334e0399e0299bdda309"
      },
      {
       "author": "Andrew Garrett, River Tarnell, Victor Vasiliev, Marius Hoch",
@@ -10417,10 +10442,10 @@
       "name": "Abuse Filter",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:AbuseFilter",
-      "vcs-date": "2016-09-20T21:00:41Z",
+      "vcs-date": "2016-10-02T09:20:07Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/AbuseFilter.git;958de0a18a47596a3321f626e33bef4fc03fbbed",
-      "vcs-version": "958de0a18a47596a3321f626e33bef4fc03fbbed"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/AbuseFilter.git;b3b9c753166ce258a1092b040143f4f339c11b92",
+      "vcs-version": "b3b9c753166ce258a1092b040143f4f339c11b92"
      },
      {
       "author": "Sam Reed",
@@ -10430,10 +10455,10 @@
       "name": "AntiSpoof for CentralAuth",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Alexander Klauer",
@@ -10443,10 +10468,10 @@
       "name": "Score",
       "type": "parserhooks",
       "url": "https://www.mediawiki.org/wiki/Extension:Score",
-      "vcs-date": "2016-09-15T21:02:50Z",
+      "vcs-date": "2016-09-28T22:12:27Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Score.git;3564675c683ae3c7ec2b78179fdc1b7034a49c13",
-      "vcs-version": "3564675c683ae3c7ec2b78179fdc1b7034a49c13",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Score.git;4d2d91123c993a36246ac7c0b48b834d566cf97b",
+      "vcs-version": "4d2d91123c993a36246ac7c0b48b834d566cf97b",
       "version": "0.3.0"
      },
      {
@@ -10457,10 +10482,10 @@
       "name": "Popups",
       "type": "betafeatures",
       "url": "https://www.mediawiki.org/wiki/Extension:Popups",
-      "vcs-date": "2016-09-20T15:48:39Z",
+      "vcs-date": "2016-10-04T10:23:46Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Popups.git;8f001ee4bd4b21b534fc12349050312563014e52",
-      "vcs-version": "8f001ee4bd4b21b534fc12349050312563014e52"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Popups.git;46274a5518ee64da9fb2dcff2e84056d817820be",
+      "vcs-version": "46274a5518ee64da9fb2dcff2e84056d817820be"
      },
      {
       "author": "Roland Unger, Hans Musil, Matthias Mullie, Sam Smith",
@@ -10468,10 +10493,10 @@
       "name": "RelatedArticles",
       "type": "betafeatures",
       "url": "https://www.mediawiki.org/wiki/Extension:RelatedArticles",
-      "vcs-date": "2016-09-16T15:02:14Z",
+      "vcs-date": "2016-09-26T15:31:04Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/RelatedArticles.git;316073e6ff063ff44d7cafdfe7a76300b0ddccb7",
-      "vcs-version": "316073e6ff063ff44d7cafdfe7a76300b0ddccb7",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/RelatedArticles.git;ec0fbca920d4fa1416d58954731fa69d1640079b",
+      "vcs-version": "ec0fbca920d4fa1416d58954731fa69d1640079b",
       "version": "2.1.0"
      }
     ],
@@ -10491,9 +10516,9 @@
      "favicon": "//en.wikipedia.org/static/favicon/wikipedia.ico",
      "fixarabicunicode": "",
      "fixmalayalamunicode": "",
-     "generator": "MediaWiki 1.28.0-wmf.20",
-     "git-branch": "wmf/1.28.0-wmf.20",
-     "git-hash": "3b2ecce3ef4cd61994d44c2d835f3635fdda72e0",
+     "generator": "MediaWiki 1.28.0-wmf.21",
+     "git-branch": "wmf/1.28.0-wmf.21",
+     "git-hash": "f53099adbfce251a0d529af415d1247cce9f8659",
      "hhvmversion": "3.12.7",
      "imagelimits": [
       {
@@ -10554,7 +10579,7 @@
       300,
       400
      ],
-     "time": "2016-09-24T16:32:24Z",
+     "time": "2016-10-09T00:05:51Z",
      "timeoffset": 0,
      "timezone": "UTC",
      "titleconversion": "",
@@ -12296,10 +12321,10 @@
       "namemsg": "timedmediahandler-extensionname",
       "type": "media",
       "url": "https://www.mediawiki.org/wiki/Extension:TimedMediaHandler",
-      "vcs-date": "2016-09-19T21:01:21Z",
+      "vcs-date": "2016-10-03T18:55:33Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TimedMediaHandler.git;4176b390c31bee865b36ced6d5e76ebda8537c0a",
-      "vcs-version": "4176b390c31bee865b36ced6d5e76ebda8537c0a",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TimedMediaHandler.git;301f80fc1cf267f51fc13c8cc4d8f93b21a20fb3",
+      "vcs-version": "301f80fc1cf267f51fc13c8cc4d8f93b21a20fb3",
       "version": "0.5.0"
      },
      {
@@ -12323,10 +12348,10 @@
       "name": "VipsScaler",
       "type": "media",
       "url": "https://www.mediawiki.org/wiki/Extension:VipsScaler",
-      "vcs-date": "2016-09-19T21:02:44Z",
+      "vcs-date": "2016-10-02T08:43:32Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/VipsScaler.git;1c7fbb41835843869575310214e7ef3794081098",
-      "vcs-version": "1c7fbb41835843869575310214e7ef3794081098"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/VipsScaler.git;a89c9c9e54c56c0aef3e4725cdf791eacc99ba34",
+      "vcs-version": "a89c9c9e54c56c0aef3e4725cdf791eacc99ba34"
      },
      {
       "author": "Nik Everett, Chad Horohoe, Erik Bernhardson",
@@ -12337,10 +12362,10 @@
       "name": "CirrusSearch",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:CirrusSearch",
-      "vcs-date": "2016-09-20T20:38:56Z",
+      "vcs-date": "2016-10-04T12:04:15Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CirrusSearch.git;9b004544a5d48fab861905e6650f1d4ceaeb6a27",
-      "vcs-version": "9b004544a5d48fab861905e6650f1d4ceaeb6a27",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CirrusSearch.git;b9662227f36e720fb307b4a5eeccdd07f39c936e",
+      "vcs-version": "b9662227f36e720fb307b4a5eeccdd07f39c936e",
       "version": "0.2"
      },
      {
@@ -12351,10 +12376,10 @@
       "name": "ZeroBanner",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:ZeroBanner",
-      "vcs-date": "2016-09-09T17:25:40Z",
+      "vcs-date": "2016-09-22T21:44:33Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ZeroBanner.git;37a3bc488eb91585a20140e9e5705a1ddf609f09",
-      "vcs-version": "37a3bc488eb91585a20140e9e5705a1ddf609f09",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ZeroBanner.git;33d6598baf6c791649d617bff7dd1cfd7ca4ad99",
+      "vcs-version": "33d6598baf6c791649d617bff7dd1cfd7ca4ad99",
       "version": "1.0.0"
      },
      {
@@ -12365,10 +12390,10 @@
       "name": "Flow",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Flow",
-      "vcs-date": "2016-09-20T20:38:31Z",
+      "vcs-date": "2016-10-04T03:37:49Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Flow.git;f22df21e044d70c42b81bbe0813634725b9b943c",
-      "vcs-version": "f22df21e044d70c42b81bbe0813634725b9b943c",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Flow.git;6f32e9047e37daaa740968c761d9c5636d186511",
+      "vcs-version": "6f32e9047e37daaa740968c761d9c5636d186511",
       "version": "1.1"
      },
      {
@@ -12397,10 +12422,10 @@
       "name": "Gadgets",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Gadgets",
-      "vcs-date": "2016-09-19T20:55:11Z",
+      "vcs-date": "2016-09-30T10:47:03Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Gadgets.git;83236f356b0341707712595f20e324ffa400d70d",
-      "vcs-version": "83236f356b0341707712595f20e324ffa400d70d"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Gadgets.git;ce32e6586cdb8e5c5d49f10111b41e2ded1aef81",
+      "vcs-version": "ce32e6586cdb8e5c5d49f10111b41e2ded1aef81"
      },
      {
       "author": "Michael Dale",
@@ -12424,10 +12449,10 @@
       "name": "GlobalBlocking",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:GlobalBlocking",
-      "vcs-date": "2016-09-20T21:03:39Z",
+      "vcs-date": "2016-09-26T20:40:12Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalBlocking.git;3c4e3f3ff4d4e30dfafdef5129a90c148fee700f",
-      "vcs-version": "3c4e3f3ff4d4e30dfafdef5129a90c148fee700f"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalBlocking.git;6f0f05bcdd5e7835cfe4866fb8609163a893278b",
+      "vcs-version": "6f0f05bcdd5e7835cfe4866fb8609163a893278b"
      },
      {
       "author": "Tim Starling",
@@ -12451,10 +12476,10 @@
       "name": "SecurePoll",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:SecurePoll",
-      "vcs-date": "2016-09-19T21:34:16Z",
+      "vcs-date": "2016-10-02T08:41:34Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SecurePoll.git;1898a85d6e151c3d02388fd9422cd462f62088ea",
-      "vcs-version": "1898a85d6e151c3d02388fd9422cd462f62088ea"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SecurePoll.git;632cfaa68ef68e28cc30c31745b07b1bd7e9ea30",
+      "vcs-version": "632cfaa68ef68e28cc30c31745b07b1bd7e9ea30"
      },
      {
       "author": "Tim Starling",
@@ -12464,10 +12489,10 @@
       "name": "Pool Counter Client",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:PoolCounter",
-      "vcs-date": "2016-08-31T20:37:17Z",
+      "vcs-date": "2016-10-03T09:41:08Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/PoolCounter.git;3d302a0cb458e3fc55cf6938e9297dc92ca0bbea",
-      "vcs-version": "3d302a0cb458e3fc55cf6938e9297dc92ca0bbea"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/PoolCounter.git;fd92105bf5b702427553352ef2694b7c6393cb45",
+      "vcs-version": "fd92105bf5b702427553352ef2694b7c6393cb45"
      },
      {
       "author": "Nik Everett, Chad Horohoe",
@@ -12506,10 +12531,10 @@
       "name": "GlobalUserPage",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:GlobalUserPage",
-      "vcs-date": "2016-09-19T20:55:39Z",
+      "vcs-date": "2016-09-27T03:24:36Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalUserPage.git;5ecc2dcbbd552e38aec3cb7c5a42c4778fdda16c",
-      "vcs-version": "5ecc2dcbbd552e38aec3cb7c5a42c4778fdda16c",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalUserPage.git;c223342847c64796f0c3014d8ef4350ea78e95ce",
+      "vcs-version": "c223342847c64796f0c3014d8ef4350ea78e95ce",
       "version": "0.11.0"
      },
      {
@@ -12535,10 +12560,10 @@
       "name": "CentralNotice",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:CentralNotice",
-      "vcs-date": "2016-09-08T21:42:48Z",
+      "vcs-date": "2016-09-22T17:52:00Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralNotice.git;ca450900a9b6598d1ef121dda98b2694b6072cfd",
-      "vcs-version": "ca450900a9b6598d1ef121dda98b2694b6072cfd",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralNotice.git;b190667ec59222f08de94d9c2dd210132bbf2319",
+      "vcs-version": "b190667ec59222f08de94d9c2dd210132bbf2319",
       "version": "2.6.0"
      },
      {
@@ -12549,10 +12574,10 @@
       "name": "WikimediaMessages",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:WikimediaMessages",
-      "vcs-date": "2016-09-20T20:42:25Z",
+      "vcs-date": "2016-10-02T08:44:42Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikimediaMessages.git;9e74dd2d3af6cd80eb9118456c4a15ae99f08619",
-      "vcs-version": "9e74dd2d3af6cd80eb9118456c4a15ae99f08619"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikimediaMessages.git;8875929672a9be1acaf037f4d04354592e81176d",
+      "vcs-version": "8875929672a9be1acaf037f4d04354592e81176d"
      },
      {
       "author": "Derk-Jan Hartman, Trevor Parscal, Roan Kattouw, Nimish Gautam, Adam Miller",
@@ -12562,10 +12587,10 @@
       "name": "WikiEditor",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:WikiEditor",
-      "vcs-date": "2016-09-15T21:06:12Z",
+      "vcs-date": "2016-10-03T11:52:05Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikiEditor.git;26941229c90cff40e7904a6356a2c98357953c17",
-      "vcs-version": "26941229c90cff40e7904a6356a2c98357953c17",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikiEditor.git;2570abc7df38d3e039a6b65f8c36f462034ae8b3",
+      "vcs-version": "2570abc7df38d3e039a6b65f8c36f462034ae8b3",
       "version": "0.5.0"
      },
      {
@@ -12591,10 +12616,10 @@
       "name": "SandboxLink",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:SandboxLink",
-      "vcs-date": "2016-09-10T21:30:35Z",
+      "vcs-date": "2016-09-29T21:02:03Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SandboxLink.git;5aafc83d70d63b9958cdf9d5253bc5e9c712250f",
-      "vcs-version": "5aafc83d70d63b9958cdf9d5253bc5e9c712250f"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SandboxLink.git;4a30d6cc5c6f5a06a68b86a2076fa9b46ebde164",
+      "vcs-version": "4a30d6cc5c6f5a06a68b86a2076fa9b46ebde164"
      },
      {
       "author": "MarkTraceur (Mark Holmquist)",
@@ -12605,10 +12630,10 @@
       "name": "BetaFeatures",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:BetaFeatures",
-      "vcs-date": "2016-09-20T19:32:01Z",
+      "vcs-date": "2016-09-28T20:22:08Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/BetaFeatures.git;fb4ecd289f7451eb6015afeb3d1e69fa8ce5c107",
-      "vcs-version": "fb4ecd289f7451eb6015afeb3d1e69fa8ce5c107",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/BetaFeatures.git;20ac734ae457967ea88bde4946e0032a5660f769",
+      "vcs-version": "20ac734ae457967ea88bde4946e0032a5660f769",
       "version": "0.1"
      },
      {
@@ -12633,10 +12658,10 @@
       "name": "MultimediaViewer",
       "type": "other",
       "url": "https://mediawiki.org/wiki/Extension:MultimediaViewer",
-      "vcs-date": "2016-09-17T21:21:19Z",
+      "vcs-date": "2016-10-02T08:40:25Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MultimediaViewer.git;2a038d520c1816cb345ded2e8e6b1aafa5ff9966",
-      "vcs-version": "2a038d520c1816cb345ded2e8e6b1aafa5ff9966"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MultimediaViewer.git;1fc8aafe3ce39b92c309b115ccc8b809bee96449",
+      "vcs-version": "1fc8aafe3ce39b92c309b115ccc8b809bee96449"
      },
      {
       "author": "Alex Monk, Bartosz Dziewoński, Christian Williams, Ed Sanders, Inez Korczyński, James D. Forrester, Moriel Schottlender, Roan Kattouw, Rob Moen, Timo Tijhof, Trevor Parscal, ...",
@@ -12647,10 +12672,10 @@
       "name": "VisualEditor",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:VisualEditor",
-      "vcs-date": "2016-09-20T20:51:22Z",
+      "vcs-date": "2016-10-04T16:24:00Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/VisualEditor.git;080d0ba8e1157862afda45a25c9baae3efb626fd",
-      "vcs-version": "080d0ba8e1157862afda45a25c9baae3efb626fd",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/VisualEditor.git;9da0eaef03e6a628d43902938a6684727a811307",
+      "vcs-version": "9da0eaef03e6a628d43902938a6684727a811307",
       "version": "0.1.0"
      },
      {
@@ -12661,10 +12686,10 @@
       "name": "Citoid",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Citoid",
-      "vcs-date": "2016-09-19T20:51:31Z",
+      "vcs-date": "2016-09-30T16:56:58Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Citoid.git;fa8cf23acb16d1c976402487ae038ef933768630",
-      "vcs-version": "fa8cf23acb16d1c976402487ae038ef933768630",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Citoid.git;a78298139690df4d096d78c5c5e1bf59803ecc57",
+      "vcs-version": "a78298139690df4d096d78c5c5e1bf59803ecc57",
       "version": "0.1.0"
      },
      {
@@ -12689,10 +12714,10 @@
       "name": "GuidedTour",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:GuidedTour",
-      "vcs-date": "2016-09-08T02:26:03Z",
+      "vcs-date": "2016-09-25T20:23:24Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GuidedTour.git;f54808c2986e4718e379c4b0a623342ff6d67242",
-      "vcs-version": "f54808c2986e4718e379c4b0a623342ff6d67242",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GuidedTour.git;5c0aa39e5c5ea7fa1669d53d1960bfabc8c5b091",
+      "vcs-version": "5c0aa39e5c5ea7fa1669d53d1960bfabc8c5b091",
       "version": "2.0"
      },
      {
@@ -12703,10 +12728,10 @@
       "name": "MobileApp",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:MobileApp",
-      "vcs-date": "2016-09-17T21:20:44Z",
+      "vcs-date": "2016-10-04T13:17:51Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MobileApp.git;33ba1c20e59b8f585ffe2cc4031b289141a76774",
-      "vcs-version": "33ba1c20e59b8f585ffe2cc4031b289141a76774"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MobileApp.git;cb3c60a3df12df000db46da39df6f29f102a38a4",
+      "vcs-version": "cb3c60a3df12df000db46da39df6f29f102a38a4"
      },
      {
       "author": "Patrick Reilly, Max Semenik, Jon Robson, Arthur Richards, Brion Vibber, Juliusz Gonera, Ryan Kaldari, Florian Schmidt, Rob Moen, Sam Smith",
@@ -12717,10 +12742,10 @@
       "name": "MobileFrontend",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:MobileFrontend",
-      "vcs-date": "2016-09-20T20:39:38Z",
+      "vcs-date": "2016-10-04T15:55:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MobileFrontend.git;a3a73c40cf74e07ce8a72977a5e17995ac4b1650",
-      "vcs-version": "a3a73c40cf74e07ce8a72977a5e17995ac4b1650",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MobileFrontend.git;d632acbe2f984cf003d44f4504df429b654e0696",
+      "vcs-version": "d632acbe2f984cf003d44f4504df429b654e0696",
       "version": "1.0.0"
      },
      {
@@ -12731,10 +12756,10 @@
       "name": "JsonConfig",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:JsonConfig",
-      "vcs-date": "2016-09-19T20:56:10Z",
+      "vcs-date": "2016-09-28T20:25:21Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/JsonConfig.git;1ce57eb6c2586546b4f1f71cc9f507fb7079f381",
-      "vcs-version": "1ce57eb6c2586546b4f1f71cc9f507fb7079f381",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/JsonConfig.git;b8454129fc68a33da2df75aa1c29c19b6770d945",
+      "vcs-version": "b8454129fc68a33da2df75aa1c29c19b6770d945",
       "version": "1.1.0"
      },
      {
@@ -12745,10 +12770,10 @@
       "name": "TextExtracts",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:TextExtracts",
-      "vcs-date": "2016-09-20T20:55:30Z",
+      "vcs-date": "2016-09-26T22:28:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TextExtracts.git;8235368c66a5262fa561f4caa499d00c1efcadd8",
-      "vcs-version": "8235368c66a5262fa561f4caa499d00c1efcadd8"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TextExtracts.git;94b5782ec5ed90ed0d4626f7f2d2f36cc54a25d9",
+      "vcs-version": "94b5782ec5ed90ed0d4626f7f2d2f36cc54a25d9"
      },
      {
       "author": "Tony Thomas, Kunal Mehta, Jeff Green, Sam Reed",
@@ -12772,10 +12797,10 @@
       "name": "FeaturedFeeds",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:FeaturedFeeds",
-      "vcs-date": "2016-09-20T19:32:07Z",
+      "vcs-date": "2016-09-27T20:36:26Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/FeaturedFeeds.git;02310add21a7b552861abf26d46f19ac6424d0cd",
-      "vcs-version": "02310add21a7b552861abf26d46f19ac6424d0cd"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/FeaturedFeeds.git;44f9b1e2c6b1732a29fbc084d641ba1280ef9256",
+      "vcs-version": "44f9b1e2c6b1732a29fbc084d641ba1280ef9256"
      },
      {
       "author": "Max Semenik",
@@ -12785,10 +12810,10 @@
       "name": "GeoData",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:GeoData",
-      "vcs-date": "2016-09-12T22:30:00Z",
+      "vcs-date": "2016-09-23T02:20:34Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GeoData.git;886a379c7ade38360be1e9bb2bdc34198b958db8",
-      "vcs-version": "886a379c7ade38360be1e9bb2bdc34198b958db8"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GeoData.git;1a38418a2a1a5c74facdbe3af3b56a363f52bcf7",
+      "vcs-version": "1a38418a2a1a5c74facdbe3af3b56a363f52bcf7"
      },
      {
       "author": "Ryan Kaldari, Benjamin Chen, Wctaiwan",
@@ -12798,10 +12823,10 @@
       "name": "Thanks",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Thanks",
-      "vcs-date": "2016-09-20T20:52:29Z",
+      "vcs-date": "2016-10-02T08:42:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Thanks.git;60bd089fd21fc9ef50bb5b64f6df436e30fe4eb1",
-      "vcs-version": "60bd089fd21fc9ef50bb5b64f6df436e30fe4eb1",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Thanks.git;db7c723891f3cfa0a7fc3cebd80a97db80849ed7",
+      "vcs-version": "db7c723891f3cfa0a7fc3cebd80a97db80849ed7",
       "version": "1.2.0"
      },
      {
@@ -12826,10 +12851,10 @@
       "name": "CodeEditor",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:CodeEditor",
-      "vcs-date": "2016-08-22T08:26:28Z",
+      "vcs-date": "2016-09-26T19:36:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CodeEditor.git;9018acb6fe186ffc815e8ee1f0ddbe0e16793854",
-      "vcs-version": "9018acb6fe186ffc815e8ee1f0ddbe0e16793854"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CodeEditor.git;46d76471e1c56c1ea7fe53dffc7b2f2eeeb60c59",
+      "vcs-version": "46d76471e1c56c1ea7fe53dffc7b2f2eeeb60c59"
      },
      {
       "author": "Reading Web",
@@ -12837,10 +12862,10 @@
       "name": "Cards",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Cards",
-      "vcs-date": "2016-09-19T19:28:24Z",
+      "vcs-date": "2016-09-26T20:36:25Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Cards.git;757b770befad3203b355eaefb759bd0c0b7d2af5",
-      "vcs-version": "757b770befad3203b355eaefb759bd0c0b7d2af5",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Cards.git;123dbc983be6474353b68828f0711626d8f26e19",
+      "vcs-version": "123dbc983be6474353b68828f0711626d8f26e19",
       "version": "0.4.0"
      },
      {
@@ -12850,10 +12875,10 @@
       "namemsg": "revisionslider",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:RevisionSlider",
-      "vcs-date": "2016-09-20T20:40:37Z",
+      "vcs-date": "2016-10-02T08:41:11Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/RevisionSlider.git;2a716772f0855506008c07785b9c1a0509ce03a4",
-      "vcs-version": "2a716772f0855506008c07785b9c1a0509ce03a4",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/RevisionSlider.git;1f8f43e27e6e1ce9243cca673836cc8b55ad924b",
+      "vcs-version": "1f8f43e27e6e1ce9243cca673836cc8b55ad924b",
       "version": "1.0.0"
      },
      {
@@ -12879,10 +12904,10 @@
       "name": "Campaigns",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Campaigns",
-      "vcs-date": "2016-09-17T21:16:25Z",
+      "vcs-date": "2016-09-22T21:34:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Campaigns.git;5fe208a42dfffb999130a228ecb35795ebeaa0df",
-      "vcs-version": "5fe208a42dfffb999130a228ecb35795ebeaa0df",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Campaigns.git;98d99a3a1d620856891abeb35d3d979eb8d81abd",
+      "vcs-version": "98d99a3a1d620856891abeb35d3d979eb8d81abd",
       "version": "0.2.0"
      },
      {
@@ -12893,10 +12918,10 @@
       "name": "WikimediaEvents",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:WikimediaEvents",
-      "vcs-date": "2016-09-19T19:31:46Z",
+      "vcs-date": "2016-09-27T16:22:45Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikimediaEvents.git;10e5d3bb6a9a0cc65543503cef02c41a4e1650dd",
-      "vcs-version": "10e5d3bb6a9a0cc65543503cef02c41a4e1650dd",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/WikimediaEvents.git;f57ed2be731506ad693af5b7db4341ee8dfdefb6",
+      "vcs-version": "f57ed2be731506ad693af5b7db4341ee8dfdefb6",
       "version": "1.1.0"
      },
      {
@@ -12934,10 +12959,10 @@
       "name": "UniversalLanguageSelector",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector",
-      "vcs-date": "2016-09-20T12:22:51Z",
+      "vcs-date": "2016-10-02T08:43:08Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/UniversalLanguageSelector.git;fda55e2ab18beba6bf5462dd4fcb71d49ba8184d",
-      "vcs-version": "fda55e2ab18beba6bf5462dd4fcb71d49ba8184d",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/UniversalLanguageSelector.git;f8af863a56a557acbef6ae93ef104c19a606dc07",
+      "vcs-version": "f8af863a56a557acbef6ae93ef104c19a606dc07",
       "version": "2016-04-06"
      },
      {
@@ -12948,10 +12973,10 @@
       "name": "Graph",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Graph",
-      "vcs-date": "2016-09-20T04:06:20Z",
+      "vcs-date": "2016-09-27T16:00:21Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Graph.git;96d39993e349026c0f6b2b8d4ffd5e9c4ad282b0",
-      "vcs-version": "96d39993e349026c0f6b2b8d4ffd5e9c4ad282b0"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Graph.git;ce2d0ae072fb5e72824fd1dfd3d7cd2590aa5a29",
+      "vcs-version": "ce2d0ae072fb5e72824fd1dfd3d7cd2590aa5a29"
      },
      {
       "author": "Aaron Schulz, Chris Steipp, Brad Jorsch",
@@ -12961,10 +12986,10 @@
       "name": "OAuth",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:OAuth",
-      "vcs-date": "2016-09-19T20:58:30Z",
+      "vcs-date": "2016-10-03T15:29:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/OAuth.git;f68d3e9bb36ad2a39a3f598daf2de818e2f9244e",
-      "vcs-version": "f68d3e9bb36ad2a39a3f598daf2de818e2f9244e"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/OAuth.git;a440157fdf87d6d8d8efd1d2694a7de45c86e7e9",
+      "vcs-version": "a440157fdf87d6d8d8efd1d2694a7de45c86e7e9"
      },
      {
       "author": "Tim Starling",
@@ -12986,10 +13011,10 @@
       "name": "OATHAuth",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:OATHAuth",
-      "vcs-date": "2016-09-17T18:05:17Z",
+      "vcs-date": "2016-10-02T12:25:59Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/OATHAuth.git;3dc8dc3b1e5ff0b9488b6f1786cbd6e9d61db65d",
-      "vcs-version": "3dc8dc3b1e5ff0b9488b6f1786cbd6e9d61db65d",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/OATHAuth.git;52686c04b7405e54f9a74af77ef229fce8084944",
+      "vcs-version": "52686c04b7405e54f9a74af77ef229fce8084944",
       "version": "0.2.1"
      },
      {
@@ -13004,7 +13029,7 @@
       "vcs-system": "git",
       "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/EventBus.git;d055bde0bba8787598b0833cc6c11c5daa7074a0",
       "vcs-version": "d055bde0bba8787598b0833cc6c11c5daa7074a0",
-      "version": "0.2.10"
+      "version": "0.2.11"
      },
      {
       "author": "Yuri Astrakhan, Max Semenik, Ed Sanders, Julien Girault",
@@ -13015,10 +13040,10 @@
       "name": "Kartographer",
       "type": "other",
       "url": "https://www.mediawiki.org/wiki/Extension:Kartographer",
-      "vcs-date": "2016-09-20T20:39:19Z",
+      "vcs-date": "2016-10-03T18:41:14Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Kartographer.git;31fef4e688a8c0bc0be9a87cdc3fced1c7235dff",
-      "vcs-version": "31fef4e688a8c0bc0be9a87cdc3fced1c7235dff"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Kartographer.git;75343fd7b7091baddb50d5744411c96d6eedf043",
+      "vcs-version": "75343fd7b7091baddb50d5744411c96d6eedf043"
      },
      {
       "author": "PediaPress GmbH, Siebrand Mazeland, Marcin Cieślak",
@@ -13028,10 +13053,10 @@
       "name": "Collection",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Collection",
-      "vcs-date": "2016-09-20T16:01:38Z",
+      "vcs-date": "2016-10-03T20:11:13Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Collection.git;b140b0c25b0d420c10eac13c891241405a51084d",
-      "vcs-version": "b140b0c25b0d420c10eac13c891241405a51084d",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Collection.git;84061a31d17f36252805c41ee55df5ab0e4fc60a",
+      "vcs-version": "84061a31d17f36252805c41ee55df5ab0e4fc60a",
       "version": "1.7.0"
      },
      {
@@ -13042,10 +13067,10 @@
       "name": "Echo",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Echo",
-      "vcs-date": "2016-09-20T20:38:11Z",
+      "vcs-date": "2016-10-04T10:19:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Echo.git;0e1a70da649ba275ef53aad0b9615812e68ef638",
-      "vcs-version": "0e1a70da649ba275ef53aad0b9615812e68ef638"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Echo.git;50384e2f30663271f31891c2ef649f1061926835",
+      "vcs-version": "50384e2f30663271f31891c2ef649f1061926835"
      },
      {
       "author": "Tim Starling, Brion Vibber, Victor Vasiliev, Alexandre Emsenhuber, Sam Reed",
@@ -13055,10 +13080,10 @@
       "name": "SiteMatrix",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:SiteMatrix",
-      "vcs-date": "2016-09-20T19:32:16Z",
+      "vcs-date": "2016-09-26T20:42:32Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SiteMatrix.git;899f4bb4c4390582eec0c090662b72ada3c81103",
-      "vcs-version": "899f4bb4c4390582eec0c090662b72ada3c81103",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SiteMatrix.git;b4565282e1852aa777f6907a5cbfe16daf43dbf7",
+      "vcs-version": "b4565282e1852aa777f6907a5cbfe16daf43dbf7",
       "version": "1.4.0"
      },
      {
@@ -13069,10 +13094,10 @@
       "name": "CiteThisPage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:CiteThisPage",
-      "vcs-date": "2016-09-19T22:06:20Z",
+      "vcs-date": "2016-10-02T08:35:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CiteThisPage.git;32a47712b363c4eb78b01d1f0879b481f9f1a252",
-      "vcs-version": "32a47712b363c4eb78b01d1f0879b481f9f1a252"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CiteThisPage.git;729a55c3640224f17fa44ea422810beb59a78063",
+      "vcs-version": "729a55c3640224f17fa44ea422810beb59a78063"
      },
      {
       "author": "Yuvi Panda, Prateek Saxena, Tim Starling, Kunal Mehta",
@@ -13096,10 +13121,10 @@
       "name": "Renameuser",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Renameuser",
-      "vcs-date": "2016-08-24T08:36:08Z",
+      "vcs-date": "2016-09-22T21:41:05Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Renameuser.git;5581c47e06db2ac37a311c2279963e95e74fc79a",
-      "vcs-version": "5581c47e06db2ac37a311c2279963e95e74fc79a"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Renameuser.git;db120ad118fc2c8ce5d15626f58d7bd42a2de354",
+      "vcs-version": "db120ad118fc2c8ce5d15626f58d7bd42a2de354"
      },
      {
       "author": "Brion Vibber, Jeroen De Dauw",
@@ -13109,10 +13134,10 @@
       "name": "Nuke",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Nuke",
-      "vcs-date": "2016-09-19T20:58:20Z",
+      "vcs-date": "2016-09-28T03:32:25Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Nuke.git;be7fb7edc1d01fca4115a0789784f0e0fe857885",
-      "vcs-version": "be7fb7edc1d01fca4115a0789784f0e0fe857885",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Nuke.git;d4e5fff8dc1b9d6758f0051a80db31c1e1e024b4",
+      "vcs-version": "d4e5fff8dc1b9d6758f0051a80db31c1e1e024b4",
       "version": "1.2.0"
      },
      {
@@ -13123,10 +13148,10 @@
       "name": "Central Auth",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Brad Jorsch",
@@ -13136,10 +13161,10 @@
       "name": "ApiFeatureUsage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:ApiFeatureUsage",
-      "vcs-date": "2016-09-19T20:49:23Z",
+      "vcs-date": "2016-10-02T08:52:48Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ApiFeatureUsage.git;ef2c1a65898b7775ea7e92dd36c2c0e9d4e154b3",
-      "vcs-version": "ef2c1a65898b7775ea7e92dd36c2c0e9d4e154b3",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ApiFeatureUsage.git;c9c565c90e67f2ac0c60bd764d07d34b11d8c244",
+      "vcs-version": "c9c565c90e67f2ac0c60bd764d07d34b11d8c244",
       "version": "1.0"
      },
      {
@@ -13150,10 +13175,10 @@
       "name": "Global Usage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:GlobalUsage",
-      "vcs-date": "2016-09-20T21:00:43Z",
+      "vcs-date": "2016-10-02T08:38:25Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalUsage.git;3909c122329b0d38984bc786f42a01dd6c2680bf",
-      "vcs-version": "3909c122329b0d38984bc786f42a01dd6c2680bf",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GlobalUsage.git;296358d8ed06f47d691e43283d9d914bcd6e46ca",
+      "vcs-version": "296358d8ed06f47d691e43283d9d914bcd6e46ca",
       "version": "2.1.0"
      },
      {
@@ -13164,10 +13189,10 @@
       "name": "MassMessage",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:MassMessage",
-      "vcs-date": "2016-09-20T19:32:12Z",
+      "vcs-date": "2016-10-04T06:39:01Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MassMessage.git;38ee06aadf85f6737e64fba5993172c8e0481e9a",
-      "vcs-version": "38ee06aadf85f6737e64fba5993172c8e0481e9a",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/MassMessage.git;8f9c023f96cba4a97a930d49b5c57d6eeb69b10b",
+      "vcs-version": "8f9c023f96cba4a97a930d49b5c57d6eeb69b10b",
       "version": "0.4.0"
      },
      {
@@ -13178,10 +13203,10 @@
       "name": "Interwiki",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:Interwiki",
-      "vcs-date": "2016-09-19T20:56:04Z",
+      "vcs-date": "2016-09-29T21:00:45Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Interwiki.git;df3cb183ba50f25f35c66409f492befddbd9a0d6",
-      "vcs-version": "df3cb183ba50f25f35c66409f492befddbd9a0d6",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Interwiki.git;609843a4dec55ec267830131082cc81bc1ea5c06",
+      "vcs-version": "609843a4dec55ec267830131082cc81bc1ea5c06",
       "version": "3.1 20160307"
      },
      {
@@ -13192,10 +13217,10 @@
       "name": "UserMerge",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:UserMerge",
-      "vcs-date": "2016-09-07T06:52:04Z",
+      "vcs-date": "2016-10-03T21:20:57Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/UserMerge.git;81ab6781aea7ef11e252f533430ae2ea4b1e10ae",
-      "vcs-version": "81ab6781aea7ef11e252f533430ae2ea4b1e10ae",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/UserMerge.git;e0af3a26c2f5a3872e037df6718aa0c99fd5cccd",
+      "vcs-version": "e0af3a26c2f5a3872e037df6718aa0c99fd5cccd",
       "version": "1.10.0"
      },
      {
@@ -13207,10 +13232,10 @@
       "name": "ContentTranslation",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:ContentTranslation",
-      "vcs-date": "2016-09-19T20:52:46Z",
+      "vcs-date": "2016-10-03T03:42:23Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ContentTranslation.git;266f1fa3d70f576f9f1927b2d7e131c00259f8f2",
-      "vcs-version": "266f1fa3d70f576f9f1927b2d7e131c00259f8f2"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ContentTranslation.git;25cb86eb1071660cf3b22e3c8d63f6980217b748",
+      "vcs-version": "25cb86eb1071660cf3b22e3c8d63f6980217b748"
      },
      {
       "author": "Brad Jorsch",
@@ -13220,10 +13245,10 @@
       "name": "TemplateSandbox",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:TemplateSandbox",
-      "vcs-date": "2016-09-15T21:48:53Z",
+      "vcs-date": "2016-09-25T20:25:27Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TemplateSandbox.git;c1c70643e40936e03fbfb4a45ae3d6388d790504",
-      "vcs-version": "c1c70643e40936e03fbfb4a45ae3d6388d790504",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TemplateSandbox.git;96c32ac9a098a13596843f6f50081734653c3f90",
+      "vcs-version": "96c32ac9a098a13596843f6f50081734653c3f90",
       "version": "1.1.0"
      },
      {
@@ -13234,10 +13259,10 @@
       "name": "CheckUser",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:CheckUser",
-      "vcs-date": "2016-09-20T20:37:47Z",
+      "vcs-date": "2016-09-28T20:23:27Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CheckUser.git;da6dc2963b178d8f373f5ec6dca13594ccd20b54",
-      "vcs-version": "da6dc2963b178d8f373f5ec6dca13594ccd20b54",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CheckUser.git;13ced2faa611a2b5603acddf30fcf999a631e76c",
+      "vcs-version": "13ced2faa611a2b5603acddf30fcf999a631e76c",
       "version": "2.4"
      },
      {
@@ -13248,10 +13273,10 @@
       "name": "Renameuser for CentralAuth",
       "type": "specialpage",
       "url": "https://www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Bryan Davis",
@@ -13261,10 +13286,10 @@
       "name": "GlobalRenameRequest",
       "type": "specialpage",
       "url": "//www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Bryan Davis",
@@ -13274,10 +13299,10 @@
       "name": "GlobalRenameQueue",
       "type": "specialpage",
       "url": "//www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Victor Vasiliev, Tim Starling, Brad Jorsch",
@@ -13287,10 +13312,10 @@
       "name": "Scribunto",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:Scribunto",
-      "vcs-date": "2016-09-16T01:38:15Z",
+      "vcs-date": "2016-10-02T08:41:24Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Scribunto.git;7d676c3bd27e7e1a7421cb0a8315f5a215b68a03",
-      "vcs-version": "7d676c3bd27e7e1a7421cb0a8315f5a215b68a03"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Scribunto.git;c922051e4c8e2dcb3ac3085f44c932c67d2e5a08",
+      "vcs-version": "c922051e4c8e2dcb3ac3085f44c932c67d2e5a08"
      },
      {
       "author": "Erik Zachte",
@@ -13300,10 +13325,10 @@
       "name": "EasyTimeline",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:EasyTimeline",
-      "vcs-date": "2016-08-10T00:38:25Z",
+      "vcs-date": "2016-09-28T22:13:04Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/timeline.git;8b5a52f36d0e3f6018011a9a965b26b2dbf5dc6a",
-      "vcs-version": "8b5a52f36d0e3f6018011a9a965b26b2dbf5dc6a"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/timeline.git;4f7b63f6d56bf841cca262c866d83e4dde67df7f",
+      "vcs-version": "4f7b63f6d56bf841cca262c866d83e4dde67df7f"
      },
      {
       "author": "Guillaume Blanchard, Max Semenik",
@@ -13340,10 +13365,10 @@
       "name": "ParserFunctions",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:ParserFunctions",
-      "vcs-date": "2016-09-10T21:30:14Z",
+      "vcs-date": "2016-09-26T20:41:39Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ParserFunctions.git;c417f26c85ed5944f2df23ef0c761ee7794f17f7",
-      "vcs-version": "c417f26c85ed5944f2df23ef0c761ee7794f17f7",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ParserFunctions.git;33e2948d2b76ea61d641f77dd42ec6a9d3a87927",
+      "vcs-version": "33e2948d2b76ea61d641f77dd42ec6a9d3a87927",
       "version": "1.6.0"
      },
      {
@@ -13355,10 +13380,10 @@
       "name": "Cite",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:Cite",
-      "vcs-date": "2016-09-20T20:55:42Z",
+      "vcs-date": "2016-10-03T20:00:30Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Cite.git;fdb25a79aac2e5b9a77ae9271c1883f2ce580934",
-      "vcs-version": "fdb25a79aac2e5b9a77ae9271c1883f2ce580934"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Cite.git;85fc76a12be8e181c1dd6cff4f660a19578f4305",
+      "vcs-version": "85fc76a12be8e181c1dd6cff4f660a19578f4305"
      },
      {
       "author": "Erik Moeller, Leonardo Pimenta, Rob Church, Trevor Parscal, DaSch",
@@ -13383,10 +13408,10 @@
       "name": "ImageMap",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:ImageMap",
-      "vcs-date": "2016-08-28T20:37:47Z",
+      "vcs-date": "2016-09-28T03:31:48Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ImageMap.git;aef77622ee2dbde07412250e4f8b356229676b77",
-      "vcs-version": "aef77622ee2dbde07412250e4f8b356229676b77"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ImageMap.git;95ab6978be94c48a07248ad7988953531b5617ee",
+      "vcs-version": "95ab6978be94c48a07248ad7988953531b5617ee"
      },
      {
       "author": "Brion Vibber, Tim Starling, Rob Church, Niklas Laxström, Ori Livneh, Ed Sanders",
@@ -13396,10 +13421,10 @@
       "name": "SyntaxHighlight",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi",
-      "vcs-date": "2016-09-06T20:46:58Z",
+      "vcs-date": "2016-10-02T08:42:08Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SyntaxHighlight_GeSHi.git;5d7c0037ce9a3ca7f67c8120c5ca7eb44d30ed81",
-      "vcs-version": "5d7c0037ce9a3ca7f67c8120c5ca7eb44d30ed81",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SyntaxHighlight_GeSHi.git;41b3de6845add440a9321d9d4473f363d1a7a9c0",
+      "vcs-version": "41b3de6845add440a9321d9d4473f363d1a7a9c0",
       "version": "2.0"
      },
      {
@@ -13423,10 +13448,10 @@
       "name": "CategoryTree",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:CategoryTree",
-      "vcs-date": "2016-09-19T20:50:40Z",
+      "vcs-date": "2016-09-28T20:23:00Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CategoryTree.git;d896dc10283094b87e195a40588c6b2b81c70c50",
-      "vcs-version": "d896dc10283094b87e195a40588c6b2b81c70c50"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CategoryTree.git;0c3c9513be46f8691085fd5d733caa0c9a3f0438",
+      "vcs-version": "0c3c9513be46f8691085fd5d733caa0c9a3f0438"
      },
      {
       "author": "Steve Sanbeg",
@@ -13449,10 +13474,10 @@
       "name": "TemplateData",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:TemplateData",
-      "vcs-date": "2016-09-20T19:32:18Z",
+      "vcs-date": "2016-09-27T20:39:23Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TemplateData.git;1ff0c37b70efd035971676b6266c5588b9dd0e00",
-      "vcs-version": "1ff0c37b70efd035971676b6266c5588b9dd0e00",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TemplateData.git;ca2970db0e543430ad94adf4e0a9fd841f2843ab",
+      "vcs-version": "ca2970db0e543430ad94adf4e0a9fd841f2843ab",
       "version": "0.1.1"
      },
      {
@@ -13463,10 +13488,10 @@
       "name": "Math",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:Math",
-      "vcs-date": "2016-09-19T20:57:17Z",
+      "vcs-date": "2016-10-02T08:39:46Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Math.git;6e006f8632c130f4321023bb4c96dbd8d39e75ec",
-      "vcs-version": "6e006f8632c130f4321023bb4c96dbd8d39e75ec",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Math.git;7845c00d3127d3025291eb941c67991b9bb466ba",
+      "vcs-version": "7845c00d3127d3025291eb941c67991b9bb466ba",
       "version": "3.0.0"
      },
      {
@@ -13477,10 +13502,10 @@
       "name": "Babel",
       "type": "parserhook",
       "url": "https://www.mediawiki.org/wiki/Extension:Babel",
-      "vcs-date": "2016-09-20T20:37:15Z",
+      "vcs-date": "2016-10-04T07:07:45Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Babel.git;8428be6e1bd466f0ee06b6254365b891c559217d",
-      "vcs-version": "8428be6e1bd466f0ee06b6254365b891c559217d",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Babel.git;cd7d1a809af412d5c593574915b0b07dc01b9b16",
+      "vcs-version": "cd7d1a809af412d5c593574915b0b07dc01b9b16",
       "version": "1.10.0"
      },
      {
@@ -13563,7 +13588,7 @@
       "name": "Purtle",
       "type": "purtle",
       "url": "https://mediawiki.org/wiki/Purtle",
-      "version": "1.0"
+      "version": "1.0.3"
      },
      {
       "author": "[http://www.snater.com H. Snater]",
@@ -13573,7 +13598,7 @@
       "name": "Wikibase Serialization JavaScript",
       "type": "wikibase",
       "url": "https://github.com/wmde/WikibaseSerializationJavaScript",
-      "version": "2.0.7"
+      "version": "2.0.8"
      },
      {
       "author": "[http://www.snater.com H. Snater]",
@@ -13647,7 +13672,7 @@
       "name": "Wikibase DataModel JavaScript",
       "type": "wikibase",
       "url": "https://github.com/wmde/WikibaseDataModelJavascript",
-      "version": "3.0.0"
+      "version": "3.0.1"
      },
      {
       "author": "[https://www.mediawiki.org/wiki/User:Jeroen_De_Dauw Jeroen De Dauw]",
@@ -13690,10 +13715,10 @@
       "name": "GettingStarted",
       "type": "api",
       "url": "https://www.mediawiki.org/wiki/Extension:GettingStarted",
-      "vcs-date": "2016-09-17T21:19:14Z",
+      "vcs-date": "2016-10-01T10:04:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GettingStarted.git;3c8e871db83ffd48c8bfbc418fb8383a738e60d8",
-      "vcs-version": "3c8e871db83ffd48c8bfbc418fb8383a738e60d8",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/GettingStarted.git;15bbc2868124860f0b84f8a1ede49f729c409a83",
+      "vcs-version": "15bbc2868124860f0b84f8a1ede49f729c409a83",
       "version": "1.1.0"
      },
      {
@@ -13705,10 +13730,10 @@
       "namemsg": "skinname-vector",
       "type": "skin",
       "url": "https://www.mediawiki.org/wiki/Skin:Vector",
-      "vcs-date": "2016-09-20T20:07:07Z",
+      "vcs-date": "2016-10-03T20:17:40Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/Vector.git;f396bb29ffca1f386294d818c9b38c19b6796b81",
-      "vcs-version": "f396bb29ffca1f386294d818c9b38c19b6796b81"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/Vector.git;2ffc504184d9ce3b410ad1f9010c39a0e1e02cd0",
+      "vcs-version": "2ffc504184d9ce3b410ad1f9010c39a0e1e02cd0"
      },
      {
       "author": "Gabriel Wicke, ...",
@@ -13719,10 +13744,10 @@
       "namemsg": "skinname-monobook",
       "type": "skin",
       "url": "https://www.mediawiki.org/wiki/Skin:MonoBook",
-      "vcs-date": "2016-09-11T20:29:17Z",
+      "vcs-date": "2016-09-24T20:10:58Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/MonoBook.git;880def44bdddbf63013ccab227b70e34168afa78",
-      "vcs-version": "880def44bdddbf63013ccab227b70e34168afa78"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/MonoBook.git;758f8f36cf9891ee4b41e52a2f51cfaa028b8a0c",
+      "vcs-version": "758f8f36cf9891ee4b41e52a2f51cfaa028b8a0c"
      },
      {
       "author": "River Tarnell, ...",
@@ -13733,10 +13758,10 @@
       "namemsg": "skinname-modern",
       "type": "skin",
       "url": "https://www.mediawiki.org/wiki/Skin:Modern",
-      "vcs-date": "2016-09-11T20:29:13Z",
+      "vcs-date": "2016-09-24T20:10:55Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/Modern.git;96d515495749bc068519dfa818dc85015d0ae199",
-      "vcs-version": "96d515495749bc068519dfa818dc85015d0ae199"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/Modern.git;d60d5a5392845c56c3b7f68b0017ca466cc6e443",
+      "vcs-version": "d60d5a5392845c56c3b7f68b0017ca466cc6e443"
      },
      {
       "author": "Lee Daniel Crocker, ...",
@@ -13747,10 +13772,10 @@
       "namemsg": "skinname-cologneblue",
       "type": "skin",
       "url": "https://www.mediawiki.org/wiki/Skin:Cologne_Blue",
-      "vcs-date": "2016-09-11T20:29:06Z",
+      "vcs-date": "2016-09-24T20:10:15Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/CologneBlue.git;e7dfba7382435b7eb526dae5b2289a80595bf24d",
-      "vcs-version": "e7dfba7382435b7eb526dae5b2289a80595bf24d"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/skins/CologneBlue.git;3f1db83b4d2b5102ef9eb030bce3d0f6014d1611",
+      "vcs-version": "3f1db83b4d2b5102ef9eb030bce3d0f6014d1611"
      },
      {
       "author": "Tim Starling, John Du Hart, Daniel Kinzler",
@@ -13760,10 +13785,10 @@
       "name": "SpamBlacklist",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:SpamBlacklist",
-      "vcs-date": "2016-09-20T19:32:17Z",
+      "vcs-date": "2016-09-29T14:14:01Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SpamBlacklist.git;7763a5b090a7a26c6dd1dd2a2203bb710efca589",
-      "vcs-version": "7763a5b090a7a26c6dd1dd2a2203bb710efca589"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/SpamBlacklist.git;637a7435cebb7e25693387469c03fbe2221c4692",
+      "vcs-version": "637a7435cebb7e25693387469c03fbe2221c4692"
      },
      {
       "author": "Victor Vasiliev, Fran Rogers",
@@ -13773,10 +13798,10 @@
       "name": "TitleBlacklist",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:TitleBlacklist",
-      "vcs-date": "2016-09-20T19:32:21Z",
+      "vcs-date": "2016-09-26T20:43:22Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TitleBlacklist.git;75a8813c863f5a1b7688448708ae2c91b798e603",
-      "vcs-version": "75a8813c863f5a1b7688448708ae2c91b798e603",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TitleBlacklist.git;2429c84002157d5c09339aa3c86f7e68ba06426e",
+      "vcs-version": "2429c84002157d5c09339aa3c86f7e68ba06426e",
       "version": "1.5.0"
      },
      {
@@ -13787,10 +13812,10 @@
       "name": "TorBlock",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:TorBlock",
-      "vcs-date": "2016-09-19T21:01:49Z",
+      "vcs-date": "2016-09-27T22:33:18Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TorBlock.git;16e1ccb7d5c37b5b6ac8003de4381a9ccd022fd2",
-      "vcs-version": "16e1ccb7d5c37b5b6ac8003de4381a9ccd022fd2",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/TorBlock.git;e528a4872cb4c4d1a250e743305a4e9ab2936771",
+      "vcs-version": "e528a4872cb4c4d1a250e743305a4e9ab2936771",
       "version": "1.1.0"
      },
      {
@@ -13802,10 +13827,10 @@
       "name": "ConfirmEdit",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:ConfirmEdit",
-      "vcs-date": "2016-09-20T19:32:05Z",
+      "vcs-date": "2016-10-04T05:36:43Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ConfirmEdit.git;ac97e69999be149137a278b6bb096ee09cbdf430",
-      "vcs-version": "ac97e69999be149137a278b6bb096ee09cbdf430",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/ConfirmEdit.git;ed9886f6fd13eae4d318d022eef040c51ebd5971",
+      "vcs-version": "ed9886f6fd13eae4d318d022eef040c51ebd5971",
       "version": "1.4.0"
      },
      {
@@ -13823,10 +13848,10 @@
       "name": "AntiSpoof",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:AntiSpoof",
-      "vcs-date": "2016-09-20T19:57:27Z",
+      "vcs-date": "2016-09-29T22:35:06Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/AntiSpoof.git;c4c7e4b1ef6f4ce112253a8849bbe0321f1ed960",
-      "vcs-version": "c4c7e4b1ef6f4ce112253a8849bbe0321f1ed960"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/AntiSpoof.git;d6115849c313d75bbffb334e0399e0299bdda309",
+      "vcs-version": "d6115849c313d75bbffb334e0399e0299bdda309"
      },
      {
       "author": "Andrew Garrett, River Tarnell, Victor Vasiliev, Marius Hoch",
@@ -13836,10 +13861,10 @@
       "name": "Abuse Filter",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:AbuseFilter",
-      "vcs-date": "2016-09-20T21:00:41Z",
+      "vcs-date": "2016-10-02T09:20:07Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/AbuseFilter.git;958de0a18a47596a3321f626e33bef4fc03fbbed",
-      "vcs-version": "958de0a18a47596a3321f626e33bef4fc03fbbed"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/AbuseFilter.git;b3b9c753166ce258a1092b040143f4f339c11b92",
+      "vcs-version": "b3b9c753166ce258a1092b040143f4f339c11b92"
      },
      {
       "author": "Sam Reed",
@@ -13849,10 +13874,10 @@
       "name": "AntiSpoof for CentralAuth",
       "type": "antispam",
       "url": "https://www.mediawiki.org/wiki/Extension:CentralAuth",
-      "vcs-date": "2016-09-19T20:50:51Z",
+      "vcs-date": "2016-10-04T18:26:53Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;1e036b205d34a56c21d50e882c1f5f1d563f62a4",
-      "vcs-version": "1e036b205d34a56c21d50e882c1f5f1d563f62a4"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/CentralAuth.git;2d5c8409465bfa6ce86677bc11b25cef0228dc28",
+      "vcs-version": "2d5c8409465bfa6ce86677bc11b25cef0228dc28"
      },
      {
       "author": "Alexander Klauer",
@@ -13862,10 +13887,10 @@
       "name": "Score",
       "type": "parserhooks",
       "url": "https://www.mediawiki.org/wiki/Extension:Score",
-      "vcs-date": "2016-09-15T21:02:50Z",
+      "vcs-date": "2016-09-28T22:12:27Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Score.git;3564675c683ae3c7ec2b78179fdc1b7034a49c13",
-      "vcs-version": "3564675c683ae3c7ec2b78179fdc1b7034a49c13",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Score.git;4d2d91123c993a36246ac7c0b48b834d566cf97b",
+      "vcs-version": "4d2d91123c993a36246ac7c0b48b834d566cf97b",
       "version": "0.3.0"
      },
      {
@@ -13876,10 +13901,10 @@
       "name": "Popups",
       "type": "betafeatures",
       "url": "https://www.mediawiki.org/wiki/Extension:Popups",
-      "vcs-date": "2016-09-20T15:48:39Z",
+      "vcs-date": "2016-10-04T10:23:46Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Popups.git;8f001ee4bd4b21b534fc12349050312563014e52",
-      "vcs-version": "8f001ee4bd4b21b534fc12349050312563014e52"
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/Popups.git;46274a5518ee64da9fb2dcff2e84056d817820be",
+      "vcs-version": "46274a5518ee64da9fb2dcff2e84056d817820be"
      },
      {
       "author": "Roland Unger, Hans Musil, Matthias Mullie, Sam Smith",
@@ -13887,10 +13912,10 @@
       "name": "RelatedArticles",
       "type": "betafeatures",
       "url": "https://www.mediawiki.org/wiki/Extension:RelatedArticles",
-      "vcs-date": "2016-09-16T15:02:14Z",
+      "vcs-date": "2016-09-26T15:31:04Z",
       "vcs-system": "git",
-      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/RelatedArticles.git;316073e6ff063ff44d7cafdfe7a76300b0ddccb7",
-      "vcs-version": "316073e6ff063ff44d7cafdfe7a76300b0ddccb7",
+      "vcs-url": "https://phabricator.wikimedia.org/r/revision/mediawiki/extensions/RelatedArticles.git;ec0fbca920d4fa1416d58954731fa69d1640079b",
+      "vcs-version": "ec0fbca920d4fa1416d58954731fa69d1640079b",
       "version": "2.1.0"
      }
     ],
@@ -13914,9 +13939,9 @@
      "favicon": "//fr.wikipedia.org/static/favicon/wikipedia.ico",
      "fixarabicunicode": "",
      "fixmalayalamunicode": "",
-     "generator": "MediaWiki 1.28.0-wmf.20",
-     "git-branch": "wmf/1.28.0-wmf.20",
-     "git-hash": "3b2ecce3ef4cd61994d44c2d835f3635fdda72e0",
+     "generator": "MediaWiki 1.28.0-wmf.21",
+     "git-branch": "wmf/1.28.0-wmf.21",
+     "git-hash": "f53099adbfce251a0d529af415d1247cce9f8659",
      "hhvmversion": "3.12.7",
      "imagelimits": [
       {
@@ -13977,7 +14002,7 @@
       300,
       400
      ],
-     "time": "2016-09-24T16:32:25Z",
+     "time": "2016-10-09T00:05:52Z",
      "timeoffset": 120,
      "timezone": "Europe/Paris",
      "titleconversion": "",

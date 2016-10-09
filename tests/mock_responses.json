@@ -961,6 +961,7 @@
    "OAuth",
    "ORES",
    "PDF Handler",
+   "PageAssessments",
    "PageImages",
    "PageTriage",
    "PagedTiffHandler",
@@ -1672,6 +1673,7 @@
    ]
   ],
   "page_error_msg": "\"gobbilygook\" does not match any pages. Try another query!",
+  "page_error_msg_pageid": "Page id \"-1\" does not match any pages. Try another id!",
   "prefixsearch_ar": [
    "Ar",
    "Arthropod",

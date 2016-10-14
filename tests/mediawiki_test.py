@@ -115,6 +115,42 @@ class TestMediaWiki(unittest.TestCase):
         response = site.responses[site.api_url]
         self.assertEqual(site.languages(), response['languages'])
 
+    def test_rate_limit(self):
+        ''' test setting rate limiting '''
+        site = MediaWikiOverloaded()
+        site.rate_limit = True
+        self.assertEqual(site.rate_limit, True)
+        self.assertEqual(site._rate_limit_last_call, None)
+        self.assertEqual(site.rate_limit_min_wait, timedelta(milliseconds=50))
+
+    def test_rate_limit_min_wait(self):
+        ''' test setting rate limiting min wait '''
+        site = MediaWikiOverloaded()
+        site.rate_limit_min_wait = timedelta(milliseconds=150)
+        self.assertEqual(site.rate_limit, False)
+        self.assertEqual(site._rate_limit_last_call, None)
+        self.assertEqual(site.rate_limit_min_wait, timedelta(milliseconds=150))
+
+    def test_rate_limit_min_wait_reset(self):
+        ''' test setting rate limiting '''
+        site = MediaWikiOverloaded(rate_limit=True)
+        self.assertNotEqual(site._rate_limit_last_call, None)  # should be set
+        site.rate_limit_min_wait = timedelta(milliseconds=150)
+        self.assertEqual(site._rate_limit_last_call, None)
+        self.assertEqual(site.rate_limit, True)
+        self.assertEqual(site.rate_limit_min_wait, timedelta(milliseconds=150))
+
+    def test_default_timeout(self):
+        ''' set default timeout '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.timeout, None)
+
+    def test_set_timeout(self):
+        ''' test setting timeout '''
+        site = MediaWikiOverloaded()
+        site.timeout = 30
+        self.assertEqual(site.timeout, 30)
+
 
 class TestMediaWikiRandom(unittest.TestCase):
     ''' Test Random Functionality '''

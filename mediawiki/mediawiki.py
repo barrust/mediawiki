@@ -619,9 +619,6 @@ class MediaWiki(object):
             wait_time = (last_call + self._min_wait) - datetime.now()
             time.sleep(int(wait_time.total_seconds()))
 
-        if self._session is None:
-            self._reset_session()
-
         req = self._get_response(params)
 
         if self._rate_limit:

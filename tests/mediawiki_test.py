@@ -29,9 +29,8 @@ class MediaWikiOverloaded(MediaWiki):
                            rate_limit=rate_limit,
                            rate_limit_wait=rate_limit_wait)
 
-    def wiki_request(self, params):
-        ''' override the wiki requests to pull from the mock data '''
-        # json dumping to make python 2.7 tests work correctly
+    def _get_response(self, params):
+        ''' override the __get_response method '''
         new_params = json.dumps(tuple(sorted(params.items())))
         return self.requests[self.api_url][new_params]
 

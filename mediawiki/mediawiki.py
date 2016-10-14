@@ -452,7 +452,6 @@ class MediaWiki(object):
         self._check_query(prefix, 'Prefix must be specified')
 
         query_params = {
-            'action': 'query',
             'list': 'prefixsearch',
             'pssearch': prefix,
             'pslimit': ('max' if results > 500 else results),
@@ -623,13 +622,12 @@ class MediaWiki(object):
         if self._session is None:
             self._reset_session()
 
-        req = self._session.get(self._api_url, params=params,
-                                timeout=self._timeout)
+        req = self._get_response(params)
 
         if self._rate_limit:
             self._rate_limit_last_call = datetime.now()
 
-        return req.json(encoding='utf8')
+        return req
     # end wiki_request
 
     # Protected functions
@@ -681,6 +679,12 @@ class MediaWiki(object):
         ''' check if the query is 'valid' '''
         if value is None or value.strip() == '':
             raise ValueError(message)
+
+    def _get_response(self, params):
+        ''' wrap the call to the requests package '''
+        return self._session.get(self._api_url, params=params,
+                                 timeout=self._timeout).json(encoding='utf8')
+
 # end MediaWiki class
 
 

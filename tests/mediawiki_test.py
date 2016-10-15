@@ -204,7 +204,6 @@ class TestMediaWikiRandom(unittest.TestCase):
     def test_random_value_err_msg(self):
         ''' test that ValueError message thrown from random'''
         site = MediaWikiOverloaded()
-        response = site.responses[site.api_url]
         try:
             site.random(pages=None)
         except ValueError as ex:
@@ -214,7 +213,6 @@ class TestMediaWikiRandom(unittest.TestCase):
     def test_random_value_err(self):
         ''' test that ValueError is thrown from random'''
         site = MediaWikiOverloaded()
-        response = site.responses[site.api_url]
         self.assertRaises(ValueError, lambda: site.random(pages=None))
 
 
@@ -649,6 +647,55 @@ class TestMediaWikiExceptions(unittest.TestCase):
                    'it on GitHub!').format(error)
             self.assertEqual(str(ex), msg)
 
+    def test_check_err_res_http_msg(self):
+        ''' test check query by throwing specific errors '''
+        site = MediaWikiOverloaded()
+        response = dict()
+        response['error'] = dict()
+        response['error']['info'] = 'HTTP request timed out.'
+        query = 'something'
+        try:
+            site._check_error_response(response, query)
+        except HTTPTimeoutError as ex:
+            msg = (u'Searching for "{0}" resulted in a timeout. Try '
+                   'again in a few seconds, and ensure you have rate '
+                   'limiting set to True.').format(query)
+            self.assertEqual(str(ex), msg)
+
+    def test_check_err_res_http(self):
+        ''' test check query by throwing specific errors '''
+        site = MediaWikiOverloaded()
+        response = dict()
+        response['error'] = dict()
+        response['error']['info'] = 'HTTP request timed out.'
+        query = 'something'
+        self.assertRaises(HTTPTimeoutError,
+                          lambda: site._check_error_response(response, query))
+
+    def test_check_er_res_media_msg(self):
+        ''' test check query by throwing specific error message ; mediawiki '''
+        site = MediaWikiOverloaded()
+        response = dict()
+        response['error'] = dict()
+        response['error']['info'] = 'blah blah'
+        query = 'something'
+        try:
+            site._check_error_response(response, query)
+        except MediaWikiException as ex:
+            msg = ('An unknown error occured: "{0}". Please report '
+                   'it on GitHub!').format(response['error']['info'])
+            self.assertEqual(str(ex), msg)
+
+    def test_check_err_res_media(self):
+        ''' test check query by throwing specific errors; mediawiki '''
+        site = MediaWikiOverloaded()
+        response = dict()
+        response['error'] = dict()
+        response['error']['info'] = 'blah blah'
+        query = 'something'
+        self.assertRaises(MediaWikiException,
+                          lambda: site._check_error_response(response, query))
+
 
 # class TestMediaWikiPage(unittest.TestCase):
 #     ''' test the actual wiki_request '''
@@ -659,14 +706,14 @@ class TestMediaWikiExceptions(unittest.TestCase):
 class TestMediaWikiPage(unittest.TestCase):
     ''' Test MediaWiki Pages '''
     def setUp(self):
-        self.site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        api_url = 'http://awoiaf.westeros.org/api.php'
+        self.site = MediaWikiOverloaded(url=api_url)
         self.response = self.site.responses[self.site.api_url]
-        self.pg = self.site.page('arya')
+        self.pag = self.site.page('arya')
 
     def test_page_value_err_msg(self):
         ''' test that ValueError message thrown from random'''
         site = MediaWikiOverloaded()
-        response = site.responses[site.api_url]
         try:
             site.page()
         except ValueError as ex:
@@ -676,66 +723,74 @@ class TestMediaWikiPage(unittest.TestCase):
     def test_page_value_err(self):
         ''' test that ValueError is thrown from random'''
         site = MediaWikiOverloaded()
-        response = site.responses[site.api_url]
-        self.assertRaises(ValueError, lambda: site.page())
+        self.assertRaises(ValueError, lambda: site.page(None))
 
     def test_page_title(self):
         ''' Test a page title '''
-        self.assertEqual(self.pg.title, self.response['arya']['title'])
+        self.assertEqual(self.pag.title, self.response['arya']['title'])
 
     def test_page_pageid(self):
         ''' Test a page pageid '''
-        self.assertEqual(self.pg.pageid, self.response['arya']['pageid'])
+        self.assertEqual(self.pag.pageid, self.response['arya']['pageid'])
 
     def test_page_url(self):
         ''' Test a page url '''
-        self.assertEqual(self.pg.url, self.response['arya']['url'])
+        self.assertEqual(self.pag.url, self.response['arya']['url'])
 
     def test_page_backlinks(self):
         ''' Test a page backlinks '''
-        self.assertEqual(self.pg.backlinks, self.response['arya']['backlinks'])
+        self.assertEqual(self.pag.backlinks,
+                         self.response['arya']['backlinks'])
 
     def test_page_images(self):
         ''' Test a page imsages '''
-        self.assertEqual(self.pg.images, self.response['arya']['images'])
+        self.assertEqual(self.pag.images, self.response['arya']['images'])
 
     def test_page_redirects(self):
         ''' Test a page redirects '''
-        self.assertEqual(self.pg.redirects, self.response['arya']['redirects'])
+        self.assertEqual(self.pag.redirects,
+                         self.response['arya']['redirects'])
 
     def test_page_links(self):
         ''' Test a page links '''
-        self.assertEqual(self.pg.links, self.response['arya']['links'])
+        self.assertEqual(self.pag.links, self.response['arya']['links'])
 
     def test_page_categories(self):
         ''' Test a page categories '''
-        self.assertEqual(self.pg.categories, self.response['arya']['categories'])
+        self.assertEqual(self.pag.categories,
+                         self.response['arya']['categories'])
 
     def test_page_references(self):
         ''' Test a page references '''
-        self.assertEqual(self.pg.references, self.response['arya']['references'])
+        self.assertEqual(self.pag.references,
+                         self.response['arya']['references'])
 
     def test_page_content(self):
         ''' Test a page content '''
-        self.assertEqual(self.pg.content, self.response['arya']['content'])
+        self.assertEqual(self.pag.content,
+                         self.response['arya']['content'])
 
     def test_page_parent_id(self):
         ''' Test a page parent_id '''
-        self.assertEqual(self.pg.parent_id, self.response['arya']['parent_id'])
+        self.assertEqual(self.pag.parent_id,
+                         self.response['arya']['parent_id'])
 
     def test_page_revision_id(self):
         ''' Test a page revision_id '''
-        self.assertEqual(self.pg.revision_id, self.response['arya']['revision_id'])
+        self.assertEqual(self.pag.revision_id,
+                         self.response['arya']['revision_id'])
 
     def test_page_coordinates_none(self):
         ''' Test a page coordinates none '''
-        self.assertEqual(self.pg.coordinates, self.response['arya']['coordinates'])
+        self.assertEqual(self.pag.coordinates,
+                         self.response['arya']['coordinates'])
 
     def test_page_sections(self):
         ''' Test a page sections '''
-        self.assertEqual(self.pg.sections, self.response['arya']['sections'])
+        self.assertEqual(self.pag.sections,
+                         self.response['arya']['sections'])
 
     def test_page_section(self):
         ''' Test a page returning a section '''
-        self.assertEqual(self.pg.section("A Game of Thrones"),
+        self.assertEqual(self.pag.section("A Game of Thrones"),
                          self.response['arya']['section_a_game_of_thrones'])

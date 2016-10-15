@@ -457,6 +457,16 @@ class TestMediaWikiCategoryMembers(unittest.TestCase):
         self.assertEqual(list(ctm), res)
         self.assertEqual(len(res), 5)
 
+    def test_cat_mems_very_large(self):
+        ''' test category members that is larger than the max allowed '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['category_members_very_large']
+        ctm = site.categorymembers('Disambiguation categories', results=None)
+        self.assertEqual(list(ctm), res)
+        self.assertEqual(len(res[0]), 0)
+        self.assertEqual(len(res[1]), 1274)
+
 
 class TestMediaWikiExceptions(unittest.TestCase):
     ''' Test MediaWiki Exceptions '''

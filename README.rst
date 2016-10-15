@@ -2,8 +2,8 @@ MediaWiki
 =========
 .. image:: https://travis-ci.org/barrust/mediawiki.svg?branch=master
     :target: https://travis-ci.org/barrust/mediawiki
-.. image:: https://coveralls.io/repos/github/barrust/mediawiki/badge.svg
-    :target: https://coveralls.io/github/barrust/mediawiki
+.. image:: https://coveralls.io/repos/github/barrust/mediawiki/badge.svg?branch=master
+    :target: https://coveralls.io/github/barrust/mediawiki?branch=master
 .. image:: https://www.quantifiedcode.com/api/v1/project/91ebef7368ca4669aac81c45c48cc2a9/badge.svg
     :target: https://www.quantifiedcode.com/app/project/91ebef7368ca4669aac81c45c48cc2a9
     :alt: Code issues

@@ -825,7 +825,7 @@ class TestMediaWikiPage(unittest.TestCase):
                          self.response['arya']['coordinates'])
 
     def test_page_coordinates(self):
-        ''' Test a page coordinates none '''
+        ''' Test a page coordinates where found '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         pag = site.page('Washington Monument')

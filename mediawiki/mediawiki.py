@@ -11,7 +11,7 @@ import time
 from decimal import (Decimal, DecimalException)
 import requests
 from bs4 import BeautifulSoup
-from .exceptions import (MediaWikiBaseException, MediaWikiException, PageError,
+from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
@@ -728,14 +728,12 @@ class MediaWikiPage(object):
 
         self.__load(redirect=redirect, preload=preload)
 
-        if preload:
-            for prop in ('content', 'summary', 'images', 'references', 'links',
+        preload_props = ['content', 'summary', 'images', 'references', 'links',
                          'sections', 'redirects', 'coordinates', 'backlinks',
-                         'categories'):
-                try:
-                    getattr(self, prop)
-                except MediaWikiBaseException:
-                    pass
+                         'categories']
+        if preload:
+            for prop in preload_props:
+                getattr(self, prop)
         # end __init__
 
     def __repr__(self):

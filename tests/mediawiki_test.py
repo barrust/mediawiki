@@ -430,7 +430,7 @@ class TestMediaWikiCategoryMembers(unittest.TestCase):
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         res = response['category_members_with_subcategories']
-        ctm = site.categorymembers("Chess", results=15, subcategories=True)
+        ctm = site.categorymembers('Chess', results=15, subcategories=True)
         self.assertEqual(list(ctm), res)  # list since json doesn't keep tuple
 
     def test_cat_mems_subcat_default(self):
@@ -438,14 +438,14 @@ class TestMediaWikiCategoryMembers(unittest.TestCase):
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         res = response['category_members_with_subcategories']
-        self.assertEqual(list(site.categorymembers("Chess", results=15)), res)
+        self.assertEqual(list(site.categorymembers('Chess', results=15)), res)
 
     def test_cat_mems_wo_subcats(self):
         ''' test categorymember without subcategories '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         res = response['category_members_without_subcategories']
-        ctm = site.categorymembers("Chess", results=15, subcategories=False)
+        ctm = site.categorymembers('Chess', results=15, subcategories=False)
         self.assertEqual(list(ctm), res)
 
     def test_cat_mems_w_subcats_lim(self):
@@ -453,7 +453,7 @@ class TestMediaWikiCategoryMembers(unittest.TestCase):
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         res = response['category_members_without_subcategories_5']
-        ctm = site.categorymembers("Chess", results=5, subcategories=False)
+        ctm = site.categorymembers('Chess', results=5, subcategories=False)
         self.assertEqual(list(ctm), res)
         self.assertEqual(len(res), 5)
 
@@ -792,5 +792,57 @@ class TestMediaWikiPage(unittest.TestCase):
 
     def test_page_section(self):
         ''' Test a page returning a section '''
-        self.assertEqual(self.pag.section("A Game of Thrones"),
+        self.assertEqual(self.pag.section('A Game of Thrones'),
                          self.response['arya']['section_a_game_of_thrones'])
+
+    def test_page_last_section(self):
+        ''' Test a page returning the last section '''
+        self.assertEqual(self.pag.section('External links'),
+                         self.response['arya']['last_section'])
+
+    def test_page_invalid_section(self):
+        ''' Test a page invalid section '''
+        self.assertEqual(self.pag.section('gobbilygook'), None)
+
+    def test_page_summary(self):
+        ''' test page summary '''
+        self.assertEqual(self.pag.summary, self.response['arya']['summary'])
+
+    def test_page_html(self):
+        ''' test page html '''
+        self.assertEqual(self.pag.html, self.response['arya']['html'])
+
+    def test_page_repr(self):
+        ''' test page representation '''
+        self.assertEqual(str(self.pag), '''<MediaWikiPage 'Arya Stark'>''')
+
+    def test_page_eq(self):
+        ''' test page equality '''
+        tmp = self.site.page('arya')
+        self.assertEqual(self.pag == tmp, True)
+
+    def test_page_neq(self):
+        ''' test page inequality '''
+        tmp = self.site.page('jon snow')
+        self.assertEqual(self.pag == tmp, False)
+        self.assertEqual(self.pag != tmp, True)
+
+    def test_page_neq_attr_err(self):
+        ''' test page inequality by AttributeError '''
+        tmp = self.site.page('arya')
+        del tmp.__dict__['pageid']  # force AttributeError
+        self.assertEqual(self.pag != tmp, True)
+
+    def test_page_preload(self):
+        ''' test preload of page properties '''
+        pag = self.site.page('arya', preload=True)
+        self.assertEqual(hasattr(pag, '_content'), True)
+        self.assertEqual(hasattr(pag, '_summary'), True)
+        self.assertEqual(hasattr(pag, '_images'), True)
+        self.assertEqual(hasattr(pag, '_references'), True)
+        self.assertEqual(hasattr(pag, '_links'), True)
+        self.assertEqual(hasattr(pag, '_sections'), True)
+        self.assertEqual(hasattr(pag, '_redirects'), True)
+        self.assertEqual(hasattr(pag, '_coordinates'), True)
+        self.assertEqual(hasattr(pag, '_backlinks'), True)
+        self.assertEqual(hasattr(pag, '_categories'), True)

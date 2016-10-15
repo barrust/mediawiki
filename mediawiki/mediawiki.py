@@ -582,7 +582,7 @@ class MediaWiki(object):
         .. note:: Title takes precedence over pageid if both are provided
         '''
         if (title is None or title.strip() == '') and pageid is None:
-            raise ValueError('Title or Pageid must be specified')
+            raise ValueError('Either a title or a pageid must be specified')
         elif title:
             if auto_suggest:
                 temp_title = self.suggest(title)

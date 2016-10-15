@@ -151,6 +151,25 @@ class TestMediaWiki(unittest.TestCase):
         site.timeout = 30
         self.assertEqual(site.timeout, 30)
 
+    def test_memoized(self):
+        ''' test returning the memoized cache '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.memoized, dict())
+
+    def test_memoized_not_empty(self):
+        ''' test returning the memoized cache; not empty '''
+        site = MediaWikiOverloaded()
+        site.search('chest set')
+        self.assertNotEqual(site.memoized, dict())
+
+    def test_clear_memoized(self):
+        ''' test clearing the memoized cache '''
+        site = MediaWikiOverloaded()
+        site.search('chest set')
+        self.assertNotEqual(site.memoized, dict())
+        site.clear_memoized()
+        self.assertEqual(site.memoized, dict())
+
 
 class TestMediaWikiRandom(unittest.TestCase):
     ''' Test Random Functionality '''
@@ -639,6 +658,11 @@ class TestMediaWikiExceptions(unittest.TestCase):
 
 class TestMediaWikiPage(unittest.TestCase):
     ''' Test MediaWiki Pages '''
+    def setUp(self):
+        self.site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        self.response = self.site.responses[self.site.api_url]
+        self.pg = self.site.page('arya')
+
     def test_page_value_err_msg(self):
         ''' test that ValueError message thrown from random'''
         site = MediaWikiOverloaded()
@@ -646,7 +670,7 @@ class TestMediaWikiPage(unittest.TestCase):
         try:
             site.page()
         except ValueError as ex:
-            msg = 'Title or Pageid must be specified'
+            msg = 'Either a title or a pageid must be specified'
             self.assertEqual(str(ex), msg)
 
     def test_page_value_err(self):
@@ -655,25 +679,63 @@ class TestMediaWikiPage(unittest.TestCase):
         response = site.responses[site.api_url]
         self.assertRaises(ValueError, lambda: site.page())
 
-    def test_page_and_properties(self):
-        ''' Test a page from ASOIAF wiki with all properties '''
-        # TODO: break up into several tests
-        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
-        response = site.responses[site.api_url]
-        pag = site.page('arya')
-        self.assertEqual(pag.title, response['arya']['title'])
-        self.assertEqual(pag.pageid, response['arya']['pageid'])
-        self.assertEqual(pag.url, response['arya']['url'])
-        self.assertEqual(pag.backlinks, response['arya']['backlinks'])
-        self.assertEqual(pag.images, response['arya']['images'])
-        self.assertEqual(pag.redirects, response['arya']['redirects'])
-        self.assertEqual(pag.links, response['arya']['links'])
-        self.assertEqual(pag.categories, response['arya']['categories'])
-        self.assertEqual(pag.references, response['arya']['references'])
-        self.assertEqual(pag.content, response['arya']['content'])
-        self.assertEqual(pag.parent_id, response['arya']['parent_id'])
-        self.assertEqual(pag.revision_id, response['arya']['revision_id'])
-        self.assertEqual(pag.coordinates, response['arya']['coordinates'])
-        self.assertEqual(pag.sections, response['arya']['sections'])
-        self.assertEqual(pag.section("A Game of Thrones"),
-                         response['arya']['section_a_game_of_thrones'])
+    def test_page_title(self):
+        ''' Test a page title '''
+        self.assertEqual(self.pg.title, self.response['arya']['title'])
+
+    def test_page_pageid(self):
+        ''' Test a page pageid '''
+        self.assertEqual(self.pg.pageid, self.response['arya']['pageid'])
+
+    def test_page_url(self):
+        ''' Test a page url '''
+        self.assertEqual(self.pg.url, self.response['arya']['url'])
+
+    def test_page_backlinks(self):
+        ''' Test a page backlinks '''
+        self.assertEqual(self.pg.backlinks, self.response['arya']['backlinks'])
+
+    def test_page_images(self):
+        ''' Test a page imsages '''
+        self.assertEqual(self.pg.images, self.response['arya']['images'])
+
+    def test_page_redirects(self):
+        ''' Test a page redirects '''
+        self.assertEqual(self.pg.redirects, self.response['arya']['redirects'])
+
+    def test_page_links(self):
+        ''' Test a page links '''
+        self.assertEqual(self.pg.links, self.response['arya']['links'])
+
+    def test_page_categories(self):
+        ''' Test a page categories '''
+        self.assertEqual(self.pg.categories, self.response['arya']['categories'])
+
+    def test_page_references(self):
+        ''' Test a page references '''
+        self.assertEqual(self.pg.references, self.response['arya']['references'])
+
+    def test_page_content(self):
+        ''' Test a page content '''
+        self.assertEqual(self.pg.content, self.response['arya']['content'])
+
+    def test_page_parent_id(self):
+        ''' Test a page parent_id '''
+        self.assertEqual(self.pg.parent_id, self.response['arya']['parent_id'])
+
+    def test_page_revision_id(self):
+        ''' Test a page revision_id '''
+        self.assertEqual(self.pg.revision_id, self.response['arya']['revision_id'])
+
+    def test_page_coordinates_none(self):
+        ''' Test a page coordinates none '''
+        self.assertEqual(self.pg.coordinates, self.response['arya']['coordinates'])
+
+    def test_page_sections(self):
+        ''' Test a page sections '''
+        self.assertEqual(self.pg.sections, self.response['arya']['sections'])
+
+    def test_page_section(self):
+        ''' Test a page returning a section '''
+        self.assertEqual(self.pg.section("A Game of Thrones"),
+                         self.response['arya']['section_a_game_of_thrones'])

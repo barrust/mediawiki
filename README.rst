@@ -1,5 +1,15 @@
 MediaWiki
 =========
+.. image:: https://travis-ci.org/barrust/mediawiki.svg?branch=master
+    :target: https://travis-ci.org/barrust/mediawiki
+.. image:: https://coveralls.io/repos/github/barrust/mediawiki/badge.svg
+    :target: https://coveralls.io/github/barrust/mediawiki
+.. image:: https://www.quantifiedcode.com/api/v1/project/91ebef7368ca4669aac81c45c48cc2a9/badge.svg
+    :target: https://www.quantifiedcode.com/app/project/91ebef7368ca4669aac81c45c48cc2a9
+    :alt: Code issues
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :target: https://opensource.org/licenses/MIT/
+    :alt: License
 
 **mediawiki** is a python wrapper for the MediaWiki API. The goal is to allow
 users to quickly and efficiently pull data from the MediaWiki site of their

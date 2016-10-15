@@ -3802,7 +3802,11 @@
   "suggest_chest_set": "chess set",
   "suggest_new_york": "New York",
   "suggest_no_results": null,
-  "suggest_yonkers": "Yonkers, New York"
+  "suggest_yonkers": "Yonkers, New York",
+  "wash_mon": [
+   "38.88946922000000228081262321211397647857666015625",
+   "-77.03525808000000552056008018553256988525390625"
+  ]
  },
  "http://fr.wikipedia.org/w/api.php": {
   "api": "http://fr.wikipedia.org/w/api.php",

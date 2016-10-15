@@ -824,6 +824,15 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(self.pag.coordinates,
                          self.response['arya']['coordinates'])
 
+    def test_page_coordinates(self):
+        ''' Test a page coordinates none '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        pag = site.page('Washington Monument')
+        coords = pag.coordinates
+        self.assertEqual([str(coords[0]), str(coords[1])],
+                         response['wash_mon'])
+
     def test_page_sections(self):
         ''' Test a page sections '''
         self.assertEqual(self.pag.sections,

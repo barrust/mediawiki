@@ -864,7 +864,6 @@ class TestMediaWikiPage(unittest.TestCase):
     def test_page_redirect_pageid(self):
         ''' test page redirect from page id '''
         site = MediaWikiOverloaded()
-        response = site.responses[site.api_url]
         pag = site.page(pageid=24337758, auto_suggest=False)
         self.assertEqual(str(pag), "<MediaWikiPage 'BPP (complexity)'>")
         self.assertEqual(int(pag.pageid), 4079)

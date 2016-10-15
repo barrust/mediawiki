@@ -18,7 +18,7 @@ from .exceptions import (MediaWikiException, PageError,
 from .utilities import memoize
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.4'
+VERSION = '0.3.5'
 
 
 class MediaWiki(object):
@@ -35,7 +35,7 @@ class MediaWiki(object):
     :type rate_limit: Boolean
     :param rate_limit_wait: Amount of time to wait between requests
     :type rate_limit_wait: timedelta
-     '''
+    '''
 
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,

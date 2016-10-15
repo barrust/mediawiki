@@ -696,11 +696,39 @@ class TestMediaWikiExceptions(unittest.TestCase):
         self.assertRaises(MediaWikiException,
                           lambda: site._check_error_response(response, query))
 
+    def test_check_query_err(self):
+        ''' test _check_query value error '''
+        site = MediaWikiOverloaded()
+        query = None
+        msg = 'Query must be specified'
+        self.assertRaises(ValueError, lambda: site._check_query(query, msg))
 
-# class TestMediaWikiPage(unittest.TestCase):
-#     ''' test the actual wiki_request '''
-#     def test_wiki_request(self):
-#         ''' test wiki request NOT SURE HOW! '''
+    def test_check_query_err_msg(self):
+        ''' test _check_query value error message '''
+        site = MediaWikiOverloaded()
+        query = None
+        msg = 'Query must be specified'
+        try:
+            site._check_query(query, msg)
+        except ValueError as ex:
+            self.assertEqual(str(ex), msg)
+
+
+class TestMediaWikiRequests(unittest.TestCase):
+    ''' test the actual wiki_request '''
+    def test_wiki_request(self):
+        ''' test wiki request by testing the timing.... '''
+        site = MediaWikiOverloaded()
+        # self.assertEqual(site._rate_limit_last_call, None)
+        site.rate_limit = True
+        site.rate_limit_min_wait = timedelta(seconds=2)
+        site.search('chest set')
+        start_time = site._rate_limit_last_call
+        site.opensearch('new york')
+        site.prefixsearch('ar')
+        end_time = site._rate_limit_last_call
+        self.assertGreater(end_time - start_time, timedelta(seconds=2))
+        self.assertNotEqual(site._rate_limit_last_call, None)
 
 
 class TestMediaWikiPage(unittest.TestCase):
@@ -820,6 +848,20 @@ class TestMediaWikiPage(unittest.TestCase):
         ''' test page equality '''
         tmp = self.site.page('arya')
         self.assertEqual(self.pag == tmp, True)
+
+    def test_page_redirect(self):
+        ''' test page redirect '''
+        tmp = self.site.page('arya', auto_suggest=False)
+        self.assertEqual(self.pag == tmp, True)
+
+    def test_page_redirect_pageid(self):
+        ''' test page redirect from page id '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        pag = site.page(pageid=24337758, auto_suggest=False)
+        self.assertEqual(str(pag), "<MediaWikiPage 'BPP (complexity)'>")
+        self.assertEqual(int(pag.pageid), 4079)
+        self.assertEqual(pag.title, 'BPP (complexity)')
 
     def test_page_neq(self):
         ''' test page inequality '''

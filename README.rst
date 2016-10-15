@@ -1,5 +1,17 @@
 MediaWiki
 =========
+.. image:: https://travis-ci.org/barrust/mediawiki.svg?branch=master
+    :target: https://travis-ci.org/barrust/mediawiki
+.. image:: https://coveralls.io/repos/github/barrust/mediawiki/badge.svg
+    :target: https://coveralls.io/github/barrust/mediawiki
+.. image:: https://www.quantifiedcode.com/api/v1/project/91ebef7368ca4669aac81c45c48cc2a9/badge.svg
+    :target: https://www.quantifiedcode.com/app/project/91ebef7368ca4669aac81c45c48cc2a9
+    :alt: Code issues
+.. image:: https://api.codacy.com/project/badge/Grade/afa87d5f5b6e4e66b78e15dedbc097ec
+    :target: https://www.codacy.com/app/barrust/mediawiki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=barrust/mediawiki&amp;utm_campaign=Badge_Grade
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :target: https://opensource.org/licenses/MIT/
+    :alt: License
 
 **mediawiki** is a python wrapper for the MediaWiki API. The goal is to allow
 users to quickly and efficiently pull data from the MediaWiki site of their
@@ -20,7 +32,16 @@ be considerate of the MediaWiki infrastructure.
 
 Installation
 ------------------
-To installing `mediawiki`, simply clone the `repository on GitHub
+
+Pip Installation:
+
+::
+
+    $ pip install pymediawiki
+
+To install from source:
+
+To install `mediawiki`, simply clone the `repository on GitHub
 <https://github.com/barrust/mediawiki>`__, then run from the folder:
 
 ::
@@ -29,29 +50,67 @@ To installing `mediawiki`, simply clone the `repository on GitHub
 
 `mediawiki` supports python versions 2.7 and 3.3 - 3.5
 
-In the future, it would be great if `mediawiki` were available to install
-using pip!
-
-
-Automated Tests
-------------------
-To run automated tests, one must simply run the following command from the
-downloaded folder:
-
-::
-
-    $ python setup.py test
-
 Documentation
 -------------
+
+Documentation of the latest release is hosted on
+`pythonhosted.org <https://pythonhosted.org/pymediawiki/>`__
 
 To build the documentation yourself run:
 
 ::
 
-  $ pip install sphinx
-  $ cd docs/
-  $ make html
+    $ pip install sphinx
+    $ cd docs/
+    $ make html
+
+Automated Tests
+------------------
+
+To run automated tests, one must simply run the following command from the
+downloaded folder:
+
+::
+
+  $ python setup.py test
+
+
+Quickstart
+------------------
+
+Import mediawiki and run a standard search against Wikipedia:
+
+.. code:: python
+
+    >>> from mediawiki import MediaWiki
+    >>> wikipedia = MediaWiki()
+    >>> wikipedia.search('washington')
+
+Run more advanced searches:
+
+.. code:: python
+
+    >>> wikipedia.opensearch('washington')
+    >>> wikipedia.geosearch(title='washington, d.c.')
+    >>> wikipedia.geosearch(latitude='0.0', longitude='0.0')
+    >>> wikipedia.prefixsearch('arm')
+    >>> wikipedia.random(pages=10)
+
+Pull a MediaWiki page and some of the page properties:
+
+.. code:: python
+
+    >>> p = wikipedia.page('Chess')
+    >>> p.title
+    >>> p.summary
+    >>> p.categories
+    >>> p.images
+    >>> p.links
+
+See the
+`Documentation for more examples! <https://pythonhosted.org/pymediawiki/>`__
+
+
 
 Changelog
 ------------------

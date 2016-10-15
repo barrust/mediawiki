@@ -11,10 +11,7 @@ def memoize(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         ''' wrap it up and store info in a cache '''
-        # add it to the class if needed
-        if not hasattr(args[0], '_cache'):
-            args[0]._cache = dict()
-        cache = args[0]._cache
+        cache = args[0].memoized
         if func.__name__ not in cache:
             cache[func.__name__] = dict()
         # build a key; should also consist of the default values

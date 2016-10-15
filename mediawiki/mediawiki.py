@@ -11,14 +11,14 @@ import time
 from decimal import (Decimal, DecimalException)
 import requests
 from bs4 import BeautifulSoup
-from .exceptions import (MediaWikiBaseException, MediaWikiException, PageError,
+from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
 from .utilities import memoize
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.4'
+VERSION = '0.3.5'
 
 
 class MediaWiki(object):
@@ -35,7 +35,7 @@ class MediaWiki(object):
     :type rate_limit: Boolean
     :param rate_limit_wait: Amount of time to wait between requests
     :type rate_limit_wait: timedelta
-     '''
+    '''
 
     def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
@@ -452,7 +452,6 @@ class MediaWiki(object):
         self._check_query(prefix, 'Prefix must be specified')
 
         query_params = {
-            'action': 'query',
             'list': 'prefixsearch',
             'pssearch': prefix,
             'pslimit': ('max' if results > 500 else results),
@@ -583,7 +582,7 @@ class MediaWiki(object):
         .. note:: Title takes precedence over pageid if both are provided
         '''
         if (title is None or title.strip() == '') and pageid is None:
-            raise ValueError('Title or Pageid must be specified')
+            raise ValueError('Either a title or a pageid must be specified')
         elif title:
             if auto_suggest:
                 temp_title = self.suggest(title)
@@ -620,16 +619,12 @@ class MediaWiki(object):
             wait_time = (last_call + self._min_wait) - datetime.now()
             time.sleep(int(wait_time.total_seconds()))
 
-        if self._session is None:
-            self._reset_session()
-
-        req = self._session.get(self._api_url, params=params,
-                                timeout=self._timeout)
+        req = self._get_response(params)
 
         if self._rate_limit:
             self._rate_limit_last_call = datetime.now()
 
-        return req.json(encoding='utf8')
+        return req
     # end wiki_request
 
     # Protected functions
@@ -681,6 +676,12 @@ class MediaWiki(object):
         ''' check if the query is 'valid' '''
         if value is None or value.strip() == '':
             raise ValueError(message)
+
+    def _get_response(self, params):
+        ''' wrap the call to the requests package '''
+        return self._session.get(self._api_url, params=params,
+                                 timeout=self._timeout).json(encoding='utf8')
+
 # end MediaWiki class
 
 
@@ -727,14 +728,12 @@ class MediaWikiPage(object):
 
         self.__load(redirect=redirect, preload=preload)
 
-        if preload:
-            for prop in ('content', 'summary', 'images', 'references', 'links',
+        preload_props = ['content', 'summary', 'images', 'references', 'links',
                          'sections', 'redirects', 'coordinates', 'backlinks',
-                         'categories'):
-                try:
-                    getattr(self, prop)
-                except MediaWikiBaseException:
-                    pass
+                         'categories']
+        if preload:
+            for prop in preload_props:
+                getattr(self, prop)
         # end __init__
 
     def __repr__(self):

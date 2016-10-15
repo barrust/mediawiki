@@ -734,6 +734,7 @@ class TestMediaWikiRequests(unittest.TestCase):
 class TestMediaWikiPage(unittest.TestCase):
     ''' Test MediaWiki Pages '''
     def setUp(self):
+        ''' single function for all the tests (well most of) '''
         api_url = 'http://awoiaf.westeros.org/api.php'
         self.site = MediaWikiOverloaded(url=api_url)
         self.response = self.site.responses[self.site.api_url]
@@ -827,6 +828,12 @@ class TestMediaWikiPage(unittest.TestCase):
         ''' Test a page returning the last section '''
         self.assertEqual(self.pag.section('External links'),
                          self.response['arya']['last_section'])
+
+    def test_page_single_section(self):
+        ''' Test a page returning the last section '''
+        pag = self.site.page('Castos')
+        self.assertEqual(pag.section('References and Notes'),
+                         self.response['castos']['section'])
 
     def test_page_invalid_section(self):
         ''' Test a page invalid section '''

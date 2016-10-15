@@ -2837,6 +2837,24 @@
     }
    }
   },
+  "[[\"action\", \"query\"], [\"explaintext\", \"\"], [\"format\", \"json\"], [\"prop\", \"extracts|revisions\"], [\"rvprop\", \"ids\"], [\"titles\", \"Castos\"]]": {
+   "query": {
+    "pages": {
+     "6182": {
+      "extract": "Archmaester Castos is an archmaester at the Citadel in Oldtown.\n\n\n== References and Notes ==",
+      "ns": 0,
+      "pageid": 6182,
+      "revisions": [
+       {
+        "parentid": 126575,
+        "revid": 152611
+       }
+      ],
+      "title": "Castos"
+     }
+    }
+   }
+  },
   "[[\"action\", \"query\"], [\"explaintext\", \"\"], [\"format\", \"json\"], [\"prop\", \"extracts|revisions\"], [\"rvprop\", \"ids\"], [\"titles\", \"Jon Snow\"]]": {
    "query": {
     "pages": {
@@ -3004,6 +3022,26 @@
     }
    }
   },
+  "[[\"action\", \"query\"], [\"format\", \"json\"], [\"inprop\", \"url\"], [\"ppprop\", \"disambiguation\"], [\"prop\", \"info|pageprops\"], [\"redirects\", \"\"], [\"titles\", \"Castos\"]]": {
+   "query": {
+    "pages": {
+     "6182": {
+      "canonicalurl": "http://awoiaf.westeros.org/index.php/Castos",
+      "contentmodel": "wikitext",
+      "counter": "",
+      "editurl": "http://awoiaf.westeros.org/index.php?title=Castos&action=edit",
+      "fullurl": "http://awoiaf.westeros.org/index.php/Castos",
+      "lastrevid": 152611,
+      "length": 641,
+      "ns": 0,
+      "pageid": 6182,
+      "pagelanguage": "en",
+      "title": "Castos",
+      "touched": "2016-07-18T08:39:04Z"
+     }
+    }
+   }
+  },
   "[[\"action\", \"query\"], [\"format\", \"json\"], [\"inprop\", \"url\"], [\"ppprop\", \"disambiguation\"], [\"prop\", \"info|pageprops\"], [\"redirects\", \"\"], [\"titles\", \"Jon Snow\"]]": {
    "query": {
     "pages": {
@@ -3052,6 +3090,16 @@
      {
       "from": "Arya",
       "to": "Arya Stark"
+     }
+    ]
+   }
+  },
+  "[[\"action\", \"query\"], [\"format\", \"json\"], [\"list\", \"search\"], [\"srinfo\", \"suggestion\"], [\"srlimit\", 1], [\"srprop\", \"\"], [\"srsearch\", \"Castos\"]]": {
+   "query": {
+    "search": [
+     {
+      "ns": 0,
+      "title": "Castos"
      }
     ]
    }
@@ -3422,7 +3470,7 @@
       250,
       300
      ],
-     "time": "2016-10-15T02:14:49Z",
+     "time": "2016-10-15T02:58:56Z",
      "timeoffset": 0,
      "timezone": "UTC",
      "titleconversion": "",
@@ -5229,6 +5277,37 @@
     }
    }
   },
+  "[[\"action\", \"query\"], [\"format\", \"json\"], [\"inprop\", \"url\"], [\"ppprop\", \"disambiguation\"], [\"prop\", \"info|pageprops\"], [\"redirects\", \"\"], [\"titles\", \"castor\"]]": {
+   "batchcomplete": "",
+   "query": {
+    "normalized": [
+     {
+      "from": "castor",
+      "to": "Castor"
+     }
+    ],
+    "pages": {
+     "56203": {
+      "canonicalurl": "https://en.wikipedia.org/wiki/Castor",
+      "contentmodel": "wikitext",
+      "editurl": "https://en.wikipedia.org/w/index.php?title=Castor&action=edit",
+      "fullurl": "https://en.wikipedia.org/wiki/Castor",
+      "lastrevid": 740340773,
+      "length": 3947,
+      "ns": 0,
+      "pageid": 56203,
+      "pagelanguage": "en",
+      "pagelanguagedir": "ltr",
+      "pagelanguagehtmlcode": "en",
+      "pageprops": {
+       "disambiguation": ""
+      },
+      "title": "Castor",
+      "touched": "2016-09-28T09:11:47Z"
+     }
+    }
+   }
+  },
   "[[\"action\", \"query\"], [\"format\", \"json\"], [\"list\", \"prefixsearch\"], [\"pslimit\", 10], [\"psnamespace\", 0], [\"psoffset\", 0], [\"pssearch\", \"ar\"]]": {
    "batchcomplete": "",
    "continue": {
@@ -6770,6 +6849,25 @@
     "searchinfo": {
      "suggestion": "chess set",
      "suggestionsnippet": "<em>chess</em> set"
+    }
+   }
+  },
+  "[[\"action\", \"query\"], [\"format\", \"json\"], [\"list\", \"search\"], [\"srinfo\", \"suggestion\"], [\"srlimit\", 1], [\"srprop\", \"\"], [\"srsearch\", \"Castos\"]]": {
+   "batchcomplete": "",
+   "continue": {
+    "continue": "-||",
+    "sroffset": 1
+   },
+   "query": {
+    "search": [
+     {
+      "ns": 0,
+      "title": "Casto, Lombardy"
+     }
+    ],
+    "searchinfo": {
+     "suggestion": "castor",
+     "suggestionsnippet": "<em>castor</em>"
     }
    }
   },
@@ -10789,7 +10887,7 @@
       300,
       400
      ],
-     "time": "2016-10-15T02:14:49Z",
+     "time": "2016-10-15T02:58:56Z",
      "timeoffset": 0,
      "timezone": "UTC",
      "titleconversion": "",
@@ -12499,6 +12597,32 @@
        }
       ],
       "title": "Bush"
+     }
+    }
+   }
+  },
+  "[[\"action\", \"query\"], [\"format\", \"json\"], [\"prop\", \"revisions\"], [\"rvlimit\", 1], [\"rvparse\", \"\"], [\"rvprop\", \"content\"], [\"titles\", \"castor\"]]": {
+   "continue": {
+    "continue": "||",
+    "rvcontinue": "20160421131305|716389987"
+   },
+   "query": {
+    "normalized": [
+     {
+      "from": "castor",
+      "to": "Castor"
+     }
+    ],
+    "pages": {
+     "56203": {
+      "ns": 0,
+      "pageid": 56203,
+      "revisions": [
+       {
+        "*": "<table role=\"presentation\" class=\"mbox-small plainlinks sistersitebox\" style=\"border:1px solid #aaa;background-color:#f9f9f9\">\n<tr>\n<td class=\"mbox-image\"><a href=\"/wiki/File:Wiktionary-logo-v2.svg\" class=\"image\"><img alt=\"\" src=\"//upload.wikimedia.org/wikipedia/commons/thumb/0/06/Wiktionary-logo-v2.svg/40px-Wiktionary-logo-v2.svg.png\" width=\"40\" height=\"40\" class=\"noviewer\" srcset=\"//upload.wikimedia.org/wikipedia/commons/thumb/0/06/Wiktionary-logo-v2.svg/60px-Wiktionary-logo-v2.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/0/06/Wiktionary-logo-v2.svg/80px-Wiktionary-logo-v2.svg.png 2x\" data-file-width=\"391\" data-file-height=\"391\" /></a></td>\n<td class=\"mbox-text plainlist\">Look up <i><b><a href=\"https://en.wiktionary.org/wiki/castor\" class=\"extiw\" title=\"wiktionary:castor\">castor</a></b></i> in Wiktionary, the free dictionary.</td></tr></table>\n<div style=\"clear: right; margin-bottom: .5em; float: right; padding: .5em 0 .8em 1.4em; background: none; width: auto;\"><div id=\"toc\" class=\"toc\"><div id=\"toctitle\"><h2>Contents</h2></div>\n<ul>\n<li class=\"toclevel-1 tocsection-1\"><a href=\"#Science_and_technology\"><span class=\"tocnumber\">1</span> <span class=\"toctext\">Science and technology</span></a>\n<ul>\n<li class=\"toclevel-2 tocsection-2\"><a href=\"#Biology\"><span class=\"tocnumber\">1.1</span> <span class=\"toctext\">Biology</span></a></li>\n</ul>\n</li>\n<li class=\"toclevel-1 tocsection-3\"><a href=\"#People\"><span class=\"tocnumber\">2</span> <span class=\"toctext\">People</span></a>\n<ul>\n<li class=\"toclevel-2 tocsection-4\"><a href=\"#Given_name\"><span class=\"tocnumber\">2.1</span> <span class=\"toctext\">Given name</span></a></li>\n<li class=\"toclevel-2 tocsection-5\"><a href=\"#Ancient\"><span class=\"tocnumber\">2.2</span> <span class=\"toctext\">Ancient</span></a></li>\n<li class=\"toclevel-2 tocsection-6\"><a href=\"#Modern\"><span class=\"tocnumber\">2.3</span> <span class=\"toctext\">Modern</span></a></li>\n<li class=\"toclevel-2 tocsection-7\"><a href=\"#Surname\"><span class=\"tocnumber\">2.4</span> <span class=\"toctext\">Surname</span></a></li>\n<li class=\"toclevel-2 tocsection-8\"><a href=\"#Fiction\"><span class=\"tocnumber\">2.5</span> <span class=\"toctext\">Fiction</span></a></li>\n</ul>\n</li>\n<li class=\"toclevel-1 tocsection-9\"><a href=\"#Places\"><span class=\"tocnumber\">3</span> <span class=\"toctext\">Places</span></a></li>\n<li class=\"toclevel-1 tocsection-10\"><a href=\"#Other_uses\"><span class=\"tocnumber\">4</span> <span class=\"toctext\">Other uses</span></a></li>\n<li class=\"toclevel-1 tocsection-11\"><a href=\"#See_also\"><span class=\"tocnumber\">5</span> <span class=\"toctext\">See also</span></a></li>\n</ul>\n</div>\n</div>\n<p><b>Castor</b> most commonly refers to:\n</p>\n<ul><li><a href=\"/wiki/Castor_(star)\" title=\"Castor (star)\">Castor (star)</a>, a star in the Gemini constellation</li>\n<li>Castor, one of the Dioscuri/Gemini twins <a href=\"/wiki/Castor_and_Pollux\" title=\"Castor and Pollux\">Castor and Pollux</a> in Graeco-Roman mythology</li></ul>\n<p><b>Castor</b> or <b>CASTOR</b> may also refer to:\n</p>\n<h2><span class=\"mw-headline\" id=\"Science_and_technology\">Science and technology</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=1\" title=\"Edit section: Science and technology\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h2>\n<ul><li><a href=\"/wiki/Castor_(rocket_stage)\" title=\"Castor (rocket stage)\">Castor (rocket stage)</a>, a family of solid-fuel rocket stages and boosters were built by Thiokol (now ATK) and used on a variety of launch vehicles</li>\n<li><a href=\"/wiki/Castor_(framework)\" title=\"Castor (framework)\">Castor (software)</a>, data binding framework for Java</li>\n<li><a href=\"/wiki/CASTOR_(nuclear_waste)\" class=\"mw-redirect\" title=\"CASTOR (nuclear waste)\"><i>CASTOR</i> (nuclear waste)</a> (cask for storage and transport of radioactive material), containers used to transport highly radioactive nuclear waste</li>\n<li><a href=\"/wiki/CASTOR_experiment\" class=\"mw-redirect\" title=\"CASTOR experiment\"><i>CASTOR</i> experiment</a>, \"Centauro and Strange Object Research\", measurement tool in the Compact Muon Solenoid experiment at CERN</li>\n<li><a href=\"/wiki/Castor_sugar\" class=\"mw-redirect\" title=\"Castor sugar\">Castor sugar</a>, superfine sugar for use in cooking</li>\n<li><a href=\"/wiki/Caster\" title=\"Caster\">Caster (or Castor)</a>, an undriven, single, double, or compound wheel</li></ul>\n<h3><span class=\"mw-headline\" id=\"Biology\">Biology</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=2\" title=\"Edit section: Biology\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h3>\n<ul><li><a href=\"/wiki/Castor_oil_plant\" class=\"mw-redirect\" title=\"Castor oil plant\">Castor oil plant</a>, plant from which castor bean grows\n<ul><li><a href=\"/wiki/Castor_oil\" title=\"Castor oil\">Castor oil</a>, oil of the castor bean</li>\n<li><a href=\"/wiki/Castor_wax\" title=\"Castor wax\">Castor wax</a>, type of wax produced from castor oil</li></ul></li>\n<li><i>Castor</i>, a genus name of the <a href=\"/wiki/Beaver\" title=\"Beaver\">beaver</a>\n<ul><li><a href=\"/wiki/Castoreum\" title=\"Castoreum\">Castoreum</a>, natural scent derived from the beaver</li></ul></li></ul>\n<h2><span class=\"mw-headline\" id=\"People\">People</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=3\" title=\"Edit section: People\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h2>\n<h3><span class=\"mw-headline\" id=\"Given_name\">Given name</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=4\" title=\"Edit section: Given name\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h3>\n<h3><span class=\"mw-headline\" id=\"Ancient\">Ancient</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=5\" title=\"Edit section: Ancient\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h3>\n<ul><li><a href=\"/wiki/Castor_of_Rhodes\" title=\"Castor of Rhodes\">Castor of Rhodes</a>, Greek grammarian and rhetorician</li>\n<li><a href=\"/wiki/Drusus_the_Younger\" class=\"mw-redirect\" title=\"Drusus the Younger\">Drusus the Younger</a> (13 BC-23 CE), Roman consul, son of the Emperor Tiberius, nicknamed \"Castor\"</li>\n<li><a href=\"/wiki/Antonius_Castor\" title=\"Antonius Castor\">Antonius Castor</a>, ancient botanist</li>\n<li>Saint Castor, the name of several Christian saints\n<ul><li><a href=\"/wiki/Castor_of_Apt\" title=\"Castor of Apt\">Castor of Apt</a> (died c. 420), French bishop of Apt</li>\n<li><a href=\"/wiki/Castor_of_Karden\" title=\"Castor of Karden\">Castor of Karden</a> (died c. 400), German priest and hermit</li></ul></li></ul>\n<h3><span class=\"mw-headline\" id=\"Modern\">Modern</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=6\" title=\"Edit section: Modern\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h3>\n<ul><li><a href=\"/wiki/Castor_Cantero\" title=\"Castor Cantero\">Castor Cantero</a> (born 1918), Paraguayan football player</li>\n<li><a href=\"/wiki/Castor_McCord\" title=\"Castor McCord\">Castor McCord</a> (1907–1963), American jazz saxophonist</li></ul>\n<h3><span class=\"mw-headline\" id=\"Surname\">Surname</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=7\" title=\"Edit section: Surname\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h3>\n<ul><li><a href=\"/wiki/Betty_Castor\" title=\"Betty Castor\">Betty Castor</a> (born 1941), American educator and politician</li>\n<li><a href=\"/wiki/Brian_Castor\" title=\"Brian Castor\">Brian Castor</a> (1889–1979), English cricketer</li>\n<li><a href=\"/wiki/Bruce_Castor\" title=\"Bruce Castor\">Bruce Castor</a> (born 1961), American lawyer and politician</li>\n<li><a href=\"/wiki/George_A._Castor\" title=\"George A. Castor\">George A. Castor</a> (1855–1906), American politician</li>\n<li><a href=\"/wiki/Helen_Castor\" title=\"Helen Castor\">Helen Castor</a> (born 1968), English historian</li>\n<li><a href=\"/wiki/Jimmy_Castor\" title=\"Jimmy Castor\">Jimmy Castor</a> (born 1947), American musician</li>\n<li><a href=\"/wiki/Kathy_Castor\" title=\"Kathy Castor\">Kathy Castor</a> (born 1966), American politician</li>\n<li><a href=\"/wiki/Stacey_Castor\" title=\"Stacey Castor\">Stacey Castor</a> (born 1968), American murderer</li></ul>\n<h3><span class=\"mw-headline\" id=\"Fiction\">Fiction</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=8\" title=\"Edit section: Fiction\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h3>\n<ul><li><a href=\"/wiki/Castor_Oyl\" title=\"Castor Oyl\">Castor Oyl</a>, fictional character in the <i>Popeye</i> cartoons</li>\n<li><i>Castor Troy</i>, fictional character in the 1997 movie <i><a href=\"/wiki/Face/Off\" title=\"Face/Off\">Face/Off</a></i>, portrayed by Nicolas Cage and John Travolta</li>\n<li><i>Castor</i>, fictional character in the video game <i><a href=\"/wiki/Spartan:_Total_Warrior\" title=\"Spartan: Total Warrior\">Spartan: Total Warrior</a></i></li>\n<li><i>Lord Castor</i>, fictional character in the 2007 movie <i><a href=\"/wiki/The_Harpy\" title=\"The Harpy\">The Harpy</a></i></li>\n<li><i>Castor</i>, fictional character in <a href=\"/wiki/Tron:_Legacy\" title=\"Tron: Legacy\">Tron: Legacy</a>, portrayed by Michael Sheen</li>\n<li>\"Castor, Gobernador\" fictional character in <a href=\"/wiki/The_Courts_of_the_Morning\" title=\"The Courts of the Morning\">The Courts of the Morning</a> by John Buchan</li>\n<li>\"Castor Wilds\" fictional location in <a href=\"/wiki/The_Legend_of_Zelda:_The_Minish_Cap\" title=\"The Legend of Zelda: The Minish Cap\">The Legend of Zelda: The Minish Cap</a> by Nintendo</li></ul>\n<h2><span class=\"mw-headline\" id=\"Places\">Places</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=9\" title=\"Edit section: Places\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h2>\n<ul><li><a href=\"/wiki/Castor,_Alberta\" title=\"Castor, Alberta\">Castor, Alberta</a>, Canada</li>\n<li><a href=\"/wiki/Castor,_Cambridgeshire\" title=\"Castor, Cambridgeshire\">Castor, Cambridgeshire</a>, England</li>\n<li><a href=\"/wiki/Castor,_Louisiana\" title=\"Castor, Louisiana\">Castor, Louisiana</a>, United States</li>\n<li><a href=\"/wiki/Castor_(mountain)\" title=\"Castor (mountain)\">Castor (mountain)</a>, in the Pennine Alps on the border between Switzerland and Italy</li>\n<li><a href=\"/wiki/Castor_Bay\" title=\"Castor Bay\">Castor Bay</a>, Auckland, New Zealand</li>\n<li><a href=\"/wiki/Castor_Creek\" title=\"Castor Creek\">Castor Creek</a>, Louisiana, United States</li>\n<li><a href=\"/wiki/Castor_River_(Missouri)\" title=\"Castor River (Missouri)\">Castor River (Missouri)</a></li>\n<li><a href=\"/wiki/Castor_River_(Ontario)\" title=\"Castor River (Ontario)\">Castor River (Ontario)</a></li>\n<li>Castor, an old name for <a href=\"/wiki/Caistor_St._Edmund\" class=\"mw-redirect\" title=\"Caistor St. Edmund\">Caistor St. Edmund</a>, Norfolk, England</li></ul>\n<h2><span class=\"mw-headline\" id=\"Other_uses\">Other uses</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=10\" title=\"Edit section: Other uses\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h2>\n<ul><li><a href=\"/wiki/Castor_(band)\" title=\"Castor (band)\">Castor (band)</a>, American rock band</li>\n<li><a href=\"/wiki/Castor_Cracking_Group\" title=\"Castor Cracking Group\">Castor Cracking Group</a>, Swedish music group</li>\n<li><a href=\"/wiki/HMS_Castor\" title=\"HMS Castor\">HMS&#160;<i>Castor</i></a>, the name of more than one ship of the British Royal Navy</li>\n<li><a href=\"/wiki/Castor_(1782_ship)\" title=\"Castor (1782 ship)\">Castor (1782 ship)</a>, a vessel launched in 1782 that made one voyage to Bengal for the British <a href=\"/wiki/East_India_Company\" title=\"East India Company\">East India Company</a> and that was last listed in 1808.</li>\n<li>Castor gloves, <a href=\"/wiki/Glove\" title=\"Glove\">gloves</a> made from the skin of lambs or deer</li>\n<li>The Castor, an ergonomic gaming mouse designed and manufactured by the company Mionix.</li></ul>\n<h2><span class=\"mw-headline\" id=\"See_also\">See also</span><span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/w/index.php?title=Castor&amp;action=edit&amp;section=11\" title=\"Edit section: See also\">edit</a><span class=\"mw-editsection-bracket\">]</span></span></h2>\n<ul><li><a href=\"/wiki/Kastor_(disambiguation)\" class=\"mw-redirect mw-disambig\" title=\"Kastor (disambiguation)\">Kastor (disambiguation)</a></li>\n<li><a href=\"/wiki/Gastor_(disambiguation)\" class=\"mw-redirect mw-disambig\" title=\"Gastor (disambiguation)\">Gastor (disambiguation)</a></li>\n<li><a href=\"/wiki/Castro_(disambiguation)\" class=\"mw-redirect mw-disambig\" title=\"Castro (disambiguation)\">Castro (disambiguation)</a></li>\n<li><a href=\"/wiki/Caster_(disambiguation)\" class=\"mw-disambig\" title=\"Caster (disambiguation)\">Caster (disambiguation)</a></li></ul>\n<table id=\"disambigbox\" class=\"metadata plainlinks dmbox dmbox-disambig\" style=\"\" role=\"presentation\">\n<tr>\n<td class=\"mbox-image\" style=\"padding: 2px 0 2px 0.4em;\"> <a href=\"/wiki/File:Disambig_gray.svg\" class=\"image\"><img alt=\"Disambiguation icon\" src=\"//upload.wikimedia.org/wikipedia/en/thumb/5/5f/Disambig_gray.svg/30px-Disambig_gray.svg.png\" width=\"30\" height=\"23\" srcset=\"//upload.wikimedia.org/wikipedia/en/thumb/5/5f/Disambig_gray.svg/45px-Disambig_gray.svg.png 1.5x, //upload.wikimedia.org/wikipedia/en/thumb/5/5f/Disambig_gray.svg/60px-Disambig_gray.svg.png 2x\" data-file-width=\"220\" data-file-height=\"168\" /></a></td>\n<td class=\"mbox-text\" style=\"padding: 0.25em 0.4em; font-style: italic;\"> This <a href=\"/wiki/Help:Disambiguation\" title=\"Help:Disambiguation\">disambiguation</a> page lists  articles associated with the title <b>Castor</b>. <br/> <small>If an <a class=\"external text\" href=\"//en.wikipedia.org/w/index.php?title=Special:WhatLinksHere/Castor&amp;namespace=0\">internal link</a> led you here, you may wish to change the link to point directly to the intended article.</small> </td>\n</tr>\n</table>\n"
+       }
+      ],
+      "title": "Castor"
      }
     }
    }
@@ -14212,7 +14336,7 @@
       300,
       400
      ],
-     "time": "2016-10-15T02:14:49Z",
+     "time": "2016-10-15T02:58:56Z",
      "timeoffset": 120,
      "timezone": "Europe/Paris",
      "titleconversion": "",

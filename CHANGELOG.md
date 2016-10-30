@@ -4,11 +4,18 @@
 
 ### Version 0.3.5
 
+* Updated Exception documentation
+* Fix badges in Readme file
+* Additional test coverage
+
+
+### Version 0.3.5
+
 * Add documentation to README
   * Quickstart information
   * pip install instructions [pypi - pymediawiki](https://pypi.python.org/pypi/pymediawiki/)
   * Additional testing
-  
+
 
 ### Version 0.3.4
 

@@ -417,8 +417,45 @@ class TestMediaWikiPrefixSearch(unittest.TestCase):
         self.assertEqual(len(res), 30)
 
 
-# class TestMediaWikiSummary(unittest.TestCase):
+class TestMediaWikiSummary(unittest.TestCase):
+    ''' Test the summary functionality '''
+    def test_summarize_chars(self):
+        ''' Test sumarize number chars '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['sumarize_chars_50']
+        sumr = site.summary('chess', chars=50)
+        self.assertEqual(res, sumr)
+        self.assertEqual(len(res), 54)
 
+    def test_summarize_sents(self):
+        ''' Test sumarize number sentences '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['sumarize_sent_5']
+        sumr = site.summary('chess', sentences=5)
+        self.assertEqual(res, sumr)
+        self.assertEqual(len(res), 466)
+
+    def test_page_summary_chars(self):
+        ''' Test page summarize - chars '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['sumarize_chars_50']
+        pag = site.page('chess')
+        sumr = pag.summarize(chars=50)
+        self.assertEqual(res, sumr)
+        self.assertEqual(len(res), 54)
+
+    def test_page_summary_sents(self):
+        ''' Test page summarize - sentences '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['sumarize_sent_5']
+        pag = site.page('chess')
+        sumr = pag.summarize(sentences=5)
+        self.assertEqual(res, sumr)
+        self.assertEqual(len(res), 466)
 
 # class TestMediaWikiCategoryTree(unittest.TestCase):
 
@@ -456,6 +493,16 @@ class TestMediaWikiCategoryMembers(unittest.TestCase):
         ctm = site.categorymembers('Chess', results=5, subcategories=False)
         self.assertEqual(list(ctm), res)
         self.assertEqual(len(res), 5)
+
+    def test_cat_mems_very_large(self):
+        ''' test category members that is larger than the max allowed '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['category_members_very_large']
+        ctm = site.categorymembers('Disambiguation categories', results=None)
+        self.assertEqual(list(ctm), res)
+        self.assertEqual(len(res[0]), 0)
+        self.assertEqual(len(res[1]), 1274)
 
 
 class TestMediaWikiExceptions(unittest.TestCase):
@@ -813,6 +860,15 @@ class TestMediaWikiPage(unittest.TestCase):
         ''' Test a page coordinates none '''
         self.assertEqual(self.pag.coordinates,
                          self.response['arya']['coordinates'])
+
+    def test_page_coordinates(self):
+        ''' Test a page coordinates where found '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        pag = site.page('Washington Monument')
+        coords = pag.coordinates
+        self.assertEqual([str(coords[0]), str(coords[1])],
+                         response['wash_mon'])
 
     def test_page_sections(self):
         ''' Test a page sections '''

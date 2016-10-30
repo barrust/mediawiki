@@ -27,7 +27,7 @@ class MediaWikiBaseException(Exception):
 
 
 class MediaWikiException(MediaWikiBaseException):
-    ''' MediaWiki exception class '''
+    ''' MediaWiki Exception Class '''
 
     def __init__(self, error):
         self.error = error
@@ -56,9 +56,11 @@ class PageError(MediaWikiBaseException):
 
 
 class RedirectError(MediaWikiBaseException):
-    '''
-        Exception raised when a page title unexpectedly resolves to
-        a redirect
+    ''' Exception raised when a page title unexpectedly resolves to
+    a redirect
+
+    .. note:: This should only occur if both auto_suggest and redirect \
+    are set to **False**
     '''
 
     def __init__(self, title):
@@ -71,13 +73,13 @@ class RedirectError(MediaWikiBaseException):
 
 
 class DisambiguationError(MediaWikiBaseException):
-    '''
-    Exception raised when a page resolves to a Disambiguation page
+    ''' Exception raised when a page resolves to a Disambiguation page
 
-    The `options` property contains a list of titles of Wikipedia
-    pages that the query may refer to
+    The `options` property contains a list of titles of MediaWiki
+    pages to which the query may refer
 
-    .. note:: `options` only includes titles that link to valid MediaWiki pages
+    .. note:: `options` only includes titles that link to valid \
+    MediaWiki pages
     '''
 
     def __init__(self, title, may_refer_to, details=None):
@@ -90,9 +92,7 @@ class DisambiguationError(MediaWikiBaseException):
 
 
 class HTTPTimeoutError(MediaWikiBaseException):
-    '''
-    Exception raised when a request to the Mediawiki site times out.
-    '''
+    ''' Exception raised when a request to the Mediawiki site times out. '''
 
     def __init__(self, query):
         self.query = query

@@ -2,13 +2,16 @@ MediaWiki
 =========
 .. image:: https://travis-ci.org/barrust/mediawiki.svg?branch=master
     :target: https://travis-ci.org/barrust/mediawiki
+    :alt: Build Status
 .. image:: https://coveralls.io/repos/github/barrust/mediawiki/badge.svg?branch=master
     :target: https://coveralls.io/github/barrust/mediawiki?branch=master
+    :alt: Test Coverage
 .. image:: https://www.quantifiedcode.com/api/v1/project/91ebef7368ca4669aac81c45c48cc2a9/badge.svg
     :target: https://www.quantifiedcode.com/app/project/91ebef7368ca4669aac81c45c48cc2a9
-    :alt: Code issues
+    :alt: Code Issues
 .. image:: https://api.codacy.com/project/badge/Grade/afa87d5f5b6e4e66b78e15dedbc097ec
     :target: https://www.codacy.com/app/barrust/mediawiki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=barrust/mediawiki&amp;utm_campaign=Badge_Grade
+    :alt: Codacy Review
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://opensource.org/licenses/MIT/
     :alt: License

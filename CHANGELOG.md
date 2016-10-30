@@ -2,7 +2,7 @@
 
 ## Current
 
-### Version 0.3.5
+### Version 0.3.6
 
 * Updated Exception documentation
 * Fix badges in Readme file

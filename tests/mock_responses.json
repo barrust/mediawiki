@@ -3803,6 +3803,8 @@
   "suggest_new_york": "New York",
   "suggest_no_results": null,
   "suggest_yonkers": "Yonkers, New York",
+  "sumarize_chars_50": "Chess is a two-player strategy board game played on...",
+  "sumarize_sent_5": "Chess is a two-player strategy board game played on a chessboard, a checkered gameboard with 64 squares arranged in an eight-by-eight grid. Chess is played by millions of people worldwide, both amateurs and professionals.\nEach player begins the game with 16 pieces: one king, one queen, two rooks, two knights, two bishops, and eight pawns. Each of the six piece types moves differently. The most powerful piece is the queen and the least powerful piece is the pawn.",
   "wash_mon": [
    "38.88946922000000228081262321211397647857666015625",
    "-77.03525808000000552056008018553256988525390625"

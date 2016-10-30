@@ -417,8 +417,45 @@ class TestMediaWikiPrefixSearch(unittest.TestCase):
         self.assertEqual(len(res), 30)
 
 
-# class TestMediaWikiSummary(unittest.TestCase):
+class TestMediaWikiSummary(unittest.TestCase):
+    ''' Test the summary functionality '''
+    def test_summarize_chars(self):
+        ''' Test sumarize number chars '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['sumarize_chars_50']
+        sumr = site.summary('chess', chars=50)
+        self.assertEqual(res, sumr)
+        self.assertEqual(len(res), 54)
 
+    def test_summarize_sents(self):
+        ''' Test sumarize number sentences '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['sumarize_sent_5']
+        sumr = site.summary('chess', sentences=5)
+        self.assertEqual(res, sumr)
+        self.assertEqual(len(res), 466)
+
+    def test_page_summary_chars(self):
+        ''' Test page summarize - chars '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['sumarize_chars_50']
+        pag = site.page('chess')
+        sumr = pag.summarize(chars=50)
+        self.assertEqual(res, sumr)
+        self.assertEqual(len(res), 54)
+
+    def test_page_summary_sents(self):
+        ''' Test page summarize - sentences '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['sumarize_sent_5']
+        pag = site.page('chess')
+        sumr = pag.summarize(sentences=5)
+        self.assertEqual(res, sumr)
+        self.assertEqual(len(res), 466)
 
 # class TestMediaWikiCategoryTree(unittest.TestCase):
 

@@ -1,9 +1,36 @@
 '''
 Utility functions
 '''
+import sys
 import json
 import functools
 import os
+import inspect
+
+
+def parse_all_arguments(func):
+    ''' determine all positional and named arguments as a dict '''
+    args = dict()
+    if sys.version_info < (3, 0):
+        func_args = inspect.getargspec(func)
+        if func_args.defaults is not None:
+            val = len(func_args.defaults)
+        else:
+            val = 0
+        if func_args.defaults is not None:
+            for i, itm in enumerate(func_args.args[1:-val]):
+                args[itm] = func_args.defaults[i]
+        for param in func_args.args[1:len(func_args.args) - val]:
+            args[param] = None
+    else:
+        func_args = inspect.signature(func)
+        for itm in list(func_args.parameters)[1:]:
+            param = func_args.parameters[itm]
+            if param.default is param.empty:
+                args[param.name] = None
+            else:
+                args[param.name] = param.default
+    return args
 
 
 def memoize(func):
@@ -14,6 +41,10 @@ def memoize(func):
         cache = args[0].memoized
         if func.__name__ not in cache:
             cache[func.__name__] = dict()
+            if 'defaults' not in cache:
+                cache['defaults'] = dict()
+            cache['defaults'][func.__name__] = parse_all_arguments(func)
+
         # build a key; should also consist of the default values
         tmp = list()
         tmp.extend(args[1:])

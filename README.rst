@@ -1,5 +1,7 @@
 MediaWiki
 =========
+.. image:: https://badge.fury.io/py/pymediawiki.svg
+    :target: https://badge.fury.io/py/pymediawiki
 .. image:: https://travis-ci.org/barrust/mediawiki.svg?branch=master
     :target: https://travis-ci.org/barrust/mediawiki
     :alt: Build Status
@@ -51,7 +53,7 @@ To install `mediawiki`, simply clone the `repository on GitHub
 
     $ python setup.py install
 
-`mediawiki` supports python versions 2.7 and 3.3 - 3.5
+`mediawiki` supports python versions 2.7 and 3.3 - 3.6
 
 Documentation
 -------------

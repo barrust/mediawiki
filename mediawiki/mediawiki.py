@@ -554,16 +554,6 @@ class MediaWiki(object):
             return pages
     # end categorymembers
 
-    # def categorytree(self, category, depth=5):
-    #     ''' Generate the Category Tree data
-    #
-    #     :raises `NotImplementedError`: not implemented
-    #
-    #     .. todo:: implement
-    #     '''
-    #     raise NotImplementedError
-    # end categorytree
-
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
              preload=False):
         ''' Get MediaWiki page based on the provided title or pageid
@@ -1141,12 +1131,15 @@ class MediaWikiPage(object):
                         for li in filtered_lis if li.a]
         disambiguation = list()
         for lis_item in filtered_lis:
-            item = lis_item.find_all('a')[0]
+            item = lis_item.find_all('a')
+            one_disambiguation = dict()
+            one_disambiguation['description'] = lis_item.text
             if item:
-                one_disambiguation = dict()
-                one_disambiguation['title'] = item['title']
-                one_disambiguation['description'] = lis_item.text
-                disambiguation.append(one_disambiguation)
+                one_disambiguation['title'] = item[0]['title']
+            else:
+                # these are non-linked records so double up the text
+                one_disambiguation['title'] = lis_item.text
+            disambiguation.append(one_disambiguation)
         raise DisambiguationError(getattr(self, 'title', page['title']),
                                   may_refer_to,
                                   disambiguation)

@@ -2,6 +2,12 @@
 
 ## Current
 
+### Version 0.3.7
+
+* Memoize support default parameters
+* Add support test for Python 3.6
+
+
 ### Version 0.3.6
 
 * Updated Exception documentation

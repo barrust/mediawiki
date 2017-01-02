@@ -15,20 +15,13 @@ def parse_all_arguments(func):
         func_args = inspect.getargspec(func)
         if func_args.defaults is not None:
             val = len(func_args.defaults)
-        else:
-            val = 0
-        if func_args.defaults is not None:
-            for i, itm in enumerate(func_args.args[1:-val]):
+            for i, itm in enumerate(func_args.args[-val:]):
                 args[itm] = func_args.defaults[i]
-        for param in func_args.args[1:len(func_args.args) - val]:
-            args[param] = None
     else:
         func_args = inspect.signature(func)
         for itm in list(func_args.parameters)[1:]:
             param = func_args.parameters[itm]
-            if param.default is param.empty:
-                args[param.name] = None
-            else:
+            if param.default is not param.empty:
                 args[param.name] = param.default
     return args
 
@@ -44,12 +37,14 @@ def memoize(func):
             if 'defaults' not in cache:
                 cache['defaults'] = dict()
             cache['defaults'][func.__name__] = parse_all_arguments(func)
-
         # build a key; should also consist of the default values
+        defaults = cache['defaults'][func.__name__].copy()
+        for key, val in kwargs.items():
+            defaults[key] = val
         tmp = list()
         tmp.extend(args[1:])
-        for k in sorted(kwargs.keys()):
-            tmp.append('({0}: {1})' .format(k, kwargs[k]))
+        for k in sorted(defaults.keys()):
+            tmp.append('({0}: {1})' .format(k, defaults[k]))
         key = ' - '.join(tmp)
 
         # pull from the cache if it is available

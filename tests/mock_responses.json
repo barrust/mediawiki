@@ -858,7 +858,7 @@
  },
  "http://en.wikipedia.org/w/api.php": {
   "api": "http://en.wikipedia.org/w/api.php",
-  "api_version": "1.28.0",
+  "api_version": "1.29.0",
   "category_members_very_large": [
    [],
    [
@@ -2174,6 +2174,7 @@
    "International Chess Day"
   ],
   "disambiguation_error_msg": "\n\"Bush\" may refer to: \n  All pages with titles containing Bush\n  Bush (1916 automobile)\n  Bush (Beer)\n  Bush (British band)\n  Bush (Canadian band)\n  Bush (Canadian band)\n  Bush (album)\n  Bush (brand)\n  Bush (plant)\n  Bush (surname)\n  Bush Brothers and Company\n  Bush House\n  Bush House (disambiguation)\n  Bush Island (Nunavut)\n  Bush Mechanics\n  Bush Rugby Football Union\n  Bush Terminal\n  Bush Tower\n  Bush baby\n  Bush family\n  Bush, Cornwall\n  Bush, Illinois\n  Bush, Louisiana\n  Bush, Saskatchewan\n  Bushcraft\n  Bushing (disambiguation)\n  George H. W. Bush\n  George W. Bush\n  Jeb Bush\n  Manawatu-Wanganui Region\n  Ralph Waldo Emerson House\n  Shepherd's Bush\n  The Bush (Alaska)\n  The bush\n  USS Bush\n  Wairarapa Bush Rugby Football Union\n  pubic hair",
+  "disambiguation_error_msg_with_empty": "\n\"Oasis (disambiguation)\" may refer to: \n  \"Oasis\" (Do As Infinity song)\n  \"Oasis\" (Gackt song)\n  \"Oasis\" (Roberta Flack song)\n  \"Oasis\" (Star Trek: Enterprise)\n  Amir Haddad\n  Antarctic oasis\n  Astro Oasis\n  Gin Oasis\n  Gregory Maguire\n  Illinois Tollway oasis\n  Isuzu Oasis\n  KOAS\n  Lydia Maria Child\n  MS Oasis of the Seas\n  OASIS (center)\n  OASIS (culfest)\n  OASIS (organization)\n  OASIS operating system\n  OASIS.MASK\n  OASYS (disambiguation)\n  Oasis (1955 film)\n  Oasis (1980s band)\n  Oasis (2002 film)\n  Oasis (Akinori Nakagawa album)\n  Oasis (American band)\n  Oasis (Casablanca)\n  Oasis (Eric Marienthal album)\n  Oasis (Kitaro album)\n  Oasis (O.C. & A.G. album)\n  Oasis (Oasis album)\n  Oasis (Roberta Flack album)\n  Oasis (Shirley Scott album)\n  Oasis (TV series)\n  Oasis (anthology)\n  Oasis (band)\n  Oasis (drink)\n  Oasis (horticulture)\n  Oasis (hotel and casino)\n  Oasis (software)\n  Oasis (video game)\n  Oasis Airlines\n  Oasis Commission\n  Oasis Group\n  Oasis HD\n  Oasis Hong Kong Airlines\n  Oasis LRT Station\n  Oasis Mall\n  Oasis Petroleum\n  Oasis Restaurant\n  Oasis Shopping Centre\n  Oasis Stores\n  Oasis Trust\n  Oasis crater\n  Oasis, Iowa\n  Oasis, Mendocino County, California\n  Oasis, Mono County, California\n  Oasis, Nevada\n  Oasis, Riverside County, California\n  Oasis, Utah\n  Oasis, Wisconsin\n  Open Access Same-Time Information System\n  Open Architecture System Integration Strategy\n  Open Artwork System Interchange Standard\n  Patricia Matthews\n  Pauline Gedge\n  Petru Popescu\n  Ready Player One\n  Sluggy Freelance character\n  The Oasis (1984 film)\n  The Oasis (2008 film)\n  The Oasis (novel)\n  The Oasis Centre\n  Urban oasis\n  Who Killed Amanda Palmer",
   "extensions": [
    "Abuse Filter",
    "AntiSpoof",
@@ -2221,7 +2222,6 @@
    "FancyCaptcha",
    "FeaturedFeeds",
    "Flagged Revisions",
-   "Flow",
    "Gadgets",
    "GeoData",
    "GettingStarted",
@@ -2303,7 +2303,6 @@
    "Wikibase Serialization JavaScript",
    "WikibaseLib",
    "Wikidata Build",
-   "WikidataPageBanner",
    "WikimediaBadges",
    "WikimediaEvents",
    "WikimediaMessages",

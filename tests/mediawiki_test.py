@@ -574,6 +574,17 @@ class TestMediaWikiExceptions(unittest.TestCase):
         except DisambiguationError as ex:
             self.assertEqual(ex.message, response['disambiguation_error_msg'])
 
+    def test_disambiguation_error_msg_w_empty(self):
+        ''' Test that disambiguation error is thrown correctly and no
+        IndexError is thrown '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        try:
+            site.page('Oasis')
+        except DisambiguationError as ex:
+            self.assertEqual(ex.message,
+                             response['disambiguation_error_msg_with_empty'])
+
     def test_geocoord_error(self):
         ''' test geocoord error thrown '''
         site = MediaWikiOverloaded()

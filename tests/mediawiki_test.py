@@ -574,7 +574,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
         except DisambiguationError as ex:
             self.assertEqual(ex.message, response['disambiguation_error_msg'])
 
-    def test_disambiguation_error_msg_w_empty(self):
+    def test_disamb_error_msg_w_empty(self):
         ''' Test that disambiguation error is thrown correctly and no
         IndexError is thrown '''
         site = MediaWikiOverloaded()

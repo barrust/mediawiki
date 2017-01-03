@@ -2,6 +2,11 @@
 
 ## Current
 
+### Version 0.3.8
+
+* Fix empty disambiguation list items
+
+
 ### Version 0.3.7
 
 * Memoize support default parameters

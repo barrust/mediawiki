@@ -3,15 +3,16 @@ Unittest class
 '''
 # -*- coding: utf-8 -*-
 from __future__ import (unicode_literals, print_function)
+import unittest
+import json
+from datetime import timedelta
+from decimal import Decimal
+
 from mediawiki import (MediaWiki, PageError, RedirectError,
                        DisambiguationError, MediaWikiAPIURLError,
                        MediaWikiGeoCoordError, HTTPTimeoutError,
                        MediaWikiException)
 import mediawiki
-import unittest
-import json
-from datetime import timedelta
-from decimal import Decimal
 
 
 class MediaWikiOverloaded(MediaWiki):
@@ -961,3 +962,18 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(hasattr(pag, '_coordinates'), True)
         self.assertEqual(hasattr(pag, '_backlinks'), True)
         self.assertEqual(hasattr(pag, '_categories'), True)
+
+
+class TestMediaWikiRegressions(unittest.TestCase):
+    ''' Add regression tests here for special cases '''
+
+    def test_hidden_file(self):
+        ''' test hidden file issue #14 '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('One Two Three... Infinity')
+        try:
+            page.images
+        except KeyError:
+            self.fail("KeyError exception on hidden file")
+        self.assertEqual(page.images, res['hidden_images'])

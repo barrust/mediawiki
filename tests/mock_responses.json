@@ -2380,6 +2380,9 @@
    "Thomas Richardson House",
    "Ilion, New York"
   ],
+  "hidden_images": [
+   "https://upload.wikimedia.org/wikipedia/en/8/87/One_Two_Three..._Infinity_%28cover%29.jpg"
+  ],
   "invalid_lat_long_geo_msg": "GeoData search resulted in the following error: Invalid coordinate provided - Please use valid coordinates or a proper page title.",
   "invalid_lat_long_value_msg": "Latitude and Longitude must be specified either as a Decimal or in formats that can be coerced into a Decimal.",
   "lang": "en",

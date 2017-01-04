@@ -843,9 +843,9 @@ class MediaWikiPage(object):
                 'gimlimit': 'max',
                 'prop': 'imageinfo',
                 'iiprop': 'url'
-                }
+            }
             for page in self._continued_query(params):
-                if 'imageinfo' in page:
+                if 'imageinfo' in page and 'url' in page['imageinfo'][0]:
                     self._images.append(page['imageinfo'][0]['url'])
             self._images = sorted(self._images)
         return self._images
@@ -887,7 +887,7 @@ class MediaWikiPage(object):
                 'prop': 'categories',
                 'cllimit': 'max',
                 'clshow': '!hidden'
-                }
+            }
             for link in self._continued_query(params):
                 if link['title'].startswith('Category:'):
                     self._categories.append(link['title'][9:])
@@ -913,7 +913,7 @@ class MediaWikiPage(object):
                 'prop': 'coordinates',
                 'colimit': 'max',
                 'titles': self.title
-                }
+            }
             request = self.mediawiki.wiki_request(params)
             res = request['query']['pages'][self.pageid]
             if 'query' in request and 'coordinates' in res:
@@ -935,7 +935,7 @@ class MediaWikiPage(object):
                 'prop': 'links',
                 'plnamespace': 0,
                 'pllimit': 'max'
-                }
+            }
             for link in self._continued_query(params):
                 self._links.append(link['title'])
             self._links = sorted(self._links)
@@ -956,7 +956,7 @@ class MediaWikiPage(object):
                 'prop': 'redirects',
                 'rdprop': 'title',
                 'rdlimit': 'max'
-                }
+            }
             for link in self._continued_query(params):
                 self._redirects.append(link['title'])
             self._redirects = sorted(self._redirects)
@@ -979,7 +979,7 @@ class MediaWikiPage(object):
                 'bllimit': 'max',
                 'blfilterredir': 'nonredirects',
                 'blnamespace': 0
-                }
+            }
             for link in self._continued_query(params, 'backlinks'):
                 self._backlinks.append(link['title'])
             self._backlinks = sorted(self._backlinks)
@@ -1184,7 +1184,7 @@ class MediaWikiPage(object):
             params.update(last_continue)
 
             request = self.mediawiki.wiki_request(params)
-
+            # print(request)
             if 'query' not in request:
                 break
 

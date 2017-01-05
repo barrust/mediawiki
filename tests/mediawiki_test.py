@@ -977,3 +977,10 @@ class TestMediaWikiRegressions(unittest.TestCase):
         except KeyError:
             self.fail("KeyError exception on hidden file")
         self.assertEqual(page.images, res['hidden_images'])
+
+    def test_large_cont_query(self):
+        ''' test known large continued query with continue='||' '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]['large_continued_query']
+        page = site.page('List of named minor planets (numerical)')
+        self.assertEqual(page.links, res)

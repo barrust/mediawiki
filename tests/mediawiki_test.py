@@ -984,3 +984,11 @@ class TestMediaWikiRegressions(unittest.TestCase):
         res = site.responses[site.api_url]['large_continued_query']
         page = site.page('List of named minor planets (numerical)')
         self.assertEqual(page.links, res)
+
+    def test_large_cont_query_images(self):
+        ''' test known large continued query with images '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]['large_continued_query_images']
+        page = site.page('B8 polytope')
+        self.assertEqual(page.images, res)
+        self.assertEqual(len(page.images), 2213)

@@ -18,7 +18,7 @@ from .exceptions import (MediaWikiException, PageError,
 from .utilities import memoize
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.8'
+VERSION = '0.3.9'
 
 
 class MediaWiki(object):
@@ -841,11 +841,11 @@ class MediaWikiPage(object):
             params = {
                 'generator': 'images',
                 'gimlimit': 'max',
-                'prop': 'imageinfo',
+                'prop': 'imageinfo',  # this will be replaced by fileinfo
                 'iiprop': 'url'
-                }
+            }
             for page in self._continued_query(params):
-                if 'imageinfo' in page:
+                if 'imageinfo' in page and 'url' in page['imageinfo'][0]:
                     self._images.append(page['imageinfo'][0]['url'])
             self._images = sorted(self._images)
         return self._images
@@ -887,7 +887,7 @@ class MediaWikiPage(object):
                 'prop': 'categories',
                 'cllimit': 'max',
                 'clshow': '!hidden'
-                }
+            }
             for link in self._continued_query(params):
                 if link['title'].startswith('Category:'):
                     self._categories.append(link['title'][9:])
@@ -913,7 +913,7 @@ class MediaWikiPage(object):
                 'prop': 'coordinates',
                 'colimit': 'max',
                 'titles': self.title
-                }
+            }
             request = self.mediawiki.wiki_request(params)
             res = request['query']['pages'][self.pageid]
             if 'query' in request and 'coordinates' in res:
@@ -935,7 +935,7 @@ class MediaWikiPage(object):
                 'prop': 'links',
                 'plnamespace': 0,
                 'pllimit': 'max'
-                }
+            }
             for link in self._continued_query(params):
                 self._links.append(link['title'])
             self._links = sorted(self._links)
@@ -956,7 +956,7 @@ class MediaWikiPage(object):
                 'prop': 'redirects',
                 'rdprop': 'title',
                 'rdlimit': 'max'
-                }
+            }
             for link in self._continued_query(params):
                 self._redirects.append(link['title'])
             self._redirects = sorted(self._redirects)
@@ -979,7 +979,7 @@ class MediaWikiPage(object):
                 'bllimit': 'max',
                 'blfilterredir': 'nonredirects',
                 'blnamespace': 0
-                }
+            }
             for link in self._continued_query(params, 'backlinks'):
                 self._backlinks.append(link['title'])
             self._backlinks = sorted(self._backlinks)
@@ -1176,12 +1176,12 @@ class MediaWikiPage(object):
         '''
         query_params.update(self.__title_query_param())
 
-        last_continue = dict()
+        last_cont = dict()
         prop = query_params.get('prop')
 
         while True:
             params = query_params.copy()
-            params.update(last_continue)
+            params.update(last_cont)
 
             request = self.mediawiki.wiki_request(params)
 
@@ -1199,10 +1199,10 @@ class MediaWikiPage(object):
                 for datum in pages[self.pageid].get(prop, list()):
                     yield datum
 
-            if 'continue' not in request:
+            if 'continue' not in request or request['continue'] == last_cont:
                 break
 
-            last_continue = request['continue']
+            last_cont = request['continue']
     # end _continued_query
 
     def __title_query_param(self):

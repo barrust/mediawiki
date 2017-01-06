@@ -3,15 +3,29 @@ Unittest class
 '''
 # -*- coding: utf-8 -*-
 from __future__ import (unicode_literals, print_function)
+import unittest
+import json
+from datetime import timedelta
+from decimal import Decimal
+
 from mediawiki import (MediaWiki, PageError, RedirectError,
                        DisambiguationError, MediaWikiAPIURLError,
                        MediaWikiGeoCoordError, HTTPTimeoutError,
                        MediaWikiException)
 import mediawiki
-import unittest
-import json
-from datetime import timedelta
-from decimal import Decimal
+
+class FunctionUseCounter:
+    ''' decorator to keep a running count of how many
+    times function has been called; stop at 50 '''
+    def __init__(self, func):
+        self.func = func
+        self.count = 0
+
+    def __call__(self, *args, **kwargs):
+        self.count += 1
+        if self.count > 50:  # arbitrary large
+            return dict()
+        return self.func(*args, **kwargs)
 
 
 class MediaWikiOverloaded(MediaWiki):
@@ -961,3 +975,42 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(hasattr(pag, '_coordinates'), True)
         self.assertEqual(hasattr(pag, '_backlinks'), True)
         self.assertEqual(hasattr(pag, '_categories'), True)
+
+
+class TestMediaWikiRegressions(unittest.TestCase):
+    ''' Add regression tests here for special cases '''
+
+    def test_hidden_file(self):
+        ''' test hidden file or no url: issue #14 '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('One Two Three... Infinity')
+        try:
+            page.images
+        except KeyError:
+            self.fail("KeyError exception on hidden file")
+        self.assertEqual(page.images, res['hidden_images'])
+
+    def test_large_cont_query(self):
+        ''' test known large continued query with continue='||' '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]['large_continued_query']
+        page = site.page('List of named minor planets (numerical)')
+        self.assertEqual(page.links, res)
+
+    def test_large_cont_query_images(self):
+        ''' test known large continued query with images '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]['large_continued_query_images']
+        page = site.page('B8 polytope')
+        self.assertEqual(page.images, res)
+        self.assertEqual(len(page.images), 2213)
+
+    def test_infinit_loop_images(self):
+        ''' test known image infinite loop: issue #15 '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]['infinite_loop_images']
+        page = site.page('Rober Eryol')
+        site._get_response = FunctionUseCounter(site._get_response)
+        self.assertEqual(page.images, res)
+        self.assertEqual(site._get_response.count, 13)

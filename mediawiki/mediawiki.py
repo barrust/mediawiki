@@ -18,7 +18,7 @@ from .exceptions import (MediaWikiException, PageError,
 from .utilities import memoize
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.8'
+VERSION = '0.3.9'
 
 
 class MediaWiki(object):

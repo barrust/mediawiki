@@ -1007,7 +1007,7 @@ class TestMediaWikiRegressions(unittest.TestCase):
         self.assertEqual(len(page.images), 2213)
 
     def test_infinit_loop_images(self):
-        ''' test known image infinte loop: issue #15 '''
+        ''' test known image infinite loop: issue #15 '''
         site = MediaWikiOverloaded()
         res = site.responses[site.api_url]['infinite_loop_images']
         page = site.page('Rober Eryol')

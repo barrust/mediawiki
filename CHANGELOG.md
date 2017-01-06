@@ -2,6 +2,12 @@
 
 ## Current
 
+### Version 0.3.9
+
+* Fix infinite loop on continued queries: [issue #15](https://github.com/barrust/mediawiki/issues/15)
+ * Check by looking at the continue variable over time; if it is the same, exit
+* Fix image with no url: [issue #14](https://github.com/barrust/mediawiki/issues/14)
+
 ### Version 0.3.8
 
 * Fix empty disambiguation list items
@@ -32,7 +38,8 @@
 
 * Update documentation
 * Better continuous integration
-
+* Better test data: [issue #4](https://github.com/barrust/mediawiki/issues/4)
+* First version on PyPi: [issue #8](https://github.com/barrust/mediawiki/issues/8)
 
 ### Version 0.3.3
 

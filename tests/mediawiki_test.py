@@ -14,7 +14,7 @@ from mediawiki import (MediaWiki, PageError, RedirectError,
                        MediaWikiException)
 import mediawiki
 
-class counter:
+class FunctionUseCounter:
     ''' decorator to keep a running count of how many
     times function has been called; stop at 50 '''
     def __init__(self, func):
@@ -1011,6 +1011,6 @@ class TestMediaWikiRegressions(unittest.TestCase):
         site = MediaWikiOverloaded()
         res = site.responses[site.api_url]['infinite_loop_images']
         page = site.page('Rober Eryol')
-        site._get_response = counter(site._get_response)
+        site._get_response = FunctionUseCounter(site._get_response)
         self.assertEqual(page.images, res)
         self.assertEqual(site._get_response.count, 13)

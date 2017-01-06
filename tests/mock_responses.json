@@ -2383,6 +2383,21 @@
   "hidden_images": [
    "https://upload.wikimedia.org/wikipedia/en/8/87/One_Two_Three..._Infinity_%28cover%29.jpg"
   ],
+  "infinite_loop_images": [
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20110402064434%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20110406094716%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120504092318%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120504092438%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120504100210%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120504145122%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120506051304%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120506051623%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120506182709%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120507174028%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120519143042%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/archive/b/b4/20120519181400%21Flag_of_Turkey.svg",
+   "https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Turkey.svg"
+  ],
   "invalid_lat_long_geo_msg": "GeoData search resulted in the following error: Invalid coordinate provided - Please use valid coordinates or a proper page title.",
   "invalid_lat_long_value_msg": "Latitude and Longitude must be specified either as a Decimal or in formats that can be coerced into a Decimal.",
   "lang": "en",

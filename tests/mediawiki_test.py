@@ -14,6 +14,19 @@ from mediawiki import (MediaWiki, PageError, RedirectError,
                        MediaWikiException)
 import mediawiki
 
+class counter:
+    ''' decorator to keep a running count of how many
+    times function has been called; stop at 50 '''
+    def __init__(self, func):
+        self.func = func
+        self.count = 0
+
+    def __call__(self, *args, **kwargs):
+        self.count += 1
+        if self.count > 50:  # arbitrary large
+            return dict()
+        return self.func(*args, **kwargs)
+
 
 class MediaWikiOverloaded(MediaWiki):
     ''' Overload the MediaWiki class to change how wiki_request works '''
@@ -968,7 +981,7 @@ class TestMediaWikiRegressions(unittest.TestCase):
     ''' Add regression tests here for special cases '''
 
     def test_hidden_file(self):
-        ''' test hidden file issue #14 '''
+        ''' test hidden file or no url: issue #14 '''
         site = MediaWikiOverloaded()
         res = site.responses[site.api_url]
         page = site.page('One Two Three... Infinity')
@@ -992,3 +1005,12 @@ class TestMediaWikiRegressions(unittest.TestCase):
         page = site.page('B8 polytope')
         self.assertEqual(page.images, res)
         self.assertEqual(len(page.images), 2213)
+
+    def test_infinit_loop_images(self):
+        ''' test known image infinte loop: issue #15 '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]['infinite_loop_images']
+        page = site.page('Rober Eryol')
+        site._get_response = counter(site._get_response)
+        self.assertEqual(page.images, res)
+        self.assertEqual(site._get_response.count, 13)

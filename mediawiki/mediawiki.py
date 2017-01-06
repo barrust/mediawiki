@@ -841,7 +841,7 @@ class MediaWikiPage(object):
             params = {
                 'generator': 'images',
                 'gimlimit': 'max',
-                'prop': 'imageinfo',
+                'prop': 'imageinfo',  # this will be replaced by fileinfo
                 'iiprop': 'url'
             }
             for page in self._continued_query(params):
@@ -1176,15 +1176,15 @@ class MediaWikiPage(object):
         '''
         query_params.update(self.__title_query_param())
 
-        last_continue = dict()
+        last_cont = dict()
         prop = query_params.get('prop')
 
         while True:
             params = query_params.copy()
-            params.update(last_continue)
+            params.update(last_cont)
 
             request = self.mediawiki.wiki_request(params)
-            # print(request)
+
             if 'query' not in request:
                 break
 
@@ -1199,10 +1199,10 @@ class MediaWikiPage(object):
                 for datum in pages[self.pageid].get(prop, list()):
                     yield datum
 
-            if 'continue' not in request:
+            if 'continue' not in request or request['continue'] == last_cont:
                 break
 
-            last_continue = request['continue']
+            last_cont = request['continue']
     # end _continued_query
 
     def __title_query_param(self):

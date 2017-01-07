@@ -2,6 +2,10 @@
 
 ## Current
 
+### Version 0.3.10
+
+* Add categorytree support
+
 ### Version 0.3.9
 
 * Fix infinite loop on continued queries: [issue #15](https://github.com/barrust/mediawiki/issues/15)

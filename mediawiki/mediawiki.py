@@ -504,6 +504,8 @@ class MediaWiki(object):
         :param subcategories: Include subcategories (**True**) or not \
         (**False**)
         :type subcategories: Boolean
+        :returns: Either a tuple ([pages], [subcategories]) or just the \
+        list of pages
 
         .. note:: Set results to **None** to get all results
         '''
@@ -520,16 +522,16 @@ class MediaWiki(object):
         subcats = list()
         returned_results = 0
         finished = False
-        last_continue = dict()
+        last_cont = dict()
         while not finished:
             params = search_params.copy()
-            params.update(last_continue)
-            raw_results = self.wiki_request(params)
+            params.update(last_cont)
+            raw_res = self.wiki_request(params)
 
-            self._check_error_response(raw_results, category)
+            self._check_error_response(raw_res, category)
 
-            current_pull = len(raw_results['query']['categorymembers'])
-            for rec in raw_results['query']['categorymembers']:
+            current_pull = len(raw_res['query']['categorymembers'])
+            for rec in raw_res['query']['categorymembers']:
                 if rec['type'] == 'page':
                     pages.append(rec['title'])
                 elif rec['type'] == 'subcat':
@@ -538,30 +540,45 @@ class MediaWiki(object):
                         tmp = tmp[9:]
                     subcats.append(tmp)
 
-            if 'continue' not in raw_results:
+            if 'continue' not in raw_res or last_cont == raw_res['continue']:
                 break
 
             returned_results = returned_results + current_pull
             if results is None or (results - returned_results > 0):
-                last_continue = raw_results['continue']
+                last_cont = raw_res['continue']
             else:
                 finished = True
-
         # end while loop
+
         if subcategories:
             return pages, subcats
         else:
             return pages
     # end categorymembers
 
-    @memoize
+    # @memoize
     def categorytree(self, category, depth=5):
         ''' Generate the Category Tree for the given categories
 
         :param category: Category name
         :type category: string or list of strings
         :param depth: Depth to traverse the tree
-        :type results: integer or None
+        :type depth: integer or None
+        :returns: Dictionary of the category tree structure
+        :rtype: Dictionary
+        :Return Data Structure: Subcategory contains the same recursive \
+        structure
+
+        >>> {
+                'category': {
+                    'depth': Number,
+                    'links': list,
+                    'parent-categories': list,
+                    'sub-categories': dict
+                }
+            }
+
+        .. versionadded:: 0.3.10
 
         .. note:: Set depth to **None** to get the whole tree
         '''
@@ -649,6 +666,9 @@ class MediaWiki(object):
         :param preload: **True:** Load most page properties
         :type preload: Boolean
 
+        :raises  ValueError: when title is blank or None and no pageid is \
+        provided
+        :raises  `mediawiki.exceptions.PageError`: if page does not exist
         .. note:: Title takes precedence over pageid if both are provided
         '''
         if (title is None or title.strip() == '') and pageid is None:

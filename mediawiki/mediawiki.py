@@ -554,6 +554,7 @@ class MediaWiki(object):
             return pages
     # end categorymembers
 
+    @memoize
     def categorytree(self, category, depth=5):
         ''' Generate the Category Tree for the given categories
 

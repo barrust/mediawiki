@@ -554,6 +554,85 @@ class MediaWiki(object):
             return pages
     # end categorymembers
 
+    def categorytree(self, category, depth=5):
+        ''' Generate the Category Tree for the given categories
+
+        :param category: Category name
+        :type category: string or list of strings
+        :param depth: Depth to traverse the tree
+        :type results: integer or None
+
+        .. note:: Set depth to **None** to get the whole tree
+        '''
+        def __cat_tree_rec(cat, depth, tree, level, categories, links):
+            ''' recursive function to build out the tree '''
+            tree[cat] = dict()
+            tree[cat]['depth'] = level
+            tree[cat]['sub-categories'] = dict()
+            tree[cat]['links'] = list()
+            tree[cat]['parent-categories'] = list()
+
+            if cat not in categories:
+                while True:
+                    try:
+                        categories[cat] = self.page('Category:{0}'.format(cat))
+                        categories[cat].categories
+                        links[cat] = self.categorymembers(cat, results=None,
+                                                          subcategories=True)
+                        break
+                    except PageError as e:
+                        raise PageError(cat)
+                    except Exception as e:
+                        time.sleep(1)
+
+            for p in categories[cat].categories:
+                tree[cat]['parent-categories'].append(p)
+
+            for link in links[cat][0]:
+                tree[cat]['links'].append(link)
+
+            if depth and level >= depth:
+                for c in links[cat][1]:
+                    tree[cat]['sub-categories'][c] = None
+            else:
+                for c in links[cat][1]:
+                    __cat_tree_rec(c, depth,
+                                   tree[cat]['sub-categories'], level + 1,
+                                   categories, links)
+            return
+        # end __cat_tree_rec
+
+        ###
+        ### Handle the actual function
+        ###
+
+        # make it simple to use both a list or a single category term
+        if type(category) is not list:
+            cats = [category]
+        else:
+            cats = category
+
+        # parameter verification
+        if len(cats) <= 0:
+            msg = ("CategoryTree: Parameter 'category' must either "
+                   "be a list of one or more categories or a string; "
+                   "provided: '{}'".format(category))
+            raise ValueError(msg)
+
+        if depth is not None and depth < 1:
+            msg = ("CategoryTree: Parameter 'depth' must None (for the full "
+                   "tree) be greater than 0")
+            raise ValueError(msg)
+
+        results = dict()
+        categories = dict()
+        links = dict()
+
+        for cat in cats:
+            __cat_tree_rec(cat, depth, results, 0, categories, links)
+        return results
+    # end categorytree
+
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
              preload=False):
         ''' Get MediaWiki page based on the provided title or pageid

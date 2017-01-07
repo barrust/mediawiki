@@ -603,9 +603,9 @@ class MediaWiki(object):
             return
         # end __cat_tree_rec
 
-        ###
-        ### Handle the actual function
-        ###
+        # ###################################
+        # ### Actual Function Code        ###
+        # ###################################
 
         # make it simple to use both a list or a single category term
         if type(category) is not list:

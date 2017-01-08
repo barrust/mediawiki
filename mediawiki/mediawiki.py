@@ -590,6 +590,7 @@ class MediaWiki(object):
             tree[cat]['sub-categories'] = dict()
             tree[cat]['links'] = list()
             tree[cat]['parent-categories'] = list()
+            parent_cats = list()
 
             if cat not in categories:
                 tries = 0
@@ -598,18 +599,19 @@ class MediaWiki(object):
                         raise MediaWikiCategoryTreeError(cat)
                     try:
                         categories[cat] = self.page('Category:{0}'.format(cat))
-                        categories[cat].categories
+                        parent_cats = categories[cat].categories
                         links[cat] = self.categorymembers(cat, results=None,
                                                           subcategories=True)
-                        tries = 0  # reset the number of tries
                         break
                     except PageError:
                         raise PageError('Category:{0}'.format(cat))
                     except Exception:
                         tries = tries + 1
                         time.sleep(1)
+            else:
+                parent_cats = categories[cat].categories
 
-            for pcat in categories[cat].categories:
+            for pcat in parent_cats:
                 tree[cat]['parent-categories'].append(pcat)
 
             for link in links[cat][0]:

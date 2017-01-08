@@ -598,23 +598,24 @@ class MediaWiki(object):
                         links[cat] = self.categorymembers(cat, results=None,
                                                           subcategories=True)
                         break
-                    except PageError as e:
+                    except PageError:
                         raise PageError(cat)
-                    except Exception as e:
+                    except Exception:
+                        print('{}: sleeping 1 second', cat)
                         time.sleep(1)
 
-            for p in categories[cat].categories:
-                tree[cat]['parent-categories'].append(p)
+            for pcat in categories[cat].categories:
+                tree[cat]['parent-categories'].append(pcat)
 
             for link in links[cat][0]:
                 tree[cat]['links'].append(link)
 
             if depth and level >= depth:
-                for c in links[cat][1]:
-                    tree[cat]['sub-categories'][c] = None
+                for ctg in links[cat][1]:
+                    tree[cat]['sub-categories'][ctg] = None
             else:
-                for c in links[cat][1]:
-                    __cat_tree_rec(c, depth,
+                for ctg in links[cat][1]:
+                    __cat_tree_rec(ctg, depth,
                                    tree[cat]['sub-categories'], level + 1,
                                    categories, links)
             return
@@ -625,13 +626,13 @@ class MediaWiki(object):
         # ###################################
 
         # make it simple to use both a list or a single category term
-        if type(category) is not list:
+        if not isinstance(category, list):
             cats = [category]
         else:
             cats = category
 
         # parameter verification
-        if len(cats) <= 0:
+        if len(cats) == 1 and (cats[0] is None or cats[0] == ''):
             msg = ("CategoryTree: Parameter 'category' must either "
                    "be a list of one or more categories or a string; "
                    "provided: '{}'".format(category))
@@ -647,6 +648,8 @@ class MediaWiki(object):
         links = dict()
 
         for cat in cats:
+            if cat is None or cat == '':
+                continue
             __cat_tree_rec(cat, depth, results, 0, categories, links)
         return results
     # end categorytree

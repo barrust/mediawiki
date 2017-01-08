@@ -13,8 +13,9 @@ from mediawiki import (MediaWiki, PageError, RedirectError,
                        MediaWikiGeoCoordError, HTTPTimeoutError,
                        MediaWikiException)
 import mediawiki
+from  .utilities import find_depth
 
-class FunctionUseCounter:
+class FunctionUseCounter(object):
     ''' decorator to keep a running count of how many
     times function has been called; stop at 50 '''
     def __init__(self, func):
@@ -50,7 +51,7 @@ class MediaWikiOverloaded(MediaWiki):
 
 
 class TestMediaWiki(unittest.TestCase):
-    ''' Test the MediaWiki Class Basic functionality '''
+    ''' test the MediaWiki Class Basic functionality '''
     def test_version(self):
         ''' test version information '''
         site = MediaWikiOverloaded()
@@ -155,7 +156,7 @@ class TestMediaWiki(unittest.TestCase):
         self.assertEqual(site.rate_limit_min_wait, timedelta(milliseconds=150))
 
     def test_default_timeout(self):
-        ''' set default timeout '''
+        ''' test default timeout '''
         site = MediaWikiOverloaded()
         self.assertEqual(site.timeout, None)
 
@@ -186,7 +187,7 @@ class TestMediaWiki(unittest.TestCase):
 
 
 class TestMediaWikiRandom(unittest.TestCase):
-    ''' Test Random Functionality '''
+    ''' test Random Functionality '''
     def test_random(self):
         ''' test pulling random pages '''
         site = MediaWikiOverloaded()
@@ -231,7 +232,7 @@ class TestMediaWikiRandom(unittest.TestCase):
 
 
 class TestMediaWikiSearch(unittest.TestCase):
-    ''' Test MediaWiki Page Search Functionality '''
+    ''' test MediaWiki Page Search Functionality '''
     def test_search_no_sug(self):
         ''' test searching without suggestion '''
         site = MediaWikiOverloaded()
@@ -260,8 +261,7 @@ class TestMediaWikiSearch(unittest.TestCase):
         ''' test searching with small result limit test '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        self.assertEqual(
-                         site.search('chess set', results=3,
+        self.assertEqual(site.search('chess set', results=3,
                                      suggestion=False),
                          response['search_with_suggestion_not_found_small'])
         num_res = len(response['search_with_suggestion_not_found_small'])
@@ -274,8 +274,7 @@ class TestMediaWikiSearch(unittest.TestCase):
         '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        self.assertEqual(
-                         site.search('chess set', results=505,
+        self.assertEqual(site.search('chess set', results=505,
                                      suggestion=False),
                          response['search_with_suggestion_not_found_large'])
         num_res = len(response['search_with_suggestion_not_found_large'])
@@ -301,7 +300,7 @@ class TestMediaWikiSuggest(unittest.TestCase):
 
 
 class TestMediaWikiGeoSearch(unittest.TestCase):
-    ''' Test GeoSearch Functionality '''
+    ''' test GeoSearch Functionality '''
     def test_geosearch_decimals(self):
         ''' test geosearch with Decimals lat / long '''
         site = MediaWikiOverloaded()
@@ -354,7 +353,7 @@ class TestMediaWikiGeoSearch(unittest.TestCase):
 
 
 class TestMediaWikiOpenSearch(unittest.TestCase):
-    ''' Test OpenSearch Functionality '''
+    ''' test OpenSearch Functionality '''
     def test_opensearch(self):
         ''' test opensearch with default values '''
         site = MediaWikiOverloaded()
@@ -397,7 +396,7 @@ class TestMediaWikiOpenSearch(unittest.TestCase):
 
 
 class TestMediaWikiPrefixSearch(unittest.TestCase):
-    ''' Test PrefixSearch Functionality '''
+    ''' test PrefixSearch Functionality '''
     def test_prefix_search(self):
         ''' test basic prefix search '''
         site = MediaWikiOverloaded()
@@ -432,9 +431,9 @@ class TestMediaWikiPrefixSearch(unittest.TestCase):
 
 
 class TestMediaWikiSummary(unittest.TestCase):
-    ''' Test the summary functionality '''
+    ''' test the summary functionality '''
     def test_summarize_chars(self):
-        ''' Test sumarize number chars '''
+        ''' test sumarize number chars '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         res = response['sumarize_chars_50']
@@ -443,7 +442,7 @@ class TestMediaWikiSummary(unittest.TestCase):
         self.assertEqual(len(res), 54)
 
     def test_summarize_sents(self):
-        ''' Test sumarize number sentences '''
+        ''' test sumarize number sentences '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         res = response['sumarize_sent_5']
@@ -452,7 +451,7 @@ class TestMediaWikiSummary(unittest.TestCase):
         self.assertEqual(len(res), 466)
 
     def test_page_summary_chars(self):
-        ''' Test page summarize - chars '''
+        ''' test page summarize - chars '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         res = response['sumarize_chars_50']
@@ -462,7 +461,7 @@ class TestMediaWikiSummary(unittest.TestCase):
         self.assertEqual(len(res), 54)
 
     def test_page_summary_sents(self):
-        ''' Test page summarize - sentences '''
+        ''' test page summarize - sentences '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         res = response['sumarize_sent_5']
@@ -471,11 +470,9 @@ class TestMediaWikiSummary(unittest.TestCase):
         self.assertEqual(res, sumr)
         self.assertEqual(len(res), 466)
 
-# class TestMediaWikiCategoryTree(unittest.TestCase):
-
 
 class TestMediaWikiCategoryMembers(unittest.TestCase):
-    ''' Test CategoryMember Functionality '''
+    ''' test CategoryMember Functionality '''
     def test_cat_mems_with_subcats(self):
         ''' test categorymember with subcategories '''
         site = MediaWikiOverloaded()
@@ -520,14 +517,14 @@ class TestMediaWikiCategoryMembers(unittest.TestCase):
 
 
 class TestMediaWikiExceptions(unittest.TestCase):
-    ''' Test MediaWiki Exceptions '''
+    ''' test MediaWiki Exceptions '''
     def test_page_error(self):
-        ''' Test that page error is thrown correctly '''
+        ''' test that page error is thrown correctly '''
         site = MediaWikiOverloaded()
         self.assertRaises(PageError, lambda: site.page('gobbilygook'))
 
     def test_page_error_message(self):
-        ''' Test that page error is thrown correctly '''
+        ''' test that page error is thrown correctly '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         try:
@@ -536,12 +533,12 @@ class TestMediaWikiExceptions(unittest.TestCase):
             self.assertEqual(ex.message, response['page_error_msg'])
 
     def test_page_error_pageid(self):
-        ''' Test that page error is thrown correctly pageid'''
+        ''' test that page error is thrown correctly pageid'''
         site = MediaWikiOverloaded()
         self.assertRaises(PageError, lambda: site.page(pageid=-1))
 
     def test_page_error_message_pageid(self):
-        ''' Test that page error is thrown correctly '''
+        ''' test that page error is thrown correctly '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         try:
@@ -559,14 +556,14 @@ class TestMediaWikiExceptions(unittest.TestCase):
             self.assertEqual(ex.message, msg)
 
     def test_redirect_error(self):
-        ''' Test that redirect error is thrown correctly '''
+        ''' test that redirect error is thrown correctly '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
         self.assertRaises(RedirectError,
                           lambda: site.page('arya', auto_suggest=False,
                                             redirect=False))
 
     def test_redirect_error_msg(self):
-        ''' Test that redirect error is thrown correctly '''
+        ''' test that redirect error is thrown correctly '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
         response = site.responses[site.api_url]
         try:
@@ -575,12 +572,12 @@ class TestMediaWikiExceptions(unittest.TestCase):
             self.assertEqual(ex.message, response['redirect_error_msg'])
 
     def test_disambiguation_error(self):
-        ''' Test that disambiguation error is thrown correctly '''
+        ''' test that disambiguation error is thrown correctly '''
         site = MediaWikiOverloaded()
         self.assertRaises(DisambiguationError, lambda: site.page('bush'))
 
     def test_disambiguation_error_msg(self):
-        ''' Test that disambiguation error is thrown correctly '''
+        ''' test that disambiguation error is thrown correctly '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         try:
@@ -589,7 +586,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
             self.assertEqual(ex.message, response['disambiguation_error_msg'])
 
     def test_disamb_error_msg_w_empty(self):
-        ''' Test that disambiguation error is thrown correctly and no
+        ''' test that disambiguation error is thrown correctly and no
         IndexError is thrown '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
@@ -692,7 +689,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
             self.assertEqual(ex.message, msg)
 
     def test_mediawiki_exception(self):
-        ''' throw MediaWikiBaseException '''
+        ''' test throwing a MediaWikiBaseException '''
         def func():
             ''' test function '''
             raise MediaWikiException('new except!')
@@ -804,7 +801,7 @@ class TestMediaWikiRequests(unittest.TestCase):
 
 
 class TestMediaWikiPage(unittest.TestCase):
-    ''' Test MediaWiki Pages '''
+    ''' test MediaWiki Pages '''
     def setUp(self):
         ''' single function for all the tests (well most of) '''
         api_url = 'http://awoiaf.westeros.org/api.php'
@@ -827,67 +824,67 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertRaises(ValueError, lambda: site.page(None))
 
     def test_page_title(self):
-        ''' Test a page title '''
+        ''' test a page title '''
         self.assertEqual(self.pag.title, self.response['arya']['title'])
 
     def test_page_pageid(self):
-        ''' Test a page pageid '''
+        ''' test a page pageid '''
         self.assertEqual(self.pag.pageid, self.response['arya']['pageid'])
 
     def test_page_url(self):
-        ''' Test a page url '''
+        ''' test a page url '''
         self.assertEqual(self.pag.url, self.response['arya']['url'])
 
     def test_page_backlinks(self):
-        ''' Test a page backlinks '''
+        ''' test a page backlinks '''
         self.assertEqual(self.pag.backlinks,
                          self.response['arya']['backlinks'])
 
     def test_page_images(self):
-        ''' Test a page imsages '''
+        ''' test a page imsages '''
         self.assertEqual(self.pag.images, self.response['arya']['images'])
 
     def test_page_redirects(self):
-        ''' Test a page redirects '''
+        ''' test a page redirects '''
         self.assertEqual(self.pag.redirects,
                          self.response['arya']['redirects'])
 
     def test_page_links(self):
-        ''' Test a page links '''
+        ''' test a page links '''
         self.assertEqual(self.pag.links, self.response['arya']['links'])
 
     def test_page_categories(self):
-        ''' Test a page categories '''
+        ''' test a page categories '''
         self.assertEqual(self.pag.categories,
                          self.response['arya']['categories'])
 
     def test_page_references(self):
-        ''' Test a page references '''
+        ''' test a page references '''
         self.assertEqual(self.pag.references,
                          self.response['arya']['references'])
 
     def test_page_content(self):
-        ''' Test a page content '''
+        ''' test a page content '''
         self.assertEqual(self.pag.content,
                          self.response['arya']['content'])
 
     def test_page_parent_id(self):
-        ''' Test a page parent_id '''
+        ''' test a page parent_id '''
         self.assertEqual(self.pag.parent_id,
                          self.response['arya']['parent_id'])
 
     def test_page_revision_id(self):
-        ''' Test a page revision_id '''
+        ''' test a page revision_id '''
         self.assertEqual(self.pag.revision_id,
                          self.response['arya']['revision_id'])
 
     def test_page_coordinates_none(self):
-        ''' Test a page coordinates none '''
+        ''' test a page coordinates none '''
         self.assertEqual(self.pag.coordinates,
                          self.response['arya']['coordinates'])
 
     def test_page_coordinates(self):
-        ''' Test a page coordinates where found '''
+        ''' test a page coordinates where found '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         pag = site.page('Washington Monument')
@@ -896,28 +893,28 @@ class TestMediaWikiPage(unittest.TestCase):
                          response['wash_mon'])
 
     def test_page_sections(self):
-        ''' Test a page sections '''
+        ''' test a page sections '''
         self.assertEqual(self.pag.sections,
                          self.response['arya']['sections'])
 
     def test_page_section(self):
-        ''' Test a page returning a section '''
+        ''' test a page returning a section '''
         self.assertEqual(self.pag.section('A Game of Thrones'),
                          self.response['arya']['section_a_game_of_thrones'])
 
     def test_page_last_section(self):
-        ''' Test a page returning the last section '''
+        ''' test a page returning the last section '''
         self.assertEqual(self.pag.section('External links'),
                          self.response['arya']['last_section'])
 
     def test_page_single_section(self):
-        ''' Test a page returning the last section '''
+        ''' test a page returning the last section '''
         pag = self.site.page('Castos')
         self.assertEqual(pag.section('References and Notes'),
                          self.response['castos']['section'])
 
     def test_page_invalid_section(self):
-        ''' Test a page invalid section '''
+        ''' test a page invalid section '''
         self.assertEqual(self.pag.section('gobbilygook'), None)
 
     def test_page_summary(self):
@@ -976,6 +973,113 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(hasattr(pag, '_backlinks'), True)
         self.assertEqual(hasattr(pag, '_categories'), True)
 
+
+class TestMediaWikiCategoryTree(unittest.TestCase):
+    ''' test the category tree functionality '''
+
+    def test_double_category_tree(self):
+        ''' test category tree using a list '''
+        site = MediaWikiOverloaded()
+        with open('./tests/mock_categorytree.json', 'r') as fpt:
+            res = json.load(fpt)
+        cat = site.categorytree(['Chess', 'Ebola'], depth=None)
+        self.assertEqual(cat, res)
+
+    def test_single_category_tree_list(self):
+        ''' test category tree using a list with one element '''
+        site = MediaWikiOverloaded()
+        with open('./tests/mock_categorytree.json', 'r') as fpt:
+            res = json.load(fpt)
+        cat = site.categorytree(['Chess'], depth=None)
+        self.assertEqual(cat['Chess'], res['Chess'])
+
+    def test_single_category_tree_str(self):
+        ''' test category tree using a string '''
+        site = MediaWikiOverloaded()
+        with open('./tests/mock_categorytree.json', 'r') as fpt:
+            res = json.load(fpt)
+        cat = site.categorytree('Ebola', depth=None)
+        self.assertEqual(cat['Ebola'], res['Ebola'])
+
+    def test_category_tree_valerror_1(self):
+        ''' test category provided None throws error '''
+        site = MediaWikiOverloaded()
+        self.assertRaises(ValueError,
+                          lambda: site.categorytree(None, depth=None))
+
+    def test_cattree_error_msg_1(self):
+        ''' test that ValueError message when None passed as category '''
+        site = MediaWikiOverloaded()
+        category = None
+        try:
+            site.categorytree(category, depth=None)
+        except ValueError as ex:
+            msg = ("CategoryTree: Parameter 'category' must either "
+                   "be a list of one or more categories or a string; "
+                   "provided: '{}'".format(category))
+            self.assertEqual(str(ex), msg)
+
+    def test_category_tree_valerror_2(self):
+        ''' test category provided empty str throws error '''
+        site = MediaWikiOverloaded()
+        self.assertRaises(ValueError,
+                          lambda: site.categorytree('', depth=None))
+
+    def test_cattree_error_msg_2(self):
+        ''' test that ValueError message when '' passed as category: 2 '''
+        site = MediaWikiOverloaded()
+        category = ''
+        try:
+            site.categorytree(category, depth=None)
+        except ValueError as ex:
+            msg = ("CategoryTree: Parameter 'category' must either "
+                   "be a list of one or more categories or a string; "
+                   "provided: '{}'".format(category))
+            self.assertEqual(str(ex), msg)
+
+    def test_category_tree_valerror_3(self):
+        ''' test category provided empty str throws error '''
+        site = MediaWikiOverloaded()
+        self.assertRaises(ValueError,
+                          lambda: site.categorytree('Chess', depth=0))
+
+    def test_cattree_error_msg_3(self):
+        ''' test that ValueError message when depth < 1 '''
+        site = MediaWikiOverloaded()
+        try:
+            site.categorytree('Chess', depth=0)
+        except ValueError as ex:
+            msg = ("CategoryTree: Parameter 'depth' must None (for the full "
+                   "tree) be greater than 0")
+            self.assertEqual(str(ex), msg)
+
+    def test_depth_none_1(self):
+        ''' test the depth when going full depth '''
+        site = MediaWikiOverloaded()
+        cat = site.categorytree(['Chess'], depth=None)
+        depth = find_depth(cat['Chess'])
+        self.assertEqual(depth, 7)
+
+    def test_depth_none_2(self):
+        ''' test the depth when going full depth take two '''
+        site = MediaWikiOverloaded()
+        cat = site.categorytree(['Ebola'], depth=None)
+        depth = find_depth(cat['Ebola'])
+        self.assertEqual(depth, 2)
+
+    def test_depth_limited(self):
+        ''' test the depth when going partial depth '''
+        site = MediaWikiOverloaded()
+        cat = site.categorytree(['Chess'], depth=5)
+        depth = find_depth(cat['Chess'])
+        self.assertEqual(depth, 5)
+
+    def test_depth_limited_2(self):
+        ''' test the depth when going partial depth take two '''
+        site = MediaWikiOverloaded()
+        cat = site.categorytree(['Chess'], depth=2)
+        depth = find_depth(cat['Chess'])
+        self.assertEqual(depth, 2)
 
 class TestMediaWikiRegressions(unittest.TestCase):
     ''' Add regression tests here for special cases '''

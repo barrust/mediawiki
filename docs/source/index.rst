@@ -9,7 +9,8 @@ manner of accessing the data and returning it in standard python data types.
 
 MediaWiki wraps the `MediaWiki API <https://www.mediawiki.org/wiki/API>`_
 so you can focus on leveraging your favorite MediaWiki site's data,
-not getting it.
+not getting it. The latest version of the code on
+`github <https://www.github.com/barrust/mediawiki>`_ is |version|
 
 .. code: python
 

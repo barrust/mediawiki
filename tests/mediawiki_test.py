@@ -11,22 +11,9 @@ from decimal import Decimal
 from mediawiki import (MediaWiki, PageError, RedirectError,
                        DisambiguationError, MediaWikiAPIURLError,
                        MediaWikiGeoCoordError, HTTPTimeoutError,
-                       MediaWikiException)
+                       MediaWikiException, MediaWikiCategoryTreeError)
 import mediawiki
-from  .utilities import find_depth
-
-class FunctionUseCounter(object):
-    ''' decorator to keep a running count of how many
-    times function has been called; stop at 50 '''
-    def __init__(self, func):
-        self.func = func
-        self.count = 0
-
-    def __call__(self, *args, **kwargs):
-        self.count += 1
-        if self.count > 50:  # arbitrary large
-            return dict()
-        return self.func(*args, **kwargs)
+from .utilities import find_depth, FunctionUseCounter
 
 
 class MediaWikiOverloaded(MediaWiki):
@@ -1080,6 +1067,58 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
         cat = site.categorytree(['Chess'], depth=2)
         depth = find_depth(cat['Chess'])
         self.assertEqual(depth, 2)
+
+    def test_cattree_list_with_none(self):
+        ''' test the removing None or '' categories from the list '''
+        site = MediaWikiOverloaded()
+        cat = site.categorytree(['Chess', None], depth=2)
+        depth = find_depth(cat['Chess'])
+        self.assertEqual(depth, 2)
+        self.assertEqual(len(cat.keys()), 1)
+
+    def test_badcat_tree_pageerror(self):
+        ''' test category provided bad category throws error '''
+        site = MediaWikiOverloaded()
+        self.assertRaises(PageError, lambda: site.categorytree('Chess Ebola'))
+
+    def test_badcat_error_msg(self):
+        ''' test that ValueError message when depth < 1 '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]['missing_categorytree']
+        category = 'Chess Ebola'
+        try:
+            site.categorytree(category)
+        except PageError as ex:
+            self.assertEqual(str(ex), res)
+
+    def test_unretrievable_cat(self):
+        ''' test throwing the exception when cannot retrieve category tree '''
+        def new_cattreemem():
+            ''' force exception to be thrown '''
+            raise Exception
+
+        site = MediaWikiOverloaded()
+        site.categorymembers = new_cattreemem
+        self.assertRaises(MediaWikiCategoryTreeError,
+                          lambda: site.categorytree('Chess'))
+
+    def test_unretrievable_cat_msg(self):
+        ''' test the exception message when cannot retrieve category tree '''
+        def new_cattreemem():
+            ''' force exception to be thrown '''
+            raise Exception
+
+        category = 'Chess'
+        msg = ("Categorytree threw an exception for trying to get the "
+               "same category '{}' too many times. Please try again later "
+               "and perhaps use the rate limiting option.").format(category)
+        site = MediaWikiOverloaded()
+        site.categorymembers = new_cattreemem
+        try:
+            site.categorytree(category)
+        except MediaWikiCategoryTreeError as ex:
+            self.assertEqual(str(ex), msg)
+
 
 class TestMediaWikiRegressions(unittest.TestCase):
     ''' Add regression tests here for special cases '''

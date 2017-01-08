@@ -24,7 +24,8 @@ Go to the :ref:`quickstart` to start using ``mediawiki`` now, or see the :ref:`a
 Indices and tables
 ******************
 
+* :ref:`api`
+* :ref:`quickstart`
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`api`
 * :ref:`search`

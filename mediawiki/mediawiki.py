@@ -14,7 +14,8 @@ from bs4 import BeautifulSoup
 from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
-                         MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
+                         MediaWikiGeoCoordError, MediaWikiCategoryTreeError,
+                         ODD_ERROR_MESSAGE)
 from .utilities import memoize
 
 URL = 'https://github.com/barrust/mediawiki'
@@ -591,17 +592,21 @@ class MediaWiki(object):
             tree[cat]['parent-categories'] = list()
 
             if cat not in categories:
+                tries = 0
                 while True:
+                    if tries > 10:
+                        raise MediaWikiCategoryTreeError(cat)
                     try:
                         categories[cat] = self.page('Category:{0}'.format(cat))
                         categories[cat].categories
                         links[cat] = self.categorymembers(cat, results=None,
                                                           subcategories=True)
+                        tries = 0  # reset the number of tries
                         break
                     except PageError:
-                        raise PageError(cat)
+                        raise PageError('Category:{0}'.format(cat))
                     except Exception:
-                        print('{}: sleeping 1 second', cat)
+                        tries = tries + 1
                         time.sleep(1)
 
             for pcat in categories[cat].categories:

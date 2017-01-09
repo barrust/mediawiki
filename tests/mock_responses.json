@@ -25570,6 +25570,7 @@
   ],
   "page_error_msg": "\"gobbilygook\" does not match any pages. Try another query!",
   "page_error_msg_pageid": "Page id \"-1\" does not match any pages. Try another id!",
+  "page_error_msg_title": "\"gobbilygook\" does not match any pages. Try another query!",
   "prefixsearch_ar": [
    "Ar",
    "Arthropod",

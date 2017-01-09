@@ -524,6 +524,22 @@ class TestMediaWikiExceptions(unittest.TestCase):
         site = MediaWikiOverloaded()
         self.assertRaises(PageError, lambda: site.page(pageid=-1))
 
+    def test_page_error_title(self):
+        ''' test that page error is thrown correctly title'''
+        site = MediaWikiOverloaded()
+        self.assertRaises(PageError,
+                          lambda: site.page(title='gobbilygook',
+                                            auto_suggest=False))
+
+    def test_page_error_title_msg(self):
+        ''' test that page error is thrown correctly title'''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        try:
+            site.page(title='gobbilygook', auto_suggest=False)
+        except PageError as ex:
+            self.assertEqual(ex.message, response['page_error_msg_title'])
+
     def test_page_error_message_pageid(self):
         ''' test that page error is thrown correctly '''
         site = MediaWikiOverloaded()
@@ -943,7 +959,7 @@ class TestMediaWikiPage(unittest.TestCase):
     def test_page_neq_attr_err(self):
         ''' test page inequality by AttributeError '''
         tmp = self.site.page('arya')
-        del tmp.__dict__['pageid']  # force AttributeError
+        delattr(tmp, 'pageid')
         self.assertEqual(self.pag != tmp, True)
 
     def test_page_preload(self):
@@ -970,6 +986,22 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
         with open('./tests/mock_categorytree.json', 'r') as fpt:
             res = json.load(fpt)
         cat = site.categorytree(['Chess', 'Ebola'], depth=None)
+        self.assertEqual(cat, res)
+
+    def test_triple_category_tree_none(self):
+        ''' test category tree using a list but one is blank or None '''
+        site = MediaWikiOverloaded()
+        with open('./tests/mock_categorytree.json', 'r') as fpt:
+            res = json.load(fpt)
+        cat = site.categorytree(['Chess', 'Ebola', None], depth=None)
+        self.assertEqual(cat, res)
+
+    def test_triple_category_tree_bnk(self):
+        ''' test category tree using a list but one is blank or None '''
+        site = MediaWikiOverloaded()
+        with open('./tests/mock_categorytree.json', 'r') as fpt:
+            res = json.load(fpt)
+        cat = site.categorytree(['Chess', 'Ebola', ''], depth=None)
         self.assertEqual(cat, res)
 
     def test_single_category_tree_list(self):

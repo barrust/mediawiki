@@ -5,6 +5,7 @@
 ### Version 0.3.10
 
 * Add categorytree support
+* Remove adding 'http:' to references if missing
 
 ### Version 0.3.9
 

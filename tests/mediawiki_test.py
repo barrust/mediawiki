@@ -884,6 +884,13 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(self.pag.references,
                          self.response['arya']['references'])
 
+    def test_page_references_no_http(self):
+        ''' test a page references with mixed http '''
+        site = MediaWikiOverloaded()
+        page = site.page('Minneapolis')
+        response = site.responses[site.api_url]['references_without_http']
+        self.assertEqual(page.references, response)
+
     def test_page_content(self):
         ''' test a page content '''
         self.assertEqual(self.pag.content,

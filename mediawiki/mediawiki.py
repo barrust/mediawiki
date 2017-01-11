@@ -975,11 +975,7 @@ class MediaWikiPage(object):
             params = {'prop': 'extlinks', 'ellimit': 'max'}
             self._references = list()
             for link in self._continued_query(params):
-                if link['*'].startswith('http'):
-                    url = link['*']
-                else:
-                    url = 'http:{0}'.format(link['*'])
-                self._references.append(url)
+                self._references.append(link['*'])
             self._references = sorted(self._references)
         return self._references
 
@@ -999,10 +995,10 @@ class MediaWikiPage(object):
                 'clshow': '!hidden'
             }
             for link in self._continued_query(params):
+                cat = link['title']
                 if link['title'].startswith('Category:'):
-                    self._categories.append(link['title'][9:])
-                else:
-                    self._categories.append(link['title'])
+                    cat = link['title'][9:]
+                self._categories.append(link['title'][9:])
             self._categories = sorted(self._categories)
         return self._categories
 

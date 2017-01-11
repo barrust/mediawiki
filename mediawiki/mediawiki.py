@@ -998,7 +998,7 @@ class MediaWikiPage(object):
                 cat = link['title']
                 if link['title'].startswith('Category:'):
                     cat = link['title'][9:]
-                self._categories.append(link['title'][9:])
+                self._categories.append(cat)
             self._categories = sorted(self._categories)
         return self._categories
 

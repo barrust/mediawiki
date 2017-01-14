@@ -37,6 +37,7 @@ Indices and tables
 ==================
 
 * :ref:`home`
+* :ref:`quickstart`
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`

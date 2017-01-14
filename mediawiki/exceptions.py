@@ -120,3 +120,17 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
                'error: {0} - Please use valid coordinates or a proper '
                'page title.').format(self.error)
         super(MediaWikiGeoCoordError, self).__init__(msg)
+
+
+class MediaWikiCategoryTreeError(MediaWikiBaseException):
+    '''
+    Exception when the category tree is unable to complete for an unknown
+    reason
+    '''
+
+    def __init__(self, category):
+        self.category = category
+        msg = ("Categorytree threw an exception for trying to get the "
+               "same category '{}' too many times. Please try again later "
+               "and perhaps use the rate limiting option.").format(category)
+        super(MediaWikiCategoryTreeError, self).__init__(msg)

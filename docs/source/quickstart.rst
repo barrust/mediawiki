@@ -16,15 +16,23 @@ please see :ref:`api`.
 Install
 ^^^^^^^
 
+Using pip
+"""""""""
+
+::
+
+    $ pip install pymediawiki
+
+From source
+"""""""""""
+
 Begin by installing Wikipedia: simply clone the
-`repository on GitHub <https://github.com/barrust/Wikipedia>`__,
+`repository on GitHub <https://github.com/barrust/mediawiki>`__,
 then run the following command from the extracted folder:
 
 ::
 
     $ python setup.py install
-
-Hopefully in the near future `mediawiki` will be available using pip
 
 Setup
 ^^^^^
@@ -141,7 +149,7 @@ The revision id of the page
 pageid
 """""""""""
 
-The revision id of the page
+The page id of the page
 
 .. code: python
 
@@ -162,7 +170,7 @@ The revision id of the page
 parent_id
 """""""""""
 
-The parent_id id of the page
+The parent id  of the page
 
 .. code: python
 

@@ -14,11 +14,12 @@ from bs4 import BeautifulSoup
 from .exceptions import (MediaWikiException, PageError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
-                         MediaWikiGeoCoordError, ODD_ERROR_MESSAGE)
+                         MediaWikiGeoCoordError, MediaWikiCategoryTreeError,
+                         ODD_ERROR_MESSAGE)
 from .utilities import memoize
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.9'
+VERSION = '0.3.10'
 
 
 class MediaWiki(object):
@@ -504,6 +505,8 @@ class MediaWiki(object):
         :param subcategories: Include subcategories (**True**) or not \
         (**False**)
         :type subcategories: Boolean
+        :returns: Either a tuple ([pages], [subcategories]) or just the \
+        list of pages
 
         .. note:: Set results to **None** to get all results
         '''
@@ -520,16 +523,16 @@ class MediaWiki(object):
         subcats = list()
         returned_results = 0
         finished = False
-        last_continue = dict()
+        last_cont = dict()
         while not finished:
             params = search_params.copy()
-            params.update(last_continue)
-            raw_results = self.wiki_request(params)
+            params.update(last_cont)
+            raw_res = self.wiki_request(params)
 
-            self._check_error_response(raw_results, category)
+            self._check_error_response(raw_res, category)
 
-            current_pull = len(raw_results['query']['categorymembers'])
-            for rec in raw_results['query']['categorymembers']:
+            current_pull = len(raw_res['query']['categorymembers'])
+            for rec in raw_res['query']['categorymembers']:
                 if rec['type'] == 'page':
                     pages.append(rec['title'])
                 elif rec['type'] == 'subcat':
@@ -538,21 +541,125 @@ class MediaWiki(object):
                         tmp = tmp[9:]
                     subcats.append(tmp)
 
-            if 'continue' not in raw_results:
+            if 'continue' not in raw_res or last_cont == raw_res['continue']:
                 break
 
             returned_results = returned_results + current_pull
             if results is None or (results - returned_results > 0):
-                last_continue = raw_results['continue']
+                last_cont = raw_res['continue']
             else:
                 finished = True
-
         # end while loop
+
         if subcategories:
             return pages, subcats
         else:
             return pages
     # end categorymembers
+
+    # @memoize
+    def categorytree(self, category, depth=5):
+        ''' Generate the Category Tree for the given categories
+
+        :param category: Category name
+        :type category: string or list of strings
+        :param depth: Depth to traverse the tree
+        :type depth: integer or None
+        :returns: Dictionary of the category tree structure
+        :rtype: Dictionary
+        :Return Data Structure: Subcategory contains the same recursive \
+        structure
+
+        >>> {
+                'category': {
+                    'depth': Number,
+                    'links': list,
+                    'parent-categories': list,
+                    'sub-categories': dict
+                }
+            }
+
+        .. versionadded:: 0.3.10
+
+        .. note:: Set depth to **None** to get the whole tree
+        '''
+        def __cat_tree_rec(cat, depth, tree, level, categories, links):
+            ''' recursive function to build out the tree '''
+            tree[cat] = dict()
+            tree[cat]['depth'] = level
+            tree[cat]['sub-categories'] = dict()
+            tree[cat]['links'] = list()
+            tree[cat]['parent-categories'] = list()
+            parent_cats = list()
+
+            if cat not in categories:
+                tries = 0
+                while True:
+                    if tries > 10:
+                        raise MediaWikiCategoryTreeError(cat)
+                    try:
+                        categories[cat] = self.page('Category:{0}'.format(cat))
+                        parent_cats = categories[cat].categories
+                        links[cat] = self.categorymembers(cat, results=None,
+                                                          subcategories=True)
+                        break
+                    except PageError:
+                        raise PageError('Category:{0}'.format(cat))
+                    except Exception:
+                        tries = tries + 1
+                        time.sleep(1)
+            else:
+                parent_cats = categories[cat].categories
+
+            for pcat in parent_cats:
+                tree[cat]['parent-categories'].append(pcat)
+
+            for link in links[cat][0]:
+                tree[cat]['links'].append(link)
+
+            if depth and level >= depth:
+                for ctg in links[cat][1]:
+                    tree[cat]['sub-categories'][ctg] = None
+            else:
+                for ctg in links[cat][1]:
+                    __cat_tree_rec(ctg, depth,
+                                   tree[cat]['sub-categories'], level + 1,
+                                   categories, links)
+            return
+        # end __cat_tree_rec
+
+        # ###################################
+        # ### Actual Function Code        ###
+        # ###################################
+
+        # make it simple to use both a list or a single category term
+        if not isinstance(category, list):
+            cats = [category]
+        else:
+            cats = category
+
+        # parameter verification
+        if len(cats) == 1 and (cats[0] is None or cats[0] == ''):
+            msg = ("CategoryTree: Parameter 'category' must either "
+                   "be a list of one or more categories or a string; "
+                   "provided: '{}'".format(category))
+            raise ValueError(msg)
+
+        if depth is not None and depth < 1:
+            msg = ("CategoryTree: Parameter 'depth' must None (for the full "
+                   "tree) be greater than 0")
+            raise ValueError(msg)
+
+        results = dict()
+        categories = dict()
+        links = dict()
+
+        for cat in cats:
+            if cat is None or cat == '':
+                continue
+            __cat_tree_rec(cat, depth, results, 0, categories, links)
+        return results
+    # end categorytree
 
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True,
              preload=False):
@@ -569,6 +676,9 @@ class MediaWiki(object):
         :param preload: **True:** Load most page properties
         :type preload: Boolean
 
+        :raises  ValueError: when title is blank or None and no pageid is \
+        provided
+        :raises  `mediawiki.exceptions.PageError`: if page does not exist
         .. note:: Title takes precedence over pageid if both are provided
         '''
         if (title is None or title.strip() == '') and pageid is None:
@@ -865,11 +975,7 @@ class MediaWikiPage(object):
             params = {'prop': 'extlinks', 'ellimit': 'max'}
             self._references = list()
             for link in self._continued_query(params):
-                if link['*'].startswith('http'):
-                    url = link['*']
-                else:
-                    url = 'http:{0}'.format(link['*'])
-                self._references.append(url)
+                self._references.append(link['*'])
             self._references = sorted(self._references)
         return self._references
 
@@ -889,10 +995,10 @@ class MediaWikiPage(object):
                 'clshow': '!hidden'
             }
             for link in self._continued_query(params):
-                if link['title'].startswith('Category:'):
-                    self._categories.append(link['title'][9:])
-                else:
-                    self._categories.append(link['title'])
+                cat = link['title']
+                if cat.startswith('Category:'):
+                    cat = cat[9:]
+                self._categories.append(cat)
             self._categories = sorted(self._categories)
         return self._categories
 

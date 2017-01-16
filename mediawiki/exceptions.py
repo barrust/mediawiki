@@ -20,10 +20,11 @@ class MediaWikiBaseException(Exception):
         return self.message
 
     def __str__(self):
+        encoding = sys.stdout.encoding
         if sys.version_info > (3, 0):
             return self.__unicode__()
         else:
-            return self.__unicode__().encode('utf8')
+            return self.__unicode__().encode(encoding)
 
 
 class MediaWikiException(MediaWikiBaseException):

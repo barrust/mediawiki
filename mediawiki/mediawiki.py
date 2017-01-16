@@ -837,12 +837,20 @@ class MediaWikiPage(object):
         # end __init__
 
     def __repr__(self):
-        ''' base repr function '''
-        text = u'''<MediaWikiPage '{0}'>'''.format(self.title)
-        encoding = sys.stdout.encoding or 'utf-8'
+        ''' repr '''
+        return self.__unicode__()
+
+    def __unicode__(self):
+        ''' python 2.7 unicode '''
+        return u'''<MediaWikiPage '{0}'>'''.format(self.title)
+
+    def __str__(self):
+        ''' python > 3 unicode python 2.7 byte str '''
+        encoding = sys.stdout.encoding
         if sys.version_info > (3, 0):
-            return text.encode(encoding).decode(encoding)
-        return text.encode(encoding)
+            return self.__unicode__()
+        else:
+            return self.__unicode__().encode('utf-8')
 
     def __eq__(self, other):
         ''' base eq function '''

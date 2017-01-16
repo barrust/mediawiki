@@ -54,6 +54,14 @@ def memoize(func):
     return wrapper
 
 
+def str_or_unicode(text):
+    ''' handle python 3 unicode and python 2.7 byte strings '''
+    encoding = sys.stdout.encoding
+    if sys.version_info > (3, 0):
+        return text.encode(encoding).decode(encoding)
+    return text.encode(encoding)
+
+
 def capture_response(func):
     ''' capture_response decorator to be used for tests '''
     def wrapper(*args, **kwargs):

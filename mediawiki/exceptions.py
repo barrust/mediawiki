@@ -2,7 +2,7 @@
 MediaWiki Exceptions
 '''
 from __future__ import unicode_literals
-import sys
+from .utilities import str_or_unicode
 
 
 ODD_ERROR_MESSAGE = ('This should not happen. Please report on '
@@ -20,11 +20,7 @@ class MediaWikiBaseException(Exception):
         return self.message
 
     def __str__(self):
-        encoding = sys.stdout.encoding
-        if sys.version_info > (3, 0):
-            return self.__unicode__()
-        else:
-            return self.__unicode__().encode(encoding)
+        return str_or_unicode(self.__unicode__())
 
 
 class MediaWikiException(MediaWikiBaseException):

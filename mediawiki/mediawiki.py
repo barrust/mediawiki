@@ -837,7 +837,7 @@ class MediaWikiPage(object):
 
     def __repr__(self):
         ''' repr '''
-        return self.__unicode__()
+        return self.__str__()
 
     def __unicode__(self):
         ''' python 2.7 unicode '''

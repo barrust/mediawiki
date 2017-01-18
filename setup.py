@@ -11,7 +11,7 @@ setuptools.setup(
     version = __version__,
     author = __author__,
     author_email = __email__,
-    description = 'MediaWiki API for Python',
+    description = 'Wikipedia and MediaWiki API wrapper for Python',
     license = __license__,
     keywords = 'python mediawiki wikipedia API',
     url = __url__,
@@ -21,6 +21,7 @@ setuptools.setup(
     long_description = open('README.rst', 'r').read(),
     classifiers = [
         'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',

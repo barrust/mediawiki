@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 '''
 Unittest class
 '''
-# -*- coding: utf-8 -*-
+
 from __future__ import (unicode_literals, print_function)
+import sys
 import unittest
 import json
 from datetime import timedelta
@@ -953,9 +955,34 @@ class TestMediaWikiPage(unittest.TestCase):
         ''' test page html '''
         self.assertEqual(self.pag.html, self.response['arya']['html'])
 
-    def test_page_repr(self):
-        ''' test page representation '''
+    def test_page_str(self):
+        ''' test page string representation '''
         self.assertEqual(str(self.pag), '''<MediaWikiPage 'Arya Stark'>''')
+
+    def test_page_repr(self):
+        ''' test page repr without unicode '''
+        self.assertEqual(repr(self.pag), '''<MediaWikiPage 'Arya Stark'>''')
+
+    def test_page_unicode(self):
+        ''' test with unicode representation '''
+        site = MediaWikiOverloaded()
+        page = site.page('Jacques Léonard Muller')
+        if sys.version_info < (3, 0):
+            res = unicode(page)
+        else:
+            res = str(page)
+        self.assertEqual(res, '''<MediaWikiPage 'Jacques Léonard Muller'>''')
+
+    def test_page_repr_2(self):
+        ''' test page string representation '''
+        site = MediaWikiOverloaded()
+        page = site.page('Jacques Léonard Muller')
+        name = u'''<MediaWikiPage 'Jacques Léonard Muller'>'''
+        if sys.version_info > (3, 0):
+            res = repr(page)
+        else:
+            res = unicode(page)
+        self.assertEqual(res, name)
 
     def test_page_eq(self):
         ''' test page equality '''

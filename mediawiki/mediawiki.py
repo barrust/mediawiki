@@ -5,7 +5,6 @@ MediaWiki class module
 # Author: Tyler Barrus (barrust@gmail.com)
 
 from __future__ import unicode_literals
-import sys
 from datetime import (datetime, timedelta)
 import time
 from decimal import (Decimal, DecimalException)
@@ -16,7 +15,7 @@ from .exceptions import (MediaWikiException, PageError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
                          MediaWikiGeoCoordError, MediaWikiCategoryTreeError,
                          ODD_ERROR_MESSAGE)
-from .utilities import memoize
+from .utilities import (memoize, str_or_unicode)
 
 URL = 'https://github.com/barrust/mediawiki'
 VERSION = '0.3.10'
@@ -837,12 +836,16 @@ class MediaWikiPage(object):
         # end __init__
 
     def __repr__(self):
-        ''' base repr function '''
-        text = u'''<MediaWikiPage '{0}'>'''.format(self.title)
-        encoding = sys.stdout.encoding or 'utf-8'
-        if sys.version_info > (3, 0):
-            return text.encode(encoding).decode(encoding)
-        return text.encode(encoding)
+        ''' repr '''
+        return self.__str__()
+
+    def __unicode__(self):
+        ''' python 2.7 unicode '''
+        return u'''<MediaWikiPage '{0}'>'''.format(self.title)
+
+    def __str__(self):
+        ''' python > 3 unicode python 2.7 byte str '''
+        return str_or_unicode(self.__unicode__())
 
     def __eq__(self, other):
         ''' base eq function '''

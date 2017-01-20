@@ -2,6 +2,11 @@
 
 ## Current
 
+### Version 0.3.11
+
+* Re-factored MediaWikiPage into its own file
+* Better Unicode support
+
 ### Version 0.3.10
 
 * Add categorytree support

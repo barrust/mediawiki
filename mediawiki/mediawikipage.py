@@ -10,6 +10,8 @@ from bs4 import (BeautifulSoup)
 from .utilities import (str_or_unicode)
 from .exceptions import (MediaWikiException, PageError, RedirectError,
                          DisambiguationError, ODD_ERROR_MESSAGE)
+
+
 class MediaWikiPage(object):
     '''
     MediaWiki Page Instance

@@ -841,8 +841,8 @@ class TestMediaWikiPage(unittest.TestCase):
             msg = 'Either a title or a pageid must be specified'
             self.assertEqual(str(ex), msg)
 
-    def test_page_value_err(self):
-        ''' test that ValueError is thrown from random'''
+    def test_page_value_err_none(self):
+        ''' test that ValueError is thrown from None '''
         site = MediaWikiOverloaded()
         self.assertRaises(ValueError, lambda: site.page(None))
 

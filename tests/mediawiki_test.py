@@ -1017,16 +1017,30 @@ class TestMediaWikiPage(unittest.TestCase):
     def test_page_preload(self):
         ''' test preload of page properties '''
         pag = self.site.page('arya', preload=True)
-        self.assertEqual(hasattr(pag, '_content'), True)
-        self.assertEqual(hasattr(pag, '_summary'), True)
-        self.assertEqual(hasattr(pag, '_images'), True)
-        self.assertEqual(hasattr(pag, '_references'), True)
-        self.assertEqual(hasattr(pag, '_links'), True)
-        self.assertEqual(hasattr(pag, '_sections'), True)
-        self.assertEqual(hasattr(pag, '_redirects'), True)
-        self.assertEqual(hasattr(pag, '_coordinates'), True)
-        self.assertEqual(hasattr(pag, '_backlinks'), True)
-        self.assertEqual(hasattr(pag, '_categories'), True)
+        self.assertNotEqual(getattr(pag, '_content'), '')
+        self.assertNotEqual(getattr(pag, '_summary'), False)
+        self.assertNotEqual(getattr(pag, '_images'), False)
+        self.assertNotEqual(getattr(pag, '_references'), False)
+        self.assertNotEqual(getattr(pag, '_links'), False)
+        self.assertNotEqual(getattr(pag, '_sections'), False)
+        self.assertNotEqual(getattr(pag, '_redirects'), False)
+        self.assertNotEqual(getattr(pag, '_coordinates'), False)
+        self.assertNotEqual(getattr(pag, '_backlinks'), False)
+        self.assertNotEqual(getattr(pag, '_categories'), False)
+
+    def test_page_no_preload(self):
+        ''' test page properties that are not set '''
+        pag = self.site.page('arya', preload=False)
+        self.assertEqual(getattr(pag, '_content'), '')
+        self.assertEqual(getattr(pag, '_summary'), False)
+        self.assertEqual(getattr(pag, '_images'), False)
+        self.assertEqual(getattr(pag, '_references'), False)
+        self.assertEqual(getattr(pag, '_links'), False)
+        self.assertEqual(getattr(pag, '_sections'), False)
+        self.assertEqual(getattr(pag, '_redirects'), False)
+        self.assertEqual(getattr(pag, '_coordinates'), False)
+        self.assertEqual(getattr(pag, '_backlinks'), False)
+        self.assertEqual(getattr(pag, '_categories'), False)
 
 
 class TestMediaWikiCategoryTree(unittest.TestCase):

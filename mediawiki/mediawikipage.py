@@ -40,8 +40,8 @@ class MediaWikiPage(object):
     :func:`mediawiki.MediaWiki.page`
     '''
 
-    def __init__(self, mediawiki, title=None, pageid=None,
-                 redirect=True, preload=False, original_title=''):
+    def __init__(self, mediawiki, title=None, pageid=None, redirect=True,
+                 preload=False, original_title=''):
         self.mediawiki = mediawiki
         self.url = None
         if title is not None:
@@ -51,6 +51,20 @@ class MediaWikiPage(object):
             self.pageid = pageid
         else:
             raise ValueError('Either a title or a pageid must be specified')
+
+        self._content = ''
+        self._revision_id = False
+        self._parent_id = False
+        self._html = False
+        self._images = False
+        self._references = False
+        self._categories = False
+        self._coordinates = False
+        self._links = False
+        self._redirects = False
+        self._backlinks = False
+        self._summary = False
+        self._sections = False
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -88,7 +102,7 @@ class MediaWikiPage(object):
     # Properties
     def _pull_content_revision_parent(self):
         ''' combine the pulling of these three properties '''
-        if not getattr(self, '_content', False):
+        if self._revision_id is False:
             query_params = {
                 'prop': 'extracts|revisions',
                 'explaintext': '',
@@ -112,7 +126,7 @@ class MediaWikiPage(object):
 
         .. note:: Side effect is to also get revision_id and parent_id
         '''
-        if not getattr(self, '_content', False):
+        if self._content is '':
             self._pull_content_revision_parent()
         return self._content
 
@@ -126,7 +140,7 @@ class MediaWikiPage(object):
 
         .. note:: Side effect is to also get content and parent_id
         '''
-        if not getattr(self, '_revision_id', False):
+        if self._revision_id is False:
             self._pull_content_revision_parent()
         return self._revision_id
 
@@ -140,7 +154,7 @@ class MediaWikiPage(object):
 
         .. note:: Side effect is to also get content and revision_id
         '''
-        if not getattr(self, '_parent_id', False):
+        if self._parent_id is False:
             self._pull_content_revision_parent()
         return self._parent_id
 
@@ -154,7 +168,7 @@ class MediaWikiPage(object):
 
         .. warning:: This can be slow for very large pages
         '''
-        if not getattr(self, '_html', False):
+        if self._html is False:
             self._html = None
             query_params = {
                 'prop': 'revisions',
@@ -176,7 +190,7 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: list
         '''
-        if not getattr(self, '_images', False):
+        if self._images is False:
             self._images = list()
             params = {
                 'generator': 'images',
@@ -201,7 +215,7 @@ class MediaWikiPage(object):
         .. note:: May include external links within page that are not \
         technically cited anywhere.
         '''
-        if not getattr(self, '_references', False):
+        if self._references is False:
             params = {'prop': 'extlinks', 'ellimit': 'max'}
             self._references = list()
             for link in self._continued_query(params):
@@ -217,7 +231,7 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: list
         '''
-        if not getattr(self, '_categories', False):
+        if self._categories is False:
             self._categories = list()
             params = {
                 'prop': 'categories',
@@ -243,7 +257,7 @@ class MediaWikiPage(object):
 
         .. note: Requires the GeoData extension to be installed
         '''
-        if not getattr(self, '_coordinates', False):
+        if self._coordinates is False:
             self._coordinates = None
             params = {
                 'prop': 'coordinates',
@@ -265,7 +279,7 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: list
         '''
-        if not getattr(self, '_links', False):
+        if self._links is False:
             self._links = list()
             params = {
                 'prop': 'links',
@@ -286,7 +300,7 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: list
         '''
-        if not getattr(self, '_redirects', False):
+        if self._redirects is False:
             self._redirects = list()
             params = {
                 'prop': 'redirects',
@@ -306,7 +320,7 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: list
         '''
-        if not getattr(self, '_backlinks', False):
+        if self._backlinks is False:
             self._backlinks = list()
             params = {
                 'action': 'query',
@@ -329,7 +343,7 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: string
         '''
-        if not getattr(self, '_summary', False):
+        if self._summary is False:
             self._summary = self.summarize()
         return self._summary
 
@@ -372,7 +386,7 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: list
         '''
-        if not getattr(self, '_sections', False):
+        if self._sections is False:
             query_params = {'action': 'parse', 'prop': 'sections'}
             if not getattr(self, 'title', None):
                 query_params['pageid'] = self.pageid
@@ -397,7 +411,8 @@ class MediaWikiPage(object):
         '''
         section = u'== {0} =='.format(section_title)
         try:
-            index = self.content.index(section) + len(section)
+            content = self.content
+            index = content.index(section) + len(section)
         except ValueError:
             return None
 

@@ -229,11 +229,16 @@ class MediaWiki(object):
         :raises `mediawiki.exceptions.MediaWikiAPIURLError`: \
         if the url is not a valid MediaWiki site
         '''
+        old_api_url = self._api_url
+        old_lang = self._lang
         self._api_url = api_url
         self._lang = lang
         try:
             self._get_site_info()
         except Exception:
+            # reset api url and lang in the event that the exception was caught
+            self._api_url = old_api_url
+            self._lang = old_lang
             raise MediaWikiAPIURLError(api_url)
         self.clear_memoized()
 

@@ -5,6 +5,15 @@ Welcome to the pymediawiki: a python MediaWiki API wrapper project. I hope that
 you have found the project to be useful. If you are here, you must want to help
 out in some way! I am very grateful for any help and support.
 
+### Table Of Contents
+* [Contributing](#contributing)
+* [Issues and Bug Reports](#issues-and-bug-reports)
+* [Enhancement Requets](#enhancements)
+* [Submitting Pull Requests](#pull-requests)
+* [Testing](#testing)
+* [Coding Style](#coding-style)
+* [Code Contributors](#code-contributors)
+
 ### Contributing
 
 Contributing to open-source software comes in many forms: adding additional

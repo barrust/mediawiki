@@ -40,8 +40,10 @@ class MediaWikiPage(object):
     :func:`mediawiki.MediaWiki.page`
     '''
 
+
     def __init__(self, mediawiki, title=None, pageid=None, redirect=True,
                  preload=False, original_title=''):
+
         self.mediawiki = mediawiki
         self.url = None
         if title is not None:
@@ -51,6 +53,7 @@ class MediaWikiPage(object):
             self.pageid = pageid
         else:
             raise ValueError('Either a title or a pageid must be specified')
+
 
         self._content = ''
         self._revision_id = False
@@ -102,6 +105,7 @@ class MediaWikiPage(object):
     # Properties
     def _pull_content_revision_parent(self):
         ''' combine the pulling of these three properties '''
+
         if self._revision_id is False:
             query_params = {
                 'prop': 'extracts|revisions',
@@ -155,6 +159,7 @@ class MediaWikiPage(object):
         .. note:: Side effect is to also get content and revision_id
         '''
         if self._parent_id is False:
+
             self._pull_content_revision_parent()
         return self._parent_id
 

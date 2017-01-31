@@ -54,7 +54,6 @@ class MediaWikiPage(object):
         else:
             raise ValueError('Either a title or a pageid must be specified')
 
-
         self._content = ''
         self._revision_id = False
         self._parent_id = False
@@ -159,7 +158,6 @@ class MediaWikiPage(object):
         .. note:: Side effect is to also get content and revision_id
         '''
         if self._parent_id is False:
-
             self._pull_content_revision_parent()
         return self._parent_id
 

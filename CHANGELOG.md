@@ -4,7 +4,8 @@
 
 ### Version 0.3.11
 
-* Re-factored MediaWikiPage into its own file
+* Re-factor MediaWikiPage into its own file
+* Remove setting properties outside of __init__()
 * Better Unicode support
 
 ### Version 0.3.10

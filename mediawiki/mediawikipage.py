@@ -40,7 +40,6 @@ class MediaWikiPage(object):
     :func:`mediawiki.MediaWiki.page`
     '''
 
-
     def __init__(self, mediawiki, title=None, pageid=None, redirect=True,
                  preload=False, original_title=''):
 

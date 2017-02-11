@@ -2,6 +2,13 @@
 
 ## Current
 
+### Version 0.3.11
+
+* Re-factor MediaWikiPage into its own file
+* Remove setting properties outside of __init__()
+* Better Unicode support
+* Add CONTRIBUTING.md file
+
 ### Version 0.3.10
 
 * Add categorytree support

@@ -2,9 +2,7 @@
 Utility functions
 '''
 import sys
-import json
 import functools
-import os
 import inspect
 
 
@@ -54,28 +52,9 @@ def memoize(func):
     return wrapper
 
 
-def capture_response(func):
-    ''' capture_response decorator to be used for tests '''
-    def wrapper(*args, **kwargs):
-        ''' define the actions '''
-        file_path = os.path.abspath('./tests/mock_requests.json')
-        if os.path.isfile(file_path):
-            with open(file_path, 'r') as mock:
-                mock_data = json.load(mock)
-        else:
-            mock_data = dict()
-
-        new_params = json.dumps(tuple(sorted(args[1].items())))
-        # build out parts of the dictionary
-        if args[0].api_url not in mock_data:
-            mock_data[args[0].api_url] = dict()
-        try:
-            res = func(*args, **kwargs)
-        except Exception:
-            res = dict()
-        mock_data[args[0].api_url][new_params] = res
-        with open(file_path, 'w') as mock:
-            json.dump(mock_data, mock, ensure_ascii=False, indent=1,
-                      sort_keys=True)
-        return res
-    return wrapper
+def str_or_unicode(text):
+    ''' handle python 3 unicode and python 2.7 byte strings '''
+    encoding = sys.stdout.encoding
+    if sys.version_info > (3, 0):
+        return text.encode(encoding).decode(encoding)
+    return text.encode(encoding)

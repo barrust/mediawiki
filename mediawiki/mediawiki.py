@@ -35,13 +35,13 @@ class MediaWiki(object):
     :type rate_limit_wait: timedelta
     '''
 
-    def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
+    def __init__(self, url='http://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
         ''' Init Function '''
         self._version = VERSION
-        self._api_url = url
-        self.language = lang  # Make sure URL is updated for language
+        self._api_url = url.format(lang=lang)
+        self._lang = lang
         self._timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
                             '/({1})/BOT').format(VERSION, URL)
@@ -217,7 +217,7 @@ class MediaWiki(object):
         return self._cache
 
     # non-properties
-    def set_api_url(self, api_url='http://en.wikipedia.org/w/api.php',
+    def set_api_url(self, api_url='http://{lang}.wikipedia.org/w/api.php',
                     lang='en'):
         ''' Set the API URL and language
 
@@ -231,7 +231,7 @@ class MediaWiki(object):
         '''
         old_api_url = self._api_url
         old_lang = self._lang
-        self._api_url = api_url
+        self._api_url = api_url.format(lang=lang)
         self._lang = lang
         try:
             self._get_site_info()

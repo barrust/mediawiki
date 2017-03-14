@@ -41,7 +41,7 @@ class MediaWiki(object):
         ''' Init Function '''
         self._version = VERSION
         self._api_url = url
-        self._lang = lang  # should this call self.language = lang?
+        self.language = lang  # Make sure URL is updated for language
         self._timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
                             '/({1})/BOT').format(VERSION, URL)

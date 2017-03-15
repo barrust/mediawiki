@@ -48,7 +48,7 @@ def capture_response(func):
 
 class MediaWikiOverloaded(MediaWiki):
     ''' overloaded mediawiki class '''
-    def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
+    def __init__(self, url='http://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
         ''' overloaded init '''

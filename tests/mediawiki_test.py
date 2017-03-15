@@ -20,7 +20,7 @@ from .utilities import find_depth, FunctionUseCounter
 
 class MediaWikiOverloaded(MediaWiki):
     ''' Overload the MediaWiki class to change how wiki_request works '''
-    def __init__(self, url='http://en.wikipedia.org/w/api.php', lang='en',
+    def __init__(self, url='http://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=None, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
         ''' new init '''
@@ -76,6 +76,18 @@ class TestMediaWiki(unittest.TestCase):
         self.assertEqual(site.language, 'fr')
         self.assertEqual(site.api_url, 'http://fr.wikipedia.org/w/api.php')
 
+    def test_api_lang_no_url(self):
+        ''' test setting the language on init without api_url '''
+        site = MediaWikiOverloaded(lang='fr')
+        self.assertEqual(site.language, 'fr')
+        self.assertEqual(site.api_url, 'http://fr.wikipedia.org/w/api.php')
+
+    def test_api_lang_no_url_upper(self):
+        ''' test setting the language on init without api_url upper case '''
+        site = MediaWikiOverloaded(lang='FR')
+        self.assertEqual(site.language, 'fr')
+        self.assertEqual(site.api_url, 'http://fr.wikipedia.org/w/api.php')
+
     def test_change_lang_no_change(self):
         ''' test changing the language when url will not change '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
@@ -108,6 +120,22 @@ class TestMediaWiki(unittest.TestCase):
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_version, response['api_version'])
         self.assertEqual(site.extensions, response['extensions'])
+
+    def test_change_api_url_lang(self):
+        ''' test changing the api url with only language '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
+        site.set_api_url(lang='fr')
+        self.assertEqual(site.api_url, 'http://fr.wikipedia.org/w/api.php')
+        self.assertEqual(site.language, 'fr')
+
+    def test_change_api_url_lang_upper(self):
+        ''' test changing the api url with only language upper case '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
+        site.set_api_url(lang='FR')
+        self.assertEqual(site.api_url, 'http://fr.wikipedia.org/w/api.php')
+        self.assertEqual(site.language, 'fr')
 
     def test_change_user_agent(self):
         ''' test changing the user agent '''

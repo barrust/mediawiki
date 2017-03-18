@@ -16,7 +16,7 @@ from .mediawikipage import (MediaWikiPage)
 from .utilities import (memoize)
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.11'
+VERSION = '0.3.12'
 
 
 class MediaWiki(object):
@@ -40,8 +40,8 @@ class MediaWiki(object):
                  rate_limit_wait=timedelta(milliseconds=50)):
         ''' Init Function '''
         self._version = VERSION
-        self._api_url = url.format(lang=lang)
-        self._lang = lang
+        self._lang = lang.lower()
+        self._api_url = url.format(lang=self._lang)
         self._timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
                             '/({1})/BOT').format(VERSION, URL)
@@ -231,8 +231,8 @@ class MediaWiki(object):
         '''
         old_api_url = self._api_url
         old_lang = self._lang
-        self._api_url = api_url.format(lang=lang)
-        self._lang = lang
+        self._lang = lang.lower()
+        self._api_url = api_url.format(lang=self._lang)
         try:
             self._get_site_info()
         except Exception:

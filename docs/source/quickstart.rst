@@ -59,7 +59,7 @@ Or one can update an already setup MediaWiki object:
 
 .. code: python
 
->>> wikipedia.api_url = 'http://awoiaf.westeros.org/api.php'
+>>> wikipedia.set_api_url('http://awoiaf.westeros.org/api.php')
 
 
 Searching

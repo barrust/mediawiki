@@ -96,10 +96,10 @@ information:
 Pull requests are how you will be able to add new features, fix bugs, or update
 documentation in the pymediawiki library. To create a pull request, you will
 first need to fork the repository, make all necessary changes and then create
-a pull request. There are a few guidelines for creating pull requests: 
+a pull request. There are a few guidelines for creating pull requests:
 
 * All pull requests must be based off of the latest development branch and not
-master
+master (unless there is not a development branch!)
 
 * If the PR only changes documentation, please add `[ci skip]` to the commit
 message. To learn more, you can [read about skipping integration testing ](https://docs.travis-ci.com/user/customizing-the-build#Skipping-a-build)
@@ -159,3 +159,4 @@ pep8 mediawiki
 A special thanks to all the code contributors to pymediawiki!
 
 [@barrust](https://github.com/barrust) (Maintainer)
+[@dan-blanchard](https://github.com/dan-blanchard) - Default URL conforms to passed in language

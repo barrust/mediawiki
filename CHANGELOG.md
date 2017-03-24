@@ -2,6 +2,10 @@
 
 ## Current
 
+### Version 0.3.12
+
+* Default API URL is now language specific: [PR #26](https://github.com/barrust/mediawiki/pull/26)
+
 ### Version 0.3.11
 
 * Re-factor MediaWikiPage into its own file

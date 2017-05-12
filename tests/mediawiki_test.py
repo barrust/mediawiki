@@ -1260,19 +1260,28 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
             self.assertEqual(str(ex), msg)
 
 
-# class TestMediaWikiLogos(unittest.TestCase):
-#     ''' Add logo tests here '''
-#
-#     def test_logo_present(self):
-#         site = MediaWikiOverloaded()
-#         res = site.responses[site.api_url]
-#         page = site.page('Chess')
-#         self.assertEqual(page.logos, res['chess_logo'])
-#
-#     def test_logo_not_present(self):
-#         site = MediaWikiOverloaded()
-#         page = site.page('Antivirus Software')
-#         self.assertEqual(page.logos, list())  # should be an empty list
+class TestMediaWikiLogos(unittest.TestCase):
+    ''' Add logo tests here '''
+
+    def test_logo_present(self):
+        ''' test when single logo or main image present '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('Chess')
+        self.assertEqual(page.logos, res['chess_logos'])
+
+    def test_mult_logo_present(self):
+        ''' test when multiple main images or logos present '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('Sony Music')
+        self.assertEqual(page.logos, res['sony_music_logos'])
+
+    def test_infobox_not_present(self):
+        ''' test when no infobox (based on the class name) is found '''
+        site = MediaWikiOverloaded()
+        page = site.page('Antivirus Software')
+        self.assertEqual(page.logos, list())  # should be an empty list
 
 
 class TestMediaWikiRegressions(unittest.TestCase):

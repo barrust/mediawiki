@@ -77,6 +77,7 @@ pull_disambiguation_errors = True
 pull_api_url_error = True
 pull_redirect_error = True
 pull_pages = True
+pull_logos = True
 
 # regression tests
 pull_issue_15 = True
@@ -367,6 +368,18 @@ if pull_pages is True:
     asoiaf.page('arya', auto_suggest=False)
 
     print("Completed pulling pages and properties")
+
+if pull_logos is True:
+    # single logo
+    res = wikipedia.page('Chess').logos
+    responses[wikipedia.api_url]['chess_logos'] = res
+    # multiple logos
+    res = wikipedia.page('Sony Music').logos
+    responses[wikipedia.api_url]['sony_music_logos'] = res
+    # no infobox
+    res = wikipedia.page('Antivirus Software').logos
+    responses[wikipedia.api_url]['antivirus_software_logos'] = res
+
 
 if pull_issue_14 is True:
     res = site.page('One Two Three... Infinity').images

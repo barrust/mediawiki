@@ -2,6 +2,10 @@
 
 ## Current
 
+### Version 0.3.13
+
+* Add pulling list of main images or logos [issue #28](https://github.com/barrust/mediawiki/issues/28)
+
 ### Version 0.3.12
 
 * Default API URL is now language specific: [PR #26](https://github.com/barrust/mediawiki/pull/26)

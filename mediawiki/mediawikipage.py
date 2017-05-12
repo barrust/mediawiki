@@ -67,6 +67,7 @@ class MediaWikiPage(object):
         self._summary = False
         self._sections = False
         self._logos = False
+        self._hatnotes = False
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -215,7 +216,7 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: list
 
-        .. note:: Side effect is to also pull the html which can be slow...
+        .. note:: Side effect is to also pull the html which can be slow
         '''
         if self._logos is False:
             self._logos = list()
@@ -226,6 +227,33 @@ class MediaWikiPage(object):
                 for child in children:
                     self._logos.append('https:' + child.img['src'])
         return self._logos
+
+    @property
+    def hatnotes(self):
+        ''' Pull hatnotes from the page
+
+        :getter: Returns the list of all hatnotes from the page
+        :setter: Not settable
+        :type: list
+
+        .. note:: Side effect is to also pull the html which can be slow
+        '''
+        if self._hatnotes is False:
+            self._hatnotes = list()
+            soup = BeautifulSoup(self.html, 'html.parser')
+            notes = soup.findAll('', {'class': 'hatnote'})
+            if notes is not None:
+                for note in notes:
+                    # print(note)
+                    tmp = list()
+                    for child in note.children:
+                        # print(child)
+                        if hasattr(child, 'text'):
+                            tmp.append(child.text)
+                        else:
+                            tmp.append(child)
+                    self._hatnotes.append(''.join(tmp))
+        return self._hatnotes
 
     @property
     def references(self):

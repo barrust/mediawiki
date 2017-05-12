@@ -6,6 +6,7 @@ MediaWiki Documentation
 Here you can find the full developer API for the mediawiki project.
 
 Contents:
+=========
 
 .. toctree::
 

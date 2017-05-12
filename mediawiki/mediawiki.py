@@ -681,6 +681,7 @@ class MediaWiki(object):
         :raises  ValueError: when title is blank or None and no pageid is \
         provided
         :raises  `mediawiki.exceptions.PageError`: if page does not exist
+
         .. note:: Title takes precedence over pageid if both are provided
         '''
         if (title is None or title.strip() == '') and pageid is None:

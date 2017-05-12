@@ -209,11 +209,13 @@ class MediaWikiPage(object):
 
     @property
     def logos(self):
-        ''' Possible logos or main images on the page
+        ''' Images within the infobox signifying either the main image or logo
 
         :getter: Returns the list of all images in the information box
         :setter: Not settable
         :type: list
+
+        .. note:: Side effect is to also pull the html which can be slow...
         '''
         if self._logos is False:
             self._logos = list()

@@ -66,6 +66,7 @@ class MediaWikiPage(object):
         self._backlinks = False
         self._summary = False
         self._sections = False
+        self._logos = False
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -205,6 +206,24 @@ class MediaWikiPage(object):
                     self._images.append(page['imageinfo'][0]['url'])
             self._images = sorted(self._images)
         return self._images
+
+    @property
+    def logos(self):
+        ''' Possible logos or main images on the page
+
+        :getter: Returns the list of all images in the information box
+        :setter: Not settable
+        :type: list
+        '''
+        if self._logos is False:
+            self._logos = list()
+            soup = BeautifulSoup(self.html, 'html.parser')
+            info = soup.find('table', {'class': 'infobox'})
+            if info is not None:
+                children = info.findAll('', {'class': 'image'})
+                for child in children:
+                    self._logos.append('https:' + child.img['src'])
+        return self._logos
 
     @property
     def references(self):

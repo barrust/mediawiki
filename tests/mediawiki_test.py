@@ -708,7 +708,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
         wiki = 'http://en.wikipedia.org/w/api.php'
         try:
             MediaWikiOverloaded(url=url, lang='fr')
-        except MediaWikiAPIURLError as ex:
+        except MediaWikiAPIURLError:
             self.assertNotEqual(site.api_url, url)
             self.assertEqual(site.api_url, wiki)
 
@@ -1009,10 +1009,11 @@ class TestMediaWikiPage(unittest.TestCase):
         site = MediaWikiOverloaded()
         page = site.page('Jacques Léonard Muller')
         if sys.version_info < (3, 0):
-            res = unicode(page)
+            self.assertEqual(unicode(page),
+                             '''<MediaWikiPage 'Jacques Léonard Muller'>''')
         else:
-            res = str(page)
-        self.assertEqual(res, '''<MediaWikiPage 'Jacques Léonard Muller'>''')
+            self.assertEqual(str(page),
+                             '''<MediaWikiPage 'Jacques Léonard Muller'>''')
 
     def test_page_repr_2(self):
         ''' test page string representation '''
@@ -1257,6 +1258,21 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
             site.categorytree(category)
         except MediaWikiCategoryTreeError as ex:
             self.assertEqual(str(ex), msg)
+
+
+# class TestMediaWikiLogos(unittest.TestCase):
+#     ''' Add logo tests here '''
+#
+#     def test_logo_present(self):
+#         site = MediaWikiOverloaded()
+#         res = site.responses[site.api_url]
+#         page = site.page('Chess')
+#         self.assertEqual(page.logos, res['chess_logo'])
+#
+#     def test_logo_not_present(self):
+#         site = MediaWikiOverloaded()
+#         page = site.page('Antivirus Software')
+#         self.assertEqual(page.logos, list())  # should be an empty list
 
 
 class TestMediaWikiRegressions(unittest.TestCase):

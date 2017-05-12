@@ -2594,6 +2594,28 @@
    "Chess aesthetics",
    "International Chess Day"
   ],
+  "chess_hatnotes": [
+   "This article is about the Western board game. For other chess games or other uses, see Chess (disambiguation).",
+   "Main article: Rules of chess",
+   "Main article: Castling",
+   "Main article: En passant",
+   "Main article: Promotion (chess)",
+   "Main article: Check (chess)",
+   "Main article: Chess notation",
+   "Main article: Chess tactics",
+   "Main article: Chess strategy",
+   "Main article: Chess opening",
+   "Main article: Chess middlegame",
+   "Main article: Chess endgame",
+   "Main article: History of chess",
+   "Main article: Chess in the arts and literature",
+   "Main article: Chess problem",
+   "Main article: Réti endgame study",
+   "Main article: Chess titles",
+   "Main articles: Chess libraries, List of chess books, and List of chess periodicals",
+   "See also: Computer chess, Mathematical chess problem, Human-computer chess matches, Deep Blue versus Garry Kasparov, and Chess engine",
+   "Main article: List of chess variants"
+  ],
   "chess_logos": [
    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/ChessSet.jpg/250px-ChessSet.jpg"
   ],
@@ -20826,6 +20848,7 @@
   "page_error_msg": "\"gobbilygook\" does not match any pages. Try another query!",
   "page_error_msg_pageid": "Page id \"-1\" does not match any pages. Try another id!",
   "page_error_msg_title": "\"gobbilygook\" does not match any pages. Try another query!",
+  "page_no_hatnotes": [],
   "prefixsearch_ar": [
    "Ar",
    "Arthropod",

@@ -63,25 +63,26 @@ class MediaWikiOverloaded(MediaWiki):
 
 
 # Parameters to determine which tests to pull
-pull_searches = True
-pull_random = True
-pull_suggest = True
-pull_opensearch = True
-pull_prefixsearch = True
-pull_geosearch = True
-pull_categorymembers = True
-pull_categorytree = True
-pull_summary = True
-pull_page_errors = True
-pull_disambiguation_errors = True
-pull_api_url_error = True
-pull_redirect_error = True
-pull_pages = True
-pull_logos = True
+pull_searches = False
+pull_random = False
+pull_suggest = False
+pull_opensearch = False
+pull_prefixsearch = False
+pull_geosearch = False
+pull_categorymembers = False
+pull_categorytree = False
+pull_summary = False
+pull_page_errors = False
+pull_disambiguation_errors = False
+pull_api_url_error = False
+pull_redirect_error = False
+pull_pages = False
+pull_logos = False
+pull_hatnotes = False
 
 # regression tests
-pull_issue_15 = True
-pull_issue_14 = True
+pull_issue_15 = False
+pull_issue_14 = False
 
 
 # make files if they don't exist
@@ -380,6 +381,15 @@ if pull_logos is True:
     res = wikipedia.page('Antivirus Software').logos
     responses[wikipedia.api_url]['antivirus_software_logos'] = res
 
+if pull_hatnotes is True:
+    # contains hatnotes
+    res = wikipedia.page('Chess').hatnotes
+    responses[wikipedia.api_url]['chess_hatnotes'] = res
+    # no hatnotes
+    page_name = ('List of Battlestar Galactica (1978 TV series) and '
+                 'Galactica 1980 episodes')
+    res = wikipedia.page(page_name).hatnotes
+    responses[wikipedia.api_url]['page_no_hatnotes'] = res
 
 if pull_issue_14 is True:
     res = site.page('One Two Three... Infinity').images

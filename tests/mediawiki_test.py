@@ -1284,6 +1284,26 @@ class TestMediaWikiLogos(unittest.TestCase):
         self.assertEqual(page.logos, list())  # should be an empty list
 
 
+class TestMediaWikiHatnotes(unittest.TestCase):
+    ''' Test the pulling of hatnotes from mediawiki pages '''
+
+    def test_contains_hatnotes(self):
+        ''' Test when hatnotes are present '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('Chess')
+        self.assertEqual(page.hatnotes, res['chess_hatnotes'])
+
+    def test_no_hatnotes(self):
+        ''' Test when no hatnote is on the page '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page_name = ('List of Battlestar Galactica (1978 TV series) and '
+                     'Galactica 1980 episodes')
+        page = site.page(page_name)
+        self.assertEqual(page.hatnotes, res['page_no_hatnotes'])
+
+
 class TestMediaWikiRegressions(unittest.TestCase):
     ''' Add regression tests here for special cases '''
 

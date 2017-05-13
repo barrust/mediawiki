@@ -4,6 +4,7 @@
 
 ### Version 0.3.13
 
+* Add pulling hatnotes [issue #6](https://github.com/barrust/mediawiki/issues/6)
 * Add pulling list of main images or logos [issue #28](https://github.com/barrust/mediawiki/issues/28)
 
 ### Version 0.3.12

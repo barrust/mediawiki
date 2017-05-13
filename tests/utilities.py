@@ -29,16 +29,11 @@ def find_depth(node):
         if next_node['sub-categories'] is None:
             return depth
 
-        # print(next_node.keys())
         if len(next_node['sub-categories'].keys()) == 0:
-            # print("got to the bottom...", next_node['depth'])
-            # print('returning', next_node['depth'])
             return next_node['depth']
         else:
-            # print(next_node)
             for key in next_node['sub-categories'].keys():
                 path_depth = walk(next_node['sub-categories'][key], depth)
-                # print('path_depth', path_depth)
                 if path_depth and path_depth > depth:
                     depth = path_depth
             return depth

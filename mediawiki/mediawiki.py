@@ -16,7 +16,7 @@ from .mediawikipage import (MediaWikiPage)
 from .utilities import (memoize)
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.12'
+VERSION = '0.3.13'
 
 
 class MediaWiki(object):
@@ -318,11 +318,10 @@ class MediaWiki(object):
         search_results = (d['title'] for d in raw_results['query']['search'])
 
         if suggestion:
+            sug = None
             if raw_results['query'].get('searchinfo'):
                 sug = raw_results['query']['searchinfo']['suggestion']
-                return list(search_results), sug
-            else:
-                return list(search_results), None
+            return list(search_results), sug
 
         return list(search_results)
     # end search
@@ -555,8 +554,7 @@ class MediaWiki(object):
 
         if subcategories:
             return pages, subcats
-        else:
-            return pages
+        return pages
     # end categorymembers
 
     # @memoize
@@ -681,6 +679,7 @@ class MediaWiki(object):
         :raises  ValueError: when title is blank or None and no pageid is \
         provided
         :raises  `mediawiki.exceptions.PageError`: if page does not exist
+
         .. note:: Title takes precedence over pageid if both are provided
         '''
         if (title is None or title.strip() == '') and pageid is None:

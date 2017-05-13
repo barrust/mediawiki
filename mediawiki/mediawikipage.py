@@ -66,6 +66,8 @@ class MediaWikiPage(object):
         self._backlinks = False
         self._summary = False
         self._sections = False
+        self._logos = False
+        self._hatnotes = False
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -205,6 +207,51 @@ class MediaWikiPage(object):
                     self._images.append(page['imageinfo'][0]['url'])
             self._images = sorted(self._images)
         return self._images
+
+    @property
+    def logos(self):
+        ''' Images within the infobox signifying either the main image or logo
+
+        :getter: Returns the list of all images in the information box
+        :setter: Not settable
+        :type: list
+
+        .. note:: Side effect is to also pull the html which can be slow
+        '''
+        if self._logos is False:
+            self._logos = list()
+            soup = BeautifulSoup(self.html, 'html.parser')
+            info = soup.find('table', {'class': 'infobox'})
+            if info is not None:
+                children = info.findAll('', {'class': 'image'})
+                for child in children:
+                    self._logos.append('https:' + child.img['src'])
+        return self._logos
+
+    @property
+    def hatnotes(self):
+        ''' Pull hatnotes from the page
+
+        :getter: Returns the list of all hatnotes from the page
+        :setter: Not settable
+        :type: list
+
+        .. note:: Side effect is to also pull the html which can be slow
+        '''
+        if self._hatnotes is False:
+            self._hatnotes = list()
+            soup = BeautifulSoup(self.html, 'html.parser')
+            notes = soup.findAll('', {'class': 'hatnote'})
+            if notes is not None:
+                for note in notes:
+                    tmp = list()
+                    for child in note.children:
+                        if hasattr(child, 'text'):
+                            tmp.append(child.text)
+                        else:
+                            tmp.append(child)
+                    self._hatnotes.append(''.join(tmp))
+        return self._hatnotes
 
     @property
     def references(self):

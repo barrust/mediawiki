@@ -318,11 +318,10 @@ class MediaWiki(object):
         search_results = (d['title'] for d in raw_results['query']['search'])
 
         if suggestion:
+            sug = None
             if raw_results['query'].get('searchinfo'):
                 sug = raw_results['query']['searchinfo']['suggestion']
-                return list(search_results), sug
-            else:
-                return list(search_results), None
+            return list(search_results), sug
 
         return list(search_results)
     # end search
@@ -555,8 +554,7 @@ class MediaWiki(object):
 
         if subcategories:
             return pages, subcats
-        else:
-            return pages
+        return pages
     # end categorymembers
 
     # @memoize

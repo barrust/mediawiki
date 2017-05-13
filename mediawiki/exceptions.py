@@ -120,8 +120,7 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
 
 
 class MediaWikiCategoryTreeError(MediaWikiBaseException):
-    '''
-    Exception when the category tree is unable to complete for an unknown
+    ''' Exception when the category tree is unable to complete for an unknown
     reason
     '''
 

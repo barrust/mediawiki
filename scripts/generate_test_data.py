@@ -4,9 +4,9 @@ Generate data for tests
 from __future__ import print_function
 import sys
 import os
-from datetime import datetime, timedelta
+from datetime import timedelta
 import json
-from decimal import Decimal, DecimalException
+from decimal import Decimal
 sys.path.insert(0, '../mediawiki')
 from mediawiki import (MediaWiki, PageError, RedirectError,
                        DisambiguationError, MediaWikiAPIURLError,
@@ -14,16 +14,16 @@ from mediawiki import (MediaWiki, PageError, RedirectError,
 
 
 # set up the json objects
-requests_file = './tests/mock_requests.json'
-responses_file = './tests/mock_responses.json'
-cattree_file = './tests/mock_categorytree.json'
+REQUESTS_FILE = './tests/mock_requests.json'
+RESPONSES_FILE = './tests/mock_responses.json'
+CATTREE_FILE = './tests/mock_categorytree.json'
 
 
 def capture_response(func):
     ''' capture_response decorator to be used for tests '''
     def wrapper(*args, **kwargs):
         ''' define the actions '''
-        file_path = os.path.abspath(requests_file)
+        file_path = os.path.abspath(REQUESTS_FILE)
         if os.path.isfile(file_path):
             with open(file_path, 'r') as mock:
                 mock_data = json.load(mock)
@@ -63,35 +63,35 @@ class MediaWikiOverloaded(MediaWiki):
 
 
 # Parameters to determine which tests to pull
-pull_searches = False
-pull_random = False
-pull_suggest = False
-pull_opensearch = False
-pull_prefixsearch = False
-pull_geosearch = False
-pull_categorymembers = False
-pull_categorytree = False
-pull_summary = False
-pull_page_errors = False
-pull_disambiguation_errors = False
-pull_api_url_error = False
-pull_redirect_error = False
-pull_pages = False
-pull_logos = False
-pull_hatnotes = False
+PULL_SEARCHES = False
+PULL_RANDOM = False
+PULL_SUGGEST = False
+PULL_OPENSEARCH = False
+PULL_PREFIXSEARCH = False
+PULL_GEOSEARCH = False
+PULL_CATEGORYMEMBERS = False
+PULL_CATEGORYTREE = False
+PULL_SUMMARY = False
+PULL_PAGE_ERRORS = False
+PULL_DISAMBIGUATION_ERRORS = False
+PULL_API_URL_ERROR = False
+PULL_REDIRECT_ERROR = False
+PULL_PAGES = False
+PULL_LOGOS = False
+PULL_HATNOTES = False
 
 # regression tests
-pull_issue_15 = False
-pull_issue_14 = False
+PULL_ISSUE_15 = False
+PULL_ISSUE_14 = False
 
 
 # make files if they don't exist
-if not os.path.isfile(requests_file):
-    with open(requests_file, 'w') as file_handle:
+if not os.path.isfile(REQUESTS_FILE):
+    with open(REQUESTS_FILE, 'w') as file_handle:
         json.dump(dict(), file_handle, ensure_ascii=False)
 
-if os.path.isfile(responses_file):
-    with open(responses_file, 'r') as file_handle:
+if os.path.isfile(RESPONSES_FILE):
+    with open(RESPONSES_FILE, 'r') as file_handle:
         responses = json.load(file_handle)
 else:
     responses = dict()
@@ -140,7 +140,7 @@ responses[asoiaf.api_url]['extensions'] = asoiaf.extensions
 
 print("Completed basic mediawiki information")
 
-if pull_searches is True:
+if PULL_SEARCHES is True:
     res = site.search('chest set', suggestion=False)
     responses[site.api_url]['search_without_suggestion'] = res
     res = site.search('chest set', suggestion=True)
@@ -154,7 +154,7 @@ if pull_searches is True:
 
     print("Completed pulling searches")
 
-if pull_random is True:
+if PULL_RANDOM is True:
     responses[site.api_url]['random_1'] = site.random(pages=1)
     responses[site.api_url]['random_2'] = site.random(pages=2)
     responses[site.api_url]['random_10'] = site.random(pages=10)
@@ -162,7 +162,7 @@ if pull_random is True:
 
     print("Completed pulling random pages")
 
-if pull_suggest is True:
+if PULL_SUGGEST is True:
     responses[site.api_url]['suggest_chest_set'] = site.suggest("chest set")
     responses[site.api_url]['suggest_chess_set'] = site.suggest("chess set")
     responses[site.api_url]['suggest_new_york'] = site.suggest('new york')
@@ -171,7 +171,7 @@ if pull_suggest is True:
 
     print("Completed pulling suggestions")
 
-if pull_opensearch is True:
+if PULL_OPENSEARCH is True:
     res = site.opensearch('new york')
     responses[site.api_url]['opensearch_new_york'] = res
     res = site.opensearch('new york', results=5)
@@ -183,7 +183,7 @@ if pull_opensearch is True:
 
     print("Completed pulling open searches")
 
-if pull_prefixsearch is True:
+if PULL_PREFIXSEARCH is True:
     responses[site.api_url]['prefixsearch_ar'] = site.prefixsearch('ar')
     responses[site.api_url]['prefixsearch_ba'] = site.prefixsearch('ba')
     res = site.prefixsearch('ba', results=5)
@@ -193,7 +193,7 @@ if pull_prefixsearch is True:
 
     print("Completed pulling prefix searches")
 
-if pull_geosearch is True:
+if PULL_GEOSEARCH is True:
     res = site.geosearch(latitude=Decimal('0.0'), longitude=Decimal('0.0'))
     responses[site.api_url]['geosearch_decimals'] = res
     res = site.geosearch(latitude=Decimal('0.0'), longitude=0.0)
@@ -220,7 +220,7 @@ if pull_geosearch is True:
 
     print("Completed pulling geo search")
 
-if pull_categorymembers is True:
+if PULL_CATEGORYMEMBERS is True:
     res = site.categorymembers("Chess", results=15, subcategories=True)
     responses[site.api_url]['category_members_with_subcategories'] = res
     res = site.categorymembers("Chess", results=15, subcategories=False)
@@ -232,10 +232,10 @@ if pull_categorymembers is True:
 
     print("Completed pulling category members")
 
-if pull_categorytree is True:
+if PULL_CATEGORYTREE is True:
     site.rate_limit = True
     ct = site.categorytree(['Chess', 'Ebola'], depth=None)
-    with open(cattree_file, 'w') as fp:
+    with open(CATTREE_FILE, 'w') as fp:
         json.dump(ct, fp, ensure_ascii=False, sort_keys=True)
 
     try:
@@ -246,7 +246,7 @@ if pull_categorytree is True:
 
     print("Completed pulling category tree")
 
-if pull_summary is True:
+if PULL_SUMMARY is True:
     res = site.summary('chess', chars=50)
     responses[site.api_url]['sumarize_chars_50'] = res
     res = site.summary('chess', sentences=5)
@@ -254,7 +254,7 @@ if pull_summary is True:
 
     print("Completed pulling summaries")
 
-if pull_page_errors is True:
+if PULL_PAGE_ERRORS is True:
     try:
         site.page('gobbilygook')
     except PageError as ex:
@@ -272,7 +272,7 @@ if pull_page_errors is True:
 
     print("Completed pulling page errors")
 
-if pull_disambiguation_errors is True:
+if PULL_DISAMBIGUATION_ERRORS is True:
     try:
         site.page('bush')
     except DisambiguationError as ex:
@@ -286,7 +286,7 @@ if pull_disambiguation_errors is True:
 
     print("Completed pulling disambiguation errors")
 
-if pull_api_url_error is True:
+if PULL_API_URL_ERROR is True:
     url = 'http://french.wikipedia.org/w/api.php'
     try:
         site.set_api_url(api_url=url, lang='fr')
@@ -298,7 +298,7 @@ if pull_api_url_error is True:
     site.set_api_url(api_url='http://en.wikipedia.org/w/api.php', lang='en')
     print("Completed pulling api url errors")
 
-if pull_redirect_error is True:
+if PULL_REDIRECT_ERROR is True:
     print('Start redirect error')
     try:
         asoiaf.page('arya', auto_suggest=False, redirect=False)
@@ -308,7 +308,7 @@ if pull_redirect_error is True:
     print("Completed pulling redirect errors")
 
 
-if pull_pages is True:
+if PULL_PAGES is True:
     # unicode
     site.page(u"Jacques Léonard Muller")
     # page id
@@ -370,7 +370,7 @@ if pull_pages is True:
 
     print("Completed pulling pages and properties")
 
-if pull_logos is True:
+if PULL_LOGOS is True:
     # single logo
     res = wikipedia.page('Chess').logos
     responses[wikipedia.api_url]['chess_logos'] = res
@@ -381,7 +381,7 @@ if pull_logos is True:
     res = wikipedia.page('Antivirus Software').logos
     responses[wikipedia.api_url]['antivirus_software_logos'] = res
 
-if pull_hatnotes is True:
+if PULL_HATNOTES is True:
     # contains hatnotes
     res = wikipedia.page('Chess').hatnotes
     responses[wikipedia.api_url]['chess_hatnotes'] = res
@@ -391,7 +391,7 @@ if pull_hatnotes is True:
     res = wikipedia.page(page_name).hatnotes
     responses[wikipedia.api_url]['page_no_hatnotes'] = res
 
-if pull_issue_14 is True:
+if PULL_ISSUE_14 is True:
     res = site.page('One Two Three... Infinity').images
     responses[wikipedia.api_url]['hidden_images'] = res
 
@@ -401,7 +401,7 @@ if pull_issue_14 is True:
 
     print("Completed pulling issue 14")
 
-if pull_issue_15 is True:
+if PULL_ISSUE_15 is True:
     res = site.page('Rober Eryol').images
     responses[wikipedia.api_url]['infinite_loop_images'] = res
     res = site.page('List of named minor planets (numerical)').links
@@ -412,5 +412,5 @@ if pull_issue_15 is True:
     print("Completed pulling issue 15")
 
 # dump data to file
-with open(responses_file, 'w') as mock:
+with open(RESPONSES_FILE, 'w') as mock:
     json.dump(responses, mock, ensure_ascii=False, indent=1, sort_keys=True)

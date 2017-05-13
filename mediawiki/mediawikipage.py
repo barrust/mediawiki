@@ -244,10 +244,8 @@ class MediaWikiPage(object):
             notes = soup.findAll('', {'class': 'hatnote'})
             if notes is not None:
                 for note in notes:
-                    # print(note)
                     tmp = list()
                     for child in note.children:
-                        # print(child)
                         if hasattr(child, 'text'):
                             tmp.append(child.text)
                         else:

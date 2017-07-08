@@ -1,6 +1,7 @@
 '''
 mediawiki module initialization
 '''
+from __future__ import (unicode_literals, absolute_import)
 from .mediawiki import (MediaWiki, URL, VERSION)
 from .mediawikipage import (MediaWikiPage)
 from .exceptions import (MediaWikiException, PageError, MediaWikiGeoCoordError,

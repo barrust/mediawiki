@@ -4,7 +4,7 @@ MediaWikiPage class module
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
-from __future__ import unicode_literals
+from __future__ import (unicode_literals, absolute_import)
 from decimal import (Decimal)
 from bs4 import (BeautifulSoup)
 from .utilities import (str_or_unicode)

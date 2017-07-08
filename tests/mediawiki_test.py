@@ -2,13 +2,13 @@
 '''
 Unittest class
 '''
-
-from __future__ import (unicode_literals, print_function)
+from __future__ import (unicode_literals, absolute_import, print_function)
 import sys
+import time
 import unittest
 import json
-from datetime import timedelta
-from decimal import Decimal
+from datetime import (timedelta)
+from decimal import (Decimal)
 
 from mediawiki import (MediaWiki, MediaWikiPage, PageError, RedirectError,
                        DisambiguationError, MediaWikiAPIURLError,
@@ -203,6 +203,54 @@ class TestMediaWiki(unittest.TestCase):
         self.assertNotEqual(site.memoized, dict())
         site.clear_memoized()
         self.assertEqual(site.memoized, dict())
+
+    def test_refresh_interval(self):
+        ''' test not setting refresh interval '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.refresh_interval, None)
+
+    def test_refresh_interval_set(self):
+        ''' test setting refresh interval '''
+        site = MediaWikiOverloaded()
+        site.refresh_interval = 5
+        self.assertEqual(site.refresh_interval, 5)
+
+    def test_refresh_interval_neg(self):
+        ''' test setting refresh interval to invalid number '''
+        site = MediaWikiOverloaded()
+        site.refresh_interval = -5
+        self.assertEqual(site.refresh_interval, None)
+
+    def test_refresh_interval_str(self):
+        ''' test setting refresh interval to invalid type '''
+        site = MediaWikiOverloaded()
+        site.refresh_interval = "something"
+        self.assertEqual(site.refresh_interval, None)
+
+    def test_memoized_refresh_no(self):
+        ''' test refresh interval for memoized cache when too quick '''
+        site = MediaWikiOverloaded()
+        site.refresh_interval = 2
+        site.search('chest set')
+        key1 = list(site.memoized['search'])[0]  # get first key
+        time1 = site.memoized['search'][key1]
+        site.search('chest set')
+        key2 = list(site.memoized['search'])[0]  # get first key
+        time2 = site.memoized['search'][key2]
+        self.assertEqual(time1, time2)
+
+    def test_memoized_refresh(self):
+        ''' test refresh interval for memoized cache '''
+        site = MediaWikiOverloaded()
+        site.refresh_interval = 2
+        site.search('chest set')
+        key1 = list(site.memoized['search'])[0]  # get first key
+        time1 = site.memoized['search'][key1]
+        time.sleep(5)
+        site.search('chest set')
+        key2 = list(site.memoized['search'])[0]  # get first key
+        time2 = site.memoized['search'][key2]
+        self.assertNotEqual(time1, time2)
 
 
 class TestMediaWikiRandom(unittest.TestCase):

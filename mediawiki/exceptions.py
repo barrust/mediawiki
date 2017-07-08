@@ -1,8 +1,8 @@
 '''
 MediaWiki Exceptions
 '''
-from __future__ import unicode_literals
-from .utilities import str_or_unicode
+from __future__ import (unicode_literals, absolute_import)
+from .utilities import (str_or_unicode)
 
 
 ODD_ERROR_MESSAGE = ('This should not happen. Please report on '
@@ -57,8 +57,7 @@ class RedirectError(MediaWikiBaseException):
     a redirect
 
     .. note:: This should only occur if both auto_suggest and redirect \
-    are set to **False**
-    '''
+    are set to **False** '''
 
     def __init__(self, title):
         self.title = title
@@ -76,8 +75,7 @@ class DisambiguationError(MediaWikiBaseException):
     pages to which the query may refer
 
     .. note:: `options` only includes titles that link to valid \
-    MediaWiki pages
-    '''
+    MediaWiki pages '''
 
     def __init__(self, title, may_refer_to, details=None):
         self.title = title
@@ -121,8 +119,7 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
 
 class MediaWikiCategoryTreeError(MediaWikiBaseException):
     ''' Exception when the category tree is unable to complete for an unknown
-    reason
-    '''
+        reason '''
 
     def __init__(self, category):
         self.category = category

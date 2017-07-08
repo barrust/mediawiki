@@ -4,7 +4,7 @@ MediaWiki class module
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
-from __future__ import unicode_literals
+from __future__ import (unicode_literals, absolute_import)
 from datetime import (datetime, timedelta)
 import time
 from decimal import (Decimal, DecimalException)
@@ -16,7 +16,7 @@ from .mediawikipage import (MediaWikiPage)
 from .utilities import (memoize)
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.13'
+VERSION = '0.3.14'
 
 
 class MediaWiki(object):
@@ -54,6 +54,7 @@ class MediaWiki(object):
 
         # for memoized results
         self._cache = dict()
+        self._refresh_interval = None
 
         # call helper functions to get everything set up
         self._reset_session()
@@ -215,6 +216,25 @@ class MediaWiki(object):
         :return: dict
         '''
         return self._cache
+
+    @property
+    def refresh_interval(self):
+        ''' Return the memoize cache refresh interval
+
+        :getter: Returns the refresh interval for the cache used for \
+        memoization
+        :setter: Sets the refresh interval for the memoize cache
+        :return: integer
+        '''
+        return self._refresh_interval
+
+    @refresh_interval.setter
+    def refresh_interval(self, refresh_interval):
+        ''' Set the new cache refresh interval '''
+        if isinstance(refresh_interval, int) and refresh_interval > 0:
+            self._refresh_interval = refresh_interval
+        else:
+            self._refresh_interval = None
 
     # non-properties
     def set_api_url(self, api_url='http://{lang}.wikipedia.org/w/api.php',
@@ -557,7 +577,6 @@ class MediaWiki(object):
         return pages
     # end categorymembers
 
-    # @memoize
     def categorytree(self, category, depth=5):
         ''' Generate the Category Tree for the given categories
 

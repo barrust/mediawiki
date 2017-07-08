@@ -147,7 +147,7 @@ class TestMediaWiki(unittest.TestCase):
         ''' test pulling wikimedia supported languages '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        self.assertEqual(site.languages(), response['languages'])
+        self.assertEqual(site.supported_languages, response['languages'])
 
     def test_rate_limit(self):
         ''' test setting rate limiting '''
@@ -251,6 +251,7 @@ class TestMediaWiki(unittest.TestCase):
         key2 = list(site.memoized['search'])[0]  # get first key
         time2 = site.memoized['search'][key2]
         self.assertNotEqual(time1, time2)
+        self.assertGreater(time2, time1)
 
 
 class TestMediaWikiRandom(unittest.TestCase):

@@ -51,6 +51,7 @@ class MediaWiki(object):
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
+        self.__supported_languages = None
 
         # for memoized results
         self._cache = dict()
@@ -219,10 +220,9 @@ class MediaWiki(object):
 
     @property
     def refresh_interval(self):
-        ''' Return the memoize cache refresh interval
+        ''' The interval at which the memoize cache is to be refresh
 
-        :getter: Returns the refresh interval for the cache used for \
-        memoization
+        :getter: Returns the refresh interval for the memoize cache
         :setter: Sets the refresh interval for the memoize cache
         :return: integer
         '''
@@ -255,6 +255,7 @@ class MediaWiki(object):
         self._api_url = api_url.format(lang=self._lang)
         try:
             self._get_site_info()
+            self.__supported_languages = None  # reset this
         except Exception:
             # reset api url and lang in the event that the exception was caught
             self._api_url = old_api_url
@@ -274,16 +275,21 @@ class MediaWiki(object):
             self._cache.clear()
 
     # non-setup functions
-    def languages(self):
+    @property
+    def supported_languages(self):
         ''' All supported language prefixes on the MediaWiki site
 
         :getter: Returns all supported language prefixes
         :setter: Not settable
         :returns: dict: prefix - local language name pairs
         '''
-        res = self.wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
-        return {lang['code']: lang['*'] for lang in res['query']['languages']}
-    # end languages
+        if self.__supported_languages is None:
+            res = self.wiki_request({'meta': 'siteinfo', 'siprop':
+                                     'languages'})
+            tmp = res['query']['languages']
+            supported = {lang['code']: lang['*'] for lang in tmp}
+            self.__supported_languages = supported
+        return self.__supported_languages
 
     def random(self, pages=1):
         ''' Request a random page title or list of random titles

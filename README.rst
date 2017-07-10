@@ -59,7 +59,7 @@ Documentation
 -------------
 
 Documentation of the latest release is hosted on
-`pythonhosted.org <https://pythonhosted.org/pymediawiki/>`__
+`readthedocs.io http://pymediawiki.readthedocs.io/en/latest/?>`__
 
 To build the documentation yourself run:
 

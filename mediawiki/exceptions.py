@@ -1,8 +1,8 @@
 '''
 MediaWiki Exceptions
 '''
-from __future__ import unicode_literals
-from .utilities import str_or_unicode
+from __future__ import (unicode_literals, absolute_import)
+from .utilities import (str_or_unicode)
 
 
 ODD_ERROR_MESSAGE = ('This should not happen. Please report on '
@@ -39,15 +39,15 @@ class PageError(MediaWikiBaseException):
     def __init__(self, title=None, pageid=None):
         if title:
             self.title = title
-            msg = (u'"{0}" does not match any pages. Try another '
+            msg = ('"{0}" does not match any pages. Try another '
                    'query!').format(self.title)
         elif pageid:
             self.pageid = pageid
-            msg = (u'Page id "{0}" does not match any pages. Try '
+            msg = ('Page id "{0}" does not match any pages. Try '
                    'another id!').format(self.pageid)
         else:
             self.title = ''
-            msg = (u'"{0}" does not match any pages. Try another '
+            msg = ('"{0}" does not match any pages. Try another '
                    'query!').format(self.title)
         super(PageError, self).__init__(msg)
 
@@ -57,12 +57,11 @@ class RedirectError(MediaWikiBaseException):
     a redirect
 
     .. note:: This should only occur if both auto_suggest and redirect \
-    are set to **False**
-    '''
+    are set to **False** '''
 
     def __init__(self, title):
         self.title = title
-        msg = (u'"{0}" resulted in a redirect. Set the redirect '
+        msg = ('"{0}" resulted in a redirect. Set the redirect '
                'property to True to allow automatic '
                'redirects.').format(self.title)
 
@@ -76,14 +75,13 @@ class DisambiguationError(MediaWikiBaseException):
     pages to which the query may refer
 
     .. note:: `options` only includes titles that link to valid \
-    MediaWiki pages
-    '''
+    MediaWiki pages '''
 
     def __init__(self, title, may_refer_to, details=None):
         self.title = title
         self.options = sorted(may_refer_to)
         self.details = details
-        msg = (u'\n"{0}" may refer to: \n  '
+        msg = ('\n"{0}" may refer to: \n  '
                '{1}').format(self.title, '\n  '.join(self.options))
         super(DisambiguationError, self).__init__(msg)
 
@@ -93,7 +91,7 @@ class HTTPTimeoutError(MediaWikiBaseException):
 
     def __init__(self, query):
         self.query = query
-        msg = (u'Searching for "{0}" resulted in a timeout. Try '
+        msg = ('Searching for "{0}" resulted in a timeout. Try '
                'again in a few seconds, and ensure you have rate '
                'limiting set to True.').format(self.query)
         super(HTTPTimeoutError, self).__init__(msg)
@@ -121,8 +119,7 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
 
 class MediaWikiCategoryTreeError(MediaWikiBaseException):
     ''' Exception when the category tree is unable to complete for an unknown
-    reason
-    '''
+        reason '''
 
     def __init__(self, category):
         self.category = category

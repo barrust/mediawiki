@@ -131,6 +131,8 @@ a title or page id and then access individual properties:
 Initialize Page
 """""""""""""""
 
+Initializing a page is easily accomplished in one line of code
+
 .. code: python
 
 >>> p = wikipedia.page('grid compass')
@@ -138,7 +140,7 @@ Initialize Page
 title
 """""""""""
 
-The revision id of the page
+The page title
 
 .. code: python
 
@@ -201,7 +203,8 @@ Other Properties
 """"""""""""""""
 
 Other properties for a page include: `content`, `html`, `images`, `references`,
-`categories`, `coordinates`, `redirects`, `backlinks`, `summary`, `sections`
+`categories`, `coordinates`, `redirects`, `backlinks`, `summary`, `sections`,
+`logos`, and `hatnotes`
 
 Summarize
 """"""""""""""""

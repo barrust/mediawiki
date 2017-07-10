@@ -4,7 +4,7 @@ MediaWikiPage class module
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
-from __future__ import unicode_literals
+from __future__ import (unicode_literals, absolute_import)
 from decimal import (Decimal)
 from bs4 import (BeautifulSoup)
 from .utilities import (str_or_unicode)
@@ -85,7 +85,7 @@ class MediaWikiPage(object):
 
     def __unicode__(self):
         ''' python 2.7 unicode '''
-        return u'''<MediaWikiPage '{0}'>'''.format(self.title)
+        return '''<MediaWikiPage '{0}'>'''.format(self.title)
 
     def __str__(self):
         ''' python > 3 unicode python 2.7 byte str '''
@@ -458,7 +458,7 @@ class MediaWikiPage(object):
         only text between title and next section or sub-section title \
         is returned.
         '''
-        section = u'== {0} =='.format(section_title)
+        section = '== {0} =='.format(section_title)
         try:
             content = self.content
             index = content.index(section) + len(section)

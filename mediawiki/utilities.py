@@ -1,9 +1,11 @@
 '''
 Utility functions
 '''
+from __future__ import (unicode_literals, absolute_import)
 import sys
 import functools
 import inspect
+import time
 
 
 def parse_all_arguments(func):
@@ -25,11 +27,15 @@ def parse_all_arguments(func):
 
 
 def memoize(func):
-    ''' quick memoize decorator for class instance methods '''
+    ''' quick memoize decorator for class instance methods
+        NOTE: this assumes that the class that the functions to be
+        memoized already has a memoized and refresh_interval
+        property '''
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         ''' wrap it up and store info in a cache '''
         cache = args[0].memoized
+        refresh = args[0].refresh_interval
         if func.__name__ not in cache:
             cache[func.__name__] = dict()
             if 'defaults' not in cache:
@@ -46,9 +52,14 @@ def memoize(func):
         key = ' - '.join(tmp)
 
         # pull from the cache if it is available
-        if key not in cache[func.__name__]:
-            cache[func.__name__][key] = func(*args, **kwargs)
-        return cache[func.__name__][key]
+        if key not in cache[func.__name__] or refresh is None:
+            cache[func.__name__][key] = (time.time(), func(*args, **kwargs))
+        else:
+            tmp = cache[func.__name__][key]
+            if time.time() - tmp[0] > refresh:
+                cache[func.__name__][key] = (time.time(),
+                                             func(*args, **kwargs))
+        return cache[func.__name__][key][1]
     return wrapper
 
 

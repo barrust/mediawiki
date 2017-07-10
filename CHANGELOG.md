@@ -2,6 +2,12 @@
 
 ## Current
 
+### Version 0.3.14
+
+* Add refresh interval to cached responses (Defaults to no refresh)
+[issue #30](https://github.com/barrust/mediawiki/issues/30)\
+* Fix minor documentation issues
+
 ### Version 0.3.13
 
 * Add pulling hatnotes [issue #6](https://github.com/barrust/mediawiki/issues/6)

@@ -4,7 +4,7 @@ MediaWiki class module
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
-from __future__ import unicode_literals
+from __future__ import (unicode_literals, absolute_import)
 from datetime import (datetime, timedelta)
 import time
 from decimal import (Decimal, DecimalException)
@@ -16,7 +16,7 @@ from .mediawikipage import (MediaWikiPage)
 from .utilities import (memoize)
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.13'
+VERSION = '0.3.14'
 
 
 class MediaWiki(object):
@@ -51,9 +51,11 @@ class MediaWiki(object):
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
+        self.__supported_languages = None
 
         # for memoized results
         self._cache = dict()
+        self._refresh_interval = None
 
         # call helper functions to get everything set up
         self._reset_session()
@@ -216,6 +218,24 @@ class MediaWiki(object):
         '''
         return self._cache
 
+    @property
+    def refresh_interval(self):
+        ''' The interval at which the memoize cache is to be refresh
+
+        :getter: Returns the refresh interval for the memoize cache
+        :setter: Sets the refresh interval for the memoize cache
+        :return: integer
+        '''
+        return self._refresh_interval
+
+    @refresh_interval.setter
+    def refresh_interval(self, refresh_interval):
+        ''' Set the new cache refresh interval '''
+        if isinstance(refresh_interval, int) and refresh_interval > 0:
+            self._refresh_interval = refresh_interval
+        else:
+            self._refresh_interval = None
+
     # non-properties
     def set_api_url(self, api_url='http://{lang}.wikipedia.org/w/api.php',
                     lang='en'):
@@ -235,6 +255,7 @@ class MediaWiki(object):
         self._api_url = api_url.format(lang=self._lang)
         try:
             self._get_site_info()
+            self.__supported_languages = None  # reset this
         except Exception:
             # reset api url and lang in the event that the exception was caught
             self._api_url = old_api_url
@@ -254,16 +275,21 @@ class MediaWiki(object):
             self._cache.clear()
 
     # non-setup functions
-    def languages(self):
+    @property
+    def supported_languages(self):
         ''' All supported language prefixes on the MediaWiki site
 
         :getter: Returns all supported language prefixes
         :setter: Not settable
         :returns: dict: prefix - local language name pairs
         '''
-        res = self.wiki_request({'meta': 'siteinfo', 'siprop': 'languages'})
-        return {lang['code']: lang['*'] for lang in res['query']['languages']}
-    # end languages
+        if self.__supported_languages is None:
+            res = self.wiki_request({'meta': 'siteinfo', 'siprop':
+                                     'languages'})
+            tmp = res['query']['languages']
+            supported = {lang['code']: lang['*'] for lang in tmp}
+            self.__supported_languages = supported
+        return self.__supported_languages
 
     def random(self, pages=1):
         ''' Request a random page title or list of random titles
@@ -557,7 +583,6 @@ class MediaWiki(object):
         return pages
     # end categorymembers
 
-    # @memoize
     def categorytree(self, category, depth=5):
         ''' Generate the Category Tree for the given categories
 

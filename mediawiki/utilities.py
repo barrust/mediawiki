@@ -52,11 +52,12 @@ def memoize(func):
         key = ' - '.join(tmp)
 
         # pull from the cache if it is available
-        if key not in cache[func.__name__] or refresh is None:
+        if key not in cache[func.__name__]:
             cache[func.__name__][key] = (time.time(), func(*args, **kwargs))
         else:
             tmp = cache[func.__name__][key]
-            if time.time() - tmp[0] > refresh:
+            # determine if we need to refresh the data...
+            if refresh is not None and time.time() - tmp[0] > refresh:
                 cache[func.__name__][key] = (time.time(),
                                              func(*args, **kwargs))
         return cache[func.__name__][key][1]

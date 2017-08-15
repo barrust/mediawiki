@@ -1,10 +1,16 @@
-'''
-Module Installation script
-'''
+''' Module Installation script '''
 import setuptools
-
+import io
 from mediawiki import (__version__, __author__, __license__, __email__,
-                       __url__)
+                       __url__, __bugtrack_url__)
+
+def read_file(filepath):
+    with io.open(filepath, 'r') as filepointer:
+        res = filepointer.read()
+    return res
+
+KEYWORDS = ['python', 'mediawiki', 'wikipedia', 'API', 'wiki', 'parser',
+            'natural language processing', 'nlp']
 
 setuptools.setup(
     name = 'pymediawiki',  # mediawiki was taken
@@ -13,12 +19,13 @@ setuptools.setup(
     author_email = __email__,
     description = 'Wikipedia and MediaWiki API wrapper for Python',
     license = __license__,
-    keywords = 'python mediawiki wikipedia API wiki parse',
+    keywords = ' '.join(KEYWORDS),
     url = __url__,
     download_url = '{0}/tarball/v{1}'.format(__url__, __version__),
-    install_requires = ['beautifulsoup4', 'requests>=2.0.0,<3.0.0'],
+    bugtrack_url = __bugtrack_url__,
+    install_requires = read_file('./requirements/python').splitlines(),
     packages = ['mediawiki'],
-    long_description = open('README.rst', 'r').read(),
+    long_description = read_file('README.rst'),
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

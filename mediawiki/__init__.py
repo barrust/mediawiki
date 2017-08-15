@@ -16,6 +16,7 @@ __license__ = 'MIT'
 __version__ = VERSION
 __credits__ = ['Jonathan Goldsmith']
 __url__ = URL
+__bugtrack_url__ = '{0}/issues'.format(URL)
 
 __all__ = ['MediaWiki', 'PageError', 'RedirectError', 'MediaWikiException',
            'DisambiguationError', 'MediaWikiAPIURLError',

@@ -5,6 +5,7 @@ from mediawiki import (__version__, __author__, __license__, __email__,
                        __url__, __bugtrack_url__)
 
 def read_file(filepath):
+    ''' read the file '''
     with io.open(filepath, 'r') as filepointer:
         res = filepointer.read()
     return res

@@ -22,6 +22,11 @@ it does not force the use of a particular MediaWiki site. It defaults to
 `Wikipedia <http://www.wikipedia.org>`__ but other MediaWiki sites can
 also be used.
 
+MediaWiki wraps the `MediaWiki API <https://www.mediawiki.org/wiki/API>`_
+so you can focus on *leveraging* your favorite MediaWiki site's data,
+not getting it. Please check out the code on
+`github <https://www.github.com/barrust/mediawiki>`_!
+
 **Note:** this library was designed for ease of use and simplicity, not for
 advanced use. If you plan on doing serious scraping or automated requests,
 please use
@@ -109,8 +114,8 @@ Pull a MediaWiki page and some of the page properties:
     >>> p.images
     >>> p.links
 
-See the
-`Documentation for more examples! <https://pythonhosted.org/pymediawiki/>`__
+See the `Documentation for more examples!
+<http://pymediawiki.readthedocs.io/en/latest/?>`_
 
 
 

@@ -9,9 +9,6 @@ to help users understand the basics of using the `mediawiki` library.
 To understand all possible parameters for each function and properties,
 please see :ref:`api`.
 
-.. toctree::
-
-   quickstart
 
 Install
 ^^^^^^^

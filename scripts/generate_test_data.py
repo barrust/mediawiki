@@ -79,6 +79,7 @@ PULL_REDIRECT_ERROR = False
 PULL_PAGES = False
 PULL_LOGOS = False
 PULL_HATNOTES = False
+PULL_EXTERNAL_LINKS = True
 
 # regression tests
 PULL_ISSUE_15 = False
@@ -118,7 +119,7 @@ if site.api_url not in responses:
     responses[site.api_url] = dict()
 responses[site.api_url]['api'] = site.api_url
 responses[site.api_url]['lang'] = site.language
-responses[site.api_url]['languages'] = site.languages()
+responses[site.api_url]['languages'] = site.supported_languages
 responses[site.api_url]['api_version'] = site.api_version
 responses[site.api_url]['extensions'] = site.extensions
 
@@ -126,7 +127,7 @@ if french_site.api_url not in responses:
     responses[french_site.api_url] = dict()
 responses[french_site.api_url]['api'] = french_site.api_url
 responses[french_site.api_url]['lang'] = french_site.language
-responses[french_site.api_url]['languages'] = french_site.languages()
+responses[french_site.api_url]['languages'] = french_site.supported_languages
 responses[french_site.api_url]['api_version'] = french_site.api_version
 responses[french_site.api_url]['extensions'] = french_site.extensions
 
@@ -134,7 +135,7 @@ if asoiaf.api_url not in responses:
     responses[asoiaf.api_url] = dict()
 responses[asoiaf.api_url]['api'] = asoiaf.api_url
 responses[asoiaf.api_url]['lang'] = asoiaf.language
-responses[asoiaf.api_url]['languages'] = asoiaf.languages()
+responses[asoiaf.api_url]['languages'] = asoiaf.supported_languages
 responses[asoiaf.api_url]['api_version'] = asoiaf.api_version
 responses[asoiaf.api_url]['extensions'] = asoiaf.extensions
 
@@ -381,6 +382,8 @@ if PULL_LOGOS is True:
     res = wikipedia.page('Antivirus Software').logos
     responses[wikipedia.api_url]['antivirus_software_logos'] = res
 
+    print("Completed pulling logos")
+
 if PULL_HATNOTES is True:
     # contains hatnotes
     res = wikipedia.page('Chess').hatnotes
@@ -390,6 +393,18 @@ if PULL_HATNOTES is True:
                  'Galactica 1980 episodes')
     res = wikipedia.page(page_name).hatnotes
     responses[wikipedia.api_url]['page_no_hatnotes'] = res
+
+    print("Completed pulling hat notes")
+
+if PULL_EXTERNAL_LINKS is True:
+    # contains external links
+    res = wikipedia.page('''McDonald's''').external_links
+    responses[wikipedia.api_url]['mcy_ds_external_links'] = res
+    # doesn't contain external links
+    res = wikipedia.page('Tropical rainforest conservation').external_links
+    responses[wikipedia.api_url]['page_no_external_links'] = res
+
+    print("Completed pulling the external links section")
 
 if PULL_ISSUE_14 is True:
     res = site.page('One Two Three... Infinity').images

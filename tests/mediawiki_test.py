@@ -1353,6 +1353,29 @@ class TestMediaWikiHatnotes(unittest.TestCase):
         self.assertEqual(page.hatnotes, res['page_no_hatnotes'])
 
 
+class TestMediaWikiExternalLinksSec(unittest.TestCase):
+    ''' Test the pulling of links from the external links sections '''
+
+    def test_contains_ext_links(self):
+        ''' Test when external links are present '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('''McDonald's''')
+        print(res['mcy_ds_external_links'])
+        tmp = page.external_links
+        for i, item in enumerate(tmp):
+            tmp[i] = list(item)
+        self.assertEqual(tmp, res['mcy_ds_external_links'])
+
+    def test_no_ext_links(self):
+        ''' Test when no external links on the page '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('Tropical rainforest conservation')
+        print(res['page_no_external_links'])
+        self.assertEqual(page.external_links, res['page_no_external_links'])
+
+
 class TestMediaWikiRegressions(unittest.TestCase):
     ''' Add regression tests here for special cases '''
 

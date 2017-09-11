@@ -68,6 +68,7 @@ class MediaWikiPage(object):
         self._sections = False
         self._logos = False
         self._hatnotes = False
+        self._external_links = False
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -227,6 +228,30 @@ class MediaWikiPage(object):
                 for child in children:
                     self._logos.append('https:' + child.img['src'])
         return self._logos
+
+    @property
+    def external_links(self):
+        ''' Links that are defined in the 'External Links' section of the
+        MediaWiki pager
+
+        :getter: Returns a list of tuples of all titles and links
+        :setter: Not settable
+        :type: list
+
+        .. note:: Side effect is to also pull the html which can be slow
+        '''
+        if self._external_links is False:
+            self._external_links = list()
+            soup = BeautifulSoup(self.html, 'html.parser')
+            e_ln = {'id': 'External_links'}
+            info = soup.find('span', e_ln)
+            if info is None:
+                return self._external_links
+            my_links = info.parent.find_next_siblings('ul')
+            for link in my_links[0].findAll('a'):
+                txt = link.string or link.title() or link['href']
+                self._external_links.append((txt, link['href'],))
+        return self._external_links
 
     @property
     def hatnotes(self):

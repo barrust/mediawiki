@@ -7,7 +7,7 @@ MediaWikiPage class module
 from __future__ import (unicode_literals, absolute_import)
 from decimal import (Decimal)
 from bs4 import (BeautifulSoup)
-from .utilities import (str_or_unicode)
+from .utilities import (str_or_unicode, is_relative_url)
 from .exceptions import (MediaWikiException, PageError, RedirectError,
                          DisambiguationError, ODD_ERROR_MESSAGE)
 
@@ -69,6 +69,7 @@ class MediaWikiPage(object):
         self._logos = False
         self._hatnotes = False
         self._external_links = False
+        self._see_also = False
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -241,41 +242,23 @@ class MediaWikiPage(object):
         .. note:: Side effect is to also pull the html which can be slow
         '''
         if self._external_links is False:
-            self._external_links = list()
-            soup = BeautifulSoup(self.html, 'html.parser')
-            e_ln = {'id': 'External_links'}
-            info = soup.find('span', e_ln)
-            if info is None:
-                return self._external_links
-            my_links = info.parent.find_next_siblings('ul')
-            for link in my_links[0].findAll('a'):
-                txt = link.string or link.title() or link['href']
-                self._external_links.append((txt, link['href'],))
+            self._external_links = self._parse_section_links('External_links')
         return self._external_links
 
-    @property
-    def see_also(self):
-        ''' Links that are defined in the 'External Links' section of the
-        MediaWiki page
-
-        :getter: Returns a list of tuples of all titles and links
-        :setter: Not settable
-        :type: list
-
-        .. note:: Side effect is to also pull the html which can be slow
-        '''
-        if self._see_also is False:
-            self._see_also = list()
-            soup = BeautifulSoup(self.html, 'html.parser')
-            e_ln = {'id': 'See_also'}
-            info = soup.find('span', e_ln)
-            if info is None:
-                return self._external_links
-            my_links = info.parent.find_next_siblings('ul')
-            for link in my_links[0].findAll('a'):
-                txt = link.string or link.title() or link['href']
-                self._see_also.append((txt, link['href'],))
-        return self._see_also
+    # @property
+    # def see_also(self):
+    #     ''' Links that are defined in the 'External Links' section of the
+    #     MediaWiki page
+    #
+    #     :getter: Returns a list of tuples of all titles and links
+    #     :setter: Not settable
+    #     :type: list
+    #
+    #     .. note:: Side effect is to also pull the html which can be slow
+    #     '''
+    #     if self._see_also is False:
+    #         self._see_also = self._parse_section_links('See_also')
+    #     return self._see_also
 
     @property
     def hatnotes(self):
@@ -653,6 +636,29 @@ class MediaWikiPage(object):
 
             last_cont = request['continue']
     # end _continued_query
+
+    def _parse_section_links(self, id_tag):
+        ''' given a section id, parse the links in the unordered list '''
+        soup = BeautifulSoup(self.html, 'html.parser')
+        e_ln = {'id': id_tag}
+        info = soup.find('span', e_ln)
+        all_links = list()
+        base_url = self.mediawiki.base_url
+        if info is None:
+            return all_links
+        else:
+            my_links = info.parent.find_next_siblings('ul')
+            for ul in my_links:
+                for link in ul.findAll('a'):
+                    href = link['href']
+                    txt = link.string or link.title() or href
+                    if is_relative_url(href):
+                        tmp = '{0}{1}'.format(base_url, href)
+                    else:
+                        tmp = href
+                    all_links.append((txt, tmp,))
+        return all_links
+    # end _parse_section_links
 
     def __title_query_param(self):
         ''' util function to determine which parameter method to use '''

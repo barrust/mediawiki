@@ -1428,3 +1428,14 @@ class TestMediaWikiRegressions(unittest.TestCase):
         site._get_response = FunctionUseCounter(site._get_response)
         self.assertEqual(page.images, res)
         self.assertEqual(site._get_response.count, 13)
+
+
+class TestMediaWikiUtilities(unittest.TestCase):
+    ''' some of the utility functions should be tested '''
+
+    def test_relative_url(self):
+        ''' tests of the relative url function '''
+        self.assertEqual(mediawiki.utilities.is_relative_url('http://www.google.com'), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url('ftp://somewhere.out.there'), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url('//cdn.somewhere.out.there/over.js'), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url('/wiki/Chess'), True)

@@ -784,7 +784,7 @@ class MediaWiki(object):
 
         # parse the base url out
         tmp = gen['server']
-        if tmp.startswith('http:') or tmp.startswith('https:'):
+        if tmp.startswith('http://') or tmp.startswith('https://'):
             self._base_url = tmp
         elif gen['base'].startswith('https:'):
             self._base_url = 'https:{}'.format(tmp)

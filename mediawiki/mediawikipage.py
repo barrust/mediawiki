@@ -232,7 +232,7 @@ class MediaWikiPage(object):
     @property
     def external_links(self):
         ''' Links that are defined in the 'External Links' section of the
-        MediaWiki pager
+        MediaWiki page
 
         :getter: Returns a list of tuples of all titles and links
         :setter: Not settable
@@ -252,6 +252,30 @@ class MediaWikiPage(object):
                 txt = link.string or link.title() or link['href']
                 self._external_links.append((txt, link['href'],))
         return self._external_links
+
+    @property
+    def see_also(self):
+        ''' Links that are defined in the 'External Links' section of the
+        MediaWiki page
+
+        :getter: Returns a list of tuples of all titles and links
+        :setter: Not settable
+        :type: list
+
+        .. note:: Side effect is to also pull the html which can be slow
+        '''
+        if self._see_also is False:
+            self._see_also = list()
+            soup = BeautifulSoup(self.html, 'html.parser')
+            e_ln = {'id': 'See_also'}
+            info = soup.find('span', e_ln)
+            if info is None:
+                return self._external_links
+            my_links = info.parent.find_next_siblings('ul')
+            for link in my_links[0].findAll('a'):
+                txt = link.string or link.title() or link['href']
+                self._see_also.append((txt, link['href'],))
+        return self._see_also
 
     @property
     def hatnotes(self):
@@ -280,7 +304,7 @@ class MediaWikiPage(object):
 
     @property
     def references(self):
-        ''' External links, or references, listed on the page
+        ''' External links, or references, listed anywher on the MediaWiki page
 
         :getter: Returns the list of all external links
         :setter: Not settable

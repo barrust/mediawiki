@@ -53,6 +53,23 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded()
         self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
 
+    def test_base_url(self):
+        ''' test that the base url is parsed correctly '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.base_url, 'https://en.wikipedia.org')
+
+    def test_base_url_no_http(self):
+        ''' test that the base url is parsed correctly without http '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.base_url, 'http://awoiaf.westeros.org')
+
+    def test_base_url_switch(self):
+        ''' test that the base url is parsed correctly when switching sites '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.base_url, 'https://en.wikipedia.org')
+        site.set_api_url('http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.base_url, 'http://awoiaf.westeros.org')
+
     def test_api_url_set(self):
         ''' test the api url being set at creation time '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
@@ -1361,7 +1378,6 @@ class TestMediaWikiExternalLinksSec(unittest.TestCase):
         site = MediaWikiOverloaded()
         res = site.responses[site.api_url]
         page = site.page('''McDonald's''')
-        print(res['mcy_ds_external_links'])
         tmp = page.external_links
         for i, item in enumerate(tmp):
             tmp[i] = list(item)
@@ -1372,7 +1388,6 @@ class TestMediaWikiExternalLinksSec(unittest.TestCase):
         site = MediaWikiOverloaded()
         res = site.responses[site.api_url]
         page = site.page('Tropical rainforest conservation')
-        print(res['page_no_external_links'])
         self.assertEqual(page.external_links, res['page_no_external_links'])
 
 

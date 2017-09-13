@@ -634,7 +634,7 @@ class MediaWikiPage(object):
         soup = BeautifulSoup(self.html, 'html.parser')
         info = soup.find('span', {'id': id_tag})
         all_links = list()
-        base_url = self.mediawiki.base_url
+
 
         if info is None:
             return all_links
@@ -652,7 +652,7 @@ class MediaWikiPage(object):
             if is_headline is not None:
                 break
             elif node.name == 'a':
-                all_links.append(self.__parse_link_info(link))
+                all_links.append(self.__parse_link_info(node))
             else:
                 for link in node.findAll('a'):
                     all_links.append(self.__parse_link_info(link))
@@ -665,7 +665,7 @@ class MediaWikiPage(object):
         txt = link.string or href
         is_rel = is_relative_url(href)
         if is_rel is True:
-            tmp = '{0}{1}'.format(base_url, href)
+            tmp = '{0}{1}'.format(self.mediawiki.base_url, href)
         elif is_rel is None:
             tmp = '{0}{1}'.format(self.url, href)
         else:

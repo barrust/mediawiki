@@ -255,7 +255,7 @@ class MediaWikiPage(object):
 
     @property
     def references(self):
-        ''' External links, or references, listed anywher on the MediaWiki page
+        ''' External links, or references, listed anywhere on the MediaWiki page
 
         :getter: Returns the list of all external links
         :setter: Not settable

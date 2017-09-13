@@ -1397,6 +1397,17 @@ class TestMediaWikiParseSectionLinks(unittest.TestCase):
         page = site.page('Tropical rainforest conservation')
         self.assertEqual(page.parse_section_links('External links'), None)
 
+    def test_song_ice_and_fire_links(self):
+        site = MediaWikiOverloaded('http://awoiaf.westeros.org/api.php')
+        res = site.responses[site.api_url]
+        pg = site.page('arya')
+
+        for section in pg.sections:
+            links = pg.parse_section_links(section)
+            for i, item in enumerate(links):
+                links[i] = list(item)
+            self.assertEqual(links, res['arya_{}_links'.format(section)])
+
 
 class TestMediaWikiRegressions(unittest.TestCase):
     ''' Add regression tests here for special cases '''

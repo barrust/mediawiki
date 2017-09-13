@@ -210,13 +210,15 @@ class MediaWikiPage(object):
 
     @property
     def logos(self):
-        ''' Images within the infobox signifying either the main image or logo
+        ''' Parse images within the infobox signifying either the main image \
+        or logo
 
         :getter: Returns the list of all images in the information box
         :setter: Not settable
         :type: list
 
         .. note:: Side effect is to also pull the html which can be slow
+        .. note:: This is a parsing operation and not part of the standard API
         '''
         if self._logos is False:
             self._logos = list()
@@ -230,13 +232,14 @@ class MediaWikiPage(object):
 
     @property
     def hatnotes(self):
-        ''' Pull hatnotes from the page
+        ''' Parse hatnotes from the html
 
         :getter: Returns the list of all hatnotes from the page
         :setter: Not settable
         :type: list
 
         .. note:: Side effect is to also pull the html which can be slow
+        .. note:: This is a parsing operation and not part of the standard API
         '''
         if self._hatnotes is False:
             self._hatnotes = list()
@@ -457,6 +460,8 @@ class MediaWikiPage(object):
         .. note:: Returns **None** if section title is not found; \
         only text between title and next section or sub-section title \
         is returned.
+        .. note:: Side effect is to also pull the content which can be slow
+        .. note:: This is a parsing operation and not part of the standard API
         '''
         section = '== {0} =='.format(section_title)
         try:
@@ -480,6 +485,8 @@ class MediaWikiPage(object):
         :return: list of (title, url) tuples
 
         .. note:: Returns **None** if section title is not found
+        .. note:: Side effect is to also pull the html which can be slow
+        .. note:: This is a parsing operation and not part of the standard API
         '''
         soup = BeautifulSoup(self.html, 'html.parser')
         headlines = soup.find_all('span', {'class': 'mw-headline'})
@@ -634,7 +641,6 @@ class MediaWikiPage(object):
         soup = BeautifulSoup(self.html, 'html.parser')
         info = soup.find('span', {'id': id_tag})
         all_links = list()
-
 
         if info is None:
             return all_links

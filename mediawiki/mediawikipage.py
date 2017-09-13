@@ -68,8 +68,6 @@ class MediaWikiPage(object):
         self._sections = False
         self._logos = False
         self._hatnotes = False
-        self._external_links = False
-        self._see_also = False
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -229,36 +227,6 @@ class MediaWikiPage(object):
                 for child in children:
                     self._logos.append('https:' + child.img['src'])
         return self._logos
-
-    @property
-    def external_links(self):
-        ''' Links that are defined in the 'External Links' section of the
-        MediaWiki page
-
-        :getter: Returns a list of tuples of all titles and links
-        :setter: Not settable
-        :type: list
-
-        .. note:: Side effect is to also pull the html which can be slow
-        '''
-        if self._external_links is False:
-            self._external_links = self._parse_section_links('External_links')
-        return self._external_links
-
-    # @property
-    # def see_also(self):
-    #     ''' Links that are defined in the 'External Links' section of the
-    #     MediaWiki page
-    #
-    #     :getter: Returns a list of tuples of all titles and links
-    #     :setter: Not settable
-    #     :type: list
-    #
-    #     .. note:: Side effect is to also pull the html which can be slow
-    #     '''
-    #     if self._see_also is False:
-    #         self._see_also = self._parse_section_links('See_also')
-    #     return self._see_also
 
     @property
     def hatnotes(self):
@@ -504,19 +472,28 @@ class MediaWikiPage(object):
 
         return self.content[index:next_index].lstrip('=').strip()
 
-    # def parse_section_links(self, section_title):
-    #     ''' Parse all links within a section
-    #
-    #     :param section_title: Name of the section to pull
-    #     :typee section_title: string
-    #     :return: list of title->url pairs
-    #
-    #     .. node:: Returns **None** if section title is not found
-    #     '''
-    #
-    #     # pull out all the section headlines ('mw-headline') tags to pull
-    #     # section names to build the correct id
+    def parse_section_links(self, section_title):
+        ''' Parse all links within a section
 
+        :param section_title: Name of the section to pull
+        :typee section_title: string
+        :return: list of (title, url) tuples
+
+        .. note:: Returns **None** if section title is not found
+        '''
+        soup = BeautifulSoup(self.html, 'html.parser')
+        headlines = soup.find_all('span', {'class':'mw-headline'})
+        tmp_sec_title = section_title.replace(' ', '_').lower()
+        id_tag = None
+        for headline in headlines:
+            tmp_id = headline.get('id', '')
+            if tmp_id.lower() == tmp_sec_title:
+                id_tag =tmp_id
+                break
+
+        if id_tag is not None:
+            return self._parse_section_links(id_tag)
+        return None
 
     # Protected Methods
     def __load(self, redirect=True, preload=False):

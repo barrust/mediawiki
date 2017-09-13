@@ -483,12 +483,13 @@ class MediaWikiPage(object):
         '''
         soup = BeautifulSoup(self.html, 'html.parser')
         headlines = soup.find_all('span', {'class': 'mw-headline'})
-        tmp_sec_title = section_title.replace(' ', '_').lower()
+        tmp_soup = BeautifulSoup(section_title, 'html.parser')
+        tmp_sec_title = tmp_soup.get_text().lower()
         id_tag = None
         for headline in headlines:
-            tmp_id = headline.get('id', '')
+            tmp_id = headline.text
             if tmp_id.lower() == tmp_sec_title:
-                id_tag = tmp_id
+                id_tag = headline.get('id')
                 break
 
         if id_tag is not None:
@@ -650,20 +651,27 @@ class MediaWikiPage(object):
             is_headline = node.find('span', {'class': 'mw-headline'})
             if is_headline is not None:
                 break
+            elif node.name == 'a':
+                all_links.append(self.__parse_link_info(link))
             else:
                 for link in node.findAll('a'):
-                    href = link.get('href', '')
-                    txt = link.string or href
-                    is_rel = is_relative_url(href)
-                    if is_rel is True:
-                        tmp = '{0}{1}'.format(base_url, href)
-                    elif is_rel is None:
-                        tmp = '{0}{1}'.format(self.url, href)
-                    else:
-                        tmp = href
-                    all_links.append((txt, tmp,))
+                    all_links.append(self.__parse_link_info(link))
         return all_links
     # end _parse_section_links
+
+    def __parse_link_info(self, link):
+        ''' parse the <a> tag for the link '''
+        href = link.get('href', '')
+        txt = link.string or href
+        is_rel = is_relative_url(href)
+        if is_rel is True:
+            tmp = '{0}{1}'.format(base_url, href)
+        elif is_rel is None:
+            tmp = '{0}{1}'.format(self.url, href)
+        else:
+            tmp = href
+        return txt, tmp
+    # end __parse_link_info
 
     def __title_query_param(self):
         ''' util function to determine which parameter method to use '''

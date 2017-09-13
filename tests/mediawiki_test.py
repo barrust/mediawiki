@@ -353,10 +353,7 @@ class TestMediaWikiSearch(unittest.TestCase):
         self.assertEqual(num_res, 3)  # limit to 500
 
     def test_search_sug_not_found_lg(self):
-        '''
-        test searching with suggestion where not found but limited to the
-        correct number
-        '''
+        ''' test searching without suggestion limited to the correct number '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         self.assertEqual(site.search('chess set', results=505,
@@ -1445,8 +1442,13 @@ class TestMediaWikiUtilities(unittest.TestCase):
 
     def test_relative_url(self):
         ''' tests of the relative url function '''
-        self.assertEqual(mediawiki.utilities.is_relative_url('http://www.google.com'), False)
-        self.assertEqual(mediawiki.utilities.is_relative_url('ftp://somewhere.out.there'), False)
-        self.assertEqual(mediawiki.utilities.is_relative_url('//cdn.somewhere.out.there/over.js'), False)
-        self.assertEqual(mediawiki.utilities.is_relative_url('/wiki/Chess'), True)
-        self.assertEqual(mediawiki.utilities.is_relative_url('#Chess_board'), None)  # internal to same page
+        url1 = 'http://www.google.com'
+        url2 = 'ftp://somewhere.out.there'
+        url3 = '//cdn.somewhere.out.there/over.js'
+        url4 = '/wiki/Chess'
+        url5 = '#Chess_board'  # internal to same page
+        self.assertEqual(mediawiki.utilities.is_relative_url(url1), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url(url2), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url(url3), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url(url4), True)
+        self.assertEqual(mediawiki.utilities.is_relative_url(url5), None)

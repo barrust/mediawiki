@@ -482,13 +482,13 @@ class MediaWikiPage(object):
         .. note:: Returns **None** if section title is not found
         '''
         soup = BeautifulSoup(self.html, 'html.parser')
-        headlines = soup.find_all('span', {'class':'mw-headline'})
+        headlines = soup.find_all('span', {'class': 'mw-headline'})
         tmp_sec_title = section_title.replace(' ', '_').lower()
         id_tag = None
         for headline in headlines:
             tmp_id = headline.get('id', '')
             if tmp_id.lower() == tmp_sec_title:
-                id_tag =tmp_id
+                id_tag = tmp_id
                 break
 
         if id_tag is not None:
@@ -637,8 +637,6 @@ class MediaWikiPage(object):
 
         if info is None:
             return all_links
-        next_node = info.parent
-        all_nodes = next_node.find_all(True)
 
         for node in soup.find(id=id_tag).parent.next_siblings:
             if not isinstance(node, Tag):
@@ -649,14 +647,13 @@ class MediaWikiPage(object):
                 continue
 
             # this is actually the child node's class...
-            is_headline = node.find('span', {'class':'mw-headline'})
+            is_headline = node.find('span', {'class': 'mw-headline'})
             if is_headline is not None:
                 break
             else:
                 for link in node.findAll('a'):
-                    # print(link)
                     href = link.get('href', '')
-                    txt = link.string or link.title() or href
+                    txt = link.string or href
                     is_rel = is_relative_url(href)
                     if is_rel is True:
                         tmp = '{0}{1}'.format(base_url, href)

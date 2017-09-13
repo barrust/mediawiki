@@ -1439,3 +1439,4 @@ class TestMediaWikiUtilities(unittest.TestCase):
         self.assertEqual(mediawiki.utilities.is_relative_url('ftp://somewhere.out.there'), False)
         self.assertEqual(mediawiki.utilities.is_relative_url('//cdn.somewhere.out.there/over.js'), False)
         self.assertEqual(mediawiki.utilities.is_relative_url('/wiki/Chess'), True)
+        self.assertEqual(mediawiki.utilities.is_relative_url('#Chess_board'), None)  # internal to same page

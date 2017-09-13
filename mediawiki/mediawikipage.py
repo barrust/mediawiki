@@ -6,7 +6,7 @@ MediaWikiPage class module
 
 from __future__ import (unicode_literals, absolute_import)
 from decimal import (Decimal)
-from bs4 import (BeautifulSoup)
+from bs4 import (BeautifulSoup, Tag)
 from .utilities import (str_or_unicode, is_relative_url)
 from .exceptions import (MediaWikiException, PageError, RedirectError,
                          DisambiguationError, ODD_ERROR_MESSAGE)
@@ -504,6 +504,20 @@ class MediaWikiPage(object):
 
         return self.content[index:next_index].lstrip('=').strip()
 
+    # def parse_section_links(self, section_title):
+    #     ''' Parse all links within a section
+    #
+    #     :param section_title: Name of the section to pull
+    #     :typee section_title: string
+    #     :return: list of title->url pairs
+    #
+    #     .. node:: Returns **None** if section title is not found
+    #     '''
+    #
+    #     # pull out all the section headlines ('mw-headline') tags to pull
+    #     # section names to build the correct id
+
+
     # Protected Methods
     def __load(self, redirect=True, preload=False):
         ''' load the basic page information '''
@@ -640,20 +654,37 @@ class MediaWikiPage(object):
     def _parse_section_links(self, id_tag):
         ''' given a section id, parse the links in the unordered list '''
         soup = BeautifulSoup(self.html, 'html.parser')
-        e_ln = {'id': id_tag}
-        info = soup.find('span', e_ln)
+        info = soup.find('span', {'id': id_tag})
         all_links = list()
         base_url = self.mediawiki.base_url
+
         if info is None:
             return all_links
-        else:
-            my_links = info.parent.find_next_siblings('ul')
-            for ul in my_links:
-                for link in ul.findAll('a'):
-                    href = link['href']
+        next_node = info.parent
+        all_nodes = next_node.find_all(True)
+
+        for node in soup.find(id=id_tag).parent.next_siblings:
+            if not isinstance(node, Tag):
+                continue
+            elif node.get('role', '') == 'navigation':
+                continue
+            elif 'infobox' in node.get('class', []):
+                continue
+
+            # this is actually the child node's class...
+            is_headline = node.find('span', {'class':'mw-headline'})
+            if is_headline is not None:
+                break
+            else:
+                for link in node.findAll('a'):
+                    # print(link)
+                    href = link.get('href', '')
                     txt = link.string or link.title() or href
-                    if is_relative_url(href):
+                    is_rel = is_relative_url(href)
+                    if is_rel is True:
                         tmp = '{0}{1}'.format(base_url, href)
+                    elif is_rel is None:
+                        tmp = '{0}{1}'.format(self.url, href)
                     else:
                         tmp = href
                     all_links.append((txt, tmp,))

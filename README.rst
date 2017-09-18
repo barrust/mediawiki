@@ -15,10 +15,10 @@ MediaWiki
     :target: https://opensource.org/licenses/MIT/
     :alt: License
 
-**mediawiki** is a python wrapper for the MediaWiki API. The goal is to allow
-users to quickly and efficiently pull data from the MediaWiki site of their
-choice instead of worrying about dealing directly with the API. As such,
-it does not force the use of a particular MediaWiki site. It defaults to
+**mediawiki** is a python wrapper and parser for the MediaWiki API. The goal
+is to allow users to quickly and efficiently pull data from the MediaWiki site
+of their choice instead of worrying about dealing directly with the API. As
+such, it does not force the use of a particular MediaWiki site. It defaults to
 `Wikipedia <http://www.wikipedia.org>`__ but other MediaWiki sites can
 also be used.
 

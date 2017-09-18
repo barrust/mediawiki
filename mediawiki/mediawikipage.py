@@ -6,8 +6,8 @@ MediaWikiPage class module
 
 from __future__ import (unicode_literals, absolute_import)
 from decimal import (Decimal)
-from bs4 import (BeautifulSoup)
-from .utilities import (str_or_unicode)
+from bs4 import (BeautifulSoup, Tag)
+from .utilities import (str_or_unicode, is_relative_url)
 from .exceptions import (MediaWikiException, PageError, RedirectError,
                          DisambiguationError, ODD_ERROR_MESSAGE)
 
@@ -210,13 +210,15 @@ class MediaWikiPage(object):
 
     @property
     def logos(self):
-        ''' Images within the infobox signifying either the main image or logo
+        ''' Parse images within the infobox signifying either the main image \
+        or logo
 
         :getter: Returns the list of all images in the information box
         :setter: Not settable
         :type: list
 
         .. note:: Side effect is to also pull the html which can be slow
+        .. note:: This is a parsing operation and not part of the standard API
         '''
         if self._logos is False:
             self._logos = list()
@@ -230,13 +232,14 @@ class MediaWikiPage(object):
 
     @property
     def hatnotes(self):
-        ''' Pull hatnotes from the page
+        ''' Parse hatnotes from the html
 
         :getter: Returns the list of all hatnotes from the page
         :setter: Not settable
         :type: list
 
         .. note:: Side effect is to also pull the html which can be slow
+        .. note:: This is a parsing operation and not part of the standard API
         '''
         if self._hatnotes is False:
             self._hatnotes = list()
@@ -255,7 +258,7 @@ class MediaWikiPage(object):
 
     @property
     def references(self):
-        ''' External links, or references, listed on the page
+        ''' External links, or references, listed anywhere on the MediaWiki page
 
         :getter: Returns the list of all external links
         :setter: Not settable
@@ -457,6 +460,8 @@ class MediaWikiPage(object):
         .. note:: Returns **None** if section title is not found; \
         only text between title and next section or sub-section title \
         is returned.
+        .. note:: Side effect is to also pull the content which can be slow
+        .. note:: This is a parsing operation and not part of the standard API
         '''
         section = '== {0} =='.format(section_title)
         try:
@@ -471,6 +476,32 @@ class MediaWikiPage(object):
             next_index = len(self.content)
 
         return self.content[index:next_index].lstrip('=').strip()
+
+    def parse_section_links(self, section_title):
+        ''' Parse all links within a section
+
+        :param section_title: Name of the section to pull
+        :typee section_title: string
+        :return: list of (title, url) tuples
+
+        .. note:: Returns **None** if section title is not found
+        .. note:: Side effect is to also pull the html which can be slow
+        .. note:: This is a parsing operation and not part of the standard API
+        '''
+        soup = BeautifulSoup(self.html, 'html.parser')
+        headlines = soup.find_all('span', {'class': 'mw-headline'})
+        tmp_soup = BeautifulSoup(section_title, 'html.parser')
+        tmp_sec_title = tmp_soup.get_text().lower()
+        id_tag = None
+        for headline in headlines:
+            tmp_id = headline.text
+            if tmp_id.lower() == tmp_sec_title:
+                id_tag = headline.get('id')
+                break
+
+        if id_tag is not None:
+            return self._parse_section_links(id_tag)
+        return None
 
     # Protected Methods
     def __load(self, redirect=True, preload=False):
@@ -604,6 +635,49 @@ class MediaWikiPage(object):
 
             last_cont = request['continue']
     # end _continued_query
+
+    def _parse_section_links(self, id_tag):
+        ''' given a section id, parse the links in the unordered list '''
+        soup = BeautifulSoup(self.html, 'html.parser')
+        info = soup.find('span', {'id': id_tag})
+        all_links = list()
+
+        if info is None:
+            return all_links
+
+        for node in soup.find(id=id_tag).parent.next_siblings:
+            if not isinstance(node, Tag):
+                continue
+            elif node.get('role', '') == 'navigation':
+                continue
+            elif 'infobox' in node.get('class', []):
+                continue
+
+            # this is actually the child node's class...
+            is_headline = node.find('span', {'class': 'mw-headline'})
+            if is_headline is not None:
+                break
+            elif node.name == 'a':
+                all_links.append(self.__parse_link_info(node))
+            else:
+                for link in node.findAll('a'):
+                    all_links.append(self.__parse_link_info(link))
+        return all_links
+    # end _parse_section_links
+
+    def __parse_link_info(self, link):
+        ''' parse the <a> tag for the link '''
+        href = link.get('href', '')
+        txt = link.string or href
+        is_rel = is_relative_url(href)
+        if is_rel is True:
+            tmp = '{0}{1}'.format(self.mediawiki.base_url, href)
+        elif is_rel is None:
+            tmp = '{0}{1}'.format(self.url, href)
+        else:
+            tmp = href
+        return txt, tmp
+    # end __parse_link_info
 
     def __title_query_param(self):
         ''' util function to determine which parameter method to use '''

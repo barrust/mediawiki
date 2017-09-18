@@ -53,6 +53,23 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded()
         self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
 
+    def test_base_url(self):
+        ''' test that the base url is parsed correctly '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.base_url, 'https://en.wikipedia.org')
+
+    def test_base_url_no_http(self):
+        ''' test that the base url is parsed correctly without http '''
+        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.base_url, 'http://awoiaf.westeros.org')
+
+    def test_base_url_switch(self):
+        ''' test that the base url is parsed correctly when switching sites '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.base_url, 'https://en.wikipedia.org')
+        site.set_api_url('http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.base_url, 'http://awoiaf.westeros.org')
+
     def test_api_url_set(self):
         ''' test the api url being set at creation time '''
         site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
@@ -336,10 +353,7 @@ class TestMediaWikiSearch(unittest.TestCase):
         self.assertEqual(num_res, 3)  # limit to 500
 
     def test_search_sug_not_found_lg(self):
-        '''
-        test searching with suggestion where not found but limited to the
-        correct number
-        '''
+        ''' test searching without suggestion limited to the correct number '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         self.assertEqual(site.search('chess set', results=505,
@@ -1353,6 +1367,48 @@ class TestMediaWikiHatnotes(unittest.TestCase):
         self.assertEqual(page.hatnotes, res['page_no_hatnotes'])
 
 
+class TestMediaWikiParseSectionLinks(unittest.TestCase):
+    ''' Test the pulling of links from the parse section links '''
+
+    def test_contains_ext_links(self):
+        ''' Test when external links are present '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('''McDonald's''')
+        tmp = page.parse_section_links('External links')
+        for i, item in enumerate(tmp):
+            tmp[i] = list(item)
+        self.assertEqual(tmp, res['mcy_ds_external_links'])
+
+    def test_contains_ext_links_2(self):
+        ''' Test when external links are present capitalization '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('''McDonald's''')
+        tmp = page.parse_section_links('EXTERNAL LINKS')
+        for i, item in enumerate(tmp):
+            tmp[i] = list(item)
+        self.assertEqual(tmp, res['mcy_ds_external_links'])
+
+    def test_no_ext_links(self):
+        ''' Test when no external links on the page '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('Tropical rainforest conservation')
+        self.assertEqual(page.parse_section_links('External links'), None)
+
+    def test_song_ice_and_fire_links(self):
+        site = MediaWikiOverloaded('http://awoiaf.westeros.org/api.php')
+        res = site.responses[site.api_url]
+        pg = site.page('arya')
+
+        for section in pg.sections:
+            links = pg.parse_section_links(section)
+            for i, item in enumerate(links):
+                links[i] = list(item)
+            self.assertEqual(links, res['arya_{}_links'.format(section)])
+
+
 class TestMediaWikiRegressions(unittest.TestCase):
     ''' Add regression tests here for special cases '''
 
@@ -1390,3 +1446,20 @@ class TestMediaWikiRegressions(unittest.TestCase):
         site._get_response = FunctionUseCounter(site._get_response)
         self.assertEqual(page.images, res)
         self.assertEqual(site._get_response.count, 13)
+
+
+class TestMediaWikiUtilities(unittest.TestCase):
+    ''' some of the utility functions should be tested '''
+
+    def test_relative_url(self):
+        ''' tests of the relative url function '''
+        url1 = 'http://www.google.com'
+        url2 = 'ftp://somewhere.out.there'
+        url3 = '//cdn.somewhere.out.there/over.js'
+        url4 = '/wiki/Chess'
+        url5 = '#Chess_board'  # internal to same page
+        self.assertEqual(mediawiki.utilities.is_relative_url(url1), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url(url2), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url(url3), False)
+        self.assertEqual(mediawiki.utilities.is_relative_url(url4), True)
+        self.assertEqual(mediawiki.utilities.is_relative_url(url5), None)

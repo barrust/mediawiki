@@ -62,6 +62,8 @@ class MediaWikiOverloaded(MediaWiki):
         return MediaWiki._get_response(self, params)
 
 
+PULL_ALL = False
+
 # Parameters to determine which tests to pull
 PULL_SEARCHES = False
 PULL_RANDOM = False
@@ -79,6 +81,7 @@ PULL_REDIRECT_ERROR = False
 PULL_PAGES = False
 PULL_LOGOS = False
 PULL_HATNOTES = False
+PULL_SECTION_LINKS = False
 
 # regression tests
 PULL_ISSUE_15 = False
@@ -118,7 +121,7 @@ if site.api_url not in responses:
     responses[site.api_url] = dict()
 responses[site.api_url]['api'] = site.api_url
 responses[site.api_url]['lang'] = site.language
-responses[site.api_url]['languages'] = site.languages()
+responses[site.api_url]['languages'] = site.supported_languages
 responses[site.api_url]['api_version'] = site.api_version
 responses[site.api_url]['extensions'] = site.extensions
 
@@ -126,7 +129,7 @@ if french_site.api_url not in responses:
     responses[french_site.api_url] = dict()
 responses[french_site.api_url]['api'] = french_site.api_url
 responses[french_site.api_url]['lang'] = french_site.language
-responses[french_site.api_url]['languages'] = french_site.languages()
+responses[french_site.api_url]['languages'] = french_site.supported_languages
 responses[french_site.api_url]['api_version'] = french_site.api_version
 responses[french_site.api_url]['extensions'] = french_site.extensions
 
@@ -134,13 +137,13 @@ if asoiaf.api_url not in responses:
     responses[asoiaf.api_url] = dict()
 responses[asoiaf.api_url]['api'] = asoiaf.api_url
 responses[asoiaf.api_url]['lang'] = asoiaf.language
-responses[asoiaf.api_url]['languages'] = asoiaf.languages()
+responses[asoiaf.api_url]['languages'] = asoiaf.supported_languages
 responses[asoiaf.api_url]['api_version'] = asoiaf.api_version
 responses[asoiaf.api_url]['extensions'] = asoiaf.extensions
 
 print("Completed basic mediawiki information")
 
-if PULL_SEARCHES is True:
+if PULL_ALL is True or PULL_SEARCHES is True:
     res = site.search('chest set', suggestion=False)
     responses[site.api_url]['search_without_suggestion'] = res
     res = site.search('chest set', suggestion=True)
@@ -154,7 +157,7 @@ if PULL_SEARCHES is True:
 
     print("Completed pulling searches")
 
-if PULL_RANDOM is True:
+if PULL_ALL is True or PULL_RANDOM is True:
     responses[site.api_url]['random_1'] = site.random(pages=1)
     responses[site.api_url]['random_2'] = site.random(pages=2)
     responses[site.api_url]['random_10'] = site.random(pages=10)
@@ -162,7 +165,7 @@ if PULL_RANDOM is True:
 
     print("Completed pulling random pages")
 
-if PULL_SUGGEST is True:
+if PULL_ALL is True or PULL_SUGGEST is True:
     responses[site.api_url]['suggest_chest_set'] = site.suggest("chest set")
     responses[site.api_url]['suggest_chess_set'] = site.suggest("chess set")
     responses[site.api_url]['suggest_new_york'] = site.suggest('new york')
@@ -171,7 +174,7 @@ if PULL_SUGGEST is True:
 
     print("Completed pulling suggestions")
 
-if PULL_OPENSEARCH is True:
+if PULL_ALL is True or PULL_OPENSEARCH is True:
     res = site.opensearch('new york')
     responses[site.api_url]['opensearch_new_york'] = res
     res = site.opensearch('new york', results=5)
@@ -183,7 +186,7 @@ if PULL_OPENSEARCH is True:
 
     print("Completed pulling open searches")
 
-if PULL_PREFIXSEARCH is True:
+if PULL_ALL is True or PULL_PREFIXSEARCH is True:
     responses[site.api_url]['prefixsearch_ar'] = site.prefixsearch('ar')
     responses[site.api_url]['prefixsearch_ba'] = site.prefixsearch('ba')
     res = site.prefixsearch('ba', results=5)
@@ -193,7 +196,7 @@ if PULL_PREFIXSEARCH is True:
 
     print("Completed pulling prefix searches")
 
-if PULL_GEOSEARCH is True:
+if PULL_ALL is True or PULL_GEOSEARCH is True:
     res = site.geosearch(latitude=Decimal('0.0'), longitude=Decimal('0.0'))
     responses[site.api_url]['geosearch_decimals'] = res
     res = site.geosearch(latitude=Decimal('0.0'), longitude=0.0)
@@ -220,7 +223,7 @@ if PULL_GEOSEARCH is True:
 
     print("Completed pulling geo search")
 
-if PULL_CATEGORYMEMBERS is True:
+if PULL_ALL is True or PULL_CATEGORYMEMBERS is True:
     res = site.categorymembers("Chess", results=15, subcategories=True)
     responses[site.api_url]['category_members_with_subcategories'] = res
     res = site.categorymembers("Chess", results=15, subcategories=False)
@@ -232,7 +235,7 @@ if PULL_CATEGORYMEMBERS is True:
 
     print("Completed pulling category members")
 
-if PULL_CATEGORYTREE is True:
+if PULL_ALL is True or PULL_CATEGORYTREE is True:
     site.rate_limit = True
     ct = site.categorytree(['Chess', 'Ebola'], depth=None)
     with open(CATTREE_FILE, 'w') as fp:
@@ -246,7 +249,7 @@ if PULL_CATEGORYTREE is True:
 
     print("Completed pulling category tree")
 
-if PULL_SUMMARY is True:
+if PULL_ALL is True or PULL_SUMMARY is True:
     res = site.summary('chess', chars=50)
     responses[site.api_url]['sumarize_chars_50'] = res
     res = site.summary('chess', sentences=5)
@@ -254,7 +257,7 @@ if PULL_SUMMARY is True:
 
     print("Completed pulling summaries")
 
-if PULL_PAGE_ERRORS is True:
+if PULL_ALL is True or PULL_PAGE_ERRORS is True:
     try:
         site.page('gobbilygook')
     except PageError as ex:
@@ -272,7 +275,7 @@ if PULL_PAGE_ERRORS is True:
 
     print("Completed pulling page errors")
 
-if PULL_DISAMBIGUATION_ERRORS is True:
+if PULL_ALL is True or PULL_DISAMBIGUATION_ERRORS is True:
     try:
         site.page('bush')
     except DisambiguationError as ex:
@@ -286,7 +289,7 @@ if PULL_DISAMBIGUATION_ERRORS is True:
 
     print("Completed pulling disambiguation errors")
 
-if PULL_API_URL_ERROR is True:
+if PULL_ALL is True or PULL_API_URL_ERROR is True:
     url = 'http://french.wikipedia.org/w/api.php'
     try:
         site.set_api_url(api_url=url, lang='fr')
@@ -298,7 +301,7 @@ if PULL_API_URL_ERROR is True:
     site.set_api_url(api_url='http://en.wikipedia.org/w/api.php', lang='en')
     print("Completed pulling api url errors")
 
-if PULL_REDIRECT_ERROR is True:
+if PULL_ALL is True or PULL_REDIRECT_ERROR is True:
     print('Start redirect error')
     try:
         asoiaf.page('arya', auto_suggest=False, redirect=False)
@@ -308,7 +311,7 @@ if PULL_REDIRECT_ERROR is True:
     print("Completed pulling redirect errors")
 
 
-if PULL_PAGES is True:
+if PULL_ALL is True or PULL_PAGES is True:
     # unicode
     site.page(u"Jacques Léonard Muller")
     # page id
@@ -370,7 +373,7 @@ if PULL_PAGES is True:
 
     print("Completed pulling pages and properties")
 
-if PULL_LOGOS is True:
+if PULL_ALL is True or PULL_LOGOS is True:
     # single logo
     res = wikipedia.page('Chess').logos
     responses[wikipedia.api_url]['chess_logos'] = res
@@ -381,7 +384,9 @@ if PULL_LOGOS is True:
     res = wikipedia.page('Antivirus Software').logos
     responses[wikipedia.api_url]['antivirus_software_logos'] = res
 
-if PULL_HATNOTES is True:
+    print("Completed pulling logos")
+
+if PULL_ALL is True or PULL_HATNOTES is True:
     # contains hatnotes
     res = wikipedia.page('Chess').hatnotes
     responses[wikipedia.api_url]['chess_hatnotes'] = res
@@ -391,7 +396,27 @@ if PULL_HATNOTES is True:
     res = wikipedia.page(page_name).hatnotes
     responses[wikipedia.api_url]['page_no_hatnotes'] = res
 
-if PULL_ISSUE_14 is True:
+    print("Completed pulling hat notes")
+
+if PULL_ALL is True or PULL_SECTION_LINKS is True:
+    # contains external links
+    pg = wikipedia.page('''McDonald's''')
+    res = pg.parse_section_links('EXTERNAL LINKS')
+    responses[wikipedia.api_url]['mcy_ds_sec_links'] = res
+
+    # doesn't contain external links
+    pg = wikipedia.page('Tropical rainforest conservation')
+    res = pg.parse_section_links('EXTERNAL LINKS')
+    responses[wikipedia.api_url]['page_no_sec_links'] = res
+
+    pg = asoiaf.page('arya')
+    for section in pg.sections:
+        links = pg.parse_section_links(section)
+        responses[asoiaf.api_url]['arya_{}_links'.format(section)] = links
+
+    print("Completed pulling the section links")
+
+if PULL_ALL is True or PULL_ISSUE_14 is True:
     res = site.page('One Two Three... Infinity').images
     responses[wikipedia.api_url]['hidden_images'] = res
 
@@ -401,7 +426,7 @@ if PULL_ISSUE_14 is True:
 
     print("Completed pulling issue 14")
 
-if PULL_ISSUE_15 is True:
+if PULL_ALL is True or PULL_ISSUE_15 is True:
     res = site.page('Rober Eryol').images
     responses[wikipedia.api_url]['infinite_loop_images'] = res
     res = site.page('List of named minor planets (numerical)').links

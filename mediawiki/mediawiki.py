@@ -16,7 +16,7 @@ from .mediawikipage import (MediaWikiPage)
 from .utilities import (memoize)
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.14'
+VERSION = '0.3.15'
 
 
 class MediaWiki(object):
@@ -51,6 +51,7 @@ class MediaWiki(object):
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
+        self._base_url = None
         self.__supported_languages = None
 
         # for memoized results
@@ -84,6 +85,16 @@ class MediaWiki(object):
         :type: string
         '''
         return '.'.join([str(x) for x in self._api_version])
+
+    @property
+    def base_url(self):
+        ''' Base URL for the MediaWiki site
+
+        :getter: Returns the base url of the site
+        :setter: Not settable
+        :type: string
+        '''
+        return self._base_url
 
     @property
     def extensions(self):
@@ -755,24 +766,30 @@ class MediaWiki(object):
 
     # Protected functions
     def _get_site_info(self):
-        '''
-        Parse out the Wikimedia site information including
-        API Version and Extensions
-        '''
+        ''' Parse out the Wikimedia site information including
+        API Version and Extensions '''
         response = self.wiki_request({
             'meta': 'siteinfo',
             'siprop': 'extensions|general'
         })
 
         # shouldn't a check for success be done here?
-
-        gen = response['query']['general']['generator']
-        api_version = gen.split(' ')[1].split('-')[0]
+        gen = response['query']['general']
+        api_version = gen['generator'].split(' ')[1].split('-')[0]
 
         major_minor = api_version.split('.')
         for i, item in enumerate(major_minor):
             major_minor[i] = int(item)
         self._api_version = tuple(major_minor)
+
+        # parse the base url out
+        tmp = gen['server']
+        if tmp.startswith('http://') or tmp.startswith('https://'):
+            self._base_url = tmp
+        elif gen['base'].startswith('https:'):
+            self._base_url = 'https:{}'.format(tmp)
+        else:
+            self._base_url = 'http:{}'.format(tmp)
 
         self._extensions = set()
         for ext in response['query']['extensions']:

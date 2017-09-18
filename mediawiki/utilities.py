@@ -70,3 +70,13 @@ def str_or_unicode(text):
     if sys.version_info > (3, 0):
         return text.encode(encoding).decode(encoding)
     return text.encode(encoding)
+
+
+def is_relative_url(url):
+    ''' simple method to determine if a url is relative or absolute '''
+    if url.startswith('#'):
+        return None
+    if url.find('://') > 0 or url.startswith('//'):
+        # either 'http(s)://...' or '//cdn...' and therefore absolute
+        return False
+    return True

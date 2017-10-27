@@ -584,7 +584,6 @@ class MediaWikiPage(object):
                 normalized = query['normalized'][0]
                 if normalized['from'] != self.title:
                     raise MediaWikiException(ODD_ERROR_MESSAGE)
-                # assert normalized['from'] == self.title, ODD_ERROR_MESSAGE
                 from_title = normalized['to']
             else:
                 if not getattr(self, 'title', None):
@@ -593,7 +592,6 @@ class MediaWikiPage(object):
                 from_title = self.title
             if redirects['from'] != from_title:
                 raise MediaWikiException(ODD_ERROR_MESSAGE)
-            # assert redirects['from'] == from_title, ODD_ERROR_MESSAGE
 
             # change the title and reload the whole object
             self.__init__(self.mediawiki, title=redirects['to'],

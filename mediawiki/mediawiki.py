@@ -336,7 +336,6 @@ class MediaWiki(object):
 
         if len(titles) == 1:
             return titles[0]
-
         return titles
     # end random
 
@@ -368,14 +367,14 @@ class MediaWiki(object):
 
         self._check_error_response(raw_results, query)
 
-        search_results = (d['title'] for d in raw_results['query']['search'])
+        search_results = [d['title'] for d in raw_results['query']['search']]
 
         if suggestion:
             sug = None
             if raw_results['query'].get('searchinfo'):
                 sug = raw_results['query']['searchinfo']['suggestion']
-            return list(search_results), sug
-        return list(search_results)
+            return search_results, sug
+        return search_results
     # end search
 
     @memoize
@@ -447,9 +446,7 @@ class MediaWiki(object):
 
         self._check_error_response(raw_results, title)
 
-        res = (d['title'] for d in raw_results['query']['geosearch'])
-
-        return list(res)
+        return [d['title'] for d in raw_results['query']['geosearch']]
 
     @memoize
     def opensearch(self, query, results=10, redirect=True):
@@ -517,9 +514,7 @@ class MediaWiki(object):
 
         self._check_error_response(raw_results, prefix)
 
-        res = [rec['title'] for rec in raw_results['query']['prefixsearch']]
-
-        return res
+        return [rec['title'] for rec in raw_results['query']['prefixsearch']]
 
     @memoize
     def summary(self, title, sentences=0, chars=0, auto_suggest=True,

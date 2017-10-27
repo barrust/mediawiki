@@ -359,7 +359,6 @@ class MediaWiki(object):
             if raw_results['query'].get('searchinfo'):
                 sug = raw_results['query']['searchinfo']['suggestion']
             return list(search_results), sug
-
         return list(search_results)
     # end search
 
@@ -502,9 +501,7 @@ class MediaWiki(object):
 
         self._check_error_response(raw_results, prefix)
 
-        res = list()
-        for rec in raw_results['query']['prefixsearch']:
-            res.append(rec['title'])
+        res = [rec['title'] for rec in raw_results['query']['prefixsearch']]
 
         return res
 

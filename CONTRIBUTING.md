@@ -45,7 +45,7 @@ within the library, please do not hesitate to report the issue!
 will help narrow down the search for the cause of the issue and may lead to a
 quicker fix!
 
-A **good bug report** will consist of the following:
+A **great bug report** will consist of the following:
 
 * A descriptive title
 
@@ -53,7 +53,8 @@ A **good bug report** will consist of the following:
 
 * Description of the expected results
 
-* An code example to reproduce the error. Please use [Markdown code blocks](https://help.github.com/articles/creating-and-highlighting-code-blocks/)
+* An code example to reproduce the error. Please use
+[Markdown code blocks](https://help.github.com/articles/creating-and-highlighting-code-blocks/)
 with syntax highlighting
 
 * The link to the API URL if not the default:
@@ -102,7 +103,7 @@ a pull request. There are a few guidelines for creating pull requests:
 master (unless there is not a development branch!)
 
 * If the PR only changes documentation, please add `[ci skip]` to the commit
-message. To learn more, you can [read about skipping integration testing ](https://docs.travis-ci.com/user/customizing-the-build#Skipping-a-build)
+message. To learn more, you can [read about skipping integration testing](https://docs.travis-ci.com/user/customizing-the-build#Skipping-a-build)
 
 * Reference ***any and all*** [issues](https://github.com/barrust/mediawiki/issues)
 related to the pull request
@@ -129,13 +130,11 @@ access.
 
 #### Coding Style
 
-All code must adhere to the [PEP8](https://www.python.org/dev/peps/pep-0008/)
-coding style standard. Code that does not adhere will be flagged as a failed
-build during continuous integration testing.
-
-The MediaWiki API wrapper project follows the PEP8 coding style for consistency
+The MediaWiki API wrapper project follows the
+[PEP8](https://www.python.org/dev/peps/pep-0008/) coding style for consistency
 and readability. Code that does not comply with PEP8 will not be accepted into
-the project as-is.
+the project as-is. All code should adhere to the PEP8 coding style standard
+where possible.
 
 The MediaWiki API wrapper project also uses [pylint](https://www.pylint.org/)
 to help identify potential errors, code duplication, and non-pythonic syntax.
@@ -159,4 +158,5 @@ pep8 mediawiki
 A special thanks to all the code contributors to pymediawiki!
 
 [@barrust](https://github.com/barrust) (Maintainer)
+
 [@dan-blanchard](https://github.com/dan-blanchard) - Default URL conforms to passed in language

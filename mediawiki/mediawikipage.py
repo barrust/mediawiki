@@ -258,7 +258,8 @@ class MediaWikiPage(object):
 
     @property
     def references(self):
-        ''' External links, or references, listed anywhere on the MediaWiki page
+        ''' External links, or references, listed anywhere on the MediaWiki \
+            page
 
         :getter: Returns the list of all external links
         :setter: Not settable
@@ -270,9 +271,8 @@ class MediaWikiPage(object):
         if self._references is False:
             params = {'prop': 'extlinks', 'ellimit': 'max'}
             self._references = list()
-            for link in self._continued_query(params):
-                self._references.append(link['*'])
-            self._references = sorted(self._references)
+            tmp = [link['*'] for link in self._continued_query(params)]
+            self._references = sorted(tmp)
         return self._references
 
     @property
@@ -284,18 +284,22 @@ class MediaWikiPage(object):
         :type: list
         '''
         if self._categories is False:
+
+            def _get_cat(val):
+                ''' parse the category correctly '''
+                tmp = val['title']
+                if tmp.startswith('Category:'):
+                    return tmp[9:]
+                return tmp
+
             self._categories = list()
             params = {
                 'prop': 'categories',
                 'cllimit': 'max',
                 'clshow': '!hidden'
             }
-            for link in self._continued_query(params):
-                cat = link['title']
-                if cat.startswith('Category:'):
-                    cat = cat[9:]
-                self._categories.append(cat)
-            self._categories = sorted(self._categories)
+            tmp = [_get_cat(link) for link in self._continued_query(params)]
+            self._categories = sorted(tmp)
         return self._categories
 
     @property
@@ -338,9 +342,8 @@ class MediaWikiPage(object):
                 'plnamespace': 0,
                 'pllimit': 'max'
             }
-            for link in self._continued_query(params):
-                self._links.append(link['title'])
-            self._links = sorted(self._links)
+            tmp = [link['title'] for link in self._continued_query(params)]
+            self._links = sorted(tmp)
         return self._links
 
     @property
@@ -359,9 +362,8 @@ class MediaWikiPage(object):
                 'rdprop': 'title',
                 'rdlimit': 'max'
             }
-            for link in self._continued_query(params):
-                self._redirects.append(link['title'])
-            self._redirects = sorted(self._redirects)
+            tmp = [link['title'] for link in self._continued_query(params)]
+            self._redirects = sorted(tmp)
         return self._redirects
 
     @property
@@ -382,9 +384,9 @@ class MediaWikiPage(object):
                 'blfilterredir': 'nonredirects',
                 'blnamespace': 0
             }
-            for link in self._continued_query(params, 'backlinks'):
-                self._backlinks.append(link['title'])
-            self._backlinks = sorted(self._backlinks)
+            tmp = [link['title']
+                   for link in self._continued_query(params, 'backlinks')]
+            self._backlinks = sorted(tmp)
         return self._backlinks
 
     @property

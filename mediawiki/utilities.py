@@ -36,6 +36,12 @@ def memoize(func):
         ''' wrap it up and store info in a cache '''
         cache = args[0].memoized
         refresh = args[0].refresh_interval
+        use_cache = args[0].use_cache
+
+        # short circuit if not using cache
+        if use_cache is False:
+            return func(*args, **kwargs)
+
         if func.__name__ not in cache:
             cache[func.__name__] = dict()
             if 'defaults' not in cache:

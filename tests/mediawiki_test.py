@@ -221,6 +221,18 @@ class TestMediaWiki(unittest.TestCase):
         site.clear_memoized()
         self.assertEqual(site.memoized, dict())
 
+    def test_no_memoized(self):
+        ''' test changing the caching of results '''
+        site = MediaWikiOverloaded()
+        self.assertTrue(site.use_cache)
+        site.use_cache = False
+        self.assertFalse(site.use_cache)
+        site.search('chest set')
+        self.assertEqual(site.memoized, dict())
+        site.use_cache = True
+        site.search('chest set')
+        self.assertNotEqual(site.memoized, dict())
+
     def test_refresh_interval(self):
         ''' test not setting refresh interval '''
         site = MediaWikiOverloaded()

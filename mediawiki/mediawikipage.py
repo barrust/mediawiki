@@ -270,7 +270,6 @@ class MediaWikiPage(object):
         '''
         if self._references is False:
             params = {'prop': 'extlinks', 'ellimit': 'max'}
-            self._references = list()
             tmp = [link['*'] for link in self._continued_query(params)]
             self._references = sorted(tmp)
         return self._references
@@ -292,7 +291,6 @@ class MediaWikiPage(object):
                     return tmp[9:]
                 return tmp
 
-            self._categories = list()
             params = {
                 'prop': 'categories',
                 'cllimit': 'max',

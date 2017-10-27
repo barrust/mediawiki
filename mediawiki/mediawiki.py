@@ -57,6 +57,7 @@ class MediaWiki(object):
         # for memoized results
         self._cache = dict()
         self._refresh_interval = None
+        self._use_cache = True
 
         # call helper functions to get everything set up
         self._reset_session()
@@ -124,6 +125,21 @@ class MediaWiki(object):
         self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         self.clear_memoized()
+
+    @property
+    def use_cache(self):
+        ''' Boolean value if the cache is to be used
+
+        :getter: Returns if the cache should be used
+        :setter: Turs on (**True**) or off (**False**) the caching algorithm
+        :type: Boolean
+        '''
+        return self._use_cache
+
+    @use_cache.setter
+    def use_cache(self, use_cache):
+        ''' toggle using the cache or not '''
+        self._use_cache = bool(use_cache)
 
     @property
     def rate_limit_min_wait(self):

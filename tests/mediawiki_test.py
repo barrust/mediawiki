@@ -1459,6 +1459,20 @@ class TestMediaWikiRegressions(unittest.TestCase):
         self.assertEqual(page.images, res)
         self.assertEqual(site._get_response.count, 13)
 
+    def test_missing_title_disambig(self):
+        ''' test when title not present for disambiguation error '''
+        site = MediaWikiOverloaded()
+        res0 = site.responses[site.api_url]['missing_title_disamb_dets']
+        res1 = site.responses[site.api_url]['missing_title_disamb_msg']
+
+        try:
+            page = site.page('Leaching')
+        except DisambiguationError as ex:
+            self.assertEqual(ex.details, res0)
+            self.assertEqual(str(ex), res1)
+        else:
+            self.assertEqual(True, False)
+
 
 class TestMediaWikiUtilities(unittest.TestCase):
     ''' some of the utility functions should be tested '''

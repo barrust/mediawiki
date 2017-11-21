@@ -558,14 +558,14 @@ class MediaWikiPage(object):
         lis = BeautifulSoup(html, 'html.parser').find_all('li')
         filtered_lis = [li for li in lis if 'tocsection' not in
                         ''.join(li.get('class', list()))]
-        may_refer_to = [li.a.get_text()
-                        for li in filtered_lis if li.a]
+        may_refer_to = [li.a.get_text() for li in filtered_lis if li.a]
+
         disambiguation = list()
         for lis_item in filtered_lis:
             item = lis_item.find_all('a')
             one_disambiguation = dict()
             one_disambiguation['description'] = lis_item.text
-            if item:
+            if item and hasattr(item, 'title'):
                 one_disambiguation['title'] = item[0]['title']
             else:
                 # these are non-linked records so double up the text

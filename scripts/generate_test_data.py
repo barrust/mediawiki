@@ -86,7 +86,7 @@ PULL_SECTION_LINKS = False
 # regression tests
 PULL_ISSUE_15 = False
 PULL_ISSUE_14 = False
-
+PULL_ISSUE_35 = False
 
 # make files if they don't exist
 if not os.path.isfile(REQUESTS_FILE):
@@ -435,6 +435,15 @@ if PULL_ALL is True or PULL_ISSUE_15 is True:
     responses[wikipedia.api_url]['large_continued_query_images'] = res
 
     print("Completed pulling issue 15")
+
+if PULL_ALL is True or PULL_ISSUE_35 is True:
+    try:
+        site.page('Leaching')
+    except DisambiguationError as ex:
+        responses[wikipedia.api_url]['missing_title_disamb_dets'] = ex.details
+        responses[wikipedia.api_url]['missing_title_disamb_msg'] = str(ex)
+
+    print("Completed pulling issue 35")
 
 # dump data to file
 with open(RESPONSES_FILE, 'w') as mock:

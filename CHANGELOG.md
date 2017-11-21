@@ -5,6 +5,7 @@
 ### Version 0.3.16
 
 * Add ability to turn off caching completely
+* Fix bug when disambiguation link does not have a title [issue #35](https://github.com/barrust/mediawiki/issues/35)
 
 ### Version 0.3.15
 

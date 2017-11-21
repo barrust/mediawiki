@@ -5081,7 +5081,7 @@
   "antivirus_software_logos": [],
   "api": "http://en.wikipedia.org/w/api.php",
   "api_url_error_msg": "http://french.wikipedia.org/w/api.php is not a valid MediaWiki API URL",
-  "api_version": "1.30.0",
+  "api_version": "1.31.0",
   "category_members_very_large": [
    [],
    [
@@ -6445,6 +6445,7 @@
    "AntiSpoof",
    "AntiSpoof for CentralAuth",
    "ApiFeatureUsage",
+   "ArticleCreationWorkflow",
    "Babel",
    "BetaFeatures",
    "BounceHandler",
@@ -6983,7 +6984,7 @@
    "sd": "سنڌي",
    "sdc": "Sassaresu",
    "sdh": "کوردی خوارگ",
-   "se": "sámegiella",
+   "se": "davvisámegiella",
    "sei": "Cmique Itom",
    "ses": "Koyraboro Senni",
    "sg": "Sängö",
@@ -7031,7 +7032,6 @@
    "tly": "толышә зывон",
    "tn": "Setswana",
    "to": "lea faka-Tonga",
-   "tokipona": "Toki Pona",
    "tpi": "Tok Pisin",
    "tr": "Türkçe",
    "tru": "Ṫuroyo",
@@ -24554,6 +24554,61 @@
    ]
   ],
   "missing_categorytree": "\"Category:Chess Ebola\" does not match any pages. Try another query!",
+  "missing_title_disamb_dets": [
+   {
+    "description": "Leaching (agriculture), the loss of water-soluble plant nutrients from the soil; or applying a small amount of excess irrigation to avoid soil salinity",
+    "title": "Leaching (agriculture), the loss of water-soluble plant nutrients from the soil; or applying a small amount of excess irrigation to avoid soil salinity"
+   },
+   {
+    "description": "Leaching (chemistry), the process of extracting minerals from a solid by dissolving them in a liquid",
+    "title": "Leaching (chemistry), the process of extracting minerals from a solid by dissolving them in a liquid"
+   },
+   {
+    "description": "Leaching (metallurgy), a widely used extractive metallurgy technique which converts metals into soluble salts in aqueous media\nDump leaching, an industrial process to extract metals from ore taken directly from the mine and stacked on the leach pad without crushing\nHeap leaching, an industrial process to extract metals from ore which has been crushed into small chunks\nTank leaching, a hydro metallurgical method of extracting valuable material from ore\nIn-situ leaching, a process of recovering minerals such as copper and uranium through boreholes drilled into the deposit",
+    "title": "Leaching (metallurgy), a widely used extractive metallurgy technique which converts metals into soluble salts in aqueous media\nDump leaching, an industrial process to extract metals from ore taken directly from the mine and stacked on the leach pad without crushing\nHeap leaching, an industrial process to extract metals from ore which has been crushed into small chunks\nTank leaching, a hydro metallurgical method of extracting valuable material from ore\nIn-situ leaching, a process of recovering minerals such as copper and uranium through boreholes drilled into the deposit"
+   },
+   {
+    "description": "Dump leaching, an industrial process to extract metals from ore taken directly from the mine and stacked on the leach pad without crushing",
+    "title": "Dump leaching, an industrial process to extract metals from ore taken directly from the mine and stacked on the leach pad without crushing"
+   },
+   {
+    "description": "Heap leaching, an industrial process to extract metals from ore which has been crushed into small chunks",
+    "title": "Heap leaching, an industrial process to extract metals from ore which has been crushed into small chunks"
+   },
+   {
+    "description": "Tank leaching, a hydro metallurgical method of extracting valuable material from ore",
+    "title": "Tank leaching, a hydro metallurgical method of extracting valuable material from ore"
+   },
+   {
+    "description": "In-situ leaching, a process of recovering minerals such as copper and uranium through boreholes drilled into the deposit",
+    "title": "In-situ leaching, a process of recovering minerals such as copper and uranium through boreholes drilled into the deposit"
+   },
+   {
+    "description": "Leaching (pedology), the loss of mineral and organic solutes due to percolation from soil",
+    "title": "Leaching (pedology), the loss of mineral and organic solutes due to percolation from soil"
+   },
+   {
+    "description": "Bioleaching, the extraction of specific metals from their ores through the use of bacteria and fungi",
+    "title": "Bioleaching, the extraction of specific metals from their ores through the use of bacteria and fungi"
+   },
+   {
+    "description": "Leachate, the liquid that drains or 'leaches' from a landfill",
+    "title": "Leachate, the liquid that drains or 'leaches' from a landfill"
+   },
+   {
+    "description": "Leach (disambiguation)",
+    "title": "Leach (disambiguation)"
+   },
+   {
+    "description": "Leech (disambiguation)",
+    "title": "Leech (disambiguation)"
+   },
+   {
+    "description": "^ \"leaching facts, information, pictures | Encyclopedia.com articles about leaching\". www.encyclopedia.com. Retrieved 2017-10-25. \n",
+    "title": "^ \"leaching facts, information, pictures | Encyclopedia.com articles about leaching\". www.encyclopedia.com. Retrieved 2017-10-25. \n"
+   }
+  ],
+  "missing_title_disamb_msg": "\n\"Leaching\" may refer to: \n  Bioleaching\n  Dump leaching\n  Heap leaching\n  In-situ leaching\n  Leach (disambiguation)\n  Leachate\n  Leaching (agriculture)\n  Leaching (chemistry)\n  Leaching (metallurgy)\n  Leaching (pedology)\n  Leech (disambiguation)\n  Tank leaching\n  ^",
   "opensearch_new_york": [
    [
     "New York",
@@ -26009,7 +26064,7 @@
  },
  "http://fr.wikipedia.org/w/api.php": {
   "api": "http://fr.wikipedia.org/w/api.php",
-  "api_version": "1.30.0",
+  "api_version": "1.31.0",
   "extensions": [
    "Abuse Filter",
    "AntiSpoof",
@@ -26083,7 +26138,6 @@
    "Nuke",
    "OATHAuth",
    "OAuth",
-   "ORES",
    "PDF Handler",
    "PageImages",
    "PageViewInfo",
@@ -26461,7 +26515,7 @@
    "sd": "سنڌي",
    "sdc": "Sassaresu",
    "sdh": "کوردی خوارگ",
-   "se": "sámegiella",
+   "se": "davvisámegiella",
    "sei": "Cmique Itom",
    "ses": "Koyraboro Senni",
    "sg": "Sängö",
@@ -26509,7 +26563,6 @@
    "tly": "толышә зывон",
    "tn": "Setswana",
    "to": "lea faka-Tonga",
-   "tokipona": "Toki Pona",
    "tpi": "Tok Pisin",
    "tr": "Türkçe",
    "tru": "Ṫuroyo",

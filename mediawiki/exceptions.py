@@ -5,9 +5,9 @@ from __future__ import (unicode_literals, absolute_import)
 from .utilities import (str_or_unicode)
 
 
-ODD_ERROR_MESSAGE = ('This should not happen. Please report on '
-                     'GitHub if the MediaWiki site is available: '
-                     'github.com/barrust/mediawiki')
+ODD_ERROR_MESSAGE = ('This should not happen. If the MediaWiki site you are '
+                     'querying is available, then please report this issue on '
+                     'GitHub: github.com/barrust/mediawiki')
 
 
 class MediaWikiBaseException(Exception):

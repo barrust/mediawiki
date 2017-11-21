@@ -16,7 +16,7 @@ from .mediawikipage import (MediaWikiPage)
 from .utilities import (memoize)
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.15'
+VERSION = '0.3.16'
 
 
 class MediaWiki(object):
@@ -51,18 +51,20 @@ class MediaWiki(object):
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
+        self._api_version_str = None
         self._base_url = None
         self.__supported_languages = None
 
         # for memoized results
         self._cache = dict()
         self._refresh_interval = None
+        self._use_cache = True
 
         # call helper functions to get everything set up
         self._reset_session()
         try:
             self._get_site_info()
-        except Exception:
+        except MediaWikiException:
             raise MediaWikiAPIURLError(url)
 
     # non-settable properties
@@ -84,7 +86,7 @@ class MediaWiki(object):
         :setter: Not settable
         :type: string
         '''
-        return '.'.join([str(x) for x in self._api_version])
+        return self._api_version_str
 
     @property
     def base_url(self):
@@ -105,7 +107,7 @@ class MediaWiki(object):
         :setter: Not settable
         :type: list
         '''
-        return sorted(list(self._extensions))
+        return self._extensions
 
     # settable properties
     @property
@@ -124,6 +126,21 @@ class MediaWiki(object):
         self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         self.clear_memoized()
+
+    @property
+    def use_cache(self):
+        ''' Boolean value if the cache is to be used
+
+        :getter: Returns if the cache should be used
+        :setter: Turs on (**True**) or off (**False**) the caching algorithm
+        :type: Boolean
+        '''
+        return self._use_cache
+
+    @use_cache.setter
+    def use_cache(self, use_cache):
+        ''' toggle using the cache or not '''
+        self._use_cache = bool(use_cache)
 
     @property
     def rate_limit_min_wait(self):
@@ -267,7 +284,7 @@ class MediaWiki(object):
         try:
             self._get_site_info()
             self.__supported_languages = None  # reset this
-        except Exception:
+        except MediaWikiException:
             # reset api url and lang in the event that the exception was caught
             self._api_url = old_api_url
             self._lang = old_lang
@@ -320,7 +337,6 @@ class MediaWiki(object):
 
         if len(titles) == 1:
             return titles[0]
-
         return titles
     # end random
 
@@ -352,15 +368,14 @@ class MediaWiki(object):
 
         self._check_error_response(raw_results, query)
 
-        search_results = (d['title'] for d in raw_results['query']['search'])
+        search_results = [d['title'] for d in raw_results['query']['search']]
 
         if suggestion:
             sug = None
             if raw_results['query'].get('searchinfo'):
                 sug = raw_results['query']['searchinfo']['suggestion']
-            return list(search_results), sug
-
-        return list(search_results)
+            return search_results, sug
+        return search_results
     # end search
 
     @memoize
@@ -432,9 +447,7 @@ class MediaWiki(object):
 
         self._check_error_response(raw_results, title)
 
-        res = (d['title'] for d in raw_results['query']['geosearch'])
-
-        return list(res)
+        return [d['title'] for d in raw_results['query']['geosearch']]
 
     @memoize
     def opensearch(self, query, results=10, redirect=True):
@@ -502,11 +515,7 @@ class MediaWiki(object):
 
         self._check_error_response(raw_results, prefix)
 
-        res = list()
-        for rec in raw_results['query']['prefixsearch']:
-            res.append(rec['title'])
-
-        return res
+        return [rec['title'] for rec in raw_results['query']['prefixsearch']]
 
     @memoize
     def summary(self, title, sentences=0, chars=0, auto_suggest=True,
@@ -641,7 +650,7 @@ class MediaWiki(object):
                         break
                     except PageError:
                         raise PageError('Category:{0}'.format(cat))
-                    except Exception:
+                    except:
                         tries = tries + 1
                         time.sleep(1)
             else:
@@ -773,17 +782,25 @@ class MediaWiki(object):
             'siprop': 'extensions|general'
         })
 
-        # shouldn't a check for success be done here?
-        gen = response['query']['general']
+        # parse what we need out here!
+        query = response.get('query', None)
+        if query is None or query.get('general', None) is None:
+            raise MediaWikiException('Missing query in response')
+
+        gen = query.get('general', None)
+
         api_version = gen['generator'].split(' ')[1].split('-')[0]
 
         major_minor = api_version.split('.')
         for i, item in enumerate(major_minor):
             major_minor[i] = int(item)
         self._api_version = tuple(major_minor)
+        self._api_version_str = '.'.join([str(x) for x in self._api_version])
 
         # parse the base url out
-        tmp = gen['server']
+        tmp = gen.get('server', '')
+        if tmp == '':
+            raise MediaWikiException('Unable to parse base url')
         if tmp.startswith('http://') or tmp.startswith('https://'):
             self._base_url = tmp
         elif gen['base'].startswith('https:'):
@@ -791,9 +808,8 @@ class MediaWiki(object):
         else:
             self._base_url = 'http:{}'.format(tmp)
 
-        self._extensions = set()
-        for ext in response['query']['extensions']:
-            self._extensions.add(ext['name'])
+        self._extensions = [ext['name'] for ext in query['extensions']]
+        self._extensions = sorted(list(set(self._extensions)))
     # end _get_site_info
 
     @staticmethod
@@ -811,8 +827,6 @@ class MediaWiki(object):
                 raise MediaWikiGeoCoordError(err)
             else:
                 raise MediaWikiException(err)
-        else:
-            return
 
     @staticmethod
     def _check_query(value, message):

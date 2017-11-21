@@ -221,6 +221,18 @@ class TestMediaWiki(unittest.TestCase):
         site.clear_memoized()
         self.assertEqual(site.memoized, dict())
 
+    def test_no_memoized(self):
+        ''' test changing the caching of results '''
+        site = MediaWikiOverloaded()
+        self.assertTrue(site.use_cache)
+        site.use_cache = False
+        self.assertFalse(site.use_cache)
+        site.search('chest set')
+        self.assertEqual(site.memoized, dict())
+        site.use_cache = True
+        site.search('chest set')
+        self.assertNotEqual(site.memoized, dict())
+
     def test_refresh_interval(self):
         ''' test not setting refresh interval '''
         site = MediaWikiOverloaded()
@@ -1446,6 +1458,20 @@ class TestMediaWikiRegressions(unittest.TestCase):
         site._get_response = FunctionUseCounter(site._get_response)
         self.assertEqual(page.images, res)
         self.assertEqual(site._get_response.count, 13)
+
+    def test_missing_title_disambig(self):
+        ''' test when title not present for disambiguation error '''
+        site = MediaWikiOverloaded()
+        res0 = site.responses[site.api_url]['missing_title_disamb_dets']
+        res1 = site.responses[site.api_url]['missing_title_disamb_msg']
+
+        try:
+            page = site.page('Leaching')
+        except DisambiguationError as ex:
+            self.assertEqual(ex.details, res0)
+            self.assertEqual(str(ex), res1)
+        else:
+            self.assertEqual(True, False)
 
 
 class TestMediaWikiUtilities(unittest.TestCase):

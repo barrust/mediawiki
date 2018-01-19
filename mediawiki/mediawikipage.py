@@ -130,7 +130,7 @@ class MediaWikiPage(object):
 
         .. note:: Side effect is to also get revision_id and parent_id
         '''
-        if self._content is '':
+        if not self._content:
             self._pull_content_revision_parent()
         return self._content
 
@@ -681,8 +681,7 @@ class MediaWikiPage(object):
         ''' util function to determine which parameter method to use '''
         if getattr(self, 'title', None) is not None:
             return {'titles': self.title}
-        else:
-            return {'pageids': self.pageid}
+        return {'pageids': self.pageid}
     # end __title_query_param
 
 # end MediaWikiPage Class

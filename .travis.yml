@@ -11,7 +11,7 @@ install:
   - ./provision/python.sh
 
 script:
-    - pep8 mediawiki/
+    - pycodestyle mediawiki/
     - coverage run --source=mediawiki setup.py test
     - ./scripts/py-lint.sh
 

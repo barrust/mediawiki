@@ -1,5 +1,5 @@
 # needed for testing purposes
-pep8
+pycodestyle
 isort
 astroid
 pylint

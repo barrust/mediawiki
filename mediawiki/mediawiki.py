@@ -650,7 +650,7 @@ class MediaWiki(object):
                         break
                     except PageError:
                         raise PageError('Category:{0}'.format(cat))
-                    except:
+                    except Exception:
                         tries = tries + 1
                         time.sleep(1)
             else:

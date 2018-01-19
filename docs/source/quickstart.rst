@@ -23,7 +23,7 @@ Using pip
 From source
 """""""""""
 
-Begin by installing Wikipedia: simply clone the
+Begin by installing pymediawiki: simply clone the
 `repository on GitHub <https://github.com/barrust/mediawiki>`__,
 then run the following command from the extracted folder:
 

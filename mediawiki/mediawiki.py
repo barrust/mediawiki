@@ -588,14 +588,20 @@ class MediaWiki(object):
                         tmp = tmp[9:]
                     subcats.append(tmp)
 
-            if 'continue' not in raw_res or last_cont == raw_res['continue']:
+            cont = raw_res.get('continue', False)
+            if cont is False:
+                cont = raw_res.get('query-continue', False)
+
+            if cont is False or last_cont == cont:
                 break
 
             returned_results = returned_results + current_pull
             if results is None or (results - returned_results > 0):
-                last_cont = raw_res['continue']
+                last_cont = cont
             else:
                 finished = True
+
+            # print(last_cont)
         # end while loop
 
         if subcategories:

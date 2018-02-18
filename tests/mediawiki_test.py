@@ -1473,6 +1473,14 @@ class TestMediaWikiRegressions(unittest.TestCase):
         else:
             self.assertEqual(True, False)
 
+    def test_query_continue(self):
+        site = MediaWikiOverloaded(url='http://practicalplants.org/w/api.php')
+        res = site.responses[site.api_url]['query-continue-find']
+
+        cat_membs = site.categorymembers('Plant', results=None, subcategories=False)
+        self.assertEqual(cat_membs, res)
+        self.assertEqual(len(cat_membs), 7415)
+
 
 class TestMediaWikiUtilities(unittest.TestCase):
     ''' some of the utility functions should be tested '''

@@ -87,6 +87,7 @@ PULL_SECTION_LINKS = False
 PULL_ISSUE_15 = False
 PULL_ISSUE_14 = False
 PULL_ISSUE_35 = False
+PULL_ISSUE_39 = False
 
 # make files if they don't exist
 if not os.path.isfile(REQUESTS_FILE):
@@ -106,7 +107,9 @@ french_site = MediaWikiOverloaded(url='http://fr.wikipedia.org/w/api.php',
                                   lang='fr')
 asoiaf = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php',
                              lang='fr')
+plants = MediaWikiOverloaded(url='http://practicalplants.org/w/api.php')
 wikipedia = MediaWikiOverloaded()
+
 
 # ensure these pieces of information do not throw errors
 if site.api_url not in responses:
@@ -116,7 +119,7 @@ if french_site.api_url not in responses:
 if asoiaf.api_url not in responses:
     responses[asoiaf.api_url] = dict()
 
-# pull in standard information for all sites (every time)
+pull in standard information for all sites (every time)
 if site.api_url not in responses:
     responses[site.api_url] = dict()
 responses[site.api_url]['api'] = site.api_url
@@ -140,6 +143,9 @@ responses[asoiaf.api_url]['lang'] = asoiaf.language
 responses[asoiaf.api_url]['languages'] = asoiaf.supported_languages
 responses[asoiaf.api_url]['api_version'] = asoiaf.api_version
 responses[asoiaf.api_url]['extensions'] = asoiaf.extensions
+
+if plants.api_url not in responses:
+    responses[plants.api_url] = dict()
 
 print("Completed basic mediawiki information")
 
@@ -444,6 +450,12 @@ if PULL_ALL is True or PULL_ISSUE_35 is True:
         responses[wikipedia.api_url]['missing_title_disamb_msg'] = str(ex)
 
     print("Completed pulling issue 35")
+
+if PULL_ALL is True or PULL_ISSUE_39 is True:
+    res = plants.categorymembers('Plant', results=None, subcategories=False)
+    responses[plants.api_url]['query-continue-find'] = res
+
+    print("Completed pulling issue 39")
 
 # dump data to file
 with open(RESPONSES_FILE, 'w') as mock:

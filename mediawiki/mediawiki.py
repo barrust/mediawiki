@@ -588,14 +588,16 @@ class MediaWiki(object):
                         tmp = tmp[9:]
                     subcats.append(tmp)
 
-            cont = raw_res.get('continue', False)
-            if cont is False:
-                cont = raw_res.get('query-continue', False)
+            cont = raw_res.get('query-continue', False)
+            if cont and 'categorymembers' in cont:
+                cont = cont['categorymembers']
+            else:
+                cont = raw_res.get('continue', False)
 
             if cont is False or last_cont == cont:
                 break
 
-            returned_results = returned_results + current_pull
+            returned_results += current_pull
             if results is None or (results - returned_results > 0):
                 last_cont = cont
             else:

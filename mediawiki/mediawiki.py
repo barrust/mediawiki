@@ -16,7 +16,7 @@ from .mediawikipage import (MediaWikiPage)
 from .utilities import (memoize)
 
 URL = 'https://github.com/barrust/mediawiki'
-VERSION = '0.3.16'
+VERSION = '0.3.17'
 
 
 class MediaWiki(object):

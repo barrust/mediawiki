@@ -6,6 +6,7 @@
 
 * Add fix to use the `query-continue` parameter to continue to pull category
 members [issue #39](https://github.com/barrust/mediawiki/issues/39)
+* Better handle large categorymember selections
 
 
 ### Version 0.3.16

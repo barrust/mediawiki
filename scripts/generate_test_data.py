@@ -119,7 +119,7 @@ if french_site.api_url not in responses:
 if asoiaf.api_url not in responses:
     responses[asoiaf.api_url] = dict()
 
-pull in standard information for all sites (every time)
+# pull in standard information for all sites (every time)
 if site.api_url not in responses:
     responses[site.api_url] = dict()
 responses[site.api_url]['api'] = site.api_url

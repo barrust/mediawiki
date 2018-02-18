@@ -76,7 +76,7 @@ class TestMediaWiki(unittest.TestCase):
         response = site.responses[site.api_url]
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_version, response['api_version'])
-        self.assertEqual(site.extensions, response['extensions'])
+        self.assertEqual(sorted(site.extensions), sorted(response['extensions']))
 
     def test_change_lang(self):
         ''' test changing the language '''
@@ -130,13 +130,13 @@ class TestMediaWiki(unittest.TestCase):
         response = site.responses[site.api_url]
         self.assertEqual(site.api_url, 'http://en.wikipedia.org/w/api.php')
         self.assertEqual(site.api_version, response['api_version'])
-        self.assertEqual(site.extensions, response['extensions'])
+        self.assertEqual(sorted(site.extensions), sorted(response['extensions']))
 
         site.set_api_url('http://awoiaf.westeros.org/api.php', lang='en')
         response = site.responses[site.api_url]
         self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_version, response['api_version'])
-        self.assertEqual(site.extensions, response['extensions'])
+        self.assertEqual(sorted(site.extensions), sorted(response['extensions']))
 
     def test_change_api_url_lang(self):
         ''' test changing the api url with only language '''
@@ -1251,8 +1251,8 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
         try:
             site.categorytree('Chess', depth=0)
         except ValueError as ex:
-            msg = ("CategoryTree: Parameter 'depth' must None (for the full "
-                   "tree) be greater than 0")
+            msg = ("CategoryTree: Parameter 'depth' must be either None "
+                   "(for the full tree) or be greater than 0")
             self.assertEqual(str(ex), msg)
 
     def test_depth_none_1(self):
@@ -1267,7 +1267,7 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
         site = MediaWikiOverloaded()
         cat = site.categorytree(['Ebola'], depth=None)
         depth = find_depth(cat['Ebola'])
-        self.assertEqual(depth, 2)
+        self.assertEqual(depth, 1)
 
     def test_depth_limited(self):
         ''' test the depth when going partial depth '''

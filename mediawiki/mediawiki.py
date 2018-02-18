@@ -559,11 +559,12 @@ class MediaWiki(object):
         '''
         self._check_query(category, 'Category must be specified')
 
+        max_pull = 5000
         search_params = {
             'list': 'categorymembers',
             'cmprop': 'ids|title|type',
             'cmtype': ('page|subcat' if subcategories else 'page'),
-            'cmlimit': (results if results is not None else 5000),
+            'cmlimit': (results if results is not None else max_pull),
             'cmtitle': 'Category:{0}'.format(category)
         }
         pages = list()
@@ -602,6 +603,9 @@ class MediaWiki(object):
                 last_cont = cont
             else:
                 finished = True
+
+            if results is not None and results - returned_results < max_pull:
+                search_params['cmlimit'] = results - returned_results
 
             # print(last_cont)
         # end while loop
@@ -699,8 +703,8 @@ class MediaWiki(object):
             raise ValueError(msg)
 
         if depth is not None and depth < 1:
-            msg = ("CategoryTree: Parameter 'depth' must None (for the full "
-                   "tree) be greater than 0")
+            msg = ("CategoryTree: Parameter 'depth' must be either None "
+                   "(for the full tree) or be greater than 0")
             raise ValueError(msg)
 
         results = dict()

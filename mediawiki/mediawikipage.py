@@ -6,6 +6,7 @@ MediaWikiPage class module
 
 from __future__ import (unicode_literals, absolute_import)
 from decimal import (Decimal)
+import re
 from bs4 import (BeautifulSoup, Tag)
 from .utilities import (str_or_unicode, is_relative_url)
 from .exceptions import (MediaWikiException, PageError, RedirectError,
@@ -438,6 +439,21 @@ class MediaWikiPage(object):
         :setter: Not settable
         :type: list
         '''
+        # NOTE: Due to MediaWiki sites adding superscripts or italics or bold
+        #       information in the sections, moving to regex to get the
+        #       `non-decorated` name instead of using the query api!
+        if self._sections is False:
+            self._sections = list()
+            section_regexp = r'\n==* .* ==*\n' # '== {STUFF_NOT_\n} =='
+            found_obj = re.findall(section_regexp, self.content)
+
+            if found_obj is not None:
+                for obj in found_obj:
+                    obj = obj.lstrip('\n= ').rstrip(' =\n')
+                    self._sections.append(obj)
+        return self._sections
+
+    def old_sections(self):
         if self._sections is False:
             query_params = {'action': 'parse', 'prop': 'sections'}
             if not getattr(self, 'title', None):
@@ -449,6 +465,7 @@ class MediaWikiPage(object):
             self._sections = [section['line'] for section in sections]
 
         return self._sections
+
 
     def section(self, section_title):
         ''' Plain text section content

@@ -444,7 +444,7 @@ class MediaWikiPage(object):
         #       `non-decorated` name instead of using the query api!
         if self._sections is False:
             self._sections = list()
-            section_regexp = r'\n==* .* ==*\n' # '== {STUFF_NOT_\n} =='
+            section_regexp = r'\n==* .* ==*\n'  # '== {STUFF_NOT_\n} =='
             found_obj = re.findall(section_regexp, self.content)
 
             if found_obj is not None:
@@ -465,7 +465,6 @@ class MediaWikiPage(object):
             self._sections = [section['line'] for section in sections]
 
         return self._sections
-
 
     def section(self, section_title):
         ''' Plain text section content

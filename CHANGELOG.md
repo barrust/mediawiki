@@ -10,6 +10,7 @@ members [issue #39](https://github.com/barrust/mediawiki/issues/39)
 * Add better handling of exception attributes including adding them to the
 documentation
 * Correct the pulling of the section titles without additional markup [#42](https://github.com/barrust/mediawiki/issues/42)
+* Handle memoization of unicode parameters in python 2.7
 
 
 ### Version 0.3.16

@@ -55,6 +55,10 @@ def memoize(func):
         tmp.extend(args[1:])
         for k in sorted(defaults.keys()):
             tmp.append('({0}: {1})' .format(k, defaults[k]))
+
+        # handle possible unicode characters
+        if sys.version_info < (3, 0):
+            tmp = [unicode(x) for x in tmp]
         key = ' - '.join(tmp)
 
         # pull from the cache if it is available

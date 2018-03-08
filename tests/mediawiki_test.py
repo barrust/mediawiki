@@ -694,6 +694,8 @@ class TestMediaWikiExceptions(unittest.TestCase):
             site.page('bush')
         except DisambiguationError as ex:
             self.assertEqual(ex.message, response['disambiguation_error_msg'])
+            self.assertEqual(ex.title, 'Bush')
+            self.assertEqual(ex.url, 'https://en.wikipedia.org/wiki/Bush')
 
     def test_disamb_error_msg_w_empty(self):
         ''' test that disambiguation error is thrown correctly and no

@@ -572,7 +572,7 @@ class MediaWikiPage(object):
                 one_disambiguation['title'] = lis_item.text
             disambiguation.append(one_disambiguation)
         raise DisambiguationError(getattr(self, 'title', page['title']),
-                                  may_refer_to,
+                                  may_refer_to, page['fullurl'],
                                   disambiguation)
 
     def _handle_redirect(self, redirect, preload, query, page):

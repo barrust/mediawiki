@@ -11,6 +11,7 @@ members [issue #39](https://github.com/barrust/mediawiki/issues/39)
 documentation
 * Correct the pulling of the section titles without additional markup [#42](https://github.com/barrust/mediawiki/issues/42)
 * Handle memoization of unicode parameters in python 2.7
+* ***Change default timeout*** for HTTP requests to 15 seconds
 
 
 ### Version 0.3.16

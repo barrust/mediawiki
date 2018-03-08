@@ -36,17 +36,17 @@ class MediaWiki(object):
     '''
 
     def __init__(self, url='http://{lang}.wikipedia.org/w/api.php', lang='en',
-                 timeout=None, rate_limit=False,
+                 timeout=15.0, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
         ''' Init Function '''
         self._version = VERSION
         self._lang = lang.lower()
         self._api_url = url.format(lang=self._lang)
-        self._timeout = timeout
+        self.timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
                             '/({1})/BOT').format(VERSION, URL)
         self._session = None
-        self._rate_limit = rate_limit
+        self.rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         self._min_wait = rate_limit_wait
         self._extensions = None
@@ -166,7 +166,7 @@ class MediaWiki(object):
 
         :getter: Returns the number of seconds to wait for a resonse
         :setter: Sets the number of seconds to wait for a response
-        :type: integer or None
+        :type: float or None
 
         .. note:: Use **None** for no response timeout
         '''
@@ -175,7 +175,11 @@ class MediaWiki(object):
     @timeout.setter
     def timeout(self, timeout):
         ''' Set request timeout in seconds (or fractions of a second) '''
-        self._timeout = timeout
+
+        if timeout is None:
+            self._timeout = None  # no timeout
+            return
+        self._timeout = float(timeout)  # allow the exception to be raised
 
     @property
     def language(self):

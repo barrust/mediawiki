@@ -453,19 +453,6 @@ class MediaWikiPage(object):
                     self._sections.append(obj)
         return self._sections
 
-    def old_sections(self):
-        if self._sections is False:
-            query_params = {'action': 'parse', 'prop': 'sections'}
-            if not getattr(self, 'title', None):
-                query_params['pageid'] = self.pageid
-            else:
-                query_params['page'] = self.title
-            request = self.mediawiki.wiki_request(query_params)
-            sections = request['parse']['sections']
-            self._sections = [section['line'] for section in sections]
-
-        return self._sections
-
     def section(self, section_title):
         ''' Plain text section content
 

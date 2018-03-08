@@ -2,7 +2,7 @@
 
 ## Current
 
-### Version 0.3.17
+### Version 0.4.0
 
 * Add fix to use the `query-continue` parameter to continue to pull category
 members [issue #39](https://github.com/barrust/mediawiki/issues/39)

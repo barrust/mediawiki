@@ -21,7 +21,7 @@ from .utilities import find_depth, FunctionUseCounter
 class MediaWikiOverloaded(MediaWiki):
     ''' Overload the MediaWiki class to change how wiki_request works '''
     def __init__(self, url='http://{lang}.wikipedia.org/w/api.php', lang='en',
-                 timeout=None, rate_limit=False,
+                 timeout=15, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
         ''' new init '''
 
@@ -194,13 +194,24 @@ class TestMediaWiki(unittest.TestCase):
     def test_default_timeout(self):
         ''' test default timeout '''
         site = MediaWikiOverloaded()
-        self.assertEqual(site.timeout, None)
+        self.assertEqual(site.timeout, 15)
 
     def test_set_timeout(self):
         ''' test setting timeout '''
         site = MediaWikiOverloaded()
         site.timeout = 30
         self.assertEqual(site.timeout, 30)
+
+    def test_set_timeout_none(self):
+        ''' test setting timeout to None '''
+        site = MediaWikiOverloaded()
+        site.timeout = None
+        self.assertEqual(site.timeout, None)
+
+    def test_set_timeout_bad(self):
+        ''' test that we raise the ValueError '''
+        self.assertRaises(ValueError,
+                          lambda: MediaWikiOverloaded(timeout='foo'))
 
     def test_memoized(self):
         ''' test returning the memoized cache '''
@@ -694,6 +705,8 @@ class TestMediaWikiExceptions(unittest.TestCase):
             site.page('bush')
         except DisambiguationError as ex:
             self.assertEqual(ex.message, response['disambiguation_error_msg'])
+            self.assertEqual(ex.title, 'Bush')
+            self.assertEqual(ex.url, 'https://en.wikipedia.org/wiki/Bush')
 
     def test_disamb_error_msg_w_empty(self):
         ''' test that disambiguation error is thrown correctly and no

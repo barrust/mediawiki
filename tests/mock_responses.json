@@ -883,12 +883,12 @@
     "Appearance and Character",
     "History",
     "Recent Events",
-    "<i>A Game of Thrones</i>",
-    "<i>A Clash of Kings</i>",
-    "<i>A Storm of Swords</i>",
-    "<i>A Feast for Crows</i>",
-    "<i>A Dance with Dragons</i>",
-    "<i>The Winds of Winter</i>",
+    "A Game of Thrones",
+    "A Clash of Kings",
+    "A Storm of Swords",
+    "A Feast for Crows",
+    "A Dance with Dragons",
+    "The Winds of Winter",
     "Arya and death",
     "Arya's prayer",
     "Others",
@@ -902,7 +902,7 @@
    "title": "Arya Stark",
    "url": "http://awoiaf.westeros.org/index.php/Arya_Stark"
   },
-  "arya_<i>A Clash of Kings</i>_links": [
+  "arya_A Clash of Kings_links": [
    [
     "King's Landing",
     "http://awoiaf.westeros.org/index.php/King%27s_Landing"
@@ -1164,7 +1164,7 @@
     "http://awoiaf.westeros.org/index.php/Arya_Stark#cite_note-Racok64.7B.7B.7B3.7D.7D.7D-40"
    ]
   ],
-  "arya_<i>A Dance with Dragons</i>_links": [
+  "arya_A Dance with Dragons_links": [
    [
     "/index.php/File:Thaldir_the_Blind_Girl.jpg",
     "http://awoiaf.westeros.org/index.php/File:Thaldir_the_Blind_Girl.jpg"
@@ -1322,7 +1322,7 @@
     "http://awoiaf.westeros.org/index.php/Arya_Stark#cite_note-Radwd62.7B.7B.7B3.7D.7D.7D-61"
    ]
   ],
-  "arya_<i>A Feast for Crows</i>_links": [
+  "arya_A Feast for Crows_links": [
    [
     "/index.php/File:Marc_Simonetti_HouseofB%26W.jpg",
     "http://awoiaf.westeros.org/index.php/File:Marc_Simonetti_HouseofB%26W.jpg"
@@ -1436,7 +1436,7 @@
     "http://awoiaf.westeros.org/index.php/Arya_Stark#cite_note-Raffc31.7B.7B.7B3.7D.7D.7D-54"
    ]
   ],
-  "arya_<i>A Game of Thrones</i>_links": [
+  "arya_A Game of Thrones_links": [
    [
     "/index.php/File:Arya_stark_by_teiiku.jpg",
     "http://awoiaf.westeros.org/index.php/File:Arya_stark_by_teiiku.jpg"
@@ -1686,7 +1686,7 @@
     "http://awoiaf.westeros.org/index.php/Arya_Stark#cite_note-Ragot59.7B.7B.7B3.7D.7D.7D-36"
    ]
   ],
-  "arya_<i>A Storm of Swords</i>_links": [
+  "arya_A Storm of Swords_links": [
    [
     "Harrenhal",
     "http://awoiaf.westeros.org/index.php/Harrenhal"
@@ -2016,7 +2016,7 @@
     "http://awoiaf.westeros.org/index.php/Arya_Stark#cite_note-Rasos71.7B.7B.7B3.7D.7D.7D-52"
    ]
   ],
-  "arya_<i>The Winds of Winter</i>_links": [
+  "arya_The Winds of Winter_links": [
    [
     "The Winds of Winter",
     "http://awoiaf.westeros.org/index.php/The_Winds_of_Winter"

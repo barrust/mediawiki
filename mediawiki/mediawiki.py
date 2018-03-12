@@ -22,18 +22,14 @@ VERSION = '0.4.0'
 class MediaWiki(object):
     ''' MediaWiki API Wrapper Instance
 
-    :param url: API URL of the MediaWiki site; defaults to Wikipedia
-    :type url: string
-    :param lang: Language of the MediaWiki site; used to help change \
-    API URL
-    :type lang: string
-    :param timeout: HTTP timeout setting; None means no timeout
-    :type timeout: integer - seconds
-    :param rate_limit: Use rate limiting to limit calls to the site
-    :type rate_limit: Boolean
-    :param rate_limit_wait: Amount of time to wait between requests
-    :type rate_limit_wait: timedelta
-    '''
+        Args:
+            url (str): API URL of the MediaWiki site; defaults to Wikipedia
+            lang (str): Language of the MediaWiki site; used to help change \
+                        API URL
+            timeout (float): HTTP timeout setting; None means no timeout
+            rate_limit (bool): Use rate limiting to limit calls to the site
+            rate_limit_wait (timedelta): Amount of time to wait between \
+                                         requests '''
 
     def __init__(self, url='http://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=15.0, rate_limit=False,
@@ -70,54 +66,40 @@ class MediaWiki(object):
     # non-settable properties
     @property
     def version(self):
-        ''' Version of the MediaWiki library
+        ''' str: The version of the pymediawiki library
 
-        :getter: Returns the version of the MediaWiki library
-        :setter: Not settable
-        :type: string
-        '''
+            Note:
+                Not settable '''
         return self._version
 
     @property
     def api_version(self):
-        ''' API Version of the MediaWiki site
+        ''' str: API Version of the MediaWiki site
 
-        :getter: Returns the API version of the MediaWiki site
-        :setter: Not settable
-        :type: string
-        '''
+            Note:
+                Not settable '''
         return self._api_version_str
 
     @property
     def base_url(self):
-        ''' Base URL for the MediaWiki site
+        ''' str: Base URL for the MediaWiki site
 
-        :getter: Returns the base url of the site
-        :setter: Not settable
-        :type: string
-        '''
+            Note:
+                Not settable '''
         return self._base_url
 
     @property
     def extensions(self):
-        '''Extensions installed on the MediaWiki site
+        ''' list: Extensions installed on the MediaWiki site
 
-        :getter: Returns a list of all extensions installed on the MediaWiki \
-        site
-        :setter: Not settable
-        :type: list
-        '''
+            Note:
+                Not settable '''
         return self._extensions
 
     # settable properties
     @property
     def rate_limit(self):
-        ''' Turn on or off Rate Limiting
-
-        :getter: Returns if rate limiting is used
-        :setter: Turns on (**True**) or off (**False**) rate limiting
-        :type: Boolean
-        '''
+        ''' bool: Turn on or off Rate Limiting '''
         return self._rate_limit
 
     @rate_limit.setter
@@ -129,12 +111,8 @@ class MediaWiki(object):
 
     @property
     def use_cache(self):
-        ''' Boolean value if the cache is to be used
-
-        :getter: Returns if the cache should be used
-        :setter: Turs on (**True**) or off (**False**) the caching algorithm
-        :type: Boolean
-        '''
+        ''' bool: Whether caching should be used; on (**True**) or off \
+                  (**False**)  '''
         return self._use_cache
 
     @use_cache.setter
@@ -144,14 +122,10 @@ class MediaWiki(object):
 
     @property
     def rate_limit_min_wait(self):
-        ''' Time to wait between calls
+        ''' timedelta: Time to wait between calls
 
-        :getter: Returns the timedelta used to wait between API calls
-        :setter: Sets the amount of time to wait between calls
-        :type: timedelta
-
-        .. note:: Only used if rate_limit is **True**
-        '''
+            Note:
+                 Only used if rate_limit is **True** '''
         return self._min_wait
 
     @rate_limit_min_wait.setter
@@ -162,14 +136,10 @@ class MediaWiki(object):
 
     @property
     def timeout(self):
-        ''' Response timeout for API requests
+        ''' float: Response timeout for API requests
 
-        :getter: Returns the number of seconds to wait for a resonse
-        :setter: Sets the number of seconds to wait for a response
-        :type: float or None
-
-        .. note:: Use **None** for no response timeout
-        '''
+            Note:
+                Use **None** for no response timeout '''
         return self._timeout
 
     @timeout.setter
@@ -183,17 +153,14 @@ class MediaWiki(object):
 
     @property
     def language(self):
-        ''' API URL language
+        ''' str: The API URL language, if possible this will update the API \
+                 URL
 
-        :getter: Returns the set language of the API URL
-        :setter: Changes the API URL to use the provided language code
-        :type: string
-
-        .. note:: Use correct language titles with the updated API URL
-
-        .. note:: Some API URLs do not encode language; unable to update if \
-        this is the case
-        '''
+            Note:
+                Use correct language titles with the updated API URL
+            Note:
+                Some API URLs do not encode language; unable to update if \
+                this is the case '''
         return self._lang
 
     @language.setter
@@ -212,15 +179,10 @@ class MediaWiki(object):
 
     @property
     def user_agent(self):
-        ''' User agent string
+        ''' str: User agent string
 
-        :getter: Returns the user agent string used in requests
-        :setter: Sets the user agent string; resets session
-        :type: string
-
-        .. note:: If using in as part of another project, this should be \
-        changed
-        '''
+            Note: If using in as part of another project, this should be \
+                  changed '''
         return self._user_agent
 
     @user_agent.setter
@@ -231,33 +193,24 @@ class MediaWiki(object):
 
     @property
     def api_url(self):
-        '''API URL of the MediaWiki site
+        ''' str: API URL of the MediaWiki site
 
-        :getter: Returns the API URL
-        :setter: Not settable; see :py:func:`mediawiki.MediaWiki.set_api_url`
-        :type: string
-        '''
+            Note:
+                Not settable; See :py:func:`mediawiki.MediaWiki.set_api_url`'''
         return self._api_url
 
     @property
     def memoized(self):
-        ''' Return the memoize cache
+        ''' dict: Return the memoize cache
 
-        :getter: Returns the cache used for memoization
-        :setter: Not settable; see \
-        :py:func:`mediawiki.MediaWiki.clear_memoized`
-        :return: dict
-        '''
+            Note:
+                Not settable; see
+                :py:func:`mediawiki.MediaWiki.clear_memoized` '''
         return self._cache
 
     @property
     def refresh_interval(self):
-        ''' The interval at which the memoize cache is to be refresh
-
-        :getter: Returns the refresh interval for the memoize cache
-        :setter: Sets the refresh interval for the memoize cache
-        :return: integer
-        '''
+        ''' int: The interval at which the memoize cache is to be refresh '''
         return self._refresh_interval
 
     @refresh_interval.setter
@@ -273,14 +226,12 @@ class MediaWiki(object):
                     lang='en'):
         ''' Set the API URL and language
 
-        :param api_url: API URL to use
-        :type pages: string
-        :param lang: Language of the API URL
-        :type pages: string
-
-        :raises `mediawiki.exceptions.MediaWikiAPIURLError`: \
-        if the url is not a valid MediaWiki site
-        '''
+            Args:
+                api_url (str): API URL to use
+                lang (str): Language of the API URL
+            Raises:
+                `mediawiki.exceptions.MediaWikiAPIURLError`: if the url is \
+                not a valid MediaWiki site '''
         old_api_url = self._api_url
         old_lang = self._lang
         self._lang = lang.lower()
@@ -309,12 +260,10 @@ class MediaWiki(object):
     # non-setup functions
     @property
     def supported_languages(self):
-        ''' All supported language prefixes on the MediaWiki site
+        ''' dict: All supported language prefixes on the MediaWiki site
 
-        :getter: Returns all supported language prefixes
-        :setter: Not settable
-        :returns: dict: prefix - local language name pairs
-        '''
+            Note:
+                Not Settable '''
         if self.__supported_languages is None:
             res = self.wiki_request({'meta': 'siteinfo', 'siprop':
                                      'languages'})
@@ -326,11 +275,11 @@ class MediaWiki(object):
     def random(self, pages=1):
         ''' Request a random page title or list of random titles
 
-        :param pages: number of random pages to returns
-        :type pages: integer
-        :returns: A list of random page titles or a random page title \
-        if pages = 1
-        '''
+            Args:
+                pages (int): Number of random pages to return
+            Returns:
+                list or int: A list of random page titles or a random page \
+                             title if pages = 1 '''
         if pages is None or pages < 1:
             raise ValueError('Number of pages must be greater than 0')
 
@@ -348,14 +297,14 @@ class MediaWiki(object):
     def search(self, query, results=10, suggestion=False):
         ''' Search for similar titles
 
-        :param query: Page title
-        :param results: Number of pages to returns
-        :type results: integer
-        :param suggestion: Use suggestion
-        :type suggestion: Boolean
-        :returns: tuple (list results, suggestion) if suggestion is **True**; \
-        list of results otherwise
-        '''
+            Args:
+                query (str): Page title
+                results (int): Number of pages to return
+                suggestion (bool): Use suggestion
+            Returns:
+                tuple or list: tuple (list results, suggestion) if \
+                               suggestion is **True**; list of results \
+                               otherwise '''
 
         self._check_query(query, 'Query must be specified')
 
@@ -384,12 +333,14 @@ class MediaWiki(object):
 
     @memoize
     def suggest(self, query):
-        ''' Gather suggestions based on the provided title or None if
-        no suggestions found
+        ''' Gather suggestions based on the provided title or None if no
+            suggestions found
 
-        :param query: Page title
-        :returns: string or None
-        '''
+            Args:
+                query (str): Page title
+            Returns:
+                String or None: Suggested page title or **None** if no \
+                                suggestion found '''
         res, suggest = self.search(query, results=1, suggestion=True)
         try:
             title = suggest or res[0]
@@ -402,23 +353,24 @@ class MediaWiki(object):
     def geosearch(self, latitude=None, longitude=None, radius=1000,
                   title=None, auto_suggest=True, results=10):
         ''' Search for pages that relate to the provided geocoords or near
-        the page
+            the page
 
-        :param latitude: Latitude geocoord
-        :type latitude: Decimal, type that can be coaxed as Decimal, or None
-        :param longitude: Longitude geocoord
-        :type longitude: Decimal, type that can be coaxed as Decimal, or None
-        :param radius: Radius around page or geocoords to pull back; in meters
-        :type radius: integer
-        :param title: Page title to use as a geocoordinate; this has \
-        precedence over lat/long
-        :type title: string
-        :param auto_suggest: Auto-suggest the page title
-        :type auto_suggest: Boolean
-        :param results: Number of pages within the radius to return
-        :type results: integer
-        :returns: List of page titles
-        '''
+            Args:
+                latitude (Decimal or None): Latitude geocoord; must be \
+                                            coercable to decimal
+                longitude (Decimal or None): Longitude geocoord; must be \
+                                             coercable to decimal
+                radius (int): Radius around page or geocoords to pull back; \
+                              in meters
+                title (str): Page title to use as a geocoordinate; this has \
+                             precedence over lat/long
+                auto_suggest (bool): Auto-suggest the page title
+                results (int): Number of pages within the radius to return
+            Returns:
+                list: A listing of page titles
+            Raises:
+                ValueError: If either the passed latitutde or longitude are \
+                            not coercable to a Decimal '''
 
         def test_lat_long(val):
             ''' handle testing lat and long '''
@@ -456,17 +408,16 @@ class MediaWiki(object):
     @memoize
     def opensearch(self, query, results=10, redirect=True):
         ''' Execute a MediaWiki opensearch request, similar to search box
-        suggestions and conforming to the OpenSearch specification
+            suggestions and conforming to the OpenSearch specification
 
-        :param query: string to search for
-        :type query: string
-        :param results: number of pages within the radius to return
-        :type results: integer
-        :param redirect: If **False** return the redirect itself, otherwise \
-        resolve redirects
-        :type redirect: Boolean
-        :returns: List of tuples: (Title, Summary, URL)
-        '''
+            Args:
+                query (str): Title to search for
+                results (int): Number of pages within the radius to return
+                redirect (bool): If **False** return the redirect itself, \
+                                 otherwise resolve redirects
+            Returns:
+                List: List of results that are stored in a tuple \
+                      (Title, Summary, URL) '''
 
         self._check_query(query, 'Query must be specified')
 
@@ -493,17 +444,17 @@ class MediaWiki(object):
     def prefixsearch(self, prefix, results=10):
         ''' Perform a prefix search using the provided prefix string
 
-        **Per the documentation:** "The purpose of this module is similar to
-        action=opensearch: to take user input and provide the best-matching
-        titles. Depending on the search engine backend, this might include
-        typo correction, redirect avoidance, or other heuristics."
-
-        :param prefix: prefix string to use for search
-        :type prefix: string
-        :param results: number of pages within the radius to return
-        :type results: integer
-        :returns: List of page titles
-        '''
+            Args:
+                prefix (str): Prefix string to use for search
+                results (int): Number of pages with the prefix to return
+            Returns:
+                list: List of page titles
+            Note:
+                **Per the documentation:** "The purpose of this module is \
+                similar to action=opensearch: to take user input and provide \
+                the best-matching titles. Depending on the search engine \
+                backend, this might include typo correction, redirect \
+                avoidance, or other heuristics." '''
 
         self._check_query(prefix, 'Prefix must be specified')
 
@@ -526,21 +477,18 @@ class MediaWiki(object):
                 redirect=True):
         ''' Get the summary for the title in question
 
-        :param title: Page title to summarize
-        :type title: string
-        :param sentences: Number of sentences to return in summary
-        :type sentences: integer
-        :param chars: Number of characters to return in summary
-        :type chars: integer
-        :param auto_suggest: Run auto-suggest on title before summarizing
-        :type auto_suggest: Boolean
-        :param redirect: Use page redirect on title before summarizing
-        :type redirect: Boolean
-        :returns: string
-
-        .. note:: Precedence for parameters: sentences then chars; \
-        if both are 0 then the entire first section is returned
-        '''
+            Args:
+                title (str): Page title to summarize
+                sentences (int): Number of sentences to return in summary
+                chars (int): Number of characters to return in summary
+                auto_suggest (bool): Run auto-suggest on title before \
+                                     summarizing
+                redirect (bool): Use page redirect on title before summarizing
+            Returns:
+                str: The summarized results of the page
+            Note:
+                Precedence for parameters: sentences then chars; if both are \
+                0 then the entire first section is returned '''
         page_info = self.page(title, auto_suggest=auto_suggest,
                               redirect=redirect)
         return page_info.summarize(sentences, chars)
@@ -549,18 +497,16 @@ class MediaWiki(object):
     def categorymembers(self, category, results=10, subcategories=True):
         ''' Get informaton about a category: pages and subcategories
 
-        :param category: Category name
-        :type category: string
-        :param results: Number of result
-        :type results: integer or None
-        :param subcategories: Include subcategories (**True**) or not \
-        (**False**)
-        :type subcategories: Boolean
-        :returns: Either a tuple ([pages], [subcategories]) or just the \
-        list of pages
-
-        .. note:: Set results to **None** to get all results
-        '''
+            Args:
+                category (str): Category name
+                results (int): Number of result
+                subcategories (bool): Include subcategories (**True**) or not \
+                                      (**False**)
+            Returns:
+                Tuple or List: Either a tuple ([pages], [subcategories]) or \
+                               just the list of pages
+            Note:
+                Set results to **None** to get all results '''
         self._check_query(category, 'Category must be specified')
 
         max_pull = 5000
@@ -622,28 +568,27 @@ class MediaWiki(object):
     def categorytree(self, category, depth=5):
         ''' Generate the Category Tree for the given categories
 
-        :param category: Category name
-        :type category: string or list of strings
-        :param depth: Depth to traverse the tree
-        :type depth: integer or None
-        :returns: Dictionary of the category tree structure
-        :rtype: Dictionary
-        :Return Data Structure: Subcategory contains the same recursive \
-        structure
+            Args:
+                category(str or list of strings): Category name(s)
+                depth(int): Depth to traverse the tree
+            Returns:
+                dict: Category tree structure
+            Note:
+                Set depth to **None** to get the whole tree
+            Note:
+                Return Data Structure: Subcategory contains the same \
+                recursive structure
 
-        >>> {
-                'category': {
-                    'depth': Number,
-                    'links': list,
-                    'parent-categories': list,
-                    'sub-categories': dict
-                }
-            }
+                >>> {
+                        'category': {
+                            'depth': Number,
+                            'links': list,
+                            'parent-categories': list,
+                            'sub-categories': dict
+                        }
+                    }
 
-        .. versionadded:: 0.3.10
-
-        .. note:: Set depth to **None** to get the whole tree
-        '''
+            .. versionadded:: 0.3.10 '''
         def __cat_tree_rec(cat, depth, tree, level, categories, links):
             ''' recursive function to build out the tree '''
             tree[cat] = dict()
@@ -726,23 +671,20 @@ class MediaWiki(object):
              preload=False):
         ''' Get MediaWiki page based on the provided title or pageid
 
-        :param title: Page title
-        :type title: string or None
-        :param pageid: MediaWiki page identifier
-        :type pageid: integer or None
-        :param auto-suggest: **True:** Allow page title auto-suggest
-        :type auto_suggest: Boolean
-        :param redirect: **True:** Follow page redirects
-        :type redirect: Boolean
-        :param preload: **True:** Load most page properties
-        :type preload: Boolean
-
-        :raises  ValueError: when title is blank or None and no pageid is \
-        provided
-        :raises  `mediawiki.exceptions.PageError`: if page does not exist
-
-        .. note:: Title takes precedence over pageid if both are provided
-        '''
+            Args:
+                title (str): Page title
+                pageid (int): MediaWiki page identifier
+                auto-suggest (bool): **True:** Allow page title auto-suggest
+                redirect (bool): **True:** Follow page redirects
+                preload (bool): **True:** Load most page properties
+            Raises:
+                ValueError: when title is blank or None and no pageid is \
+                            provided
+            Raises:
+                :py:func:`mediawiki.exceptions.PageError`: if page does \
+                not exist
+            Note:
+                Title takes precedence over pageid if both are provided '''
         if (title is None or title.strip() == '') and pageid is None:
             raise ValueError('Either a title or a pageid must be specified')
         elif title:
@@ -760,15 +702,15 @@ class MediaWiki(object):
 
     def wiki_request(self, params):
         ''' Make a request to the MediaWiki API using the given search
-        parameters
+            parameters
 
-        :param params: Dictionary of request parameters
-        :type params: dict
-        :returns: A parsed dict of the JSON response
-
-        .. note:: Useful when wanting to query the MediaWiki site for some \
-        value that is not part of the wrapper API
-        '''
+            Args:
+                params (dict): Request parameters
+            Returns:
+                A parsed dict of the JSON response
+            Note:
+                Useful when wanting to query the MediaWiki site for some \
+                value that is not part of the wrapper API '''
 
         params['format'] = 'json'
         if 'action' not in params:

@@ -11,9 +11,12 @@ ODD_ERROR_MESSAGE = ('This should not happen. If the MediaWiki site you are '
 
 
 class MediaWikiBaseException(Exception):
-    ''' Base MediaWikiException '''
+    ''' Base MediaWikiException
+
+        Args:
+            message: The message of the exception '''
     def __init__(self, message):
-        self.message = message
+        self._message = message
         super(MediaWikiBaseException, self).__init__(self.message)
 
     def __unicode__(self):
@@ -22,9 +25,17 @@ class MediaWikiBaseException(Exception):
     def __str__(self):
         return str_or_unicode(self.__unicode__())
 
+    @property
+    def message(self):
+        ''' str: The MediaWiki exception message '''
+        return self._message
+
 
 class MediaWikiException(MediaWikiBaseException):
-    ''' MediaWiki Exception Class '''
+    ''' MediaWiki Exception Class
+
+        Args:
+            error (str): The error message that the MediaWiki site retuned '''
 
     def __init__(self, error):
         self._error = error
@@ -34,15 +45,16 @@ class MediaWikiException(MediaWikiBaseException):
 
     @property
     def error(self):
-        """ The error message that the MediaWiki site returned
-
-        :getter: Returns the raised error message
-        :type: str """
+        """ str: The error message that the MediaWiki site returned """
         return self._error
 
 
 class PageError(MediaWikiBaseException):
-    ''' Exception raised when no MediaWiki page matched a query '''
+    ''' Exception raised when no MediaWiki page matched a query
+
+        Args:
+            title (str): Title of the page
+            pageid (int): MediaWiki page id of the page'''
 
     def __init__(self, title=None, pageid=None):
         if title:
@@ -61,27 +73,24 @@ class PageError(MediaWikiBaseException):
 
     @property
     def title(self):
-        """ The title that caused the page error
-
-        :getter: Returns the title that caused the page error
-        :type: str """
+        """ str: The title that caused the page error """
         return self._title
 
     @property
     def pageid(self):
-        """ The title that caused the page error
-
-        :getter: Returns the pageid that caused the page error
-        :type: str """
+        """ int: The page id that caused the page error """
         return self._pageid
 
 
 class RedirectError(MediaWikiBaseException):
     ''' Exception raised when a page title unexpectedly resolves to
-    a redirect
+        a redirect
 
-    .. note:: This should only occur if both auto_suggest and redirect \
-    are set to **False** '''
+        Args:
+            title (str): Title of the page that redirected
+        Note:
+            This should only occur if both auto_suggest and redirect \
+            are set to **False** '''
 
     def __init__(self, title):
         self._title = title
@@ -93,21 +102,22 @@ class RedirectError(MediaWikiBaseException):
 
     @property
     def title(self):
-        """ The title that was redirected
-
-        :getter: Returns the title that was a redirect
-        :type: str """
+        """ str: The title that was redirected """
         return self._title
 
 
 class DisambiguationError(MediaWikiBaseException):
     ''' Exception raised when a page resolves to a Disambiguation page
 
-    The `options` property contains a list of titles of MediaWiki
-    pages to which the query may refer
-
-    .. note:: `options` only includes titles that link to valid \
-    MediaWiki pages '''
+        Args:
+            title (str): Title that resulted in a disambiguation page
+            may_refer_to (list): List of possible titles
+            url (str): Full URL to the disambiguation page
+            details (dict): A list of dictionaries with more inforation of \
+                            possible results
+        Note:
+            `options` only includes titles that link to valid \
+            MediaWiki pages '''
 
     def __init__(self, title, may_refer_to, url, details=None):
         self._title = title
@@ -120,39 +130,30 @@ class DisambiguationError(MediaWikiBaseException):
 
     @property
     def url(self):
-        """ The url, if possible, of the disambiguation page
-
-        :getter: Returns the url for the page
-        :type: str """
+        """ str: The url, if possible, of the disambiguation page """
         return self._url
 
     @property
     def title(self):
-        """ The title of the page
-
-        :getter: Returns the title of the disambiguation page
-        :type: str """
+        """ str: The title of the page """
         return self._title
 
     @property
     def options(self):
-        """ The list of possible page titles
-
-        :getter: Returns a list of `may refer to` pages
-        :type: list(str) """
+        """ list: The list of possible page titles """
         return self._options
 
     @property
     def details(self):
-        """ The details of the proposed non-disambigous pages
-
-        :getter: Returns the disambiguous page information
-        :type: list """
+        """ list: The details of the proposed non-disambigous pages """
         return self._details
 
 
 class HTTPTimeoutError(MediaWikiBaseException):
-    ''' Exception raised when a request to the Mediawiki site times out. '''
+    ''' Exception raised when a request to the Mediawiki site times out.
+
+        Args:
+            query (str): The query that timed out'''
 
     def __init__(self, query):
         self._query = query
@@ -163,15 +164,15 @@ class HTTPTimeoutError(MediaWikiBaseException):
 
     @property
     def query(self):
-        """ The query that timed out
-
-        :getter: Returns the query that timed out
-        :type: str """
+        """ str: The query that timed out """
         return self._query
 
 
 class MediaWikiAPIURLError(MediaWikiBaseException):
-    ''' Exception raised when the MediaWiki server does not support the API '''
+    ''' Exception raised when the MediaWiki server does not support the API
+
+        Args:
+            api_url (str): The API URL that was not recognized '''
 
     def __init__(self, api_url):
         self._api_url = api_url
@@ -180,15 +181,16 @@ class MediaWikiAPIURLError(MediaWikiBaseException):
 
     @property
     def api_url(self):
-        """ The api url that raised the exception
-
-        :getter: Returns the attempted api url
-        :type: str """
+        """ str: The api url that raised the exception """
         return self._api_url
 
 
 class MediaWikiGeoCoordError(MediaWikiBaseException):
-    ''' Exceptions to handle GeoData exceptions '''
+    ''' Exceptions to handle GeoData exceptions
+
+        Args:
+            error (str): Error message from the MediaWiki site related to \
+                         GeoCorrdinates '''
 
     def __init__(self, error):
         self._error = error
@@ -199,16 +201,16 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
 
     @property
     def error(self):
-        """ The error that was thrown when pulling GeoCoordinates
-
-        :getter: The error message
-        :type: str """
+        """ str: The error that was thrown when pulling GeoCoordinates """
         return self._error
 
 
 class MediaWikiCategoryTreeError(MediaWikiBaseException):
     ''' Exception when the category tree is unable to complete for an unknown
-        reason '''
+        reason
+
+        Args:
+            category (str): The category that threw an exception '''
 
     def __init__(self, category):
         self._category = category
@@ -220,9 +222,6 @@ class MediaWikiCategoryTreeError(MediaWikiBaseException):
 
     @property
     def category(self):
-        """ The category that threw an exception during category tree \
-            generation
-
-        :getter: Returns the category that caused the exception
-        :type: str """
+        """ str: The category that threw an exception during category tree \
+                 generation """
         return self._category

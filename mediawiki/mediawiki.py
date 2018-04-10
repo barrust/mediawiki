@@ -31,7 +31,7 @@ class MediaWiki(object):
             rate_limit_wait (timedelta): Amount of time to wait between \
                                          requests '''
 
-    def __init__(self, url='http://{lang}.wikipedia.org/w/api.php', lang='en',
+    def __init__(self, url='https://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=15.0, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50)):
         ''' Init Function '''
@@ -222,7 +222,7 @@ class MediaWiki(object):
             self._refresh_interval = None
 
     # non-properties
-    def set_api_url(self, api_url='http://{lang}.wikipedia.org/w/api.php',
+    def set_api_url(self, api_url='https://{lang}.wikipedia.org/w/api.php',
                     lang='en'):
         ''' Set the API URL and language
 

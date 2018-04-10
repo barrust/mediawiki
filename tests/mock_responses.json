@@ -5078,10 +5078,10 @@
   },
   "redirect_error_msg": "\"arya\" resulted in a redirect. Set the redirect property to True to allow automatic redirects."
  },
- "http://en.wikipedia.org/w/api.php": {
+ "https://en.wikipedia.org/w/api.php": {
   "antivirus_software_logos": [],
   "api": "http://en.wikipedia.org/w/api.php",
-  "api_url_error_msg": "http://french.wikipedia.org/w/api.php is not a valid MediaWiki API URL",
+  "api_url_error_msg": "https://french.wikipedia.org/w/api.php is not a valid MediaWiki API URL",
   "api_version": "1.31.0",
   "category_members_very_large": [
    [],
@@ -26063,7 +26063,7 @@
    "-77.03525808000000552056008018553256988525390625"
   ]
  },
- "http://fr.wikipedia.org/w/api.php": {
+ "https://fr.wikipedia.org/w/api.php": {
   "api": "http://fr.wikipedia.org/w/api.php",
   "api_version": "1.31.0",
   "extensions": [

@@ -61,7 +61,7 @@ def memoize(func):
             tmp = [unicode(x) for x in tmp]
         key = ' - '.join(tmp)
 
-        # pull from the cache if it is available
+        # set the value in the cache if missing or needs to be refreshed
         if key not in cache[func.__name__]:
             cache[func.__name__][key] = (time.time(), func(*args, **kwargs))
         else:

@@ -505,7 +505,6 @@ class MediaWikiPage(object):
             self.pageid = pageid
             self.title = page['title']
             self.url = page['fullurl']
-    # end __load
 
     def _raise_page_error(self):
         ''' raise the correct type of page error '''
@@ -602,7 +601,6 @@ class MediaWikiPage(object):
                 break
 
             last_cont = request['continue']
-    # end _continued_query
 
     def _parse_section_links(self, id_tag):
         ''' given a section id, parse the links in the unordered list '''
@@ -631,7 +629,6 @@ class MediaWikiPage(object):
                 for link in node.findAll('a'):
                     all_links.append(self.__parse_link_info(link))
         return all_links
-    # end _parse_section_links
 
     def __parse_link_info(self, link):
         ''' parse the <a> tag for the link '''
@@ -645,12 +642,9 @@ class MediaWikiPage(object):
         else:
             tmp = href
         return txt, tmp
-    # end __parse_link_info
 
     def __title_query_param(self):
         ''' util function to determine which parameter method to use '''
         if getattr(self, 'title', None) is not None:
             return {'titles': self.title}
         return {'pageids': self.pageid}
-    # end __title_query_param
-# end MediaWikiPage Class

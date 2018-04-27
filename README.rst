@@ -14,6 +14,9 @@ MediaWiki
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://opensource.org/licenses/MIT/
     :alt: License
+.. image:: http://pepy.tech/badge/pymediawiki
+    :target: http://pepy.tech/count/pymediawiki
+    :alt: Downloads
 
 **mediawiki** is a python wrapper and parser for the MediaWiki API. The goal
 is to allow users to quickly and efficiently pull data from the MediaWiki site

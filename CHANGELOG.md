@@ -2,6 +2,12 @@
 
 ## Current
 
+### Version 0.4.1
+
+* Use HTTPS by default
+* Resolve category functions not working properly with non-English MediaWikis [#48](https://github.com/barrust/mediawiki/issues/48)
+    * Add category prefix parameter to `categorymembers` and `categorytree` functions
+
 ### Version 0.4.0
 
 * Add fix to use the `query-continue` parameter to continue to pull category

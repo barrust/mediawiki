@@ -545,7 +545,7 @@ class MediaWiki(object):
                 elif rec['type'] == 'subcat':
                     tmp = rec['title']
                     if tmp.startswith(prefix):
-                        tmp = tmp[9:]
+                        tmp = tmp[len(prefix):]
                     subcats.append(tmp)
 
             cont = raw_res.get('query-continue', False)

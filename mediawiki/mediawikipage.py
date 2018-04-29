@@ -266,8 +266,8 @@ class MediaWikiPage(object):
             def _get_cat(val):
                 ''' parse the category correctly '''
                 tmp = val['title']
-                if tmp.startswith('Category:'):
-                    return tmp[9:]
+                if tmp.startswith(self.mediawiki.category_prefix):
+                    return tmp[len(self.mediawiki.category_prefix) + 1:]
                 return tmp
 
             params = {

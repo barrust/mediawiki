@@ -38,10 +38,12 @@ class MediaWiki(object):
         self._version = VERSION
         self._lang = lang.lower()
         self._api_url = url.format(lang=self._lang)
+        self._timeout = None  # ensure it exists before we try to set it
         self.timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
                             '/({1})/BOT').format(VERSION, URL)
         self._session = None
+        self._rate_limit = None  # ensure it exists before we try to set it
         self.rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         self._min_wait = rate_limit_wait
@@ -494,7 +496,8 @@ class MediaWiki(object):
         return page_info.summarize(sentences, chars)
 
     @memoize
-    def categorymembers(self, category, results=10, subcategories=True):
+    def categorymembers(self, category, results=10, subcategories=True,
+                        prefix='Category'):
         ''' Get informaton about a category: pages and subcategories
 
             Args:
@@ -502,6 +505,8 @@ class MediaWiki(object):
                 results (int): Number of result
                 subcategories (bool): Include subcategories (**True**) or not \
                                       (**False**)
+                prefix (str): Category prefix; non-english languages will \
+                              need to set accordingly!
             Returns:
                 Tuple or List: Either a tuple ([pages], [subcategories]) or \
                                just the list of pages
@@ -509,14 +514,18 @@ class MediaWiki(object):
                 Set results to **None** to get all results '''
         self._check_query(category, 'Category must be specified')
 
+        if prefix[-1:] != ':':
+            prefix = "{}:".format(prefix)
+
         max_pull = 5000
         search_params = {
             'list': 'categorymembers',
             'cmprop': 'ids|title|type',
             'cmtype': ('page|subcat' if subcategories else 'page'),
             'cmlimit': (results if results is not None else max_pull),
-            'cmtitle': 'Category:{0}'.format(category)
+            'cmtitle': '{0}{1}'.format(prefix, category)
         }
+        # print(search_params)
         pages = list()
         subcats = list()
         returned_results = 0
@@ -535,7 +544,7 @@ class MediaWiki(object):
                     pages.append(rec['title'])
                 elif rec['type'] == 'subcat':
                     tmp = rec['title']
-                    if tmp.startswith('Category:'):
+                    if tmp.startswith(prefix):
                         tmp = tmp[9:]
                     subcats.append(tmp)
 
@@ -565,12 +574,14 @@ class MediaWiki(object):
         return pages
     # end categorymembers
 
-    def categorytree(self, category, depth=5):
+    def categorytree(self, category, depth=5, prefix="Category"):
         ''' Generate the Category Tree for the given categories
 
             Args:
-                category(str or list of strings): Category name(s)
-                depth(int): Depth to traverse the tree
+                category (str or list of strings): Category name(s)
+                depth (int): Depth to traverse the tree
+                prefix (str): Category prefix; non-english languages will \
+                              need to set accordingly!
             Returns:
                 dict: Category tree structure
             Note:
@@ -589,7 +600,8 @@ class MediaWiki(object):
                     }
 
             .. versionadded:: 0.3.10 '''
-        def __cat_tree_rec(cat, depth, tree, level, categories, links):
+
+        def __cat_tree_rec(cat, depth, tree, level, categories, links, prefix):
             ''' recursive function to build out the tree '''
             tree[cat] = dict()
             tree[cat]['depth'] = level
@@ -604,13 +616,15 @@ class MediaWiki(object):
                     if tries > 10:
                         raise MediaWikiCategoryTreeError(cat)
                     try:
-                        categories[cat] = self.page('Category:{0}'.format(cat))
+                        categories[cat] = self.page('{0}{1}'.format(prefix,
+                                                                    cat))
                         parent_cats = categories[cat].categories
                         links[cat] = self.categorymembers(cat, results=None,
-                                                          subcategories=True)
+                                                          subcategories=True,
+                                                          prefix=prefix)
                         break
                     except PageError:
-                        raise PageError('Category:{0}'.format(cat))
+                        raise PageError('{0}{1}'.format(prefix, cat))
                     except Exception:
                         tries = tries + 1
                         time.sleep(1)
@@ -630,13 +644,16 @@ class MediaWiki(object):
                 for ctg in links[cat][1]:
                     __cat_tree_rec(ctg, depth,
                                    tree[cat]['sub-categories'], level + 1,
-                                   categories, links)
+                                   categories, links, prefix)
             return
         # end __cat_tree_rec
 
         # ###################################
         # ### Actual Function Code        ###
         # ###################################
+
+        if prefix[-1:] != ':':
+            prefix = "{}:".format(prefix)
 
         # make it simple to use both a list or a single category term
         if not isinstance(category, list):
@@ -663,7 +680,7 @@ class MediaWiki(object):
         for cat in cats:
             if cat is None or cat == '':
                 continue
-            __cat_tree_rec(cat, depth, results, 0, categories, links)
+            __cat_tree_rec(cat, depth, results, 0, categories, links, prefix)
         return results
     # end categorytree
 

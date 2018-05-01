@@ -22,7 +22,8 @@ class MediaWikiOverloaded(MediaWiki):
     ''' Overload the MediaWiki class to change how wiki_request works '''
     def __init__(self, url='https://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=15, rate_limit=False,
-                 rate_limit_wait=timedelta(milliseconds=50)):
+                 rate_limit_wait=timedelta(milliseconds=50),
+                 cat_prefix='Category'):
         ''' new init '''
 
         with open('./tests/mock_requests.json', 'r') as file_handle:

@@ -33,15 +33,20 @@ class MediaWiki(object):
 
     def __init__(self, url='https://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=15.0, rate_limit=False,
-                 rate_limit_wait=timedelta(milliseconds=50)):
+                 rate_limit_wait=timedelta(milliseconds=50),
+                 cat_prefix='Category'):
         ''' Init Function '''
         self._version = VERSION
         self._lang = lang.lower()
         self._api_url = url.format(lang=self._lang)
+        self._cat_prefix = None
+        self.category_prefix = cat_prefix  # should this be set somewhere else?
+        self._timeout = None
         self.timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
                             '/({1})/BOT').format(VERSION, URL)
         self._session = None
+        self._rate_limit = None
         self.rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         self._min_wait = rate_limit_wait
@@ -176,6 +181,21 @@ class MediaWiki(object):
         self._api_url = tmp
         self._lang = lang
         self.clear_memoized()
+
+    @property
+    def category_prefix(self):
+        ''' str: The category prefix to use when using category based functions
+
+            Note:
+                Use the correct category name for the language selected '''
+        return self._cat_prefix
+
+    @category_prefix.setter
+    def category_prefix(self, prefix):
+        ''' Set the category prefix correctly '''
+        if prefix[-1:] == ':':
+            prefix = prefix[:-1]
+        self._cat_prefix = prefix
 
     @property
     def user_agent(self):
@@ -515,7 +535,7 @@ class MediaWiki(object):
             'cmprop': 'ids|title|type',
             'cmtype': ('page|subcat' if subcategories else 'page'),
             'cmlimit': (results if results is not None else max_pull),
-            'cmtitle': 'Category:{0}'.format(category)
+            'cmtitle': '{0}:{1}'.format(self.category_prefix, category)
         }
         pages = list()
         subcats = list()
@@ -535,8 +555,8 @@ class MediaWiki(object):
                     pages.append(rec['title'])
                 elif rec['type'] == 'subcat':
                     tmp = rec['title']
-                    if tmp.startswith('Category:'):
-                        tmp = tmp[9:]
+                    if tmp.startswith(self.category_prefix):
+                        tmp = tmp[len(self.category_prefix) + 1:]
                     subcats.append(tmp)
 
             cont = raw_res.get('query-continue', False)
@@ -604,13 +624,16 @@ class MediaWiki(object):
                     if tries > 10:
                         raise MediaWikiCategoryTreeError(cat)
                     try:
-                        categories[cat] = self.page('Category:{0}'.format(cat))
+                        pag = self.page('{0}:{1}'.format(self.category_prefix,
+                                                         cat))
+                        categories[cat] = pag
                         parent_cats = categories[cat].categories
                         links[cat] = self.categorymembers(cat, results=None,
                                                           subcategories=True)
                         break
                     except PageError:
-                        raise PageError('Category:{0}'.format(cat))
+                        raise PageError('{0}:{1}'.format(self.category_prefix,
+                                                         cat))
                     except Exception:
                         tries = tries + 1
                         time.sleep(1)

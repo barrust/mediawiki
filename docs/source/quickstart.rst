@@ -58,6 +58,20 @@ Or one can update an already setup MediaWiki object:
 
 >>> wikipedia.set_api_url('http://awoiaf.westeros.org/api.php')
 
+Set the User-Agent String
+^^^^^^^^^^^^^^^^^^^^^^^^^
+Per the `MediaWiki API Etiquette <https://www.mediawiki.org/wiki/API:Etiquette>`__
+it is recommended to not use a library's default user-agent string. Therefore,
+it is easy to change the `user-agent` string either during initialization or by
+setting the user_agent property:
+
+.. code: python
+
+>>> from mediawiki import MediaWiki
+>>> wikipedia = MediaWiki(user_agent='pyMediaWiki-User-Agent-String')
+>>>
+>>> # Or reset it!
+>>> wikipedia.user_agent = 'my-new-user-agent-string'
 
 Searching
 ^^^^^^^^^

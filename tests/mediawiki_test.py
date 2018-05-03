@@ -23,7 +23,7 @@ class MediaWikiOverloaded(MediaWiki):
     def __init__(self, url='https://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=15, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50),
-                 cat_prefix='Category'):
+                 cat_prefix='Category', user_agent=None):
         ''' new init '''
 
         with open('./tests/mock_requests.json', 'r') as file_handle:

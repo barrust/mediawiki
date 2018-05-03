@@ -29,22 +29,31 @@ class MediaWiki(object):
             timeout (float): HTTP timeout setting; None means no timeout
             rate_limit (bool): Use rate limiting to limit calls to the site
             rate_limit_wait (timedelta): Amount of time to wait between \
-                                         requests '''
+                                         requests
+            cat_prefix (str): The prefix for categories used by the mediawiki \
+                              site; defaults to Category (en)
+            user_agent (str): The user agent string to use when making \
+                              requests; defults to a library version but per \
+                              the MediaWiki API documentation it recommends \
+                              setting a unique one and not using the \
+                              library's default user-agent string '''
 
     def __init__(self, url='https://{lang}.wikipedia.org/w/api.php', lang='en',
                  timeout=15.0, rate_limit=False,
                  rate_limit_wait=timedelta(milliseconds=50),
-                 cat_prefix='Category'):
+                 cat_prefix='Category', user_agent=None):
         ''' Init Function '''
         self._version = VERSION
         self._lang = lang.lower()
         self._api_url = url.format(lang=self._lang)
         self._cat_prefix = None
-        self.category_prefix = cat_prefix  # should this be set somewhere else?
+        self.category_prefix = cat_prefix
         self._timeout = None
         self.timeout = timeout
         self._user_agent = ('python-mediawiki/VERSION-{0}'
                             '/({1})/BOT').format(VERSION, URL)
+        if user_agent is not None:
+            self.user_agent = user_agent
         self._session = None
         self._rate_limit = None
         self.rate_limit = bool(rate_limit)

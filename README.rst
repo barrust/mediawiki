@@ -30,12 +30,9 @@ so you can focus on *leveraging* your favorite MediaWiki site's data,
 not getting it. Please check out the code on
 `github <https://www.github.com/barrust/mediawiki>`_!
 
-**Note:** this library was designed for ease of use and simplicity, not for
-advanced use. If you plan on doing serious scraping or automated requests,
-please use
+**Note:** this library was designed for ease of use and simplicity. If you plan 
+on doing serious scraping, automated requests, or editing, please look into 
 `Pywikipediabot <http://www.mediawiki.org/wiki/Manual:Pywikipediabot>`__
-(or one of the other more advanced `Python MediaWiki API wrappers
-<http://en.wikipedia.org/wiki/Wikipedia:Creating_a_bot#Python>`__),
 which has a larger API, advanced rate limiting, and other features so we may
 be considerate of the MediaWiki infrastructure.
 

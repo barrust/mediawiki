@@ -7,7 +7,7 @@ from .mediawikipage import (MediaWikiPage)
 from .exceptions import (MediaWikiException, PageError, MediaWikiGeoCoordError,
                          RedirectError, DisambiguationError,
                          MediaWikiAPIURLError, HTTPTimeoutError,
-                         MediaWikiCategoryTreeError)
+                         MediaWikiCategoryTreeError, MediaWikiLoginError)
 
 __author__ = 'Tyler Barrus'
 __maintainer__ = 'Tyler Barrus'
@@ -21,4 +21,4 @@ __bugtrack_url__ = '{0}/issues'.format(URL)
 __all__ = ['MediaWiki', 'PageError', 'RedirectError', 'MediaWikiException',
            'DisambiguationError', 'MediaWikiAPIURLError',
            'HTTPTimeoutError', 'MediaWikiGeoCoordError',
-           'MediaWikiCategoryTreeError']
+           'MediaWikiCategoryTreeError', 'MediaWikiLoginError']

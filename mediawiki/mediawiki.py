@@ -11,7 +11,7 @@ from decimal import (Decimal, DecimalException)
 import requests
 from .exceptions import (MediaWikiException, PageError, MediaWikiAPIURLError,
                          HTTPTimeoutError, MediaWikiGeoCoordError,
-                         MediaWikiCategoryTreeError)
+                         MediaWikiCategoryTreeError, MediaWikiLoginError)
 from .mediawikipage import (MediaWikiPage)
 from .utilities import (memoize)
 
@@ -69,6 +69,9 @@ class MediaWiki(object):
         self._cache = dict()
         self._refresh_interval = None
         self._use_cache = True
+
+        # for login information
+        self._is_logged_in = False
 
         # call helper functions to get everything set up
         self._reset_session()
@@ -250,6 +253,46 @@ class MediaWiki(object):
         else:
             self._refresh_interval = None
 
+    def login(self, username, password):
+        ''' Login as specified user
+
+            Args:
+                username (str): The username to log in with
+                password (str): The password for the user
+            Returns:
+                bool: `True` if successfully logged in; `False` otherwise
+            Note:
+                Per the MediaWiki API, one should use the `bot password`; \
+                see https://www.mediawiki.org/wiki/API:Login for more \
+                information '''
+        # get login token
+        params = {
+            'action': 'query',
+            'meta': 'tokens',
+            'type': 'login',
+            'format': 'json'
+        }
+        token_res = self._get_response(params)
+        if 'query' in token_res and 'tokens' in token_res['query']:
+            token = token_res['query']['tokens']['logintoken']
+
+        params = {
+            'action': 'login',
+            'lgname': username,
+            'lgpassword': password,
+            'lgtoken': token,
+            'format': 'json'
+        }
+
+        res = self._post_response(params)
+        print(res)
+        if res['login']['result'] == 'Success':
+            self._is_logged_in = True
+            return True
+        self._is_logged_in = False
+        reason = res['login']['reason']
+        raise MediaWikiLoginError("MediaWiki login failure: {}".format(reason))
+
     # non-properties
     def set_api_url(self, api_url='https://{lang}.wikipedia.org/w/api.php',
                     lang='en'):
@@ -280,6 +323,7 @@ class MediaWiki(object):
         headers = {'User-Agent': self._user_agent}
         self._session = requests.Session()
         self._session.headers.update(headers)
+        self._is_logged_in = False
 
     def clear_memoized(self):
         ''' Clear memoized (cached) values '''
@@ -300,6 +344,11 @@ class MediaWiki(object):
             supported = {lang['code']: lang['*'] for lang in tmp}
             self.__supported_languages = supported
         return self.__supported_languages
+
+    @property
+    def logged_in(self):
+        ''' bool: Returns if logged into the MediaWiki site '''
+        return self._is_logged_in
 
     def random(self, pages=1):
         ''' Request a random page title or list of random titles
@@ -828,5 +877,10 @@ class MediaWiki(object):
         ''' wrap the call to the requests package '''
         return self._session.get(self._api_url, params=params,
                                  timeout=self._timeout).json(encoding='utf8')
+
+    def _post_response(self, params):
+        ''' wrap a post call to the requests package '''
+        return self._session.post(self._api_url, data=params,
+                                  timeout=self._timeout).json(encoding='utf8')
 
 # end MediaWiki class

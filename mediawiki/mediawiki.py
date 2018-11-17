@@ -262,8 +262,8 @@ class MediaWiki(object):
             Returns:
                 bool: `True` if successfully logged in; `False` otherwise
             Raises:
-                :py:func:`mediawiki.exceptions.MediaWikiLoginError`: if unable \
-                to login
+                :py:func:`mediawiki.exceptions.MediaWikiLoginError`: if \
+                unable to login
 
             Note:
                 Per the MediaWiki API, one should use the `bot password`; \

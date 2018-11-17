@@ -25,13 +25,15 @@ class MediaWikiPage(object):
             original_title (str): Not to be used from the caller; used to \
                                   help follow redirects
         Raises:
-            `mediawiki.exceptions.PageError`: if page provided does not exist
+            :py:func:`mediawiki.exceptions.PageError`: if page provided does \
+            not exist
         Raises:
-            `mediawiki.exceptions.DisambiguationError`: if page provided \
-            is a disambiguation page
+            :py:func:`mediawiki.exceptions.DisambiguationError`: if page \
+            provided is a disambiguation page
         Raises:
-            `mediawiki.exceptions.RedirectError`: if redirect is **False** \
-            and the pageid or title provided redirects to another page
+            :py:func:`mediawiki.exceptions.RedirectError`: if redirect is \
+            **False** and the pageid or title provided redirects to another \
+            page
         Warning:
             This should never need to be used directly! Please use \
             :func:`mediawiki.MediaWiki.page` '''

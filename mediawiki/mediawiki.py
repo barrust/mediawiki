@@ -261,6 +261,10 @@ class MediaWiki(object):
                 password (str): The password for the user
             Returns:
                 bool: `True` if successfully logged in; `False` otherwise
+            Raises:
+                :py:func:`mediawiki.exceptions.MediaWikiLoginError`: if unable \
+                to login
+
             Note:
                 Per the MediaWiki API, one should use the `bot password`; \
                 see https://www.mediawiki.org/wiki/API:Login for more \
@@ -302,8 +306,8 @@ class MediaWiki(object):
                 api_url (str): API URL to use
                 lang (str): Language of the API URL
             Raises:
-                `mediawiki.exceptions.MediaWikiAPIURLError`: if the url is \
-                not a valid MediaWiki site '''
+                :py:func:`mediawiki.exceptions.MediaWikiAPIURLError`: if the \
+                url is not a valid MediaWiki site '''
         old_api_url = self._api_url
         old_lang = self._lang
         self._lang = lang.lower()

@@ -1,5 +1,9 @@
 # MediaWiki Changelog
 
+## Current Version
+
+* Add support for logging into the MediaWiki site
+
 ## Version 0.4.1
 
 * Default to `https`

@@ -18,6 +18,7 @@ MediaWiki
               memoized, clear_memoized, refresh_interval, set_api_url,
               supported_languages, random, categorytree, page, wiki_request
 
+    .. automethod:: mediawiki.MediaWiki.login(username, password)
     .. automethod:: mediawiki.MediaWiki.suggest(query)
     .. automethod:: mediawiki.MediaWiki.search(query, results=10, suggestion=False)
     .. automethod:: mediawiki.MediaWiki.summary(title, sentences=0, chars=0, auto_suggest=True, redirect=True)

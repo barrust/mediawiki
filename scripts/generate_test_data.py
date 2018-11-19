@@ -61,6 +61,11 @@ class MediaWikiOverloaded(MediaWiki):
         ''' overloaded response '''
         return MediaWiki._get_response(self, params)
 
+    @capture_response
+    def _post_response(self, params):
+        ''' overloaded response '''
+        return MediaWiki._post_response(self, params)
+
 
 PULL_ALL = False
 
@@ -82,6 +87,7 @@ PULL_PAGES = False
 PULL_LOGOS = False
 PULL_HATNOTES = False
 PULL_SECTION_LINKS = False
+PULL_LOGIN = False
 
 # regression tests
 PULL_ISSUE_15 = False
@@ -421,6 +427,11 @@ if PULL_ALL is True or PULL_SECTION_LINKS is True:
         responses[asoiaf.api_url]['arya_{}_links'.format(section)] = links
 
     print("Completed pulling the section links")
+
+if PULL_ALL is True or PULL_LOGIN is True:
+    pg = wikipedia.login(username='badusername', password='fakepassword')
+    print("Completed pulling login")
+
 
 if PULL_ALL is True or PULL_ISSUE_14 is True:
     res = site.page('One Two Three... Infinity').images

@@ -253,12 +253,13 @@ class MediaWiki(object):
         else:
             self._refresh_interval = None
 
-    def login(self, username, password):
+    def login(self, username, password, strict=True):
         ''' Login as specified user
 
             Args:
                 username (str): The username to log in with
                 password (str): The password for the user
+                strict (bool): `True` to thow an error on failure
             Returns:
                 bool: `True` if successfully logged in; `False` otherwise
             Raises:
@@ -289,13 +290,15 @@ class MediaWiki(object):
         }
 
         res = self._post_response(params)
-        print(res)
         if res['login']['result'] == 'Success':
             self._is_logged_in = True
             return True
         self._is_logged_in = False
         reason = res['login']['reason']
-        raise MediaWikiLoginError("MediaWiki login failure: {}".format(reason))
+        if strict:
+            msg = "MediaWiki login failure: {}".format(reason)
+            raise MediaWikiLoginError(msg)
+        return False
 
     # non-properties
     def set_api_url(self, api_url='https://{lang}.wikipedia.org/w/api.php',
@@ -696,6 +699,8 @@ class MediaWiki(object):
                     except PageError:
                         raise PageError('{0}:{1}'.format(self.category_prefix,
                                                          cat))
+                    except KeyboardInterrupt:
+                        raise
                     except Exception:
                         tries = tries + 1
                         time.sleep(1)

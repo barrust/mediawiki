@@ -35,7 +35,8 @@ class MediaWikiOverloaded(MediaWiki):
 
         MediaWiki.__init__(self, url=url, lang=lang, timeout=timeout,
                            rate_limit=rate_limit,
-                           rate_limit_wait=rate_limit_wait)
+                           rate_limit_wait=rate_limit_wait,
+                           cat_prefix=cat_prefix, user_agent=user_agent)
 
     def _get_response(self, params):
         ''' override the __get_response method '''
@@ -165,6 +166,11 @@ class TestMediaWiki(unittest.TestCase):
         ''' test changing the user agent '''
         site = MediaWikiOverloaded()
         site.user_agent = 'test-user-agent'
+        self.assertEqual(site.user_agent, 'test-user-agent')
+
+    def test_init_user_agent(self):
+        ''' test initializing the user agent '''
+        site = MediaWikiOverloaded(user_agent='test-user-agent')
         self.assertEqual(site.user_agent, 'test-user-agent')
 
     def test_languages(self):
@@ -316,8 +322,10 @@ class TestMediaWikiLogin(unittest.TestCase):
         site = MediaWikiOverloaded()
         try:
             res = site.login('badusername', 'fakepassword')
-        except MediaWikiLoginError:
+        except MediaWikiLoginError as ex:
             self.assertEqual(site.logged_in, False)
+            msg = 'MediaWiki login failure: Incorrect username or password entered. Please try again.'
+            self.assertEqual(ex.error, msg)
         else:
             self.assertEqual(True, False)
 
@@ -1380,6 +1388,7 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
             site.categorytree(category)
         except MediaWikiCategoryTreeError as ex:
             self.assertEqual(str(ex), msg)
+            self.assertEqual(ex.category, 'Chess')
 
 
 class TestMediaWikiLogos(unittest.TestCase):

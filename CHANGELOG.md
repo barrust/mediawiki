@@ -1,8 +1,8 @@
 # MediaWiki Changelog
 
-## Current Version
+## Version 0.5.0
 
-* Add support for logging into the MediaWiki site
+* Add support for logging into the MediaWiki site [issue #59](https://github.com/barrust/mediawiki/issues/48)
 
 ## Version 0.4.1
 

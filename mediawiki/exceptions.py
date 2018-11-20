@@ -225,3 +225,19 @@ class MediaWikiCategoryTreeError(MediaWikiBaseException):
         """ str: The category that threw an exception during category tree \
                  generation """
         return self._category
+
+
+class MediaWikiLoginError(MediaWikiBaseException):
+    ''' Exception raised when unable to login to the MediaWiki site
+
+        Args:
+            error (str): The error message that the MediaWiki site returned '''
+
+    def __init__(self, error):
+        self._error = error
+        super(MediaWikiLoginError, self).__init__(error)
+
+    @property
+    def error(self):
+        """ str: The error message that the MediaWiki site returned """
+        return self._error

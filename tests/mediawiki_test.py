@@ -13,7 +13,8 @@ from decimal import (Decimal)
 from mediawiki import (MediaWiki, MediaWikiPage, PageError, RedirectError,
                        DisambiguationError, MediaWikiAPIURLError,
                        MediaWikiGeoCoordError, HTTPTimeoutError,
-                       MediaWikiException, MediaWikiCategoryTreeError)
+                       MediaWikiException, MediaWikiCategoryTreeError,
+                       MediaWikiLoginError)
 import mediawiki
 from .utilities import find_depth, FunctionUseCounter
 
@@ -34,9 +35,15 @@ class MediaWikiOverloaded(MediaWiki):
 
         MediaWiki.__init__(self, url=url, lang=lang, timeout=timeout,
                            rate_limit=rate_limit,
-                           rate_limit_wait=rate_limit_wait)
+                           rate_limit_wait=rate_limit_wait,
+                           cat_prefix=cat_prefix, user_agent=user_agent)
 
     def _get_response(self, params):
+        ''' override the __get_response method '''
+        new_params = json.dumps(tuple(sorted(params.items())))
+        return self.requests[self.api_url][new_params]
+
+    def _post_response(self, params):
         ''' override the __get_response method '''
         new_params = json.dumps(tuple(sorted(params.items())))
         return self.requests[self.api_url][new_params]
@@ -61,21 +68,21 @@ class TestMediaWiki(unittest.TestCase):
 
     def test_base_url_no_http(self):
         ''' test that the base url is parsed correctly without http '''
-        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
-        self.assertEqual(site.base_url, 'http://awoiaf.westeros.org')
+        site = MediaWikiOverloaded(url='https://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.base_url, 'https://awoiaf.westeros.org')
 
     def test_base_url_switch(self):
         ''' test that the base url is parsed correctly when switching sites '''
         site = MediaWikiOverloaded()
         self.assertEqual(site.base_url, 'https://en.wikipedia.org')
-        site.set_api_url('http://awoiaf.westeros.org/api.php')
-        self.assertEqual(site.base_url, 'http://awoiaf.westeros.org')
+        site.set_api_url('https://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.base_url, 'https://awoiaf.westeros.org')
 
     def test_api_url_set(self):
         ''' test the api url being set at creation time '''
-        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        site = MediaWikiOverloaded(url='https://awoiaf.westeros.org/api.php')
         response = site.responses[site.api_url]
-        self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.api_url, 'https://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_version, response['api_version'])
         self.assertEqual(sorted(site.extensions), sorted(response['extensions']))
 
@@ -108,10 +115,10 @@ class TestMediaWiki(unittest.TestCase):
 
     def test_change_lang_no_change(self):
         ''' test changing the language when url will not change '''
-        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        site = MediaWikiOverloaded(url='https://awoiaf.westeros.org/api.php')
         site.language = 'FR'
         self.assertEqual(site.language, 'fr')
-        self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.api_url, 'https://awoiaf.westeros.org/api.php')
 
     def test_api_version(self):
         ''' test api version parsed correctly'''
@@ -133,9 +140,9 @@ class TestMediaWiki(unittest.TestCase):
         self.assertEqual(site.api_version, response['api_version'])
         self.assertEqual(sorted(site.extensions), sorted(response['extensions']))
 
-        site.set_api_url('http://awoiaf.westeros.org/api.php', lang='en')
+        site.set_api_url('https://awoiaf.westeros.org/api.php', lang='en')
         response = site.responses[site.api_url]
-        self.assertEqual(site.api_url, 'http://awoiaf.westeros.org/api.php')
+        self.assertEqual(site.api_url, 'https://awoiaf.westeros.org/api.php')
         self.assertEqual(site.api_version, response['api_version'])
         self.assertEqual(sorted(site.extensions), sorted(response['extensions']))
 
@@ -159,6 +166,11 @@ class TestMediaWiki(unittest.TestCase):
         ''' test changing the user agent '''
         site = MediaWikiOverloaded()
         site.user_agent = 'test-user-agent'
+        self.assertEqual(site.user_agent, 'test-user-agent')
+
+    def test_init_user_agent(self):
+        ''' test initializing the user agent '''
+        site = MediaWikiOverloaded(user_agent='test-user-agent')
         self.assertEqual(site.user_agent, 'test-user-agent')
 
     def test_languages(self):
@@ -294,6 +306,35 @@ class TestMediaWiki(unittest.TestCase):
         self.assertNotEqual(time1, time2)
         self.assertGreater(time2, time1)
 
+
+class TestMediaWikiLogin(unittest.TestCase):
+    ''' Test login functionality '''
+
+    def test_successful_login(self):
+        ''' test login success!'''
+        site = MediaWikiOverloaded()
+        res = site.login('username', 'fakepassword')
+        self.assertEqual(site.logged_in, True)
+        self.assertEqual(res, True)
+
+    def test_failed_login(self):
+        ''' test that login failure throws the correct exception '''
+        site = MediaWikiOverloaded()
+        try:
+            res = site.login('badusername', 'fakepassword')
+        except MediaWikiLoginError as ex:
+            self.assertEqual(site.logged_in, False)
+            msg = 'MediaWiki login failure: Incorrect username or password entered. Please try again.'
+            self.assertEqual(ex.error, msg)
+        else:
+            self.assertEqual(True, False)
+
+    def test_failed_login_no_strict(self):
+        ''' test that login failure with strict off works '''
+        site = MediaWikiOverloaded()
+        res = site.login('badusername', 'fakepassword', strict=False)
+        self.assertEqual(site.logged_in, False)
+        self.assertEqual(res, False)
 
 class TestMediaWikiRandom(unittest.TestCase):
     ''' test Random Functionality '''
@@ -679,14 +720,14 @@ class TestMediaWikiExceptions(unittest.TestCase):
 
     def test_redirect_error(self):
         ''' test that redirect error is thrown correctly '''
-        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        site = MediaWikiOverloaded(url='https://awoiaf.westeros.org/api.php')
         self.assertRaises(RedirectError,
                           lambda: site.page('arya', auto_suggest=False,
                                             redirect=False))
 
     def test_redirect_error_msg(self):
         ''' test that redirect error is thrown correctly '''
-        site = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php')
+        site = MediaWikiOverloaded(url='https://awoiaf.westeros.org/api.php')
         response = site.responses[site.api_url]
         try:
             site.page('arya', auto_suggest=False, redirect=False)
@@ -939,7 +980,7 @@ class TestMediaWikiPage(unittest.TestCase):
     ''' test MediaWiki Pages '''
     def setUp(self):
         ''' single function for all the tests (well most of) '''
-        api_url = 'http://awoiaf.westeros.org/api.php'
+        api_url = 'https://awoiaf.westeros.org/api.php'
         self.site = MediaWikiOverloaded(url=api_url)
         self.response = self.site.responses[self.site.api_url]
         self.pag = self.site.page('arya')
@@ -1347,6 +1388,7 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
             site.categorytree(category)
         except MediaWikiCategoryTreeError as ex:
             self.assertEqual(str(ex), msg)
+            self.assertEqual(ex.category, 'Chess')
 
 
 class TestMediaWikiLogos(unittest.TestCase):
@@ -1424,7 +1466,7 @@ class TestMediaWikiParseSectionLinks(unittest.TestCase):
         self.assertEqual(page.parse_section_links('External links'), None)
 
     def test_song_ice_and_fire_links(self):
-        site = MediaWikiOverloaded('http://awoiaf.westeros.org/api.php')
+        site = MediaWikiOverloaded('https://awoiaf.westeros.org/api.php')
         res = site.responses[site.api_url]
         pg = site.page('arya')
 

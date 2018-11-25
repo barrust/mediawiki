@@ -468,7 +468,6 @@ class MediaWikiPage(object):
         self._table_of_contents = res
         return self._table_of_contents
 
-
     def section(self, section_title):
         ''' Plain text section content
 

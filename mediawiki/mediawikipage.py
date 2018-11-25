@@ -7,6 +7,7 @@ MediaWikiPage class module
 from __future__ import (unicode_literals, absolute_import)
 from decimal import (Decimal)
 import re
+from collections import OrderedDict
 from bs4 import (BeautifulSoup, Tag)
 from .utilities import (str_or_unicode, is_relative_url)
 from .exceptions import (MediaWikiException, PageError, RedirectError,
@@ -64,6 +65,7 @@ class MediaWikiPage(object):
         self._backlinks = False
         self._summary = False
         self._sections = False
+        self._table_of_contents = False
         self._logos = False
         self._hatnotes = False
 
@@ -419,6 +421,53 @@ class MediaWikiPage(object):
                     obj = obj.lstrip('\n= ').rstrip(' =\n')
                     self._sections.append(obj)
         return self._sections
+
+    @property
+    def table_of_contents(self):
+        ''' OrderedDict: Dictionary of sections and sub-sections
+
+            Note:
+                Leaf nodes are empty OrderedDict objects
+            Note:
+                Not Settable'''
+
+        def _list_to_dict(_dict, path):
+            tmp = res
+            for el in path[:-1]:
+                tmp = tmp[el]
+            tmp[sec] = OrderedDict()
+
+        if self._table_of_contents:
+            return self._table_of_contents
+
+        section_regexp = r'\n==* .* ==*\n'  # '== {STUFF_NOT_\n} =='
+        found_obj = re.findall(section_regexp, self.content)
+        res = OrderedDict()
+
+        path = list()
+
+        last_depth = 0
+        for obj in found_obj:
+            depth = obj.count('=') / 2  # this gets us to the single side...
+            depth -= 2  # now, we can calculate depth
+
+            sec = obj.lstrip('\n= ').rstrip(' =\n')
+            if depth == 0:
+                last_depth = 0
+                path = [sec]
+                res[sec] = OrderedDict()
+            elif depth > last_depth:
+                last_depth = depth
+                path.append(sec)
+                _list_to_dict(res, path)
+            elif depth == last_depth:
+                path.pop()
+                path.append(sec)
+                _list_to_dict(res, path)
+
+        self._table_of_contents = res
+        return self._table_of_contents
+
 
     def section(self, section_title):
         ''' Plain text section content

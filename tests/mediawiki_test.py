@@ -306,6 +306,17 @@ class TestMediaWiki(unittest.TestCase):
         self.assertNotEqual(time1, time2)
         self.assertGreater(time2, time1)
 
+    def test_cat_prefix(self):
+        ''' test the default category prefix'''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.category_prefix, 'Category')
+
+    def test_cat_prefix_change(self):
+        ''' test changing the category prefix '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.category_prefix, 'Category')
+        site.category_prefix = 'Something:'
+        self.assertEqual(site.category_prefix, 'Something')
 
 class TestMediaWikiLogin(unittest.TestCase):
     ''' Test login functionality '''

@@ -412,14 +412,7 @@ class MediaWikiPage(object):
         #       information in the sections, moving to regex to get the
         #       `non-decorated` name instead of using the query api!
         if self._sections is False:
-            self._sections = list()
-            section_regexp = r'\n==* .* ==*\n'  # '== {STUFF_NOT_\n} =='
-            found_obj = re.findall(section_regexp, self.content)
-
-            if found_obj is not None:
-                for obj in found_obj:
-                    obj = obj.lstrip('\n= ').rstrip(' =\n')
-                    self._sections.append(obj)
+            self._parse_sections()
         return self._sections
 
     @property
@@ -431,41 +424,8 @@ class MediaWikiPage(object):
             Note:
                 Not Settable'''
 
-        def _list_to_dict(_dict, path):
-            tmp = res
-            for el in path[:-1]:
-                tmp = tmp[el]
-            tmp[sec] = OrderedDict()
-
-        if self._table_of_contents:
-            return self._table_of_contents
-
-        section_regexp = r'\n==* .* ==*\n'  # '== {STUFF_NOT_\n} =='
-        found_obj = re.findall(section_regexp, self.content)
-        res = OrderedDict()
-
-        path = list()
-
-        last_depth = 0
-        for obj in found_obj:
-            depth = obj.count('=') / 2  # this gets us to the single side...
-            depth -= 2  # now, we can calculate depth
-
-            sec = obj.lstrip('\n= ').rstrip(' =\n')
-            if depth == 0:
-                last_depth = 0
-                path = [sec]
-                res[sec] = OrderedDict()
-            elif depth > last_depth:
-                last_depth = depth
-                path.append(sec)
-                _list_to_dict(res, path)
-            elif depth == last_depth:
-                path.pop()
-                path.append(sec)
-                _list_to_dict(res, path)
-
-        self._table_of_contents = res
+        if self._table_of_contents is False:
+            self._parse_sections()
         return self._table_of_contents
 
     def section(self, section_title):
@@ -692,6 +652,42 @@ class MediaWikiPage(object):
         else:
             tmp = href
         return txt, tmp
+
+    def _parse_sections(self):
+        ''' parse sections and TOC '''
+        def _list_to_dict(_dict, path):
+            tmp = res
+            for el in path[:-1]:
+                tmp = tmp[el]
+            tmp[sec] = OrderedDict()
+
+        self._sections = list()
+        section_regexp = r'\n==* .* ==*\n'  # '== {STUFF_NOT_\n} =='
+        found_obj = re.findall(section_regexp, self.content)
+
+        res = OrderedDict()
+        path = list()
+        last_depth = 0
+        for obj in found_obj:
+            depth = obj.count('=') / 2  # this gets us to the single side...
+            depth -= 2  # now, we can calculate depth
+
+            sec = obj.lstrip('\n= ').rstrip(' =\n')
+            if depth == 0:
+                last_depth = 0
+                path = [sec]
+                res[sec] = OrderedDict()
+            elif depth > last_depth:
+                last_depth = depth
+                path.append(sec)
+                _list_to_dict(res, path)
+            elif depth == last_depth:
+                path.pop()
+                path.append(sec)
+                _list_to_dict(res, path)
+            self._sections.append(sec)
+
+        self._table_of_contents = res
 
     def __title_query_param(self):
         ''' util function to determine which parameter method to use '''

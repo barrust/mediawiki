@@ -1098,6 +1098,21 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(self.pag.sections,
                          self.response['arya']['sections'])
 
+    def test_table_of_contents(self):
+        ''' test a page table of contents '''
+
+        def _flatten_toc(_dict, res):
+            ''' flatten the table of contents into a list '''
+            for key, val in _dict.items():
+                res.append(key)
+                if val.keys():
+                    _flatten_toc(val, res)
+
+        toc = self.pag.table_of_contents
+        toc_ord = list()
+        _flatten_toc(toc, toc_ord)
+        self.assertEqual(toc_ord, self.response['arya']['sections'])
+
     def test_page_section(self):
         ''' test a page returning a section '''
         self.assertEqual(self.pag.section('A Game of Thrones'),

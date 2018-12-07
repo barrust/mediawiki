@@ -306,6 +306,17 @@ class TestMediaWiki(unittest.TestCase):
         self.assertNotEqual(time1, time2)
         self.assertGreater(time2, time1)
 
+    def test_cat_prefix(self):
+        ''' test the default category prefix'''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.category_prefix, 'Category')
+
+    def test_cat_prefix_change(self):
+        ''' test changing the category prefix '''
+        site = MediaWikiOverloaded()
+        self.assertEqual(site.category_prefix, 'Category')
+        site.category_prefix = 'Something:'
+        self.assertEqual(site.category_prefix, 'Something')
 
 class TestMediaWikiLogin(unittest.TestCase):
     ''' Test login functionality '''
@@ -1097,6 +1108,21 @@ class TestMediaWikiPage(unittest.TestCase):
         ''' test a page sections '''
         self.assertEqual(self.pag.sections,
                          self.response['arya']['sections'])
+
+    def test_table_of_contents(self):
+        ''' test a page table of contents '''
+
+        def _flatten_toc(_dict, res):
+            ''' flatten the table of contents into a list '''
+            for key, val in _dict.items():
+                res.append(key)
+                if val.keys():
+                    _flatten_toc(val, res)
+
+        toc = self.pag.table_of_contents
+        toc_ord = list()
+        _flatten_toc(toc, toc_ord)
+        self.assertEqual(toc_ord, self.response['arya']['sections'])
 
     def test_page_section(self):
         ''' test a page returning a section '''

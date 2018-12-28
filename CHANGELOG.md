@@ -1,5 +1,10 @@
 # MediaWiki Changelog
 
+## Version 0.5.1
+
+* Added Table of Contents parsing based on sections: result is an OrderedDict
+* Fix issue where some sections are not pulled correctly
+
 ## Version 0.5.0
 
 * Add support for logging into the MediaWiki site [issue #59](https://github.com/barrust/mediawiki/issues/48)

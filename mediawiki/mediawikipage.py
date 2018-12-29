@@ -74,7 +74,7 @@ class MediaWikiPage(object):
 
         preload_props = ['content', 'summary', 'images', 'references', 'links',
                          'sections', 'redirects', 'coordinates', 'backlinks',
-                         'categories', 'langlinks']
+                         'categories']
         if preload:
             for prop in preload_props:
                 getattr(self, prop)
@@ -286,25 +286,26 @@ class MediaWikiPage(object):
 
     @property
     def langlinks(self):
-        """
+        """List of other languages in which page is available.
+
         Gets a list of all language links from the provided pages to other
         languages according to: https://www.mediawiki.org/wiki/API:Langlinks
-        Note: Not settable.
-        :return: {<lang_code>: <native page title>}
+        Note:
+            Not settable.
+        Returns:
+            {<lang_code>: <native page title>}
         """
         if self._langlinks is False:
-
-            def _get_lang(val):
-                """ parse the lang correctly """
-                lang = val['lang']
-                title = val['*']
-                return lang, title
-
             params = {
                 'prop': 'langlinks',
                 'cllimit': 'max',
             }
-            self._langlinks = dict(_get_lang(lang_link) for lang_link in self._continued_query(params))
+            query_result = self._continued_query(params)
+
+            langlinks = dict()
+            for lang_info in query_result:
+                langlinks[lang_info['lang']] = lang_info['*']
+            self._langlinks = langlinks
         return self._langlinks
 
     @property

@@ -446,8 +446,17 @@ class MediaWikiPage(object):
         try:
             content = self.content
             index = content.index(section) + len(section)
+
+            # ensure we have the full section header...
+            while True:
+                if content[index + 1] == '=':
+                    index += 1
+                else:
+                    break
         except ValueError:
             return None
+        except IndexError:
+            pass
 
         try:
             next_index = self.content.index('==', index)

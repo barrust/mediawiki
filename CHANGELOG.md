@@ -1,9 +1,13 @@
 # MediaWiki Changelog
 
+## Version 0.5.2
+
+* Add `langlinks` property to `MediaWikiPage` [issue #65](https://github.com/barrust/mediawiki/issues/65)
+
 ## Version 0.5.1
 
 * Added Table of Contents parsing based on sections: result is an OrderedDict
-* Fix issue where some sections are not pulled correctly
+* Fix issue where some sections are not pulled correctly [issue #64](https://github.com/barrust/mediawiki/issues/64)
 
 ## Version 0.5.0
 

@@ -51,6 +51,7 @@ class MediaWikiOverloaded(MediaWiki):
 
 class TestMediaWiki(unittest.TestCase):
     ''' test the MediaWiki Class Basic functionality '''
+
     def test_version(self):
         ''' test version information '''
         site = MediaWikiOverloaded()
@@ -1063,6 +1064,10 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(self.pag.categories,
                          self.response['arya']['categories'])
 
+    def test_page_langlinks(self):
+        ''' test pulling wikimedia supported langlinks '''
+        raise NotImplementedError()  # TODO
+
     def test_page_references(self):
         ''' test a page references '''
         self.assertEqual(self.pag.references,
@@ -1389,6 +1394,7 @@ class TestMediaWikiCategoryTree(unittest.TestCase):
 
     def test_unretrievable_cat(self):
         ''' test throwing the exception when cannot retrieve category tree '''
+
         def new_cattreemem():
             ''' force exception to be thrown '''
             raise Exception

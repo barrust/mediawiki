@@ -90,3 +90,6 @@ ENV/
 
 # PyPi
 .pypirc
+
+# PyCharm files
+.idea

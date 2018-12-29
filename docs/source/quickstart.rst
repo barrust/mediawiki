@@ -214,8 +214,8 @@ Other Properties
 """"""""""""""""
 
 Other properties for a page include: `content`, `html`, `images`, `references`,
-`categories`, `coordinates`, `redirects`, `backlinks`, `summary`, `sections`,
-`logos`, and `hatnotes`
+`categories`, `langlinks`, `coordinates`, `redirects`, `backlinks`, `summary`,
+`sections`, `logos`, and `hatnotes`
 
 Summarize
 """"""""""""""""

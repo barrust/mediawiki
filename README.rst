@@ -111,6 +111,7 @@ Pull a MediaWiki page and some of the page properties:
     >>> p.title
     >>> p.summary
     >>> p.categories
+    >>> p.langlinks
     >>> p.images
     >>> p.links
 

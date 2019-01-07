@@ -664,10 +664,10 @@ class MediaWikiPage(object):
 
     def _parse_sections(self):
         ''' parse sections and TOC '''
-        def _list_to_dict(_dict, path):
-            tmp = res
-            for el in path[:-1]:
-                tmp = tmp[el]
+        def _list_to_dict(_dict, path, sec):
+            tmp = _dict
+            for elm in path[:-1]:
+                tmp = tmp[elm]
             tmp[sec] = OrderedDict()
 
         self._sections = list()
@@ -689,11 +689,11 @@ class MediaWikiPage(object):
             elif depth > last_depth:
                 last_depth = depth
                 path.append(sec)
-                _list_to_dict(res, path)
+                _list_to_dict(res, path, sec)
             elif depth == last_depth:
                 path.pop()
                 path.append(sec)
-                _list_to_dict(res, path)
+                _list_to_dict(res, path, sec)
             self._sections.append(sec)
 
         self._table_of_contents = res

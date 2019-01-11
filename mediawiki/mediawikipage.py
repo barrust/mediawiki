@@ -676,6 +676,7 @@ class MediaWikiPage(object):
         query_params = {
             'titles': self.title,
             'prop': 'extracts|redirects|links|coordinates|categories|extlinks',
+            'continue': dict(),
             # summary
             'explaintext': '',
             'exintro': '',  # full first section for the summary!
@@ -696,41 +697,45 @@ class MediaWikiPage(object):
 
         last_cont = dict()
         results = None
+        idx = 0
         while True:
             params = query_params.copy()
             params.update(last_cont)
 
             request = self.mediawiki.wiki_request(params)
+            idx += 1
 
+            # print(idx)
             # quick exit
             if 'query' not in request:
+                # print(request)
                 break
 
+            new_cont = request.get('continue')
             request = request['query']['pages'][self.pageid]
-
             if not results:
                 results = request
             else:
-                for key in request.keys():
-                    if key in results:
-                        results[key] = results.get(key, list()).append(request.get(key, list()))
-                    else:
-                        results[key] = request[key]
-                # results.update(request)  # this isn't correct... somehow...
-            if 'continue' not in request or request['continue'] == last_cont:
+                for key in ['extracts', 'redirects', 'links', 'coordinates', 'categories', 'extlinks']:
+                    if key in request and request.get(key) is not None:
+                        val = request.get(key)
+                        tmp = results.get(key)
+                        if isinstance(tmp, (list, tuple)):
+                            results[key] = results.get(key, list) + val
+            if new_cont is None or new_cont == last_cont:
                 break
 
-            last_cont = request['continue']
+            last_cont = new_cont
 
         # redirects
-        tmp = [link['title'] for link in results['redirects']]
+        tmp = [link['title'] for link in results.get('redirects', list())]
         self._redirects = sorted(tmp)
 
         # summary
         self._summary = results['extract']
 
         # links
-        tmp = [link['title'] for link in results['links']]
+        tmp = [link['title'] for link in results.get('links', list())]
         self._links = sorted(tmp)
 
         # categories
@@ -741,7 +746,7 @@ class MediaWikiPage(object):
                 return tmp[len(self.mediawiki.category_prefix) + 1:]
             return tmp
 
-        tmp = [_get_cat(link) for link in results['categories']]
+        tmp = [_get_cat(link) for link in results.get('categories', list())]
         self._categories = sorted(tmp)
 
         # coordinates
@@ -750,5 +755,7 @@ class MediaWikiPage(object):
                                  Decimal(results['coordinates'][0]['lon']))
 
         # references
-        tmp = [link['*'] for link in results['extlinks']]
+        # tmp = [link['*'] for link in results['extlinks']]
+        # print(results.get('extlinks', list()))
+        tmp = [link['*'] for link in results.get('extlinks', list())]
         self._references = sorted(tmp)

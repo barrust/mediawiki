@@ -303,7 +303,7 @@ class MediaWikiPage(object):
                 Not settable '''
         if self._redirects is None:
             self._redirects = list()
-            res = self.__pull_combined_properties()
+            self.__pull_combined_properties()
         return self._redirects
 
     @property
@@ -559,7 +559,7 @@ class MediaWikiPage(object):
         query_params.update(self.__title_query_param())
 
         last_cont = dict()
-        # prop = query_params.get('prop')
+        prop = query_params.get('prop')
 
         while True:
             params = query_params.copy()
@@ -695,7 +695,7 @@ class MediaWikiPage(object):
         }
 
         last_cont = dict()
-        results = None
+        results = dict()
         idx = 0
         while True:
             params = query_params.copy()
@@ -710,12 +710,13 @@ class MediaWikiPage(object):
                 # print(request)
                 break
 
+            keys = ['extracts', 'redirects', 'links', 'coordinates', 'categories', 'extlinks']
             new_cont = request.get('continue')
             request = request['query']['pages'][self.pageid]
             if not results:
                 results = request
             else:
-                for key in ['extracts', 'redirects', 'links', 'coordinates', 'categories', 'extlinks']:
+                for key in keys:
                     if key in request and request.get(key) is not None:
                         val = request.get(key)
                         tmp = results.get(key)

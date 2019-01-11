@@ -254,9 +254,8 @@ class MediaWikiPage(object):
                 May include external links within page that are not \
                 technically cited anywhere '''
         if self._references is None:
-            params = {'prop': 'extlinks', 'ellimit': 'max'}
-            tmp = [link['*'] for link in self._continued_query(params)]
-            self._references = sorted(tmp)
+            self._references = list()
+            self.__pull_combined_properties()
         return self._references
 
     @property

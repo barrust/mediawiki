@@ -642,7 +642,6 @@ class MediaWiki(object):
             if results is not None and results - returned_results < max_pull:
                 search_params['cmlimit'] = results - returned_results
 
-            # print(last_cont)
         # end while loop
 
         if subcategories:
@@ -865,7 +864,7 @@ class MediaWiki(object):
         ''' check for default error messages and throw correct exception '''
         if 'error' in response:
             http_error = ['HTTP request timed out.', 'Pool queue is full']
-            geo_error = ['Page coordinates unknown',
+            geo_error = ['Page coordinates unknown.',
                          ('One of the parameters gscoord, gspage, gsbbox is '
                           'required'), 'Invalid coordinate provided']
             err = response['error']['info']

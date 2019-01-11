@@ -111,9 +111,9 @@ else:
 site = MediaWikiOverloaded()
 french_site = MediaWikiOverloaded(url='https://fr.wikipedia.org/w/api.php',
                                   lang='fr')
-asoiaf = MediaWikiOverloaded(url='http://awoiaf.westeros.org/api.php',
+asoiaf = MediaWikiOverloaded(url='https://awoiaf.westeros.org/api.php',
                              lang='fr')
-plants = MediaWikiOverloaded(url='http://practicalplants.org/w/api.php')
+plants = MediaWikiOverloaded(url='https://practicalplants.org/w/api.php')
 wikipedia = MediaWikiOverloaded()
 
 
@@ -213,14 +213,14 @@ if PULL_ALL is True or PULL_GEOSEARCH is True:
     responses[site.api_url]['geosearch_decimals'] = res
     res = site.geosearch(latitude=Decimal('0.0'), longitude=0.0)
     responses[site.api_url]['geosearch_mix_types'] = res
-    res = site.geosearch(title='new york', latitude=Decimal('-9999999999.999'),
+    res = site.geosearch(title='new york city', latitude=Decimal('-9999999999.999'),
                          longitude=Decimal('0.0'), results=22, radius=10000)
     responses[site.api_url]['geosearch_page_invalid_lat_long'] = res
-    res = site.geosearch(title='new york', results=22, radius=10000)
+    res = site.geosearch(title='new york city', results=22, radius=10000)
     responses[site.api_url]['geosearch_page_radius_results_set'] = res
-    res = site.geosearch(title='new york', radius=10000)
+    res = site.geosearch(title='new york city', radius=10000)
     responses[site.api_url]['geosearch_page_radius_results'] = res
-    res = site.geosearch(title='new york')
+    res = site.geosearch(title='new york city')
     responses[site.api_url]['geosearch_page'] = res
     try:
         site.geosearch(latitude=None, longitude=Decimal('0.0'), results=22,
@@ -263,9 +263,9 @@ if PULL_ALL is True or PULL_CATEGORYTREE is True:
 
 if PULL_ALL is True or PULL_SUMMARY is True:
     res = site.summary('chess', chars=50)
-    responses[site.api_url]['sumarize_chars_50'] = res
+    responses[site.api_url]['summarize_chars_50'] = res
     res = site.summary('chess', sentences=5)
-    responses[site.api_url]['sumarize_sent_5'] = res
+    responses[site.api_url]['summarize_sent_5'] = res
 
     print("Completed pulling summaries")
 
@@ -314,7 +314,7 @@ if PULL_ALL is True or PULL_API_URL_ERROR is True:
     print("Completed pulling api url errors")
 
 if PULL_ALL is True or PULL_REDIRECT_ERROR is True:
-    print('Start redirect error')
+    # print('Start redirect error')
     try:
         asoiaf.page('arya', auto_suggest=False, redirect=False)
     except RedirectError as ex:
@@ -414,7 +414,7 @@ if PULL_ALL is True or PULL_SECTION_LINKS is True:
     # contains external links
     pg = wikipedia.page('''McDonald's''')
     res = pg.parse_section_links('EXTERNAL LINKS')
-    responses[wikipedia.api_url]['mcy_ds_sec_links'] = res
+    responses[wikipedia.api_url]['mcy_ds_external_links'] = res
 
     # doesn't contain external links
     pg = wikipedia.page('Tropical rainforest conservation')

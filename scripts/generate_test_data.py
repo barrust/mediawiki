@@ -267,6 +267,8 @@ if PULL_ALL is True or PULL_SUMMARY is True:
     responses[site.api_url]['summarize_chars_50'] = res
     res = site.summary('chess', sentences=5)
     responses[site.api_url]['summarize_sent_5'] = res
+    res = site.summary('chess')
+    responses[site.api_url]['summarize_first_paragraph'] = res
 
     print("Completed pulling summaries")
 

@@ -597,7 +597,7 @@ class TestMediaWikiSummary(unittest.TestCase):
         res = response['summarize_chars_50']
         sumr = site.summary('chess', chars=50)
         self.assertEqual(res, sumr)
-        self.assertEqual(len(res), 54)
+        self.assertEqual(len(res), 54)  # add the elipses
 
     def test_summarize_sents(self):
         ''' test summarize number sentences '''
@@ -607,6 +607,14 @@ class TestMediaWikiSummary(unittest.TestCase):
         sumr = site.summary('chess', sentences=5)
         self.assertEqual(res, sumr)
         # self.assertEqual(len(res), 466)
+
+    def test_summarize_paragraph(self):
+        ''' test summarize based on first section '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['summarize_first_paragraph']
+        sumr = site.summary('chess')
+        self.assertEqual(res, sumr)
 
     def test_page_summary_chars(self):
         ''' test page summarize - chars '''

@@ -1262,7 +1262,7 @@ class TestMediaWikiPage(unittest.TestCase):
         toc = pg.table_of_contents
         toc_ord = list()
         _flatten_toc(toc, toc_ord)
-        self.assertCountEqual(toc_ord, response['new_york_city_sections'])
+        self.assertEqual(toc_ord, response['new_york_city_sections'])
 
     def test_page_section_large(self):
         ''' test a page returning a section - large '''

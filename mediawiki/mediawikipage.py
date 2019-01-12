@@ -52,7 +52,7 @@ class MediaWikiPage(object):
         else:
             raise ValueError('Either a title or a pageid must be specified')
 
-        self._content = ''
+        self._content = None
         self._revision_id = None
         self._parent_id = None
         self._html = False  # None signifies nothing returned...
@@ -128,7 +128,7 @@ class MediaWikiPage(object):
                 Not settable
             Note:
                 Side effect is to also get revision_id and parent_id '''
-        if not self._content:
+        if self._content is None:
             self._pull_content_revision_parent()
         return self._content
 
@@ -655,10 +655,20 @@ class MediaWikiPage(object):
                 last_depth = depth
                 path.append(sec)
                 _list_to_dict(res, path, sec)
-            elif depth == last_depth:
+            elif depth < last_depth:
+                # path.pop()
+                while last_depth > depth:
+                    path.pop()
+                    last_depth -= 1
                 path.pop()
                 path.append(sec)
                 _list_to_dict(res, path, sec)
+                last_depth = depth
+            else:
+                path.pop()
+                path.append(sec)
+                _list_to_dict(res, path, sec)
+                last_depth = depth
             self._sections.append(sec)
 
         self._table_of_contents = res

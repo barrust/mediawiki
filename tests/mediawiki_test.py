@@ -1215,7 +1215,7 @@ class TestMediaWikiPage(unittest.TestCase):
     def test_page_preload(self):
         ''' test preload of page properties '''
         pag = self.site.page('arya', preload=True)
-        # self.assertNotEqual(getattr(pag, '_content'), '')
+        self.assertNotEqual(getattr(pag, '_content'), None)
         self.assertNotEqual(getattr(pag, '_summary'), None)
         self.assertNotEqual(getattr(pag, '_images'), None)
         self.assertNotEqual(getattr(pag, '_references'), None)
@@ -1229,7 +1229,7 @@ class TestMediaWikiPage(unittest.TestCase):
     def test_page_no_preload(self):
         ''' test page properties that are not set '''
         pag = self.site.page('arya', preload=False)
-        self.assertEqual(getattr(pag, '_content'), '')
+        self.assertEqual(getattr(pag, '_content'), None)
         self.assertEqual(getattr(pag, '_summary'), None)
         self.assertEqual(getattr(pag, '_images'), None)
         self.assertEqual(getattr(pag, '_references'), None)
@@ -1239,6 +1239,44 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(getattr(pag, '_coordinates'), False)
         self.assertEqual(getattr(pag, '_backlinks'), None)
         self.assertEqual(getattr(pag, '_categories'), None)
+
+    def test_full_sections_large(self):
+        ''' test parsing a set of sections - large '''
+        wiki = MediaWikiOverloaded()
+        pg = wiki.page('New York City')
+        response = wiki.responses[wiki.api_url]
+        self.assertEqual(pg.sections, response['new_york_city_sections'])
+
+    def test_table_of_contents_large(self):
+        ''' test a page table of contents for nested TOC - large'''
+
+        def _flatten_toc(_dict, res):
+            ''' flatten the table of contents into a list '''
+            for key, val in _dict.items():
+                res.append(key)
+                if val.keys():
+                    _flatten_toc(val, res)
+        wiki = MediaWikiOverloaded()
+        response = wiki.responses[wiki.api_url]
+        pg = wiki.page('New York City')
+        toc = pg.table_of_contents
+        toc_ord = list()
+        _flatten_toc(toc, toc_ord)
+        self.assertCountEqual(toc_ord, response['new_york_city_sections'])
+
+    def test_page_section_large(self):
+        ''' test a page returning a section - large '''
+        wiki = MediaWikiOverloaded()
+        response = wiki.responses[wiki.api_url]
+        pg = wiki.page('New York City')
+        self.assertEqual(pg.section('Air quality'), response['new_york_city_air_quality'])
+
+    def test_page_last_section_large(self):
+        ''' test a page returning the last section - large '''
+        wiki = MediaWikiOverloaded()
+        response = wiki.responses[wiki.api_url]
+        pg = wiki.page('New York City')
+        self.assertEqual(pg.section('External links'), response['new_york_city_last_sec'])
 
 
 class TestMediaWikiCategoryTree(unittest.TestCase):

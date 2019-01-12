@@ -87,6 +87,7 @@ PULL_PAGES = False
 PULL_LOGOS = False
 PULL_HATNOTES = False
 PULL_SECTION_LINKS = False
+PULL_TABLE_OF_CONTENTS = False
 PULL_LOGIN = False
 
 # regression tests
@@ -427,6 +428,16 @@ if PULL_ALL is True or PULL_SECTION_LINKS is True:
         responses[asoiaf.api_url]['arya_{}_links'.format(section)] = links
 
     print("Completed pulling the section links")
+
+if PULL_ALL is True or PULL_TABLE_OF_CONTENTS is True:
+    pg = wikipedia.page('New York City')
+    res = pg.sections
+    responses[wikipedia.api_url]['new_york_city_sections'] = res
+    res = pg.table_of_contents
+    responses[wikipedia.api_url]['new_york_city_toc'] = res
+    responses[wikipedia.api_url]['new_york_city_air_quality'] = pg.section('Air quality')
+    responses[wikipedia.api_url]['new_york_city_last_sec'] = pg.section('External links')
+    print("Completed pulling Table of Content data")
 
 if PULL_ALL is True or PULL_LOGIN is True:
     pg = wikipedia.login(username='badusername', password='fakepassword')

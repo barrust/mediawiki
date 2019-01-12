@@ -6291,6 +6291,157 @@
    }
   ],
   "missing_title_disamb_msg": "\n\"Leaching\" may refer to: \n  Bioleaching\n  Dump leaching\n  Heap leaching\n  In-situ leaching\n  Leach (disambiguation)\n  Leachate\n  Leaching (agriculture)\n  Leaching (chemistry)\n  Leaching (metallurgy)\n  Leaching (pedology)\n  Leech (disambiguation)\n  Leeching (disambiguation)\n  Tank leaching",
+  "new_york_city_air_quality": "According to the 2016 World Health Organization Global Urban Ambient Air Pollution Database, the annual average concentration in New York City's air of particulate matter measuring 2.5 microns or less (PM2.5) was 7 micrograms per cubic meter, or 3 micrograms below the recommended limit of the WHO Air Quality Guidelines for the annual mean PM2.5. The New York City Department of Health and Mental Hygiene, in partnership with Queens College, conducts the New York Community Air Survey to measure pollutants at about 150 locations.",
+  "new_york_city_last_sec": "Official website\nNYC Go, official tourism website of New York City\nNew York City at Curlie\n Geographic data related to New York City at OpenStreetMap.\nCollections, 145,000 NYC photographs at Museum of the City of New York\n\"The New New York Skyline\". Interactive. National Geographic. Nov 2015.",
+  "new_york_city_sections": [
+   "History",
+   "Etymology",
+   "Early history",
+   "Dutch rule",
+   "English rule",
+   "American Revolution",
+   "Nineteenth century",
+   "Modern history",
+   "Geography",
+   "Cityscapes",
+   "Architecture",
+   "Boroughs",
+   "Climate",
+   "Parks",
+   "National parks",
+   "State parks",
+   "City parks",
+   "Military installations",
+   "Demographics",
+   "Population density",
+   "Race and ethnicity",
+   "Sexual orientation and gender identity",
+   "Transgender contribution",
+   "Religion",
+   "Wealth and income disparity",
+   "Economy",
+   "City economic overview",
+   "Wall Street",
+   "Silicon Alley",
+   "Tourism",
+   "Media and entertainment",
+   "Education and scholarly activity",
+   "Primary and secondary education",
+   "Higher education and research",
+   "Human resources",
+   "Public health",
+   "Public safety",
+   "Police and law enforcement",
+   "Firefighting",
+   "Public library system",
+   "Culture and contemporary life",
+   "Arts",
+   "Performing arts",
+   "Visual arts",
+   "Cuisine",
+   "Parades",
+   "Accent and dialect",
+   "Sports",
+   "Transportation",
+   "Rapid transit",
+   "Rail",
+   "Buses",
+   "Air",
+   "Ferries",
+   "Taxis, transport startups, and trams",
+   "Streets and highways",
+   "River crossings",
+   "Environment",
+   "Environmental impact reduction",
+   "Water purity and availability",
+   "Air quality",
+   "Environmental revitalization",
+   "Government and politics",
+   "Government",
+   "Politics",
+   "Notable people",
+   "Global outreach",
+   "Notes",
+   "References",
+   "Further reading",
+   "External links"
+  ],
+  "new_york_city_toc": {
+   "Culture and contemporary life": {
+    "Arts": {
+     "Performing arts": {},
+     "Visual arts": {}
+    }
+   },
+   "Demographics": {
+    "Population density": {},
+    "Race and ethnicity": {},
+    "Sexual orientation and gender identity": {
+     "Transgender contribution": {}
+    }
+   },
+   "Economy": {
+    "City economic overview": {},
+    "Media and entertainment": {},
+    "Silicon Alley": {},
+    "Tourism": {},
+    "Wall Street": {}
+   },
+   "Education and scholarly activity": {
+    "Higher education and research": {},
+    "Primary and secondary education": {}
+   },
+   "Environment": {
+    "Air quality": {},
+    "Environmental impact reduction": {},
+    "Environmental revitalization": {},
+    "Water purity and availability": {}
+   },
+   "External links": {},
+   "Further reading": {},
+   "Geography": {
+    "Architecture": {},
+    "Boroughs": {},
+    "Cityscapes": {},
+    "Climate": {},
+    "Parks": {
+     "City parks": {},
+     "National parks": {},
+     "State parks": {}
+    }
+   },
+   "Global outreach": {},
+   "Government and politics": {
+    "Government": {},
+    "Politics": {}
+   },
+   "History": {
+    "American Revolution": {},
+    "Dutch rule": {},
+    "Early history": {},
+    "English rule": {},
+    "Etymology": {},
+    "Modern history": {},
+    "Nineteenth century": {}
+   },
+   "Human resources": {
+    "Public health": {},
+    "Public safety": {
+     "Firefighting": {},
+     "Police and law enforcement": {}
+    }
+   },
+   "Notable people": {},
+   "Notes": {},
+   "References": {},
+   "Transportation": {
+    "Rapid transit": {
+     "Buses": {},
+     "Rail": {},
+     "River crossings": {}
+    }
+   }
+  },
   "opensearch_new_york": [
    [
     "New York",

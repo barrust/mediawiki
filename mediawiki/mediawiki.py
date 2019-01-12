@@ -707,7 +707,7 @@ class MediaWiki(object):
                 parent_cats = categories[cat].categories
 
             tree[cat]['parent-categories'].extend(parent_cats)
-            tree[cat]['links'].extend([link for link in links[cat][0]])
+            tree[cat]['links'].extend(links[cat][0])
 
             if depth and level >= depth:
                 for ctg in links[cat][1]:

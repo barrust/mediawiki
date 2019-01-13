@@ -479,7 +479,7 @@ class TestMediaWikiGeoSearch(unittest.TestCase):
         ''' test geosearch using page with invalid lat / long '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        self.assertEqual(site.geosearch(title='new york',
+        self.assertEqual(site.geosearch(title='new york city',
                                         latitude=Decimal('-9999999999.999'),
                                         longitude=Decimal('0.0'), results=22,
                                         radius=10000),
@@ -489,7 +489,7 @@ class TestMediaWikiGeoSearch(unittest.TestCase):
         ''' test geosearch with radius and result set '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        res = site.geosearch(title='new york', results=22, radius=10000)
+        res = site.geosearch(title='new york city', results=22, radius=10000)
         self.assertEqual(res, response['geosearch_page_radius_results_set'])
         self.assertEqual(len(res), 22)
 
@@ -497,7 +497,7 @@ class TestMediaWikiGeoSearch(unittest.TestCase):
         ''' test geosearch with radius set '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        res = site.geosearch(title='new york', radius=10000)
+        res = site.geosearch(title='new york city', radius=10000)
         self.assertEqual(res, response['geosearch_page_radius_results'])
         self.assertEqual(len(res), 10)
 
@@ -505,9 +505,9 @@ class TestMediaWikiGeoSearch(unittest.TestCase):
         ''' test geosearch using just page '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        res = site.geosearch(title='new york')
+        res = site.geosearch(title='new york city')
         self.assertEqual(res, response['geosearch_page'])
-        self.assertEqual(len(res), 1)
+        self.assertEqual(len(res), 10)
 
 
 class TestMediaWikiOpenSearch(unittest.TestCase):
@@ -591,28 +591,36 @@ class TestMediaWikiPrefixSearch(unittest.TestCase):
 class TestMediaWikiSummary(unittest.TestCase):
     ''' test the summary functionality '''
     def test_summarize_chars(self):
-        ''' test sumarize number chars '''
+        ''' test summarize number chars '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        res = response['sumarize_chars_50']
+        res = response['summarize_chars_50']
         sumr = site.summary('chess', chars=50)
         self.assertEqual(res, sumr)
-        self.assertEqual(len(res), 54)
+        self.assertEqual(len(res), 54)  # add the elipses
 
     def test_summarize_sents(self):
-        ''' test sumarize number sentences '''
+        ''' test summarize number sentences '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        res = response['sumarize_sent_5']
+        res = response['summarize_sent_5']
         sumr = site.summary('chess', sentences=5)
         self.assertEqual(res, sumr)
         # self.assertEqual(len(res), 466)
+
+    def test_summarize_paragraph(self):
+        ''' test summarize based on first section '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]
+        res = response['summarize_first_paragraph']
+        sumr = site.summary('chess')
+        self.assertEqual(res, sumr)
 
     def test_page_summary_chars(self):
         ''' test page summarize - chars '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        res = response['sumarize_chars_50']
+        res = response['summarize_chars_50']
         pag = site.page('chess')
         sumr = pag.summarize(chars=50)
         self.assertEqual(res, sumr)
@@ -622,7 +630,7 @@ class TestMediaWikiSummary(unittest.TestCase):
         ''' test page summarize - sentences '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
-        res = response['sumarize_sent_5']
+        res = response['summarize_sent_5']
         pag = site.page('chess')
         sumr = pag.summarize(sentences=5)
         self.assertEqual(res, sumr)
@@ -671,7 +679,7 @@ class TestMediaWikiCategoryMembers(unittest.TestCase):
         ctm = site.categorymembers('Disambiguation categories', results=None)
         self.assertEqual(list(ctm), res)
         self.assertEqual(len(res[0]), 0)
-        self.assertEqual(len(res[1]), 1290)  # difficult if it changes sizes
+        self.assertEqual(len(res[1]), 1629)  # difficult if it changes sizes
 
 
 class TestMediaWikiExceptions(unittest.TestCase):
@@ -1215,30 +1223,68 @@ class TestMediaWikiPage(unittest.TestCase):
     def test_page_preload(self):
         ''' test preload of page properties '''
         pag = self.site.page('arya', preload=True)
-        self.assertNotEqual(getattr(pag, '_content'), '')
-        self.assertNotEqual(getattr(pag, '_summary'), False)
-        self.assertNotEqual(getattr(pag, '_images'), False)
-        self.assertNotEqual(getattr(pag, '_references'), False)
-        self.assertNotEqual(getattr(pag, '_links'), False)
-        self.assertNotEqual(getattr(pag, '_sections'), False)
-        self.assertNotEqual(getattr(pag, '_redirects'), False)
+        self.assertNotEqual(getattr(pag, '_content'), None)
+        self.assertNotEqual(getattr(pag, '_summary'), None)
+        self.assertNotEqual(getattr(pag, '_images'), None)
+        self.assertNotEqual(getattr(pag, '_references'), None)
+        self.assertNotEqual(getattr(pag, '_links'), None)
+        self.assertNotEqual(getattr(pag, '_sections'), None)
+        self.assertNotEqual(getattr(pag, '_redirects'), None)
         self.assertNotEqual(getattr(pag, '_coordinates'), False)
-        self.assertNotEqual(getattr(pag, '_backlinks'), False)
-        self.assertNotEqual(getattr(pag, '_categories'), False)
+        self.assertNotEqual(getattr(pag, '_backlinks'), None)
+        self.assertNotEqual(getattr(pag, '_categories'), None)
 
     def test_page_no_preload(self):
         ''' test page properties that are not set '''
         pag = self.site.page('arya', preload=False)
-        self.assertEqual(getattr(pag, '_content'), '')
-        self.assertEqual(getattr(pag, '_summary'), False)
-        self.assertEqual(getattr(pag, '_images'), False)
-        self.assertEqual(getattr(pag, '_references'), False)
-        self.assertEqual(getattr(pag, '_links'), False)
-        self.assertEqual(getattr(pag, '_sections'), False)
-        self.assertEqual(getattr(pag, '_redirects'), False)
+        self.assertEqual(getattr(pag, '_content'), None)
+        self.assertEqual(getattr(pag, '_summary'), None)
+        self.assertEqual(getattr(pag, '_images'), None)
+        self.assertEqual(getattr(pag, '_references'), None)
+        self.assertEqual(getattr(pag, '_links'), None)
+        self.assertEqual(getattr(pag, '_sections'), None)
+        self.assertEqual(getattr(pag, '_redirects'), None)
         self.assertEqual(getattr(pag, '_coordinates'), False)
-        self.assertEqual(getattr(pag, '_backlinks'), False)
-        self.assertEqual(getattr(pag, '_categories'), False)
+        self.assertEqual(getattr(pag, '_backlinks'), None)
+        self.assertEqual(getattr(pag, '_categories'), None)
+
+    def test_full_sections_large(self):
+        ''' test parsing a set of sections - large '''
+        wiki = MediaWikiOverloaded()
+        pg = wiki.page('New York City')
+        response = wiki.responses[wiki.api_url]
+        self.assertEqual(pg.sections, response['new_york_city_sections'])
+
+    def test_table_of_contents_large(self):
+        ''' test a page table of contents for nested TOC - large'''
+
+        def _flatten_toc(_dict, res):
+            ''' flatten the table of contents into a list '''
+            for key, val in _dict.items():
+                res.append(key)
+                if val.keys():
+                    _flatten_toc(val, res)
+        wiki = MediaWikiOverloaded()
+        response = wiki.responses[wiki.api_url]
+        pg = wiki.page('New York City')
+        toc = pg.table_of_contents
+        toc_ord = list()
+        _flatten_toc(toc, toc_ord)
+        self.assertEqual(toc_ord, response['new_york_city_sections'])
+
+    def test_page_section_large(self):
+        ''' test a page returning a section - large '''
+        wiki = MediaWikiOverloaded()
+        response = wiki.responses[wiki.api_url]
+        pg = wiki.page('New York City')
+        self.assertEqual(pg.section('Air quality'), response['new_york_city_air_quality'])
+
+    def test_page_last_section_large(self):
+        ''' test a page returning the last section - large '''
+        wiki = MediaWikiOverloaded()
+        response = wiki.responses[wiki.api_url]
+        pg = wiki.page('New York City')
+        self.assertEqual(pg.section('External links'), response['new_york_city_last_sec'])
 
 
 class TestMediaWikiCategoryTree(unittest.TestCase):
@@ -1530,7 +1576,7 @@ class TestMediaWikiRegressions(unittest.TestCase):
         res = site.responses[site.api_url]['large_continued_query_images']
         page = site.page('B8 polytope')
         self.assertEqual(page.images, res)
-        self.assertEqual(len(page.images), 2213)
+        self.assertEqual(len(page.images), 2214)
 
     def test_infinit_loop_images(self):
         ''' test known image infinite loop: issue #15 '''
@@ -1556,7 +1602,7 @@ class TestMediaWikiRegressions(unittest.TestCase):
             self.assertEqual(True, False)
 
     def test_query_continue(self):
-        site = MediaWikiOverloaded(url='http://practicalplants.org/w/api.php')
+        site = MediaWikiOverloaded(url='https://practicalplants.org/w/api.php')
         res = site.responses[site.api_url]['query-continue-find']
 
         cat_membs = site.categorymembers('Plant', results=None, subcategories=False)

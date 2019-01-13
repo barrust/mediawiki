@@ -52,22 +52,22 @@ class MediaWikiPage(object):
         else:
             raise ValueError('Either a title or a pageid must be specified')
 
-        self._content = ''
-        self._revision_id = False
-        self._parent_id = False
-        self._html = False
-        self._images = False
-        self._references = False
-        self._categories = False
-        self._coordinates = False
-        self._links = False
-        self._redirects = False
-        self._backlinks = False
-        self._summary = False
-        self._sections = False
-        self._table_of_contents = False
-        self._logos = False
-        self._hatnotes = False
+        self._content = None
+        self._revision_id = None
+        self._parent_id = None
+        self._html = False  # None signifies nothing returned...
+        self._images = None
+        self._references = None
+        self._categories = None
+        self._coordinates = False  # None signifies nothing returned...
+        self._links = None
+        self._redirects = None
+        self._backlinks = None
+        self._summary = None
+        self._sections = None
+        self._table_of_contents = None
+        self._logos = None
+        self._hatnotes = None
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -106,7 +106,7 @@ class MediaWikiPage(object):
     def _pull_content_revision_parent(self):
         ''' combine the pulling of these three properties '''
 
-        if self._revision_id is False:
+        if self._revision_id is None:
             query_params = {
                 'prop': 'extracts|revisions',
                 'explaintext': '',
@@ -128,7 +128,7 @@ class MediaWikiPage(object):
                 Not settable
             Note:
                 Side effect is to also get revision_id and parent_id '''
-        if not self._content:
+        if self._content is None:
             self._pull_content_revision_parent()
         return self._content
 
@@ -140,7 +140,7 @@ class MediaWikiPage(object):
                 Not settable
             Note:
                 Side effect is to also get content and parent_id '''
-        if self._revision_id is False:
+        if self._revision_id is None:
             self._pull_content_revision_parent()
         return self._revision_id
 
@@ -152,7 +152,7 @@ class MediaWikiPage(object):
                 Not settable
             Note:
                 Side effect is to also get content and revision_id '''
-        if self._parent_id is False:
+        if self._parent_id is None:
             self._pull_content_revision_parent()
         return self._parent_id
 
@@ -184,7 +184,7 @@ class MediaWikiPage(object):
 
             Note:
                 Not settable '''
-        if self._images is False:
+        if self._images is None:
             self._images = list()
             params = {
                 'generator': 'images',
@@ -209,7 +209,7 @@ class MediaWikiPage(object):
                 Side effect is to also pull the html which can be slow
             Note:
                 This is a parsing operation and not part of the standard API'''
-        if self._logos is False:
+        if self._logos is None:
             self._logos = list()
             soup = BeautifulSoup(self.html, 'html.parser')
             info = soup.find('table', {'class': 'infobox'})
@@ -229,7 +229,7 @@ class MediaWikiPage(object):
                 Side effect is to also pull the html which can be slow
             Note:
                 This is a parsing operation and not part of the standard API'''
-        if self._hatnotes is False:
+        if self._hatnotes is None:
             self._hatnotes = list()
             soup = BeautifulSoup(self.html, 'html.parser')
             notes = soup.findAll('', {'class': 'hatnote'})
@@ -253,10 +253,9 @@ class MediaWikiPage(object):
             Note
                 May include external links within page that are not \
                 technically cited anywhere '''
-        if self._references is False:
-            params = {'prop': 'extlinks', 'ellimit': 'max'}
-            tmp = [link['*'] for link in self._continued_query(params)]
-            self._references = sorted(tmp)
+        if self._references is None:
+            self._references = list()
+            self.__pull_combined_properties()
         return self._references
 
     @property
@@ -265,22 +264,9 @@ class MediaWikiPage(object):
 
             Note:
                 Not settable '''
-        if self._categories is False:
-
-            def _get_cat(val):
-                ''' parse the category correctly '''
-                tmp = val['title']
-                if tmp.startswith(self.mediawiki.category_prefix):
-                    return tmp[len(self.mediawiki.category_prefix) + 1:]
-                return tmp
-
-            params = {
-                'prop': 'categories',
-                'cllimit': 'max',
-                'clshow': '!hidden'
-            }
-            tmp = [_get_cat(link) for link in self._continued_query(params)]
-            self._categories = sorted(tmp)
+        if self._categories is None:
+            self._categories = list()
+            self.__pull_combined_properties()
         return self._categories
 
     @property
@@ -294,16 +280,7 @@ class MediaWikiPage(object):
                 Requires the GeoData extension to be installed '''
         if self._coordinates is False:
             self._coordinates = None
-            params = {
-                'prop': 'coordinates',
-                'colimit': 'max',
-                'titles': self.title
-            }
-            request = self.mediawiki.wiki_request(params)
-            res = request['query']['pages'][self.pageid]
-            if 'query' in request and 'coordinates' in res:
-                self._coordinates = (Decimal(res['coordinates'][0]['lat']),
-                                     Decimal(res['coordinates'][0]['lon']))
+            self.__pull_combined_properties()
         return self._coordinates
 
     @property
@@ -312,15 +289,9 @@ class MediaWikiPage(object):
 
             Note:
                 Not settable '''
-        if self._links is False:
+        if self._links is None:
             self._links = list()
-            params = {
-                'prop': 'links',
-                'plnamespace': 0,
-                'pllimit': 'max'
-            }
-            tmp = [link['title'] for link in self._continued_query(params)]
-            self._links = sorted(tmp)
+            self.__pull_combined_properties()
         return self._links
 
     @property
@@ -330,15 +301,9 @@ class MediaWikiPage(object):
 
             Note:
                 Not settable '''
-        if self._redirects is False:
+        if self._redirects is None:
             self._redirects = list()
-            params = {
-                'prop': 'redirects',
-                'rdprop': 'title',
-                'rdlimit': 'max'
-            }
-            tmp = [link['title'] for link in self._continued_query(params)]
-            self._redirects = sorted(tmp)
+            self.__pull_combined_properties()
         return self._redirects
 
     @property
@@ -347,7 +312,7 @@ class MediaWikiPage(object):
 
             Note:
                 Not settable '''
-        if self._backlinks is False:
+        if self._backlinks is None:
             self._backlinks = list()
             params = {
                 'action': 'query',
@@ -368,8 +333,8 @@ class MediaWikiPage(object):
 
             Note:
                 Not settable '''
-        if self._summary is False:
-            self._summary = self.summarize()
+        if self._summary is None:
+            self.__pull_combined_properties()
         return self._summary
 
     def summarize(self, sentences=0, chars=0):
@@ -411,7 +376,7 @@ class MediaWikiPage(object):
         # NOTE: Due to MediaWiki sites adding superscripts or italics or bold
         #       information in the sections, moving to regex to get the
         #       `non-decorated` name instead of using the query api!
-        if self._sections is False:
+        if self._sections is None:
             self._parse_sections()
         return self._sections
 
@@ -424,7 +389,7 @@ class MediaWikiPage(object):
             Note:
                 Not Settable'''
 
-        if self._table_of_contents is False:
+        if self._table_of_contents is None:
             self._parse_sections()
         return self._table_of_contents
 
@@ -690,10 +655,20 @@ class MediaWikiPage(object):
                 last_depth = depth
                 path.append(sec)
                 _list_to_dict(res, path, sec)
-            elif depth == last_depth:
+            elif depth < last_depth:
+                # path.pop()
+                while last_depth > depth:
+                    path.pop()
+                    last_depth -= 1
                 path.pop()
                 path.append(sec)
                 _list_to_dict(res, path, sec)
+                last_depth = depth
+            else:
+                path.pop()
+                path.append(sec)
+                _list_to_dict(res, path, sec)
+                last_depth = depth
             self._sections.append(sec)
 
         self._table_of_contents = res
@@ -703,3 +678,94 @@ class MediaWikiPage(object):
         if getattr(self, 'title', None) is not None:
             return {'titles': self.title}
         return {'pageids': self.pageid}
+
+    def __pull_combined_properties(self):
+        ''' something here... '''
+
+        query_params = {
+            'titles': self.title,
+            'prop': 'extracts|redirects|links|coordinates|categories|extlinks',
+            'continue': dict(),
+            # summary
+            'explaintext': '',
+            'exintro': '',  # full first section for the summary!
+            # redirects
+            'rdprop': 'title',
+            'rdlimit': 'max',
+            # links
+            'plnamespace': 0,
+            'pllimit': 'max',
+            # coordinates
+            'colimit': 'max',
+            # categories
+            'cllimit': 'max',
+            'clshow': '!hidden',
+            # references
+            'ellimit': 'max',
+        }
+
+        last_cont = dict()
+        results = dict()
+        idx = 0
+        while True:
+            params = query_params.copy()
+            params.update(last_cont)
+
+            request = self.mediawiki.wiki_request(params)
+            idx += 1
+
+            # print(idx)
+            # quick exit
+            if 'query' not in request:
+                # print(request)
+                break
+
+            keys = ['extracts', 'redirects', 'links', 'coordinates', 'categories', 'extlinks']
+            new_cont = request.get('continue')
+            request = request['query']['pages'][self.pageid]
+            if not results:
+                results = request
+            else:
+                for key in keys:
+                    if key in request and request.get(key) is not None:
+                        val = request.get(key)
+                        tmp = results.get(key)
+                        if isinstance(tmp, (list, tuple)):
+                            results[key] = results.get(key, list) + val
+            if new_cont is None or new_cont == last_cont:
+                break
+
+            last_cont = new_cont
+
+        # redirects
+        tmp = [link['title'] for link in results.get('redirects', list())]
+        self._redirects = sorted(tmp)
+
+        # summary
+        self._summary = results['extract']
+
+        # links
+        tmp = [link['title'] for link in results.get('links', list())]
+        self._links = sorted(tmp)
+
+        # categories
+        def _get_cat(val):
+            ''' parse the category correctly '''
+            tmp = val['title']
+            if tmp.startswith(self.mediawiki.category_prefix):
+                return tmp[len(self.mediawiki.category_prefix) + 1:]
+            return tmp
+
+        tmp = [_get_cat(link) for link in results.get('categories', list())]
+        self._categories = sorted(tmp)
+
+        # coordinates
+        if 'coordinates' in results:
+            self._coordinates = (Decimal(results['coordinates'][0]['lat']),
+                                 Decimal(results['coordinates'][0]['lon']))
+
+        # references
+        # tmp = [link['*'] for link in results['extlinks']]
+        # print(results.get('extlinks', list()))
+        tmp = [link['*'] for link in results.get('extlinks', list())]
+        self._references = sorted(tmp)

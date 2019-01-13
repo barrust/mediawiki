@@ -1,5 +1,10 @@
 # MediaWiki Changelog
 
+## Current Branch
+
+* Fix for the table of contents for all subsections
+* Combined properties into a single set of pulling to reduce the load on the MediaWiki infrastructure
+
 ## Version 0.5.1
 
 * Added Table of Contents parsing based on sections: result is an OrderedDict

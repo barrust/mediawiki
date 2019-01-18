@@ -1,9 +1,9 @@
 # MediaWiki Changelog
 
-## Current Branch
+## Version 0.6.0
 
-* Fix for the table of contents for all subsections
-* Combined properties into a single set of pulling to reduce the load on the MediaWiki infrastructure
+* Fix for the table of contents for all subsections [issue #64](https://github.com/barrust/mediawiki/issues/64)
+* Combined properties into a single set of pulling to reduce the load on the MediaWiki infrastructure [issue #55](https://github.com/barrust/mediawiki/issues/55)
 
 ## Version 0.5.1
 
@@ -12,7 +12,7 @@
 
 ## Version 0.5.0
 
-* Add support for logging into the MediaWiki site [issue #59](https://github.com/barrust/mediawiki/issues/48)
+* Add support for logging into the MediaWiki site [issue #59](https://github.com/barrust/mediawiki/issues/59)
 
 ## Version 0.4.1
 

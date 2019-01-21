@@ -1,20 +1,23 @@
-'''
+"""
 MediaWiki Exceptions
-'''
-from __future__ import (unicode_literals, absolute_import)
-from .utilities import (str_or_unicode)
+"""
+from __future__ import unicode_literals, absolute_import
+from .utilities import str_or_unicode
 
 
-ODD_ERROR_MESSAGE = ('This should not happen. If the MediaWiki site you are '
-                     'querying is available, then please report this issue on '
-                     'GitHub: github.com/barrust/mediawiki')
+ODD_ERROR_MESSAGE = (
+    "This should not happen. If the MediaWiki site you are "
+    "querying is available, then please report this issue on "
+    "GitHub: github.com/barrust/mediawiki"
+)
 
 
 class MediaWikiBaseException(Exception):
-    ''' Base MediaWikiException
+    """ Base MediaWikiException
 
         Args:
-            message: The message of the exception '''
+            message: The message of the exception """
+
     def __init__(self, message):
         self._message = message
         super(MediaWikiBaseException, self).__init__(self.message)
@@ -27,20 +30,21 @@ class MediaWikiBaseException(Exception):
 
     @property
     def message(self):
-        ''' str: The MediaWiki exception message '''
+        """ str: The MediaWiki exception message """
         return self._message
 
 
 class MediaWikiException(MediaWikiBaseException):
-    ''' MediaWiki Exception Class
+    """ MediaWiki Exception Class
 
         Args:
-            error (str): The error message that the MediaWiki site retuned '''
+            error (str): The error message that the MediaWiki site retuned """
 
     def __init__(self, error):
         self._error = error
-        msg = ('An unknown error occured: "{0}". Please report '
-               'it on GitHub!').format(self.error)
+        msg = ('An unknown error occured: "{0}". Please report it on GitHub!').format(
+            self.error
+        )
         super(MediaWikiException, self).__init__(msg)
 
     @property
@@ -50,25 +54,28 @@ class MediaWikiException(MediaWikiBaseException):
 
 
 class PageError(MediaWikiBaseException):
-    ''' Exception raised when no MediaWiki page matched a query
+    """ Exception raised when no MediaWiki page matched a query
 
         Args:
             title (str): Title of the page
-            pageid (int): MediaWiki page id of the page'''
+            pageid (int): MediaWiki page id of the page"""
 
     def __init__(self, title=None, pageid=None):
         if title:
             self._title = title
-            msg = ('"{0}" does not match any pages. Try another '
-                   'query!').format(self.title)
+            msg = ('"{0}" does not match any pages. Try another query!').format(
+                self.title
+            )
         elif pageid:
             self._pageid = pageid
-            msg = ('Page id "{0}" does not match any pages. Try '
-                   'another id!').format(self.pageid)
+            msg = ('Page id "{0}" does not match any pages. Try another id!').format(
+                self.pageid
+            )
         else:
-            self._title = ''
-            msg = ('"{0}" does not match any pages. Try another '
-                   'query!').format(self.title)
+            self._title = ""
+            msg = ('"{0}" does not match any pages. Try another query!').format(
+                self.title
+            )
         super(PageError, self).__init__(msg)
 
     @property
@@ -83,20 +90,20 @@ class PageError(MediaWikiBaseException):
 
 
 class RedirectError(MediaWikiBaseException):
-    ''' Exception raised when a page title unexpectedly resolves to
+    """ Exception raised when a page title unexpectedly resolves to
         a redirect
 
         Args:
             title (str): Title of the page that redirected
         Note:
             This should only occur if both auto_suggest and redirect \
-            are set to **False** '''
+            are set to **False** """
 
     def __init__(self, title):
         self._title = title
-        msg = ('"{0}" resulted in a redirect. Set the redirect '
-               'property to True to allow automatic '
-               'redirects.').format(self.title)
+        msg = (
+            '"{0}" resulted in a redirect. Set the redirect property to True to allow automatic redirects.'
+        ).format(self.title)
 
         super(RedirectError, self).__init__(msg)
 
@@ -107,7 +114,7 @@ class RedirectError(MediaWikiBaseException):
 
 
 class DisambiguationError(MediaWikiBaseException):
-    ''' Exception raised when a page resolves to a Disambiguation page
+    """ Exception raised when a page resolves to a Disambiguation page
 
         Args:
             title (str): Title that resulted in a disambiguation page
@@ -117,15 +124,16 @@ class DisambiguationError(MediaWikiBaseException):
                             possible results
         Note:
             `options` only includes titles that link to valid \
-            MediaWiki pages '''
+            MediaWiki pages """
 
     def __init__(self, title, may_refer_to, url, details=None):
         self._title = title
         self._options = sorted(may_refer_to)
         self._details = details
         self._url = url
-        msg = ('\n"{0}" may refer to: \n  '
-               '{1}').format(self.title, '\n  '.join(self.options))
+        msg = ('\n"{0}" may refer to: \n  ' "{1}").format(
+            self.title, "\n  ".join(self.options)
+        )
         super(DisambiguationError, self).__init__(msg)
 
     @property
@@ -150,16 +158,17 @@ class DisambiguationError(MediaWikiBaseException):
 
 
 class HTTPTimeoutError(MediaWikiBaseException):
-    ''' Exception raised when a request to the Mediawiki site times out.
+    """ Exception raised when a request to the Mediawiki site times out.
 
         Args:
-            query (str): The query that timed out'''
+            query (str): The query that timed out"""
 
     def __init__(self, query):
         self._query = query
-        msg = ('Searching for "{0}" resulted in a timeout. Try '
-               'again in a few seconds, and ensure you have rate '
-               'limiting set to True.').format(self.query)
+        msg = (
+            'Searching for "{0}" resulted in a timeout. Try again in a few seconds, '
+            "and ensure you have rate limiting set to True."
+        ).format(self.query)
         super(HTTPTimeoutError, self).__init__(msg)
 
     @property
@@ -169,14 +178,14 @@ class HTTPTimeoutError(MediaWikiBaseException):
 
 
 class MediaWikiAPIURLError(MediaWikiBaseException):
-    ''' Exception raised when the MediaWiki server does not support the API
+    """ Exception raised when the MediaWiki server does not support the API
 
         Args:
-            api_url (str): The API URL that was not recognized '''
+            api_url (str): The API URL that was not recognized """
 
     def __init__(self, api_url):
         self._api_url = api_url
-        msg = '{0} is not a valid MediaWiki API URL'.format(self.api_url)
+        msg = "{0} is not a valid MediaWiki API URL".format(self.api_url)
         super(MediaWikiAPIURLError, self).__init__(msg)
 
     @property
@@ -186,17 +195,17 @@ class MediaWikiAPIURLError(MediaWikiBaseException):
 
 
 class MediaWikiGeoCoordError(MediaWikiBaseException):
-    ''' Exceptions to handle GeoData exceptions
+    """ Exceptions to handle GeoData exceptions
 
         Args:
             error (str): Error message from the MediaWiki site related to \
-                         GeoCorrdinates '''
+                         GeoCorrdinates """
 
     def __init__(self, error):
         self._error = error
-        msg = ('GeoData search resulted in the following '
-               'error: {0} - Please use valid coordinates or a proper '
-               'page title.').format(self.error)
+        msg = (
+            "GeoData search resulted in the following error: {0} - Please use valid coordinates or a proper page title."
+        ).format(self.error)
         super(MediaWikiGeoCoordError, self).__init__(msg)
 
     @property
@@ -206,18 +215,20 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
 
 
 class MediaWikiCategoryTreeError(MediaWikiBaseException):
-    ''' Exception when the category tree is unable to complete for an unknown
+    """ Exception when the category tree is unable to complete for an unknown
         reason
 
         Args:
-            category (str): The category that threw an exception '''
+            category (str): The category that threw an exception """
 
     def __init__(self, category):
         self._category = category
-        msg = ("Categorytree threw an exception for trying to get the "
-               "same category '{}' too many times. Please try again later "
-               "and perhaps use the rate limiting "
-               "option.").format(self._category)
+        msg = (
+            "Categorytree threw an exception for trying to get the "
+            "same category '{}' too many times. Please try again later "
+            "and perhaps use the rate limiting "
+            "option."
+        ).format(self._category)
         super(MediaWikiCategoryTreeError, self).__init__(msg)
 
     @property
@@ -228,10 +239,10 @@ class MediaWikiCategoryTreeError(MediaWikiBaseException):
 
 
 class MediaWikiLoginError(MediaWikiBaseException):
-    ''' Exception raised when unable to login to the MediaWiki site
+    """ Exception raised when unable to login to the MediaWiki site
 
         Args:
-            error (str): The error message that the MediaWiki site returned '''
+            error (str): The error message that the MediaWiki site returned """
 
     def __init__(self, error):
         self._error = error

@@ -799,7 +799,5 @@ class MediaWikiPage(object):
             )
 
         # references
-        # tmp = [link['*'] for link in results['extlinks']]
-        # print(results.get('extlinks', list()))
         tmp = [link["*"] for link in results.get("extlinks", list())]
         self._references = sorted(tmp)

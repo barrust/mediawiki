@@ -536,7 +536,7 @@ class MediaWikiPage(object):
             item = lis_item.find_all("a")
             one_disambiguation = dict()
             one_disambiguation["description"] = lis_item.text
-            if item and hasattr(item, "title"):
+            if item and hasattr(item[0], "title"):
                 one_disambiguation["title"] = item[0]["title"]
             else:
                 # these are non-linked records so double up the text

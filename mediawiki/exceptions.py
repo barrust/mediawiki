@@ -102,7 +102,8 @@ class RedirectError(MediaWikiBaseException):
     def __init__(self, title):
         self._title = title
         msg = (
-            '"{0}" resulted in a redirect. Set the redirect property to True to allow automatic redirects.'
+            '"{0}" resulted in a redirect. Set the redirect property to True '
+            "to allow automatic redirects."
         ).format(self.title)
 
         super(RedirectError, self).__init__(msg)
@@ -166,8 +167,9 @@ class HTTPTimeoutError(MediaWikiBaseException):
     def __init__(self, query):
         self._query = query
         msg = (
-            'Searching for "{0}" resulted in a timeout. Try again in a few seconds, '
-            "and ensure you have rate limiting set to True."
+            'Searching for "{0}" resulted in a timeout. '
+            "Try again in a few seconds, and ensure you have rate limiting "
+            "set to True."
         ).format(self.query)
         super(HTTPTimeoutError, self).__init__(msg)
 
@@ -204,7 +206,8 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
     def __init__(self, error):
         self._error = error
         msg = (
-            "GeoData search resulted in the following error: {0} - Please use valid coordinates or a proper page title."
+            "GeoData search resulted in the following error: {0}"
+            " - Please use valid coordinates or a proper page title."
         ).format(self.error)
         super(MediaWikiGeoCoordError, self).__init__(msg)
 

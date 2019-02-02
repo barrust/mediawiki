@@ -732,7 +732,6 @@ class MediaWiki(object):
                         categories,
                         links,
                     )
-            return
 
         # ###################################
         # ### Actual Function Code        ###
@@ -878,7 +877,7 @@ class MediaWiki(object):
             http_error = ["HTTP request timed out.", "Pool queue is full"]
             geo_error = [
                 "Page coordinates unknown.",
-                ("One of the parameters gscoord, gspage, gsbbox is " "required"),
+                "One of the parameters gscoord, gspage, gsbbox is required",
                 "Invalid coordinate provided",
             ]
             err = response["error"]["info"]

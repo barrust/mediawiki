@@ -1,5 +1,10 @@
 # MediaWiki Changelog
 
+## Version 0.6.1
+
+* Fix DisambiguationError title property [issue #72](https://github.com/barrust/mediawiki/issues/72)
+* Change to using [black](https://github.com/ambv/black) formatting
+
 ## Version 0.6.0
 
 * Fix for the table of contents for all subsections [issue #64](https://github.com/barrust/mediawiki/issues/64)

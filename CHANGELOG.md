@@ -1,5 +1,9 @@
 # MediaWiki Changelog
 
+## Version 0.6.2 (future release)
+
+* Add `allpages` functionaloty [PR #75](https://github.com/barrust/mediawiki/pull/75)
+
 ## Version 0.6.1
 
 * Fix DisambiguationError title property [issue #72](https://github.com/barrust/mediawiki/issues/72)

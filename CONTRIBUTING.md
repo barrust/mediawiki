@@ -162,3 +162,5 @@ A special thanks to all the code contributors to pymediawiki!
 [@dan-blanchard](https://github.com/dan-blanchard) - Default URL conforms to passed in language [#26](https://github.com/barrust/mediawiki/pull/26)
 
 [@nagash91](https://github.com/nagash91) - Pull section titles without additional markup [#42](https://github.com/barrust/mediawiki/issues/42)
+
+[@flamableconcrete](https://github.com/flamableconcrete) - Added `allpages` functionality [#75](https://github.com/barrust/mediawiki/issues/75)

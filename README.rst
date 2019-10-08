@@ -30,8 +30,8 @@ so you can focus on *leveraging* your favorite MediaWiki site's data,
 not getting it. Please check out the code on
 `github <https://www.github.com/barrust/mediawiki>`_!
 
-**Note:** this library was designed for ease of use and simplicity. If you plan 
-on doing serious scraping, automated requests, or editing, please look into 
+**Note:** this library was designed for ease of use and simplicity. If you plan
+on doing serious scraping, automated requests, or editing, please look into
 `Pywikipediabot <http://www.mediawiki.org/wiki/Manual:Pywikipediabot>`__
 which has a larger API, advanced rate limiting, and other features so we may
 be considerate of the MediaWiki infrastructure.
@@ -55,7 +55,7 @@ To install `mediawiki`, simply clone the `repository on GitHub
 
     $ python setup.py install
 
-`mediawiki` supports python versions 2.7 and 3.3 - 3.6
+`mediawiki` supports python versions 2.7 and 3.4 - 3.7
 
 Documentation
 -------------
@@ -98,6 +98,7 @@ Run more advanced searches:
 .. code:: python
 
     >>> wikipedia.opensearch('washington')
+    >>> wikipedia.allpages('a')
     >>> wikipedia.geosearch(title='washington, d.c.')
     >>> wikipedia.geosearch(latitude='0.0', longitude='0.0')
     >>> wikipedia.prefixsearch('arm')

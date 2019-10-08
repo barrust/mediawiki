@@ -60,6 +60,8 @@ def memoize(func):
         # handle possible unicode characters
         if sys.version_info < (3, 0):
             tmp = [unicode(x) for x in tmp]
+        else:
+            tmp = [str(x) for x in tmp]
         key = " - ".join(tmp)
 
         # set the value in the cache if missing or needs to be refreshed

@@ -21,6 +21,7 @@ MediaWiki
     .. automethod:: mediawiki.MediaWiki.login(username, password)
     .. automethod:: mediawiki.MediaWiki.suggest(query)
     .. automethod:: mediawiki.MediaWiki.search(query, results=10, suggestion=False)
+    .. automethod:: mediawiki.MediaWiki.allpages(query='', results=10)
     .. automethod:: mediawiki.MediaWiki.summary(title, sentences=0, chars=0, auto_suggest=True, redirect=True)
     .. automethod:: mediawiki.MediaWiki.geosearch(latitude=None, longitude=None, radius=1000, title=None, auto_suggest=True, results=10)
     .. automethod:: mediawiki.MediaWiki.prefixsearch(prefix, results=10)

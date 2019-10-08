@@ -392,6 +392,25 @@ class TestMediaWikiRandom(unittest.TestCase):
         self.assertRaises(ValueError, lambda: site.random(pages=None))
 
 
+class TestMediaWikiAllPages(unittest.TestCase):
+    ''' test Mediawiki AllPages functionality '''
+    def test_allpages(self):
+        ''' test using the all page query '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]['all_pages_query_a']
+
+        res = site.allpages("a")
+        self.assertEqual(response, res)
+
+    def test_allpages_num_results(self):
+        ''' test using the all page query with a limitting number '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]['all_pages_query_a_1']
+
+        res = site.allpages("a", results=1)
+        self.assertEqual(response, res)
+
+
 class TestMediaWikiSearch(unittest.TestCase):
     ''' test MediaWiki Page Search Functionality '''
     def test_search_no_sug(self):

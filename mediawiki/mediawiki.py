@@ -388,14 +388,26 @@ class MediaWiki(object):
             return titles[0]
         return titles
 
-    def allpages(self, query='', limit=10):
+    @memoize
+    def allpages(self, query='', results=10):
         """ Request all pages from mediawiki instance
+
+            Args:
+                query (str): Search string to use for pulling pages
+                results (int): The number of pages to return
+            Returns:
+                list: The pages that meet the search query
         """
-        query_params = {"list": "allpages",
-                        "aplimit": limit,
-                        "apfrom": query}
+        query_params = {
+            "list": "allpages",
+            "aplimit": results,
+            "apfrom": query,
+        }
 
         request = self.wiki_request(query_params)
+
+        self._check_error_response(request, query)
+
         titles = [page["title"] for page in request["query"]["allpages"]]
         return titles
 

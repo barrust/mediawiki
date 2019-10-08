@@ -71,6 +71,7 @@ PULL_ALL = False
 
 # Parameters to determine which tests to pull
 PULL_SEARCHES = False
+PULL_ALLPAGES = False
 PULL_RANDOM = False
 PULL_SUGGEST = False
 PULL_OPENSEARCH = False
@@ -169,6 +170,15 @@ if PULL_ALL is True or PULL_SEARCHES is True:
     responses[site.api_url]['search_with_suggestion_not_found_small'] = res
 
     print("Completed pulling searches")
+
+if PULL_ALL is True or PULL_ALLPAGES is True:
+    res = site.allpages('a')
+    responses[site.api_url]['all_pages_query_a'] = res
+
+    res = site.allpages("a", results=1)
+    responses[site.api_url]['all_pages_query_a_1'] = res
+
+    print("Completed pulling allpages")
 
 if PULL_ALL is True or PULL_RANDOM is True:
     responses[site.api_url]['random_1'] = site.random(pages=1)

@@ -100,6 +100,16 @@ Search for the provided title:
 >>> wikipedia.search('washington', results=3)
 # ['Washington', 'Washington, D.C.', 'List of Governors of Washington']
 
+allpages
+""""""""
+
+Search for the provided title:
+
+.. code: python
+
+>>> wikipedia.allpages('a', results=3)
+# ['A', 'A!', 'A! (Alexa Feser album)']
+
 geosearch
 """""""""
 

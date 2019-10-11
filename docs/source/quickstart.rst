@@ -223,9 +223,21 @@ Links to other MediaWiki pages
 Other Properties
 """"""""""""""""
 
-Other properties for a page include: `content`, `html`, `images`, `references`,
-`categories`, `coordinates`, `redirects`, `backlinks`, `summary`, `sections`,
-`logos`, and `hatnotes`
+Other properties for a page include:
+
+- `content`
+- `html`
+- `images`
+- `references`
+- `categories`
+- `coordinates`
+- `redirects`
+- `backlinks`
+- `langlinks`
+- `summary`,
+- `sections`
+- `logos`
+- `hatnotes`
 
 Summarize
 """"""""""""""""

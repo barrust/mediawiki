@@ -1,8 +1,9 @@
 # MediaWiki Changelog
 
-## Version 0.6.2 (future release)
+## Version 0.6.2
 
 * Add `allpages` functionaloty [PR #75](https://github.com/barrust/mediawiki/pull/75)
+* Add `langlinks` page property [PR #76](https://github.com/barrust/mediawiki/pull/76)
 
 ## Version 0.6.1
 

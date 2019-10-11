@@ -114,6 +114,7 @@ Pull a MediaWiki page and some of the page properties:
     >>> p.categories
     >>> p.images
     >>> p.links
+    >>> p.langlinks
 
 See the `Documentation for more examples!
 <http://pymediawiki.readthedocs.io/en/latest/quickstart.html#quickstart>`_

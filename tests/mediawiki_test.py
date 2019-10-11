@@ -1131,6 +1131,13 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual([str(coords[0]), str(coords[1])],
                          response['wash_mon'])
 
+    def test_page_langlinks(self):
+        ''' test a page language links property '''
+        site = MediaWikiOverloaded()
+        response = site.responses[site.api_url]['nobel_chemistry']['langlinks']
+        pag = site.page('Nobel Prize in Chemistry')
+        self.assertEqual(pag.langlinks, response)
+
     def test_page_sections(self):
         ''' test a page sections '''
         self.assertEqual(self.pag.sections,

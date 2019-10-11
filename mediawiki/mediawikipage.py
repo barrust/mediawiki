@@ -75,6 +75,7 @@ class MediaWikiPage(object):
         self._links = None
         self._redirects = None
         self._backlinks = None
+        self._langlinks = None
         self._summary = None
         self._sections = None
         self._table_of_contents = None
@@ -346,6 +347,32 @@ class MediaWikiPage(object):
             tmp = [link["title"] for link in self._continued_query(params, "backlinks")]
             self._backlinks = sorted(tmp)
         return self._backlinks
+
+    @property
+    def langlinks(self):
+        """ dict: Names of the page in other languages for which page is \
+            where the key is the language code and the page name is the name \
+            of the page in that language.
+
+        Note:
+            Not settable
+        Note:
+            list of all language links from the provided pages to other \
+            languages according to: \
+            https://www.mediawiki.org/wiki/API:Langlinks """
+
+        if self._langlinks is None:
+            params = {
+                'prop': 'langlinks',
+                'cllimit': 'max',
+            }
+            query_result = self._continued_query(params)
+
+            langlinks = dict()
+            for lang_info in query_result:
+                langlinks[lang_info['lang']] = lang_info['*']
+            self._langlinks = langlinks
+        return self._langlinks
 
     @property
     def summary(self):

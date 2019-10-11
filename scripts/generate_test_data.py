@@ -396,7 +396,13 @@ if PULL_ALL is True or PULL_PAGES is True:
     # other pages as they will be in the response object
     asoiaf.page('arya', auto_suggest=False)
 
+    # lang links property (standard wikipedia)
+    pg = site.page('Nobel Prize in Chemistry')
+    responses[site.api_url]['nobel_chemistry'] = dict()
+    responses[site.api_url]['nobel_chemistry']['langlinks'] = pg.langlinks
+
     print("Completed pulling pages and properties")
+
 
 if PULL_ALL is True or PULL_LOGOS is True:
     # single logo

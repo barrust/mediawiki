@@ -8,7 +8,7 @@ from __future__ import unicode_literals, absolute_import
 from decimal import Decimal
 import re
 from collections import OrderedDict
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag, UnicodeDammit
 from .utilities import str_or_unicode, is_relative_url
 from .exceptions import (
     MediaWikiException,
@@ -563,7 +563,7 @@ class MediaWikiPage(object):
             item = lis_item.find_all("a")
             one_disambiguation = dict()
             one_disambiguation["description"] = lis_item.text
-            if item and hasattr(item[0], "title"):
+            if item and item[0].has_attr("title"):
                 one_disambiguation["title"] = item[0]["title"]
             else:
                 # these are non-linked records so double up the text

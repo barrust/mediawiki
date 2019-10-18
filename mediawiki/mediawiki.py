@@ -330,7 +330,7 @@ class MediaWiki(object):
         try:
             self._get_site_info()
             self.__supported_languages = None  # reset this
-        except MediaWikiException:
+        except (requests.exceptions.ConnectTimeout, MediaWikiException):
             # reset api url and lang in the event that the exception was caught
             self._api_url = old_api_url
             self._lang = old_lang

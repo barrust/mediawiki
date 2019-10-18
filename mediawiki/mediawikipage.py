@@ -8,7 +8,7 @@ from __future__ import unicode_literals, absolute_import
 from decimal import Decimal
 import re
 from collections import OrderedDict
-from bs4 import BeautifulSoup, Tag, UnicodeDammit
+from bs4 import BeautifulSoup, Tag
 from .utilities import str_or_unicode, is_relative_url
 from .exceptions import (
     MediaWikiException,

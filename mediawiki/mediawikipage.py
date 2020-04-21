@@ -362,15 +362,12 @@ class MediaWikiPage(object):
             https://www.mediawiki.org/wiki/API:Langlinks """
 
         if self._langlinks is None:
-            params = {
-                'prop': 'langlinks',
-                'cllimit': 'max',
-            }
+            params = {"prop": "langlinks", "cllimit": "max"}
             query_result = self._continued_query(params)
 
             langlinks = dict()
             for lang_info in query_result:
-                langlinks[lang_info['lang']] = lang_info['*']
+                langlinks[lang_info["lang"]] = lang_info["*"]
             self._langlinks = langlinks
         return self._langlinks
 

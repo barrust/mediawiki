@@ -22,7 +22,7 @@ from .mediawikipage import MediaWikiPage
 from .utilities import memoize
 
 URL = "https://github.com/barrust/mediawiki"
-VERSION = "0.6.3"
+VERSION = "0.6.4"
 
 
 class MediaWiki(object):
@@ -42,7 +42,9 @@ class MediaWiki(object):
                               requests; defults to a library version but per \
                               the MediaWiki API documentation it recommends \
                               setting a unique one and not using the \
-                              library's default user-agent string """
+                              library's default user-agent string
+            username (str): The username to use to log into the MediaWiki
+            password (str): The password to use to log into the MediaWiki """
 
     def __init__(
         self,
@@ -53,6 +55,8 @@ class MediaWiki(object):
         rate_limit_wait=timedelta(milliseconds=50),
         cat_prefix="Category",
         user_agent=None,
+        username=None,
+        password=None,
     ):
         """ Init Function """
         self._version = VERSION
@@ -83,11 +87,14 @@ class MediaWiki(object):
         self._refresh_interval = None
         self._use_cache = True
 
-        # for login information
-        self._is_logged_in = False
-
         # call helper functions to get everything set up
         self._reset_session()
+
+        # for login information
+        self._is_logged_in = False
+        if password is not None and username is not None:
+            self.login(username, password)
+
         try:
             self._get_site_info()
         except MediaWikiException:
@@ -232,7 +239,10 @@ class MediaWiki(object):
 
     @user_agent.setter
     def user_agent(self, user_agent):
-        """ Set the new user agent string """
+        """ Set the new user agent string
+
+            Note: Will need to re-log into the MediaWiki if user agent string \
+                 is changed """
         self._user_agent = user_agent
         self._reset_session()
 
@@ -314,20 +324,32 @@ class MediaWiki(object):
         return False
 
     # non-properties
-    def set_api_url(self, api_url="https://{lang}.wikipedia.org/w/api.php", lang="en"):
+    def set_api_url(
+        self,
+        api_url="https://{lang}.wikipedia.org/w/api.php",
+        lang="en",
+        username=None,
+        password=None,
+    ):
         """ Set the API URL and language
 
             Args:
                 api_url (str): API URL to use
                 lang (str): Language of the API URL
+                username (str): The username, if needed, to log into the MediaWiki site
+                password (str): The password, if needed, to log into the MediaWiki site
             Raises:
                 :py:func:`mediawiki.exceptions.MediaWikiAPIURLError`: if the \
-                url is not a valid MediaWiki site """
+                url is not a valid MediaWiki site or login fails """
         old_api_url = self._api_url
         old_lang = self._lang
         self._lang = lang.lower()
         self._api_url = api_url.format(lang=self._lang)
+
+        self._is_logged_in = False
         try:
+            if username is not None and password is not None:
+                self.login(username, password)
             self._get_site_info()
             self.__supported_languages = None  # reset this
         except (requests.exceptions.ConnectTimeout, MediaWikiException):
@@ -389,7 +411,7 @@ class MediaWiki(object):
         return titles
 
     @memoize
-    def allpages(self, query='', results=10):
+    def allpages(self, query="", results=10):
         """ Request all pages from mediawiki instance
 
             Args:
@@ -398,11 +420,7 @@ class MediaWiki(object):
             Returns:
                 list: The pages that meet the search query
         """
-        query_params = {
-            "list": "allpages",
-            "aplimit": results,
-            "apfrom": query,
-        }
+        query_params = {"list": "allpages", "aplimit": results, "apfrom": query}
 
         request = self.wiki_request(query_params)
 

@@ -1,5 +1,14 @@
 # MediaWiki Changelog
 
+## Version 0.6.4
+
+* Add ability to login during initialization [issue #79](https://github.com/barrust/mediawiki/issues/79)
+
+## Version 0.6.3
+
+* Capture timeout exception
+* bs4 does not support `hasattr` but uses `*.has_attr()`
+
 ## Version 0.6.2
 
 * Add `allpages` functionaloty [PR #75](https://github.com/barrust/mediawiki/pull/75)

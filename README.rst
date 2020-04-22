@@ -5,7 +5,7 @@ MediaWiki
     :target: https://opensource.org/licenses/MIT/
     :alt: License
 .. image:: https://img.shields.io/github/release/barrust/mediawiki.svg
-    :target: https://GitHub.com/Naereen/StrapDown.js/releases/
+    :target: https://github.com/barrust/mediawiki/releases
     :alt: GitHub release
 .. image:: https://badge.fury.io/py/pymediawiki.svg
     :target: https://badge.fury.io/py/pymediawiki

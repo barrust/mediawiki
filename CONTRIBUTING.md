@@ -25,7 +25,7 @@ bugs and issues, request enhancements, and issue pull requests.
 
 #### Issues and Bug Reports
 
-If you have found an issue with pymediawiki, please do not hesitate to let us
+If you have found an issue with `pymediawiki`, please do not hesitate to let us
 know! Before submitting an issue or bug report, we ask that you complete a few
 cursory items:
 
@@ -38,8 +38,8 @@ quickly.
 trying to which you are trying to connect. There are times where the MediaWiki
 site may refuse connections or throw an error. There are times when trying
 again is all that is needed! If the error is the MediaWiki site, please do not
-report an issue as there is nothing we can do to help. If it is something
-within the library, please do not hesitate to report the issue!
+report an issue as there is nothing we can do to help. If, however it is
+something within the library, please do not hesitate to report the issue!
 
 * **Determine** that the issue is reproducible - a code sample of the issue
 will help narrow down the search for the cause of the issue and may lead to a
@@ -60,14 +60,14 @@ with syntax highlighting
 * The link to the API URL if not the default:
 [Wikipedia API](http://en.wikipedia.org/w/api.php)
 
-* The affected version(s) of pymediawiki
+* The affected version(s) of `pymediawiki`
 
 #### Enhancements
 
 Enhancements are additional functionality not currently supported by the
-pymediawiki library. Unfortunately, not all enhancements make sense for the
+`pymediawiki` library. Unfortunately, not all enhancements make sense for the
 goal of the project. If you have a desired feature, there are a few things you
-can do to possibly help get the feature into the pymediawiki library:
+can do to possibly help get the feature into the `pymediawiki` library:
 
 * **Review** to see if the feature has been requested in the past.
 
@@ -140,11 +140,11 @@ The MediaWiki API wrapper project also uses [pylint](https://www.pylint.org/)
 to help identify potential errors, code duplication, and non-pythonic syntax.
 Adhering to pylint's results is not strictly required.
 
-To install the [PEP8 compliance checker](https://pypi.python.org/pypi/pep8),
+To install the [PEP8 compliance checker](https://pypi.org/project/pycodestyle/),
 you can simply run the following:
 
 ```
-pip install pep8
+pip install pycodestyle
 ```
 
 To test for PEP8 compliance, run the following from the root directory:
@@ -155,7 +155,7 @@ pep8 mediawiki
 
 ### Code Contributors:
 
-A special thanks to all the code contributors to pymediawiki!
+A special thanks to all the code contributors to `pymediawiki`!
 
 [@barrust](https://github.com/barrust) (Maintainer)
 

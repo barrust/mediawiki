@@ -1,5 +1,12 @@
 MediaWiki
 =========
+
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :target: https://opensource.org/licenses/MIT/
+    :alt: License
+.. image:: https://img.shields.io/github/release/barrust/mediawiki.svg
+    :target: https://GitHub.com/Naereen/StrapDown.js/releases/
+    :alt: GitHub release
 .. image:: https://badge.fury.io/py/pymediawiki.svg
     :target: https://badge.fury.io/py/pymediawiki
 .. image:: https://travis-ci.org/barrust/mediawiki.svg?branch=master
@@ -11,9 +18,6 @@ MediaWiki
 .. image:: https://api.codacy.com/project/badge/Grade/afa87d5f5b6e4e66b78e15dedbc097ec
     :target: https://www.codacy.com/app/barrust/mediawiki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=barrust/mediawiki&amp;utm_campaign=Badge_Grade
     :alt: Codacy Review
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg
-    :target: https://opensource.org/licenses/MIT/
-    :alt: License
 .. image:: http://pepy.tech/badge/pymediawiki
     :target: http://pepy.tech/count/pymediawiki
     :alt: Downloads

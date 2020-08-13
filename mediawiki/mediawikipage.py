@@ -43,6 +43,30 @@ class MediaWikiPage(object):
         Warning:
             This should never need to be used directly! Please use \
             :func:`mediawiki.MediaWiki.page` """
+    __slots__ = [
+        "mediawiki",
+        "url",
+        "title",
+        "original_title",
+        "pageid",
+        "_content",
+        "_revision_id",
+        "_parent_id",
+        "_html",
+        "_images",
+        "_references",
+        "_categories",
+        "_coordinates",
+        "_links",
+        "_redirects",
+        "_backlinks",
+        "_langlinks",
+        "_summary",
+        "_sections",
+        "_table_of_contents",
+        "_logos",
+        "_hatnotes",
+    ]
 
     def __init__(
         self,
@@ -99,7 +123,7 @@ class MediaWikiPage(object):
         if preload:
             for prop in preload_props:
                 getattr(self, prop)
-        # end __init__
+    # end __init__
 
     def __repr__(self):
         """ repr """
@@ -763,10 +787,7 @@ class MediaWikiPage(object):
             request = self.mediawiki.wiki_request(params)
             idx += 1
 
-            # print(idx)
-            # quick exit
             if "query" not in request:
-                # print(request)
                 break
 
             keys = [

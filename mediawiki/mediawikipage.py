@@ -563,8 +563,7 @@ class MediaWikiPage(object):
         """ raise the correct type of page error """
         if hasattr(self, "title"):
             raise PageError(title=self.title)
-        else:
-            raise PageError(pageid=self.pageid)
+        raise PageError(pageid=self.pageid)
 
     def _raise_disambiguation_error(self, page, pageid):
         """ parse and throw a disambiguation error """
@@ -675,7 +674,7 @@ class MediaWikiPage(object):
         for node in soup.find(id=id_tag).parent.next_siblings:
             if not isinstance(node, Tag):
                 continue
-            elif node.get("role", "") == "navigation":
+            if node.get("role", "") == "navigation":
                 continue
             elif "infobox" in node.get("class", []):
                 continue
@@ -684,7 +683,7 @@ class MediaWikiPage(object):
             is_headline = node.find("span", {"class": "mw-headline"})
             if is_headline is not None:
                 break
-            elif node.name == "a":
+            if node.name == "a":
                 all_links.append(self.__parse_link_info(node))
             else:
                 for link in node.findAll("a"):

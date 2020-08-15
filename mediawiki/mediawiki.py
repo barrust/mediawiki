@@ -944,10 +944,9 @@ class MediaWiki(object):
             err = response["error"]["info"]
             if err in http_error:
                 raise HTTPTimeoutError(query)
-            elif err in geo_error:
+            if err in geo_error:
                 raise MediaWikiGeoCoordError(err)
-            else:
-                raise MediaWikiException(err)
+            raise MediaWikiException(err)
 
     @staticmethod
     def _check_query(value, message):

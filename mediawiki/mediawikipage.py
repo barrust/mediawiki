@@ -11,6 +11,7 @@ from collections import OrderedDict
 from bs4 import BeautifulSoup, Tag
 from .utilities import str_or_unicode, is_relative_url
 from .exceptions import (
+    MediaWikiBaseException,
     MediaWikiException,
     PageError,
     RedirectError,
@@ -161,9 +162,13 @@ class MediaWikiPage(object):
             query_params.update(self.__title_query_param())
             request = self.mediawiki.wiki_request(query_params)
             page_info = request["query"]["pages"][self.pageid]
-            self._content = page_info["extract"]
+            self._content = page_info.get("extract", None)
             self._revision_id = page_info["revisions"][0]["revid"]
             self._parent_id = page_info["revisions"][0]["parentid"]
+
+            if self._content is None and 'TextExtracts' not in self.mediawiki.extensions:
+                msg = "Unable to extract page content; the TextExtracts extension must be installed!"
+                raise MediaWikiBaseException(msg)
         return self._content, self._revision_id, self._parent_id
 
     @property
@@ -428,7 +433,7 @@ class MediaWikiPage(object):
             query_params["exintro"] = ""
 
         request = self.mediawiki.wiki_request(query_params)
-        summary = request["query"]["pages"][self.pageid]["extract"]
+        summary = request["query"]["pages"][self.pageid].get("extract")
         return summary
 
     @property
@@ -819,7 +824,7 @@ class MediaWikiPage(object):
         self._redirects = sorted(tmp)
 
         # summary
-        self._summary = results["extract"]
+        self._summary = results.get("extract")
 
         # links
         tmp = [link["title"] for link in results.get("links", list())]

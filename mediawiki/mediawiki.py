@@ -46,6 +46,28 @@ class MediaWiki(object):
             username (str): The username to use to log into the MediaWiki
             password (str): The password to use to log into the MediaWiki """
 
+    __slots__ = [
+        "_version",
+        "_lang",
+        "_api_url",
+        "_cat_prefix",
+        "_timeout",
+        "_user_agent",
+        "_session",
+        "_rate_limit",
+        "_rate_limit_last_call",
+        "_min_wait",
+        "_extensions",
+        "_api_version",
+        "_api_version_str",
+        "_base_url",
+        "__supported_languages",
+        "_cache",
+        "_refresh_interval",
+        "_use_cache",
+        "_is_logged_in",
+    ]
+
     def __init__(
         self,
         url="https://{lang}.wikipedia.org/w/api.php",
@@ -577,7 +599,6 @@ class MediaWiki(object):
         res = list()
         for i, item in enumerate(results[1]):
             res.append((item, results[2][i], results[3][i]))
-
         return res
 
     @memoize
@@ -831,16 +852,14 @@ class MediaWiki(object):
                 Title takes precedence over pageid if both are provided """
         if (title is None or title.strip() == "") and pageid is None:
             raise ValueError("Either a title or a pageid must be specified")
-        elif title:
+        if title:
             if auto_suggest:
                 temp_title = self.suggest(title)
                 if temp_title is None:  # page doesn't exist
                     raise PageError(title=title)
-                else:
-                    title = temp_title
+                title = temp_title
             return MediaWikiPage(self, title, redirect=redirect, preload=preload)
-        else:  # must be pageid
-            return MediaWikiPage(self, pageid=pageid, preload=preload)
+        return MediaWikiPage(self, pageid=pageid, preload=preload)
 
     def wiki_request(self, params):
         """ Make a request to the MediaWiki API using the given search
@@ -924,10 +943,9 @@ class MediaWiki(object):
             err = response["error"]["info"]
             if err in http_error:
                 raise HTTPTimeoutError(query)
-            elif err in geo_error:
+            if err in geo_error:
                 raise MediaWikiGeoCoordError(err)
-            else:
-                raise MediaWikiException(err)
+            raise MediaWikiException(err)
 
     @staticmethod
     def _check_query(value, message):

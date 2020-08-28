@@ -11,6 +11,7 @@ from collections import OrderedDict
 from bs4 import BeautifulSoup, Tag
 from .utilities import str_or_unicode, is_relative_url
 from .exceptions import (
+    MediaWikiBaseException,
     MediaWikiException,
     PageError,
     RedirectError,
@@ -43,6 +44,30 @@ class MediaWikiPage(object):
         Warning:
             This should never need to be used directly! Please use \
             :func:`mediawiki.MediaWiki.page` """
+    __slots__ = [
+        "mediawiki",
+        "url",
+        "title",
+        "original_title",
+        "pageid",
+        "_content",
+        "_revision_id",
+        "_parent_id",
+        "_html",
+        "_images",
+        "_references",
+        "_categories",
+        "_coordinates",
+        "_links",
+        "_redirects",
+        "_backlinks",
+        "_langlinks",
+        "_summary",
+        "_sections",
+        "_table_of_contents",
+        "_logos",
+        "_hatnotes",
+    ]
 
     def __init__(
         self,
@@ -99,7 +124,7 @@ class MediaWikiPage(object):
         if preload:
             for prop in preload_props:
                 getattr(self, prop)
-        # end __init__
+    # end __init__
 
     def __repr__(self):
         """ repr """
@@ -137,9 +162,13 @@ class MediaWikiPage(object):
             query_params.update(self.__title_query_param())
             request = self.mediawiki.wiki_request(query_params)
             page_info = request["query"]["pages"][self.pageid]
-            self._content = page_info["extract"]
+            self._content = page_info.get("extract", None)
             self._revision_id = page_info["revisions"][0]["revid"]
             self._parent_id = page_info["revisions"][0]["parentid"]
+
+            if self._content is None and 'TextExtracts' not in self.mediawiki.extensions:
+                msg = "Unable to extract page content; the TextExtracts extension must be installed!"
+                raise MediaWikiBaseException(msg)
         return self._content, self._revision_id, self._parent_id
 
     @property
@@ -404,7 +433,7 @@ class MediaWikiPage(object):
             query_params["exintro"] = ""
 
         request = self.mediawiki.wiki_request(query_params)
-        summary = request["query"]["pages"][self.pageid]["extract"]
+        summary = request["query"]["pages"][self.pageid].get("extract")
         return summary
 
     @property
@@ -534,8 +563,7 @@ class MediaWikiPage(object):
         """ raise the correct type of page error """
         if hasattr(self, "title"):
             raise PageError(title=self.title)
-        else:
-            raise PageError(pageid=self.pageid)
+        raise PageError(pageid=self.pageid)
 
     def _raise_disambiguation_error(self, page, pageid):
         """ parse and throw a disambiguation error """
@@ -646,7 +674,7 @@ class MediaWikiPage(object):
         for node in soup.find(id=id_tag).parent.next_siblings:
             if not isinstance(node, Tag):
                 continue
-            elif node.get("role", "") == "navigation":
+            if node.get("role", "") == "navigation":
                 continue
             elif "infobox" in node.get("class", []):
                 continue
@@ -655,7 +683,7 @@ class MediaWikiPage(object):
             is_headline = node.find("span", {"class": "mw-headline"})
             if is_headline is not None:
                 break
-            elif node.name == "a":
+            if node.name == "a":
                 all_links.append(self.__parse_link_info(node))
             else:
                 for link in node.findAll("a"):
@@ -763,10 +791,7 @@ class MediaWikiPage(object):
             request = self.mediawiki.wiki_request(params)
             idx += 1
 
-            # print(idx)
-            # quick exit
             if "query" not in request:
-                # print(request)
                 break
 
             keys = [
@@ -798,7 +823,7 @@ class MediaWikiPage(object):
         self._redirects = sorted(tmp)
 
         # summary
-        self._summary = results["extract"]
+        self._summary = results.get("extract")
 
         # links
         tmp = [link["title"] for link in results.get("links", list())]

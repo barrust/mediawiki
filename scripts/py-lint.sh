@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pip install pylint --upgrade
+
 pylint mediawiki/
 
 echo 'pylint status code:' $?

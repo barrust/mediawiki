@@ -500,7 +500,7 @@ class MediaWiki(object):
                                 suggestion found """
         res, suggest = self.search(query, results=1, suggestion=True)
         try:
-            title = suggest or res[0]
+            title = res[0] or suggest
         except IndexError:  # page doesn't exist
             title = None
         return title

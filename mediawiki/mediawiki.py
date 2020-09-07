@@ -304,7 +304,7 @@ class MediaWiki(object):
             Args:
                 username (str): The username to log in with
                 password (str): The password for the user
-                strict (bool): `True` to thow an error on failure
+                strict (bool): `True` to throw an error on failure
             Returns:
                 bool: `True` if successfully logged in; `False` otherwise
             Raises:
@@ -520,9 +520,9 @@ class MediaWiki(object):
 
             Args:
                 latitude (Decimal or None): Latitude geocoord; must be \
-                                            coercable to decimal
+                                            coercible to decimal
                 longitude (Decimal or None): Longitude geocoord; must be \
-                                             coercable to decimal
+                                             coercible to decimal
                 radius (int): Radius around page or geocoords to pull back; \
                               in meters
                 title (str): Page title to use as a geocoordinate; this has \
@@ -533,7 +533,7 @@ class MediaWiki(object):
                 list: A listing of page titles
             Raises:
                 ValueError: If either the passed latitutde or longitude are \
-                            not coercable to a Decimal """
+                            not coercible to a Decimal """
 
         def test_lat_long(val):
             """ handle testing lat and long """
@@ -654,7 +654,7 @@ class MediaWiki(object):
 
     @memoize
     def categorymembers(self, category, results=10, subcategories=True):
-        """ Get informaton about a category: pages and subcategories
+        """ Get information about a category: pages and subcategories
 
             Args:
                 category (str): Category name

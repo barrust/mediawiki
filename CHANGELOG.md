@@ -36,7 +36,7 @@
 ## Version 0.4.1
 
 * Default to `https`
-* Add `category_prefix` property to properly support categories in non-Engish
+* Add `category_prefix` property to properly support categories in non-English
 MediaWiki sites [issue #48](https://github.com/barrust/mediawiki/issues/48)
 * Add `user_agent` as an initialization parameter and added information to the
 documentation about why one should set the user-agent string [issue #50](https://github.com/barrust/mediawiki/issues/50)

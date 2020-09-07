@@ -38,11 +38,11 @@ class MediaWikiException(MediaWikiBaseException):
     """ MediaWiki Exception Class
 
         Args:
-            error (str): The error message that the MediaWiki site retuned """
+            error (str): The error message that the MediaWiki site returned """
 
     def __init__(self, error):
         self._error = error
-        msg = ('An unknown error occured: "{0}". Please report it on GitHub!').format(
+        msg = ('An unknown error occurred: "{0}". Please report it on GitHub!').format(
             self.error
         )
         super(MediaWikiException, self).__init__(msg)
@@ -121,7 +121,7 @@ class DisambiguationError(MediaWikiBaseException):
             title (str): Title that resulted in a disambiguation page
             may_refer_to (list): List of possible titles
             url (str): Full URL to the disambiguation page
-            details (dict): A list of dictionaries with more inforation of \
+            details (dict): A list of dictionaries with more information of \
                             possible results
         Note:
             `options` only includes titles that link to valid \

@@ -8,7 +8,7 @@ out in some way! I am very grateful for any help and support.
 ### Table Of Contents
 * [Contributing](#contributing)
 * [Issues and Bug Reports](#issues-and-bug-reports)
-* [Enhancement Requets](#enhancements)
+* [Enhancement Requests](#enhancements)
 * [Submitting Pull Requests](#pull-requests)
 * [Testing](#testing)
 * [Coding Style](#coding-style)
@@ -53,7 +53,7 @@ A **great bug report** will consist of the following:
 
 * Description of the expected results
 
-* An code example to reproduce the error. Please use
+* A code example to reproduce the error. Please use
 [Markdown code blocks](https://help.github.com/articles/creating-and-highlighting-code-blocks/)
 with syntax highlighting
 

@@ -616,7 +616,7 @@ class TestMediaWikiSummary(unittest.TestCase):
         res = response['summarize_chars_50']
         sumr = site.summary('chess', chars=50)
         self.assertEqual(res, sumr)
-        self.assertEqual(len(res), 54)  # add the elipses
+        self.assertEqual(len(res), 54)  # add the ellipses
 
     def test_summarize_sents(self):
         ''' test summarize number sentences '''
@@ -916,7 +916,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
         try:
             raise MediaWikiException(error)
         except MediaWikiException as ex:
-            msg = ('An unknown error occured: "{0}". Please report '
+            msg = ('An unknown error occurred: "{0}". Please report '
                    'it on GitHub!').format(error)
             self.assertEqual(ex.message, msg)
 
@@ -926,7 +926,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
         try:
             raise MediaWikiException(error)
         except MediaWikiException as ex:
-            msg = ('An unknown error occured: "{0}". Please report '
+            msg = ('An unknown error occurred: "{0}". Please report '
                    'it on GitHub!').format(error)
             self.assertEqual(str(ex), msg)
 
@@ -965,7 +965,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
         try:
             site._check_error_response(response, query)
         except MediaWikiException as ex:
-            msg = ('An unknown error occured: "{0}". Please report '
+            msg = ('An unknown error occurred: "{0}". Please report '
                    'it on GitHub!').format(response['error']['info'])
             self.assertEqual(str(ex), msg)
 

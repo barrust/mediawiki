@@ -265,7 +265,7 @@ class MediaWikiPage(object):
             soup = BeautifulSoup(self.html, "html.parser")
             info = soup.find("table", {"class": "infobox"})
             if info is not None:
-                children = info.findAll("", {"class": "image"})
+                children = info.find_all("a", class_="image")
                 for child in children:
                     self._logos.append("https:" + child.img["src"])
         return self._logos
@@ -283,7 +283,7 @@ class MediaWikiPage(object):
         if self._hatnotes is None:
             self._hatnotes = list()
             soup = BeautifulSoup(self.html, "html.parser")
-            notes = soup.findAll("", {"class": "hatnote"})
+            notes = soup.find_all("div", class_="hatnote")
             if notes is not None:
                 for note in notes:
                     tmp = list()
@@ -513,7 +513,7 @@ class MediaWikiPage(object):
             Note:
                 This is a parsing operation and not part of the standard API"""
         soup = BeautifulSoup(self.html, "html.parser")
-        headlines = soup.find_all("span", {"class": "mw-headline"})
+        headlines = soup.find_all("span", class_="mw-headline")
         tmp_soup = BeautifulSoup(section_title, "html.parser")
         tmp_sec_title = tmp_soup.get_text().lower()
         id_tag = None
@@ -686,7 +686,7 @@ class MediaWikiPage(object):
             if node.name == "a":
                 all_links.append(self.__parse_link_info(node))
             else:
-                for link in node.findAll("a"):
+                for link in node.find_all("a"):
                     all_links.append(self.__parse_link_info(link))
         return all_links
 

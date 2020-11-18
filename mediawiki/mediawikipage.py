@@ -515,7 +515,6 @@ class MediaWikiPage(object):
             Note:
                 This is a parsing operation and not part of the standard API"""
         # Cache the results of parsing the html, so that multiple calls happen much faster
-        print("using custom function")
         if not self._soup:
             self._soup = BeautifulSoup(self.html, "html.parser")        
         

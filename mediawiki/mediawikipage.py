@@ -505,7 +505,8 @@ class MediaWikiPage(object):
         """ Parse all links within a section
 
             Args:
-                section_title (str): Name of the section to pull
+                section_title (str or 0): Name of the section to pull, 0 for all text
+                between the main heading and the first section.
             Returns:
                 list: List of (title, url) tuples
             Note:
@@ -517,6 +518,9 @@ class MediaWikiPage(object):
         # Cache the results of parsing the html, so that multiple calls happen much faster
         if not self._soup:
             self._soup = BeautifulSoup(self.html, "html.parser")
+
+        if section_title == 0:
+            self._parse_section_links(0)
 
         headlines = self._soup.find_all("span", class_="mw-headline")
         tmp_soup = BeautifulSoup(section_title, "html.parser")
@@ -669,21 +673,33 @@ class MediaWikiPage(object):
 
     def _parse_section_links(self, id_tag):
         """ given a section id, parse the links in the unordered list """
-
-        info = self._soup.find("span", {"id": id_tag})
         all_links = list()
 
-        if info is None:
-            return all_links
+        if id_tag == 0:
+            root = self._soup.find("div", {"class": "mw-parser-output"})
 
-        for node in self._soup.find(id=id_tag).parent.next_siblings:
+            if root is None:
+                return all_links
+
+            candidates = root.children
+        else:
+            root = self._soup.find("span", {"id": id_tag})
+            if root is None:
+                return all_links
+            candidates = self._soup.find(id=id_tag).parent.next_siblings
+
+        for node in candidates:
             if not isinstance(node, Tag):
                 continue
             if node.get("role", "") == "navigation":
                 continue
             elif "infobox" in node.get("class", []):
                 continue
-
+            # If the classname contains "toc", the element is a table of contents.
+            # The comprehension is necessary because there are several possible types of tocs: "toclevel", "toc", ...
+            toc_classnames = [classname for classname in node.get("class", []) if "toc" in classname]
+            if toc_classnames:
+                continue
             # this is actually the child node's class...
             is_headline = node.find("span", {"class": "mw-headline"})
             if is_headline is not None:

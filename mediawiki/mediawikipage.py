@@ -516,8 +516,8 @@ class MediaWikiPage(object):
                 This is a parsing operation and not part of the standard API"""
         # Cache the results of parsing the html, so that multiple calls happen much faster
         if not self._soup:
-            self._soup = BeautifulSoup(self.html, "html.parser")        
-        
+            self._soup = BeautifulSoup(self.html, "html.parser")
+
         headlines = self._soup.find_all("span", class_="mw-headline")
         tmp_soup = BeautifulSoup(section_title, "html.parser")
         tmp_sec_title = tmp_soup.get_text().lower()
@@ -669,7 +669,7 @@ class MediaWikiPage(object):
 
     def _parse_section_links(self, id_tag):
         """ given a section id, parse the links in the unordered list """
-    
+
         info = self._soup.find("span", {"id": id_tag})
         all_links = list()
 

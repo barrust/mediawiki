@@ -520,7 +520,7 @@ class MediaWikiPage(object):
             self._soup = BeautifulSoup(self.html, "html.parser")
 
         if section_title == 0:
-            self._parse_section_links(0)
+            return self._parse_section_links(0)
 
         headlines = self._soup.find_all("span", class_="mw-headline")
         tmp_soup = BeautifulSoup(section_title, "html.parser")

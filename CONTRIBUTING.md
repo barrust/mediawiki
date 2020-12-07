@@ -166,3 +166,5 @@ A special thanks to all the code contributors to `pymediawiki`!
 [@flamableconcrete](https://github.com/flamableconcrete) - Added `allpages` functionality [#75](https://github.com/barrust/mediawiki/pull/75)
 
 [@shnela](https://github.com/shnela) - Added `langlinks` property [#65](https://github.com/barrust/mediawiki/issues/65)
+
+[rubabredwan](https://github.com/rubabredwan) - Fix for `suggest` [#85](https://github.com/barrust/mediawiki/pull/85)

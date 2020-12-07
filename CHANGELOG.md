@@ -1,8 +1,15 @@
 # MediaWiki Changelog
 
+## Version 0.6.7
+
+* ***NOTE:*** Last planed support for **Python 2.7**
+* Cache results of `BeautifulSoup` parsing of `page.html` [PR #90](https://github.com/barrust/mediawiki/pull/90) Thank [ldorigo](https://github.com/ldorigo)
+* Move to GitHib Actions and CodeCov for testing
+
+
 ## Version 0.6.6
 
-Fix a bug using `find_all()` on newer versions of BeautifulSoup4
+* Fix a bug using `find_all()` on newer versions of BeautifulSoup4
 
 ## Version 0.6.5
 

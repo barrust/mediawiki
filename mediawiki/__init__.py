@@ -27,6 +27,7 @@ __bugtrack_url__ = "{0}/issues".format(URL)
 
 __all__ = [
     "MediaWiki",
+    "MediaWikiPage",
     "PageError",
     "RedirectError",
     "MediaWikiException",

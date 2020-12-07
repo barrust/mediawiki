@@ -19,6 +19,10 @@ import mediawiki
 from .utilities import find_depth, FunctionUseCounter
 
 
+if sys.version_info[0] >= 3:
+    unicode = str
+
+
 class MediaWikiOverloaded(MediaWiki):
     ''' Overload the MediaWiki class to change how wiki_request works '''
     def __init__(self, url='https://{lang}.wikipedia.org/w/api.php', lang='en',

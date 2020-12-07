@@ -40,7 +40,7 @@ setuptools.setup(
     url=__url__,
     download_url="{0}/tarball/v{1}".format(__url__, __version__),
     bugtrack_url=__bugtrack_url__,
-    install_requires=read_file("./requirements/python").splitlines(),
+    install_requires=read_file("requirements.txt").splitlines(),
     packages=["mediawiki"],
     long_description=read_file("README.rst"),
     classifiers=[

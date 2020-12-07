@@ -695,7 +695,7 @@ class MediaWiki(object):
                 elif rec["type"] == "subcat":
                     tmp = rec["title"]
                     if tmp.startswith(self.category_prefix):
-                        tmp = tmp[len(self.category_prefix) + 1 :]
+                        tmp = tmp[len(self.category_prefix) + 1:]
                     subcats.append(tmp)
 
             cont = raw_res.get("query-continue", False)
@@ -746,89 +746,17 @@ class MediaWiki(object):
 
             .. versionadded:: 0.3.10 """
 
-        def __cat_tree_rec(cat, depth, tree, level, categories, links):
-            """ recursive function to build out the tree """
-            tree[cat] = dict()
-            tree[cat]["depth"] = level
-            tree[cat]["sub-categories"] = dict()
-            tree[cat]["links"] = list()
-            tree[cat]["parent-categories"] = list()
-            parent_cats = list()
-
-            if cat not in categories:
-                tries = 0
-                while True:
-                    if tries > 10:
-                        raise MediaWikiCategoryTreeError(cat)
-                    try:
-                        pag = self.page("{0}:{1}".format(self.category_prefix, cat))
-                        categories[cat] = pag
-                        parent_cats = categories[cat].categories
-                        links[cat] = self.categorymembers(
-                            cat, results=None, subcategories=True
-                        )
-                        break
-                    except PageError:
-                        raise PageError("{0}:{1}".format(self.category_prefix, cat))
-                    except KeyboardInterrupt:
-                        raise
-                    except Exception:
-                        tries = tries + 1
-                        time.sleep(1)
-            else:
-                parent_cats = categories[cat].categories
-
-            tree[cat]["parent-categories"].extend(parent_cats)
-            tree[cat]["links"].extend(links[cat][0])
-
-            if depth and level >= depth:
-                for ctg in links[cat][1]:
-                    tree[cat]["sub-categories"][ctg] = None
-            else:
-                for ctg in links[cat][1]:
-                    __cat_tree_rec(
-                        ctg,
-                        depth,
-                        tree[cat]["sub-categories"],
-                        level + 1,
-                        categories,
-                        links,
-                    )
-
-        # ###################################
-        # ### Actual Function Code        ###
-        # ###################################
-
         # make it simple to use both a list or a single category term
-        if not isinstance(category, list):
-            cats = [category]
-        else:
-            cats = category
+        cats = [category] if not isinstance(category, list) else category
 
-        # parameter verification
-        if len(cats) == 1 and (cats[0] is None or cats[0] == ""):
-            msg = (
-                "CategoryTree: Parameter 'category' must either "
-                "be a list of one or more categories or a string; "
-                "provided: '{}'".format(category)
-            )
-            raise ValueError(msg)
-
-        if depth is not None and depth < 1:
-            msg = (
-                "CategoryTree: Parameter 'depth' must be either None "
-                "(for the full tree) or be greater than 0"
-            )
-            raise ValueError(msg)
+        self.__category_parameter_verification(cats, depth, category)
 
         results = dict()
         categories = dict()
         links = dict()
 
-        for cat in cats:
-            if cat is None or cat == "":
-                continue
-            __cat_tree_rec(cat, depth, results, 0, categories, links)
+        for cat in [x for x in cats if x]:
+            self.__cat_tree_rec(cat, depth, results, 0, categories, links)
         return results
 
     def page(
@@ -953,6 +881,73 @@ class MediaWiki(object):
         if value is None or value.strip() == "":
             raise ValueError(message)
 
+    @staticmethod
+    def __category_parameter_verification(cats, depth, category):
+        # parameter verification
+        if len(cats) == 1 and (cats[0] is None or cats[0] == ""):
+            msg = (
+                "CategoryTree: Parameter 'category' must either "
+                "be a list of one or more categories or a string; "
+                "provided: '{}'".format(category)
+            )
+            raise ValueError(msg)
+
+        if depth is not None and depth < 1:
+            msg = (
+                "CategoryTree: Parameter 'depth' must be either None "
+                "(for the full tree) or be greater than 0"
+            )
+            raise ValueError(msg)
+
+    def __cat_tree_rec(self, cat, depth, tree, level, categories, links):
+        """ recursive function to build out the tree """
+        tree[cat] = dict()
+        tree[cat]["depth"] = level
+        tree[cat]["sub-categories"] = dict()
+        tree[cat]["links"] = list()
+        tree[cat]["parent-categories"] = list()
+        parent_cats = list()
+
+        if cat not in categories:
+            tries = 0
+            while True:
+                if tries > 10:
+                    raise MediaWikiCategoryTreeError(cat)
+                try:
+                    pag = self.page("{0}:{1}".format(self.category_prefix, cat))
+                    categories[cat] = pag
+                    parent_cats = categories[cat].categories
+                    links[cat] = self.categorymembers(
+                        cat, results=None, subcategories=True
+                    )
+                    break
+                except PageError:
+                    raise PageError("{0}:{1}".format(self.category_prefix, cat))
+                except KeyboardInterrupt:
+                    raise
+                except Exception:
+                    tries = tries + 1
+                    time.sleep(1)
+        else:
+            parent_cats = categories[cat].categories
+
+        tree[cat]["parent-categories"].extend(parent_cats)
+        tree[cat]["links"].extend(links[cat][0])
+
+        if depth and level >= depth:
+            for ctg in links[cat][1]:
+                tree[cat]["sub-categories"][ctg] = None
+        else:
+            for ctg in links[cat][1]:
+                self.__cat_tree_rec(
+                    ctg,
+                    depth,
+                    tree[cat]["sub-categories"],
+                    level + 1,
+                    categories,
+                    links,
+                )
+
     def _get_response(self, params):
         """ wrap the call to the requests package """
         return self._session.get(
@@ -964,6 +959,5 @@ class MediaWiki(object):
         return self._session.post(
             self._api_url, data=params, timeout=self._timeout
         ).json(encoding="utf8")
-
 
 # end MediaWiki class

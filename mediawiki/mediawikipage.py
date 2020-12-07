@@ -264,8 +264,10 @@ class MediaWikiPage(object):
                 This is a parsing operation and not part of the standard API"""
         if self._logos is None:
             self._logos = list()
-            soup = BeautifulSoup(self.html, "html.parser")
-            info = soup.find("table", {"class": "infobox"})
+            # Cache the results of parsing the html, so that multiple calls happen much faster
+            if not self._soup:
+                self._soup = BeautifulSoup(self.html, "html.parser")
+            info = self._soup.find("table", {"class": "infobox"})
             if info is not None:
                 children = info.find_all("a", class_="image")
                 for child in children:
@@ -284,8 +286,10 @@ class MediaWikiPage(object):
                 This is a parsing operation and not part of the standard API"""
         if self._hatnotes is None:
             self._hatnotes = list()
-            soup = BeautifulSoup(self.html, "html.parser")
-            notes = soup.find_all("div", class_="hatnote")
+            # Cache the results of parsing the html, so that multiple calls happen much faster
+            if not self._soup:
+                self._soup = BeautifulSoup(self.html, "html.parser")
+            notes = self._soup.find_all("div", class_="hatnote")
             if notes is not None:
                 for note in notes:
                     tmp = list()
@@ -839,7 +843,7 @@ class MediaWikiPage(object):
             """ parse the category correctly """
             tmp = val["title"]
             if tmp.startswith(self.mediawiki.category_prefix):
-                return tmp[len(self.mediawiki.category_prefix) + 1 :]
+                return tmp[len(self.mediawiki.category_prefix) + 1:]
             return tmp
 
         tmp = [_get_cat(link) for link in results.get("categories", list())]

@@ -8,6 +8,10 @@ import inspect
 import time
 
 
+if sys.version_info[0] >= 3:
+    unicode = str
+
+
 def parse_all_arguments(func):
     """ determine all positional and named arguments as a dict """
     args = dict()
@@ -58,10 +62,7 @@ def memoize(func):
             tmp.append("({0}: {1})".format(k, defaults[k]))
 
         # handle possible unicode characters
-        if sys.version_info < (3, 0):
-            tmp = [unicode(x) for x in tmp]
-        else:
-            tmp = [str(x) for x in tmp]
+        tmp = [unicode(x) for x in tmp]
         key = " - ".join(tmp)
 
         # set the value in the cache if missing or needs to be refreshed

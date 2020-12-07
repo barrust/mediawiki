@@ -1,6 +1,6 @@
 # MediaWiki Changelog
 
-## Version 0.6.7
+## Version 0.6.7 (planned)
 
 * ***NOTE:*** Last planed support for **Python 2.7**
 * Cache results of `BeautifulSoup` parsing of `page.html` [PR #90](https://github.com/barrust/mediawiki/pull/90) Thank [ldorigo](https://github.com/ldorigo)

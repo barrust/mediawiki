@@ -9,11 +9,11 @@ MediaWiki
     :alt: GitHub release
 .. image:: https://badge.fury.io/py/pymediawiki.svg
     :target: https://badge.fury.io/py/pymediawiki
-.. image:: https://travis-ci.org/barrust/mediawiki.svg?branch=master
-    :target: https://travis-ci.org/barrust/mediawiki
+.. image:: https://github.com/barrust/mediawiki/workflows/Python%20package/badge.svg
+    :target: https://github.com/barrust/mediawiki/actions?query=workflow%3A%22Python+package%22
     :alt: Build Status
-.. image:: https://coveralls.io/repos/github/barrust/mediawiki/badge.svg?branch=master
-    :target: https://coveralls.io/github/barrust/mediawiki?branch=master
+.. image:: https://codecov.io/gh/barrust/mediawiki/branch/master/graph/badge.svg?token=OdETiNgz9k
+    :target: https://codecov.io/gh/barrust/mediawiki
     :alt: Test Coverage
 .. image:: https://api.codacy.com/project/badge/Grade/afa87d5f5b6e4e66b78e15dedbc097ec
     :target: https://www.codacy.com/app/barrust/mediawiki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=barrust/mediawiki&amp;utm_campaign=Badge_Grade

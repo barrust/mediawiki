@@ -1,5 +1,14 @@
 # MediaWiki Changelog
 
+## Version 0.6.6
+
+Fix a bug using `find_all()` on newer versions of BeautifulSoup4
+
+## Version 0.6.5
+
+* Fix for `suggest` [PR #85](https://github.com/barrust/mediawiki/pull/85) Thanks [rubabredwan](https://github.com/rubabredwan)
+* `__slots__` usage
+
 ## Version 0.6.4
 
 * Add ability to login during initialization [issue #79](https://github.com/barrust/mediawiki/issues/79)

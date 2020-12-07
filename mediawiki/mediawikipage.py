@@ -54,6 +54,7 @@ class MediaWikiPage(object):
         "_revision_id",
         "_parent_id",
         "_html",
+        "_soup",
         "_images",
         "_references",
         "_categories",
@@ -106,6 +107,7 @@ class MediaWikiPage(object):
         self._table_of_contents = None
         self._logos = None
         self._hatnotes = None
+        self._soup = None
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -512,8 +514,11 @@ class MediaWikiPage(object):
                 Side effect is to also pull the html which can be slow
             Note:
                 This is a parsing operation and not part of the standard API"""
-        soup = BeautifulSoup(self.html, "html.parser")
-        headlines = soup.find_all("span", class_="mw-headline")
+        # Cache the results of parsing the html, so that multiple calls happen much faster
+        if not self._soup:
+            self._soup = BeautifulSoup(self.html, "html.parser")
+
+        headlines = self._soup.find_all("span", class_="mw-headline")
         tmp_soup = BeautifulSoup(section_title, "html.parser")
         tmp_sec_title = tmp_soup.get_text().lower()
         id_tag = None
@@ -664,14 +669,14 @@ class MediaWikiPage(object):
 
     def _parse_section_links(self, id_tag):
         """ given a section id, parse the links in the unordered list """
-        soup = BeautifulSoup(self.html, "html.parser")
-        info = soup.find("span", {"id": id_tag})
+
+        info = self._soup.find("span", {"id": id_tag})
         all_links = list()
 
         if info is None:
             return all_links
 
-        for node in soup.find(id=id_tag).parent.next_siblings:
+        for node in self._soup.find(id=id_tag).parent.next_siblings:
             if not isinstance(node, Tag):
                 continue
             if node.get("role", "") == "navigation":

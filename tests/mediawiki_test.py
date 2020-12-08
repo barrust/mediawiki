@@ -1560,6 +1560,17 @@ class TestMediaWikiParseSectionLinks(unittest.TestCase):
             tmp[i] = list(item)
         self.assertEqual(tmp, res['mcy_ds_external_links'])
 
+    def test_contains_ext_links_3(self):
+        ''' Test when external links are present None '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('''McDonald's''')
+        tmp = page.parse_section_links(None)
+        for i, item in enumerate(tmp):
+            tmp[i] = list(item)
+        print(tmp)
+        self.assertEqual(tmp, res['mcy_ds_external_links_none'])
+
     def test_no_ext_links(self):
         ''' Test when no external links on the page '''
         site = MediaWikiOverloaded()

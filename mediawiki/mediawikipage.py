@@ -485,7 +485,7 @@ class MediaWikiPage(object):
                 Side effect is to also pull the content which can be slow
             Note:
                 This is a parsing operation and not part of the standard API"""
-        if section_title == None:
+        if not section_title:
             try:
                 content = self.content
                 index = 0

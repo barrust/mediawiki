@@ -472,9 +472,12 @@ class MediaWikiPage(object):
         """ Plain text section content
 
             Args:
-                section_title (str): Name of the section to pull
+                section_title (str): Name of the section to pull or None \
+                    for the header section
             Returns:
                 str: The content of the section
+            Note:
+                Use **None** if the header section is desired
             Note:
                 Returns **None** if section title is not found; only text \
                 between title and next section or sub-section title is returned
@@ -482,21 +485,30 @@ class MediaWikiPage(object):
                 Side effect is to also pull the content which can be slow
             Note:
                 This is a parsing operation and not part of the standard API"""
-        section = "== {0} ==".format(section_title)
-        try:
-            content = self.content
-            index = content.index(section) + len(section)
+        if section_title == None:
+            try:
+                content = self.content
+                index = 0
+            except ValueError:
+                return None
+            except IndexError:
+                pass
+        else:
+            section = "== {0} ==".format(section_title)
+            try:
+                content = self.content
+                index = content.index(section) + len(section)
 
-            # ensure we have the full section header...
-            while True:
-                if content[index + 1] == "=":
-                    index += 1
-                else:
-                    break
-        except ValueError:
-            return None
-        except IndexError:
-            pass
+                # ensure we have the full section header...
+                while True:
+                    if content[index + 1] == "=":
+                        index += 1
+                    else:
+                        break
+            except ValueError:
+                return None
+            except IndexError:
+                pass
 
         try:
             next_index = self.content.index("==", index)
@@ -509,11 +521,13 @@ class MediaWikiPage(object):
         """ Parse all links within a section
 
             Args:
-                section_title (str, None): Name of the section to pull or, if \
+                section_title (str): Name of the section to pull or, if \
                     None is provided, the links between the main heading and \
                     the first section
             Returns:
                 list: List of (title, url) tuples
+            Note:
+                Use **None** to pull the links from the header section
             Note:
                 Returns **None** if section title is not found
             Note:

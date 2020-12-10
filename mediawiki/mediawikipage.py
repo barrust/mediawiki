@@ -472,9 +472,12 @@ class MediaWikiPage(object):
         """ Plain text section content
 
             Args:
-                section_title (str): Name of the section to pull
+                section_title (str): Name of the section to pull or None \
+                    for the header section
             Returns:
                 str: The content of the section
+            Note:
+                Use **None** if the header section is desired
             Note:
                 Returns **None** if section title is not found; only text \
                 between title and next section or sub-section title is returned
@@ -482,21 +485,30 @@ class MediaWikiPage(object):
                 Side effect is to also pull the content which can be slow
             Note:
                 This is a parsing operation and not part of the standard API"""
-        section = "== {0} ==".format(section_title)
-        try:
-            content = self.content
-            index = content.index(section) + len(section)
+        if not section_title:
+            try:
+                content = self.content
+                index = 0
+            except ValueError:
+                return None
+            except IndexError:
+                pass
+        else:
+            section = "== {0} ==".format(section_title)
+            try:
+                content = self.content
+                index = content.index(section) + len(section)
 
-            # ensure we have the full section header...
-            while True:
-                if content[index + 1] == "=":
-                    index += 1
-                else:
-                    break
-        except ValueError:
-            return None
-        except IndexError:
-            pass
+                # ensure we have the full section header...
+                while True:
+                    if content[index + 1] == "=":
+                        index += 1
+                    else:
+                        break
+            except ValueError:
+                return None
+            except IndexError:
+                pass
 
         try:
             next_index = self.content.index("==", index)
@@ -509,9 +521,13 @@ class MediaWikiPage(object):
         """ Parse all links within a section
 
             Args:
-                section_title (str): Name of the section to pull
+                section_title (str): Name of the section to pull or, if \
+                    None is provided, the links between the main heading and \
+                    the first section
             Returns:
                 list: List of (title, url) tuples
+            Note:
+                Use **None** to pull the links from the header section
             Note:
                 Returns **None** if section title is not found
             Note:
@@ -521,6 +537,9 @@ class MediaWikiPage(object):
         # Cache the results of parsing the html, so that multiple calls happen much faster
         if not self._soup:
             self._soup = BeautifulSoup(self.html, "html.parser")
+
+        if not section_title:
+            return self._parse_section_links(None)
 
         headlines = self._soup.find_all("span", class_="mw-headline")
         tmp_soup = BeautifulSoup(section_title, "html.parser")
@@ -673,19 +692,32 @@ class MediaWikiPage(object):
 
     def _parse_section_links(self, id_tag):
         """ given a section id, parse the links in the unordered list """
-
-        info = self._soup.find("span", {"id": id_tag})
         all_links = list()
 
-        if info is None:
-            return all_links
+        if id_tag is None:
+            root = self._soup.find("div", {"class": "mw-parser-output"})
+            if root is None:
+                return all_links
+            candidates = root.children
+        else:
+            root = self._soup.find("span", {"id": id_tag})
+            if root is None:
+                return all_links
+            candidates = self._soup.find(id=id_tag).parent.next_siblings
 
-        for node in self._soup.find(id=id_tag).parent.next_siblings:
+        for node in candidates:
             if not isinstance(node, Tag):
                 continue
             if node.get("role", "") == "navigation":
                 continue
             elif "infobox" in node.get("class", []):
+                continue
+
+            # If the classname contains "toc", the element is a table of contents.
+            # The comprehension is necessary because there are several possible
+            # types of tocs: "toclevel", "toc", ...
+            toc_classnames = [cname for cname in node.get("class", []) if "toc" in cname]
+            if toc_classnames:
                 continue
 
             # this is actually the child node's class...

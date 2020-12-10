@@ -1167,6 +1167,13 @@ class TestMediaWikiPage(unittest.TestCase):
         self.assertEqual(self.pag.section('A Game of Thrones'),
                          self.response['arya']['section_a_game_of_thrones'])
 
+    def test_page_section_header(self):
+        ''' test a page returning the section header '''
+        res = self.pag.section(None)
+        print(res)
+        self.assertEqual(self.pag.section(None),
+                         self.response['arya']['section_a_game_of_thrones'])
+
     def test_page_last_section(self):
         ''' test a page returning the last section '''
         self.assertEqual(self.pag.section('External links'),
@@ -1308,6 +1315,15 @@ class TestMediaWikiPage(unittest.TestCase):
         response = wiki.responses[wiki.api_url]
         pg = wiki.page('New York City')
         self.assertEqual(pg.section('Air quality'), response['new_york_city_air_quality'])
+
+    def test_page_section_header(self):
+        ''' test a page returning a section - header '''
+        wiki = MediaWikiOverloaded()
+        response = wiki.responses[wiki.api_url]
+        pg = wiki.page('New York City')
+        import json
+        print(json.dumps(pg.section(None)))
+        self.assertEqual(pg.section(None), response['new_york_city_none'])
 
     def test_page_last_section_large(self):
         ''' test a page returning the last section - large '''
@@ -1559,6 +1575,16 @@ class TestMediaWikiParseSectionLinks(unittest.TestCase):
         for i, item in enumerate(tmp):
             tmp[i] = list(item)
         self.assertEqual(tmp, res['mcy_ds_external_links'])
+
+    def test_contains_ext_links_3(self):
+        ''' Test when external links are present None '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('''McDonald's''')
+        tmp = page.parse_section_links(None)
+        for i, item in enumerate(tmp):
+            tmp[i] = list(item)
+        self.assertEqual(tmp, res['mcy_ds_external_links_none'])
 
     def test_no_ext_links(self):
         ''' Test when no external links on the page '''

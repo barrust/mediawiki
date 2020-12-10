@@ -435,10 +435,14 @@ if PULL_ALL is True or PULL_SECTION_LINKS is True:
     res = pg.parse_section_links('EXTERNAL LINKS')
     responses[wikipedia.api_url]['mcy_ds_external_links'] = res
 
+    res = pg.parse_section_links(None)
+    responses[wikipedia.api_url]['mcy_ds_external_links_none'] = res
+
     # doesn't contain external links
     pg = wikipedia.page('Tropical rainforest conservation')
     res = pg.parse_section_links('EXTERNAL LINKS')
     responses[wikipedia.api_url]['page_no_sec_links'] = res
+
 
     pg = asoiaf.page('arya')
     for section in pg.sections:
@@ -454,6 +458,7 @@ if PULL_ALL is True or PULL_TABLE_OF_CONTENTS is True:
     res = pg.table_of_contents
     responses[wikipedia.api_url]['new_york_city_toc'] = res
     responses[wikipedia.api_url]['new_york_city_air_quality'] = pg.section('Air quality')
+    responses[wikipedia.api_url]['new_york_city_none'] = pg.section(None)
     responses[wikipedia.api_url]['new_york_city_last_sec'] = pg.section('External links')
     print("Completed pulling Table of Content data")
 

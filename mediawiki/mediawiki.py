@@ -39,7 +39,7 @@ class MediaWiki(object):
             cat_prefix (str): The prefix for categories used by the mediawiki \
                               site; defaults to Category (en)
             user_agent (str): The user agent string to use when making \
-                              requests; defults to a library version but per \
+                              requests; defaults to a library version but per \
                               the MediaWiki API documentation it recommends \
                               setting a unique one and not using the \
                               library's default user-agent string
@@ -532,7 +532,7 @@ class MediaWiki(object):
             Returns:
                 list: A listing of page titles
             Raises:
-                ValueError: If either the passed latitutde or longitude are \
+                ValueError: If either the passed latitude or longitude are \
                             not coercible to a Decimal """
 
         def test_lat_long(val):

@@ -2,11 +2,11 @@
 
 ## Version 0.6.7
 
-* ***NOTE:*** Last planed support for **Python 2.7**
+* ***NOTE:*** Last planned support for **Python 2.7**
 * Cache results of `BeautifulSoup` parsing of `page.html` [PR #90](https://github.com/barrust/mediawiki/pull/90) Thanks [ldorigo](https://github.com/ldorigo)
 * Add ability to pull links from the header section; Thanks to [ldorigo](https://github.com/ldorigo) for example code!
 * Add ability to pull the header section text
-* Move to GitHib Actions and CodeCov for testing
+* Move to GitHub Actions and CodeCov for testing
 
 ## Version 0.6.6
 

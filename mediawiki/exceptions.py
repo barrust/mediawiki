@@ -201,7 +201,7 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
 
         Args:
             error (str): Error message from the MediaWiki site related to \
-                         GeoCorrdinates """
+                         GeoCoordinates """
 
     def __init__(self, error):
         self._error = error

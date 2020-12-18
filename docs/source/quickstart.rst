@@ -234,7 +234,7 @@ Other properties for a page include:
 - `redirects`
 - `backlinks`
 - `langlinks`
-- `summary`,
+- `summary`
 - `sections`
 - `logos`
 - `hatnotes`

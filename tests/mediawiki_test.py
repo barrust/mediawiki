@@ -407,7 +407,7 @@ class TestMediaWikiAllPages(unittest.TestCase):
         self.assertEqual(response, res)
 
     def test_allpages_num_results(self):
-        ''' test using the all page query with a limitting number '''
+        ''' test using the all page query with a limiting number '''
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]['all_pages_query_a_1']
 

@@ -36,7 +36,7 @@ not getting it. Please check out the code on
 
 **Note:** this library was designed for ease of use and simplicity. If you plan
 on doing serious scraping, automated requests, or editing, please look into
-`Pywikipediabot <http://www.mediawiki.org/wiki/Manual:Pywikipediabot>`__
+`Pywikibot <https://www.mediawiki.org/wiki/Manual:Pywikibot>`__
 which has a larger API, advanced rate limiting, and other features so we may
 be considerate of the MediaWiki infrastructure.
 

@@ -668,12 +668,12 @@ class MediaWiki(object):
                 Set results to **None** to get all results """
         self._check_query(category, "Category must be specified")
 
-        max_pull = 5000
+        max_pull = 500
         search_params = {
             "list": "categorymembers",
             "cmprop": "ids|title|type",
             "cmtype": ("page|subcat" if subcategories else "page"),
-            "cmlimit": (results if results is not None else max_pull),
+            "cmlimit": (min(results, max_pull) if results is not None else max_pull),
             "cmtitle": "{0}:{1}".format(self.category_prefix, category),
         }
         pages = list()

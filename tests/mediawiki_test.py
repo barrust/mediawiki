@@ -1321,8 +1321,6 @@ class TestMediaWikiPage(unittest.TestCase):
         wiki = MediaWikiOverloaded()
         response = wiki.responses[wiki.api_url]
         pg = wiki.page('New York City')
-        import json
-        print(json.dumps(pg.section(None)))
         self.assertEqual(pg.section(None), response['new_york_city_none'])
 
     def test_page_last_section_large(self):

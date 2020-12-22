@@ -1,32 +1,21 @@
 """
 Utility functions
 """
-from __future__ import unicode_literals, absolute_import
 import sys
 import functools
 import inspect
 import time
 
 
-if sys.version_info[0] >= 3:
-    unicode = str
-
-
 def parse_all_arguments(func):
     """ determine all positional and named arguments as a dict """
     args = dict()
-    if sys.version_info < (3, 0):
-        func_args = inspect.getargspec(func)
-        if func_args.defaults is not None:
-            val = len(func_args.defaults)
-            for i, itm in enumerate(func_args.args[-val:]):
-                args[itm] = func_args.defaults[i]
-    else:
-        func_args = inspect.signature(func)
-        for itm in list(func_args.parameters)[1:]:
-            param = func_args.parameters[itm]
-            if param.default is not param.empty:
-                args[param.name] = param.default
+
+    func_args = inspect.signature(func)
+    for itm in list(func_args.parameters)[1:]:
+        param = func_args.parameters[itm]
+        if param.default is not param.empty:
+            args[param.name] = param.default
     return args
 
 
@@ -61,8 +50,7 @@ def memoize(func):
         for k in sorted(defaults.keys()):
             tmp.append("({0}: {1})".format(k, defaults[k]))
 
-        # handle possible unicode characters
-        tmp = [unicode(x) for x in tmp]
+        tmp = [str(x) for x in tmp]
         key = " - ".join(tmp)
 
         # set the value in the cache if missing or needs to be refreshed
@@ -79,11 +67,9 @@ def memoize(func):
 
 
 def str_or_unicode(text):
-    """ handle python 3 unicode and python 2.7 byte strings """
+    """ handle python 3 unicode """
     encoding = sys.stdout.encoding
-    if sys.version_info > (3, 0):
-        return text.encode(encoding).decode(encoding)
-    return text.encode(encoding)
+    return text.encode(encoding).decode(encoding)
 
 
 def is_relative_url(url):

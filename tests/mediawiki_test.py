@@ -2,8 +2,6 @@
 '''
 Unittest class
 '''
-from __future__ import (unicode_literals, absolute_import, print_function)
-import sys
 import time
 import unittest
 import json
@@ -17,10 +15,6 @@ from mediawiki import (MediaWiki, MediaWikiPage, PageError, RedirectError,
                        MediaWikiLoginError)
 import mediawiki
 from .utilities import find_depth, FunctionUseCounter
-
-
-if sys.version_info[0] >= 3:
-    unicode = str
 
 
 class MediaWikiOverloaded(MediaWiki):
@@ -756,7 +750,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
         try:
             raise PageError(pageid=None, title=None)
         except PageError as ex:
-            msg = (u'"{0}" does not match any pages. Try another '
+            msg = ('"{0}" does not match any pages. Try another '
                    'query!').format('')
             self.assertEqual(ex.message, msg)
 
@@ -901,7 +895,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
         try:
             raise HTTPTimeoutError(error)
         except HTTPTimeoutError as ex:
-            msg = (u'Searching for "{0}" resulted in a timeout. Try '
+            msg = ('Searching for "{0}" resulted in a timeout. Try '
                    'again in a few seconds, and ensure you have rate '
                    'limiting set to True.').format(error)
             self.assertEqual(ex.message, msg)
@@ -944,7 +938,7 @@ class TestMediaWikiExceptions(unittest.TestCase):
         try:
             site._check_error_response(response, query)
         except HTTPTimeoutError as ex:
-            msg = (u'Searching for "{0}" resulted in a timeout. Try '
+            msg = ('Searching for "{0}" resulted in a timeout. Try '
                    'again in a few seconds, and ensure you have rate '
                    'limiting set to True.').format(query)
             self.assertEqual(str(ex), msg)
@@ -1209,22 +1203,15 @@ class TestMediaWikiPage(unittest.TestCase):
         ''' test with unicode representation '''
         site = MediaWikiOverloaded()
         page = site.page('Jacques Léonard Muller')
-        if sys.version_info < (3, 0):
-            self.assertEqual(unicode(page),
-                             '''<MediaWikiPage 'Jacques Léonard Muller'>''')
-        else:
-            self.assertEqual(str(page),
+        self.assertEqual(str(page),
                              '''<MediaWikiPage 'Jacques Léonard Muller'>''')
 
     def test_page_repr_2(self):
         ''' test page string representation '''
         site = MediaWikiOverloaded()
         page = site.page('Jacques Léonard Muller')
-        name = u'''<MediaWikiPage 'Jacques Léonard Muller'>'''
-        if sys.version_info > (3, 0):
-            res = repr(page)
-        else:
-            res = unicode(page)
+        name = '''<MediaWikiPage 'Jacques Léonard Muller'>'''
+        res = repr(page)
         self.assertEqual(res, name)
 
     def test_page_eq(self):

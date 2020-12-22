@@ -4,7 +4,6 @@ MediaWikiPage class module
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
-from __future__ import unicode_literals, absolute_import
 from decimal import Decimal
 import re
 from collections import OrderedDict

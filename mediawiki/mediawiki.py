@@ -4,7 +4,6 @@ MediaWiki class module
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
-from __future__ import unicode_literals, absolute_import
 from datetime import datetime, timedelta
 import time
 from decimal import Decimal, DecimalException
@@ -978,12 +977,12 @@ class MediaWiki(object):
         """ wrap the call to the requests package """
         return self._session.get(
             self._api_url, params=params, timeout=self._timeout
-        ).json(encoding="utf8")
+        ).json()
 
     def _post_response(self, params):
         """ wrap a post call to the requests package """
         return self._session.post(
             self._api_url, data=params, timeout=self._timeout
-        ).json(encoding="utf8")
+        ).json()
 
 # end MediaWiki class

@@ -672,7 +672,7 @@ class MediaWiki(object):
         search_params = {
             "list": "categorymembers",
             "cmprop": "ids|title|type",
-            "cmtype": ("page|subcat" if subcategories else "page"),
+            "cmtype": ("page|subcat|file" if subcategories else "page|file"),
             "cmlimit": (min(results, max_pull) if results is not None else max_pull),
             "cmtitle": "{0}:{1}".format(self.category_prefix, category),
         }
@@ -690,7 +690,7 @@ class MediaWiki(object):
 
             current_pull = len(raw_res["query"]["categorymembers"])
             for rec in raw_res["query"]["categorymembers"]:
-                if rec["type"] == "page":
+                if rec["type"] in ("page", "file"):
                     pages.append(rec["title"])
                 elif rec["type"] == "subcat":
                     tmp = rec["title"]

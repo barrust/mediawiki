@@ -3,6 +3,7 @@
 ## Future Version
 
 * Add files to `categorymembers()` pull [PPR #100](https://github.com/barrust/mediawiki/pull/100) Thanks [tbm](https://github.com/tbm)
+* Set `categorymembers()` to max 500 results per query (per API documentation) [PPR #99](https://github.com/barrust/mediawiki/pull/99) Thanks [tbm](https://github.com/tbm)
 
 ## Version 0.6.7
 

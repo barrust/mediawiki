@@ -441,8 +441,12 @@ class MediaWiki(object):
                 results (int): The number of pages to return
             Returns:
                 list: The pages that meet the search query
+            Note:
+                Could add ability to continue past the limit of 500
         """
-        query_params = {"list": "allpages", "aplimit": results, "apfrom": query}
+        max_pull = 500
+        limit = min(results, max_pull) if results is not None else max_pull
+        query_params = {"list": "allpages", "aplimit": limit, "apfrom": query}
 
         request = self.wiki_request(query_params)
 
@@ -462,15 +466,21 @@ class MediaWiki(object):
             Returns:
                 tuple or list: tuple (list results, suggestion) if \
                                suggestion is **True**; list of results \
-                               otherwise """
+                               otherwise
+            Note:
+                Could add ability to continue past the limit of 500
+        """
 
         self._check_query(query, "Query must be specified")
+
+        max_pull = 500
 
         search_params = {
             "list": "search",
             "srprop": "",
-            "srlimit": results,
+            "srlimit": min(results, max_pull) if results is not None else max_pull,
             "srsearch": query,
+            "sroffset": 0,  # this is what will be used to pull more than the max
         }
         if suggestion:
             search_params["srinfo"] = "suggestion"
@@ -497,7 +507,8 @@ class MediaWiki(object):
                 query (str): Page title
             Returns:
                 String or None: Suggested page title or **None** if no \
-                                suggestion found """
+                                suggestion found
+        """
         res, suggest = self.search(query, results=1, suggestion=True)
         try:
             title = res[0] or suggest
@@ -531,9 +542,13 @@ class MediaWiki(object):
                 results (int): Number of pages within the radius to return
             Returns:
                 list: A listing of page titles
+            Note:
+                The Geosearch API does not support pulling more than the \
+                maximum of 500
             Raises:
                 ValueError: If either the passed latitude or longitude are \
-                            not coercible to a Decimal """
+                            not coercible to a Decimal
+        """
 
         def test_lat_long(val):
             """ handle testing lat and long """
@@ -550,8 +565,10 @@ class MediaWiki(object):
             return val
 
         # end local function
+        max_pull = 500
 
-        params = {"list": "geosearch", "gsradius": radius, "gslimit": results}
+        limit = (min(results, max_pull) if results is not None else max_pull)
+        params = {"list": "geosearch", "gsradius": radius, "gslimit": limit}
         if title is not None:
             if auto_suggest:
                 title = self.suggest(title)
@@ -579,14 +596,20 @@ class MediaWiki(object):
                                  otherwise resolve redirects
             Returns:
                 List: List of results that are stored in a tuple \
-                      (Title, Summary, URL) """
+                      (Title, Summary, URL)
+            Note:
+                The Opensearch API does not support pulling more than the \
+                maximum of 500
+            Raises:
+        """
 
         self._check_query(query, "Query must be specified")
+        max_pull = 500
 
         query_params = {
             "action": "opensearch",
             "search": query,
-            "limit": (100 if results > 100 else results),
+            "limit": (min(results, max_pull) if results is not None else max_pull),
             "redirects": ("resolve" if redirect else "return"),
             "warningsaserror": True,
             "namespace": "",
@@ -615,14 +638,17 @@ class MediaWiki(object):
                 similar to action=opensearch: to take user input and provide \
                 the best-matching titles. Depending on the search engine \
                 backend, this might include typo correction, redirect \
-                avoidance, or other heuristics." """
+                avoidance, or other heuristics."
+            Note:
+                Could add ability to continue past the limit of 500
+        """
 
         self._check_query(prefix, "Prefix must be specified")
 
         query_params = {
             "list": "prefixsearch",
             "pssearch": prefix,
-            "pslimit": ("max" if results > 500 else results),
+            "pslimit": ("max" if (results > 500 or results is None) else results),
             "psnamespace": 0,
             "psoffset": 0,  # parameterize to skip to later in the list?
         }

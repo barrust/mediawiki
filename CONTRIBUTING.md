@@ -170,3 +170,5 @@ A special thanks to all the code contributors to `pymediawiki`!
 [@rubabredwan](https://github.com/rubabredwan) - Fix for `suggest` [#85](https://github.com/barrust/mediawiki/pull/85)
 
 [@ldorigo](https://github.com/ldorigo) - Pulling links for header sections [#90](https://github.com/barrust/mediawiki/pull/90)
+
+[@tbm](https://github.com/tbm) - `categorymember` improvements [PPR #100](https://github.com/barrust/mediawiki/pull/100)

@@ -1,5 +1,9 @@
 # MediaWiki Changelog
 
+## Future Version
+
+* Add files to `categorymembers()` pull [PPR #100](https://github.com/barrust/mediawiki/pull/100) Thanks [tbm](https://github.com/tbm)
+
 ## Version 0.6.7
 
 * ***NOTE:*** Last planned support for **Python 2.7**

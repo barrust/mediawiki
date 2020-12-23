@@ -1,6 +1,6 @@
 # MediaWiki Changelog
 
-## Future Version
+## Version 0.7.0
 
 * Remove support for ***python 2.7***!
 * Add files to `categorymembers()` pull [PPR #100](https://github.com/barrust/mediawiki/pull/100) Thanks [tbm](https://github.com/tbm)

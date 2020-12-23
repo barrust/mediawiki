@@ -1,7 +1,8 @@
 # MediaWiki Changelog
 
-## Future Version
+## Version 0.7.0
 
+* Remove support for ***python 2.7***!
 * Add files to `categorymembers()` pull [PPR #100](https://github.com/barrust/mediawiki/pull/100) Thanks [tbm](https://github.com/tbm)
 * Better support calls to limit results to the maximum 500 results per query (per API documentation) [PR #99](https://github.com/barrust/mediawiki/pull/99) Thanks [tbm](https://github.com/tbm)
 

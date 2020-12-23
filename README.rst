@@ -7,8 +7,6 @@ MediaWiki
 .. image:: https://img.shields.io/github/release/barrust/mediawiki.svg
     :target: https://github.com/barrust/mediawiki/releases
     :alt: GitHub release
-.. image:: https://badge.fury.io/py/pymediawiki.svg
-    :target: https://badge.fury.io/py/pymediawiki
 .. image:: https://github.com/barrust/mediawiki/workflows/Python%20package/badge.svg
     :target: https://github.com/barrust/mediawiki/actions?query=workflow%3A%22Python+package%22
     :alt: Build Status
@@ -18,11 +16,14 @@ MediaWiki
 .. image:: https://api.codacy.com/project/badge/Grade/afa87d5f5b6e4e66b78e15dedbc097ec
     :target: https://www.codacy.com/app/barrust/mediawiki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=barrust/mediawiki&amp;utm_campaign=Badge_Grade
     :alt: Codacy Review
+.. image:: https://badge.fury.io/py/pymediawiki.svg
+    :target: https://badge.fury.io/py/pymediawiki
+    :alt: PyPi Release
 .. image:: http://pepy.tech/badge/pymediawiki
     :target: http://pepy.tech/count/pymediawiki
     :alt: Downloads
 
-**mediawiki** is a python wrapper and parser for the MediaWiki API. The goal
+***mediawiki*** is a python wrapper and parser for the MediaWiki API. The goal
 is to allow users to quickly and efficiently pull data from the MediaWiki site
 of their choice instead of worrying about dealing directly with the API. As
 such, it does not force the use of a particular MediaWiki site. It defaults to
@@ -52,14 +53,20 @@ Pip Installation:
 
 To install from source:
 
-To install `mediawiki`, simply clone the `repository on GitHub
+To install ``mediawiki``, simply clone the `repository on GitHub
 <https://github.com/barrust/mediawiki>`__, then run from the folder:
 
 ::
 
     $ python setup.py install
 
-`mediawiki` supports python versions 2.7 and 3.4 - 3.7
+``mediawiki`` supports python versions 3.5 - 3.9
+
+For *python 2.7* support, install `release 0.6.7 <https://github.com/barrust/mediawiki/releases/tag/v0.6.7>`__
+
+::
+
+    $ pip install pymediawiki==0.6.7
 
 Documentation
 -------------

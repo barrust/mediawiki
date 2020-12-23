@@ -1,7 +1,6 @@
 '''
 Generate data for tests
 '''
-from __future__ import print_function
 import sys
 import os
 from datetime import timedelta

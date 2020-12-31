@@ -67,6 +67,7 @@ class MediaWikiPage(object):
         "_table_of_contents",
         "_logos",
         "_hatnotes",
+        "_wikitext",
     ]
 
     def __init__(
@@ -107,6 +108,7 @@ class MediaWikiPage(object):
         self._logos = None
         self._hatnotes = None
         self._soup = None
+        self._wikitext = None
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -229,6 +231,23 @@ class MediaWikiPage(object):
             page = request["query"]["pages"][self.pageid]
             self._html = page["revisions"][0]["*"]
         return self._html
+
+    @property
+    def wikitext(self):
+        """ str: Wikitext representation of the page
+
+            Note:
+                Not settable """
+        if self._wikitext is None:
+            query_params = {
+                "action": "parse",
+                "pageid": self.pageid,
+                "prop": "wikitext",
+                "formatversion": "latest",
+            }
+            request = self.mediawiki.wiki_request(query_params)
+            self._wikitext = request["parse"]["wikitext"]
+        return self._wikitext
 
     @property
     def images(self):

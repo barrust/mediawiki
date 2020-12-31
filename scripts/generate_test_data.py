@@ -338,8 +338,9 @@ if PULL_ALL is True or PULL_REDIRECT_ERROR is True:
 if PULL_ALL is True or PULL_PAGES is True:
     # unicode
     site.page(u"Jacques Léonard Muller")
-    # page id
-    site.page(pageid=24337758, auto_suggest=False)
+    # page id and wikitext
+    p = site.page(pageid=24337758, auto_suggest=False)
+    responses['bpp-complexity_wikitext'] = p.wikitext
 
     # coordinates
     p = site.page('Washington Monument')

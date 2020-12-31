@@ -1,5 +1,9 @@
 # MediaWiki Changelog
 
+## Future Release
+
+* Add [proxy support](https://requests.readthedocs.io/en/master/user/advanced/#proxies) by passing info directly to the requests library.
+
 ## Version 0.7.0
 
 * Remove support for ***python 2.7***!

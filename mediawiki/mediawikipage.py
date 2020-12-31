@@ -242,6 +242,8 @@ class MediaWikiPage(object):
             query_params = {
                 "action": "parse",
                 "pageid": self.pageid,
+                "prop": "wikitext",
+                "formatversion": "latest",
             }
             request = self.mediawiki.wiki_request(query_params)
             self._wikitext = request["parse"]["wikitext"]

@@ -1317,6 +1317,13 @@ class TestMediaWikiPage(unittest.TestCase):
         pg = wiki.page('New York City')
         self.assertEqual(pg.section('External links'), response['new_york_city_last_sec'])
 
+    def test_page_wikitext(self):
+        ''' test wikitext '''
+        wiki = MediaWikiOverloaded()
+        response = wiki.responses[wiki.api_url]
+        pg = wiki.page(pageid=24337758)
+        self.assertEqual(pg.wikitext, response['bpp-complexity_wikitext'])
+
 
 class TestMediaWikiCategoryTree(unittest.TestCase):
     ''' test the category tree functionality '''

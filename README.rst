@@ -39,7 +39,8 @@ not getting it. Please check out the code on
 on doing serious scraping, automated requests, or editing, please look into
 `Pywikibot <https://www.mediawiki.org/wiki/Manual:Pywikibot>`__
 which has a larger API, advanced rate limiting, and other features so we may
-be considerate of the MediaWiki infrastructure.
+be considerate of the MediaWiki infrastructure. Pywikibot has also other extra
+features such as support for Wikibase (that runs Wikidata).
 
 
 Installation

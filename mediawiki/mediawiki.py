@@ -43,7 +43,9 @@ class MediaWiki(object):
                               setting a unique one and not using the \
                               library's default user-agent string
             username (str): The username to use to log into the MediaWiki
-            password (str): The password to use to log into the MediaWiki """
+            password (str): The password to use to log into the MediaWiki
+            proxies (str): A dictionary of specific proxies to use in the \
+                           Requests libary."""
 
     __slots__ = [
         "_version",
@@ -65,6 +67,7 @@ class MediaWiki(object):
         "_refresh_interval",
         "_use_cache",
         "_is_logged_in",
+        "_proxies",
     ]
 
     def __init__(
@@ -78,6 +81,7 @@ class MediaWiki(object):
         user_agent=None,
         username=None,
         password=None,
+        proxies=None
     ):
         """ Init Function """
         self._version = VERSION
@@ -87,12 +91,17 @@ class MediaWiki(object):
         self.category_prefix = cat_prefix
         self._timeout = None
         self.timeout = timeout
+        # requests library parameters
+        self._session = None
         self._user_agent = ("python-mediawiki/VERSION-{0}" "/({1})/BOT").format(
             VERSION, URL
         )
+        self._proxies = None
+        # set libary parameters
         if user_agent is not None:
             self.user_agent = user_agent
-        self._session = None
+        self.proxies = proxies  # this will call self._reset_session()
+
         self._rate_limit = None
         self.rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
@@ -107,9 +116,6 @@ class MediaWiki(object):
         self._cache = dict()
         self._refresh_interval = None
         self._use_cache = True
-
-        # call helper functions to get everything set up
-        self._reset_session()
 
         # for login information
         self._is_logged_in = False
@@ -166,6 +172,20 @@ class MediaWiki(object):
         self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         self.clear_memoized()
+
+    @property
+    def proxies(self):
+        """ dict: Turn on, off, or set proxy use with the Requests library """
+        return self._proxies
+
+    @proxies.setter
+    def proxies(self, proxies):
+        """ Turn on, off, or set proxy use through the Requests library """
+        if proxies and isinstance(proxies, dict):
+            self._proxies = proxies
+        else:
+            self._proxies = None
+        self._reset_session()
 
     @property
     def use_cache(self):
@@ -382,9 +402,14 @@ class MediaWiki(object):
 
     def _reset_session(self):
         """ Set session information """
+        if self._session:
+            self._session.close()
+
         headers = {"User-Agent": self._user_agent}
         self._session = requests.Session()
         self._session.headers.update(headers)
+        if self._proxies is not None:
+            self._session.proxies.update(self._proxies)
         self._is_logged_in = False
 
     def clear_memoized(self):

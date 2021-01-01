@@ -1,5 +1,10 @@
 # MediaWiki Changelog
 
+## Future Release
+
+* Add `page.wikitext` support for pulling the page contents as [wikitext](https://en.wikipedia.org/wiki/Help:Wikitext)
+* Add [proxy support](https://requests.readthedocs.io/en/master/user/advanced/#proxies) by passing info directly to the requests library.
+
 ## Version 0.7.0
 
 * Remove support for ***python 2.7***!

@@ -13,14 +13,14 @@ MediaWiki
 .. image:: https://codecov.io/gh/barrust/mediawiki/branch/master/graph/badge.svg?token=OdETiNgz9k
     :target: https://codecov.io/gh/barrust/mediawiki
     :alt: Test Coverage
-.. image:: https://api.codacy.com/project/badge/Grade/afa87d5f5b6e4e66b78e15dedbc097ec
-    :target: https://www.codacy.com/app/barrust/mediawiki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=barrust/mediawiki&amp;utm_campaign=Badge_Grade
+.. image:: https://app.codacy.com/project/badge/Grade/34162198611f4aa0bde630d1dab72ce8    
+    :target: https://www.codacy.com/gh/barrust/mediawiki/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=barrust/mediawiki&amp;utm_campaign=Badge_Grade
     :alt: Codacy Review
 .. image:: https://badge.fury.io/py/pymediawiki.svg
     :target: https://badge.fury.io/py/pymediawiki
     :alt: PyPi Release
 .. image:: http://pepy.tech/badge/pymediawiki
-    :target: http://pepy.tech/count/pymediawiki
+    :target: https://pepy.tech/project/pymediawiki
     :alt: Downloads
 
 ***mediawiki*** is a python wrapper and parser for the MediaWiki API. The goal

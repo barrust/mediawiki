@@ -68,6 +68,7 @@ class MediaWikiPage(object):
         "_logos",
         "_hatnotes",
         "_wikitext",
+        "_preview",
     ]
 
     def __init__(
@@ -109,6 +110,7 @@ class MediaWikiPage(object):
         self._hatnotes = None
         self._soup = None
         self._wikitext = None
+        self._preview = None
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -423,6 +425,26 @@ class MediaWikiPage(object):
                 langlinks[lang_info["lang"]] = lang_info["*"]
             self._langlinks = langlinks
         return self._langlinks
+
+    @property
+    def preview(self):
+        if self._preview is None:
+            params = {
+                "action": "query",
+                "formatversion": "2",
+                "prop":"info|extracts|pageimages|revisions|pageterms|coordinates",
+                "exsentences": "5",
+                "explaintext": "true",
+                "piprop": "thumbnail|original",
+                "pithumbsize": "320",
+                "pilicense": "any",
+                "rvprop": "timestamp|ids",
+                "wbptterms": "description",
+                "titles": self.title,
+            }
+            raw = self.mediawiki.wiki_request(params)
+            self._preview = raw
+        return self._preview
 
     @property
     def summary(self):

@@ -428,6 +428,7 @@ class MediaWikiPage(object):
 
     @property
     def preview(self):
+        """ dict: Page preview information that builds the preview hover """
         if self._preview is None:
             params = {
                 "action": "query",
@@ -443,7 +444,7 @@ class MediaWikiPage(object):
                 "titles": self.title,
             }
             raw = self.mediawiki.wiki_request(params)
-            self._preview = raw
+            self._preview = raw.get("query", dict()).get("pages", list())[0]
         return self._preview
 
     @property

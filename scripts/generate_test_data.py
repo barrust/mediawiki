@@ -85,6 +85,7 @@ PULL_API_URL_ERROR = False
 PULL_REDIRECT_ERROR = False
 PULL_PAGES = False
 PULL_LOGOS = False
+PULL_PREVIEWS = True
 PULL_HATNOTES = False
 PULL_SECTION_LINKS = False
 PULL_TABLE_OF_CONTENTS = False
@@ -114,7 +115,7 @@ french_site = MediaWikiOverloaded(url='https://fr.wikipedia.org/w/api.php',
                                   lang='fr')
 asoiaf = MediaWikiOverloaded(url='https://awoiaf.westeros.org/api.php',
                              lang='fr')
-plants = MediaWikiOverloaded(url='https://practicalplants.org/w/api.php')
+# plants = MediaWikiOverloaded(url='https://practicalplants.org/w/api.php')
 wikipedia = MediaWikiOverloaded()
 
 
@@ -151,8 +152,8 @@ responses[asoiaf.api_url]['languages'] = asoiaf.supported_languages
 responses[asoiaf.api_url]['api_version'] = asoiaf.api_version
 responses[asoiaf.api_url]['extensions'] = asoiaf.extensions
 
-if plants.api_url not in responses:
-    responses[plants.api_url] = dict()
+# if plants.api_url not in responses:
+#     responses[plants.api_url] = dict()
 
 print("Completed basic mediawiki information")
 
@@ -416,6 +417,14 @@ if PULL_ALL is True or PULL_LOGOS is True:
     responses[wikipedia.api_url]['antivirus_software_logos'] = res
 
     print("Completed pulling logos")
+
+
+if PULL_ALL is True or PULL_PREVIEWS is True:
+    res = wikipedia.page('Chess').preview
+    responses[wikipedia.api_url]['chess_preview'] = res
+
+    print("Completed pulling previews")
+
 
 if PULL_ALL is True or PULL_HATNOTES is True:
     # contains hatnotes

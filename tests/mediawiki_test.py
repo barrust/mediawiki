@@ -1525,6 +1525,17 @@ class TestMediaWikiLogos(unittest.TestCase):
         self.assertEqual(page.logos, list())  # should be an empty list
 
 
+class TestMediaWikiPreview(unittest.TestCase):
+    ''' Preview tests '''
+
+    def test_page_preview(self):
+        ''' test pulling a page preview '''
+        site = MediaWikiOverloaded()
+        res = site.responses[site.api_url]
+        page = site.page('Chess')
+        self.assertEqual(page.preview, res['chess_preview'])
+
+
 class TestMediaWikiHatnotes(unittest.TestCase):
     ''' Test the pulling of hatnotes from mediawiki pages '''
 

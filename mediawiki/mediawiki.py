@@ -4,18 +4,22 @@ MediaWiki class module
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
-from datetime import datetime, timedelta
 import time
+from datetime import datetime, timedelta
 from decimal import Decimal, DecimalException
+from json import JSONDecodeError
+
 import requests
+from requests.exceptions import ConnectionError, ConnectTimeout
+
 from .exceptions import (
-    MediaWikiException,
-    PageError,
-    MediaWikiAPIURLError,
     HTTPTimeoutError,
-    MediaWikiGeoCoordError,
+    MediaWikiAPIURLError,
     MediaWikiCategoryTreeError,
+    MediaWikiException,
+    MediaWikiGeoCoordError,
     MediaWikiLoginError,
+    PageError,
 )
 from .mediawikipage import MediaWikiPage
 from .utilities import memoize
@@ -29,23 +33,17 @@ class MediaWiki(object):
 
         Args:
             url (str): API URL of the MediaWiki site; defaults to Wikipedia
-            lang (str): Language of the MediaWiki site; used to help change \
-                        API URL
+            lang (str): Language of the MediaWiki site; used to help change API URL
             timeout (float): HTTP timeout setting; None means no timeout
             rate_limit (bool): Use rate limiting to limit calls to the site
-            rate_limit_wait (timedelta): Amount of time to wait between \
-                                         requests
-            cat_prefix (str): The prefix for categories used by the mediawiki \
-                              site; defaults to Category (en)
-            user_agent (str): The user agent string to use when making \
-                              requests; defaults to a library version but per \
-                              the MediaWiki API documentation it recommends \
-                              setting a unique one and not using the \
-                              library's default user-agent string
+            rate_limit_wait (timedelta): Amount of time to wait between requests
+            cat_prefix (str): The prefix for categories used by the mediawiki site; defaults to Category (en)
+            user_agent (str): The user agent string to use when making requests; defaults to a library version but \
+                per the MediaWiki API documentation it recommends setting a unique one and not using the \
+                library's default user-agent string
             username (str): The username to use to log into the MediaWiki
             password (str): The password to use to log into the MediaWiki
-            proxies (str): A dictionary of specific proxies to use in the \
-                           Requests libary."""
+            proxies (str): A dictionary of specific proxies to use in the Requests libary."""
 
     __slots__ = [
         "_version",
@@ -82,7 +80,7 @@ class MediaWiki(object):
         user_agent=None,
         username=None,
         password=None,
-        proxies=None
+        proxies=None,
     ):
         """ Init Function """
         self._version = VERSION
@@ -94,9 +92,7 @@ class MediaWiki(object):
         self.timeout = timeout
         # requests library parameters
         self._session = None
-        self._user_agent = ("python-mediawiki/VERSION-{0}" "/({1})/BOT").format(
-            VERSION, URL
-        )
+        self._user_agent = ("python-mediawiki/VERSION-{0}" "/({1})/BOT").format(VERSION, URL)
         self._proxies = None
         # set libary parameters
         if user_agent is not None:
@@ -329,13 +325,11 @@ class MediaWiki(object):
             Returns:
                 bool: `True` if successfully logged in; `False` otherwise
             Raises:
-                :py:func:`mediawiki.exceptions.MediaWikiLoginError`: if \
-                unable to login
+                :py:func:`mediawiki.exceptions.MediaWikiLoginError`: if unable to login
 
             Note:
                 Per the MediaWiki API, one should use the `bot password`; \
-                see https://www.mediawiki.org/wiki/API:Login for more \
-                information """
+                see https://www.mediawiki.org/wiki/API:Login for more information """
         # get login token
         params = {
             "action": "query",
@@ -368,11 +362,7 @@ class MediaWiki(object):
 
     # non-properties
     def set_api_url(
-        self,
-        api_url="https://{lang}.wikipedia.org/w/api.php",
-        lang="en",
-        username=None,
-        password=None,
+        self, api_url="https://{lang}.wikipedia.org/w/api.php", lang="en", username=None, password=None,
     ):
         """ Set the API URL and language
 
@@ -396,7 +386,7 @@ class MediaWiki(object):
             self._get_site_info()
             self.__supported_languages = None  # reset this
             self.__available_languages = None  # reset this
-        except (requests.exceptions.ConnectTimeout, MediaWikiException):
+        except (ConnectTimeout, MediaWikiException):
             # reset api url and lang in the event that the exception was caught
             self._api_url = old_api_url
             self._lang = old_lang
@@ -446,7 +436,7 @@ class MediaWiki(object):
                 try:
                     MediaWiki(lang=lang)
                     available[lang] = True
-                except Exception:
+                except (ConnectionError, ConnectTimeout, MediaWikiException, MediaWikiAPIURLError):
                     available[lang] = False
             self.__available_languages = available
         return self.__available_languages
@@ -462,8 +452,7 @@ class MediaWiki(object):
             Args:
                 pages (int): Number of random pages to return
             Returns:
-                list or int: A list of random page titles or a random page \
-                             title if pages = 1 """
+                list or int: A list of random page titles or a random page title if pages = 1 """
         if pages is None or pages < 1:
             raise ValueError("Number of pages must be greater than 0")
 
@@ -508,9 +497,7 @@ class MediaWiki(object):
                 results (int): Number of pages to return
                 suggestion (bool): Use suggestion
             Returns:
-                tuple or list: tuple (list results, suggestion) if \
-                               suggestion is **True**; list of results \
-                               otherwise
+                tuple or list: tuple (list results, suggestion) if suggestion is **True**; list of results otherwise
             Note:
                 Could add ability to continue past the limit of 500
         """
@@ -550,8 +537,7 @@ class MediaWiki(object):
             Args:
                 query (str): Page title
             Returns:
-                String or None: Suggested page title or **None** if no \
-                                suggestion found
+                String or None: Suggested page title or **None** if no suggestion found
         """
         res, suggest = self.search(query, results=1, suggestion=True)
         try:
@@ -562,36 +548,24 @@ class MediaWiki(object):
 
     @memoize
     def geosearch(
-        self,
-        latitude=None,
-        longitude=None,
-        radius=1000,
-        title=None,
-        auto_suggest=True,
-        results=10,
+        self, latitude=None, longitude=None, radius=1000, title=None, auto_suggest=True, results=10,
     ):
         """ Search for pages that relate to the provided geocoords or near
             the page
 
             Args:
-                latitude (Decimal or None): Latitude geocoord; must be \
-                                            coercible to decimal
-                longitude (Decimal or None): Longitude geocoord; must be \
-                                             coercible to decimal
-                radius (int): Radius around page or geocoords to pull back; \
-                              in meters
-                title (str): Page title to use as a geocoordinate; this has \
-                             precedence over lat/long
+                latitude (Decimal or None): Latitude geocoord; must be coercible to decimal
+                longitude (Decimal or None): Longitude geocoord; must be coercible to decimal
+                radius (int): Radius around page or geocoords to pull back; in meters
+                title (str): Page title to use as a geocoordinate; this has precedence over lat/long
                 auto_suggest (bool): Auto-suggest the page title
                 results (int): Number of pages within the radius to return
             Returns:
                 list: A listing of page titles
             Note:
-                The Geosearch API does not support pulling more than the \
-                maximum of 500
+                The Geosearch API does not support pulling more than the maximum of 500
             Raises:
-                ValueError: If either the passed latitude or longitude are \
-                            not coercible to a Decimal
+                ValueError: If either the passed latitude or longitude are not coercible to a Decimal
         """
 
         def test_lat_long(val):
@@ -611,7 +585,7 @@ class MediaWiki(object):
         # end local function
         max_pull = 500
 
-        limit = (min(results, max_pull) if results is not None else max_pull)
+        limit = min(results, max_pull) if results is not None else max_pull
         params = {"list": "geosearch", "gsradius": radius, "gslimit": limit}
         if title is not None:
             if auto_suggest:
@@ -636,14 +610,11 @@ class MediaWiki(object):
             Args:
                 query (str): Title to search for
                 results (int): Number of pages within the radius to return
-                redirect (bool): If **False** return the redirect itself, \
-                                 otherwise resolve redirects
+                redirect (bool): If **False** return the redirect itself, otherwise resolve redirects
             Returns:
-                List: List of results that are stored in a tuple \
-                      (Title, Summary, URL)
+                List: List of results that are stored in a tuple (Title, Summary, URL)
             Note:
-                The Opensearch API does not support pulling more than the \
-                maximum of 500
+                The Opensearch API does not support pulling more than the maximum of 500
             Raises:
         """
 
@@ -711,8 +682,7 @@ class MediaWiki(object):
                 title (str): Page title to summarize
                 sentences (int): Number of sentences to return in summary
                 chars (int): Number of characters to return in summary
-                auto_suggest (bool): Run auto-suggest on title before \
-                                     summarizing
+                auto_suggest (bool): Run auto-suggest on title before summarizing
                 redirect (bool): Use page redirect on title before summarizing
             Returns:
                 str: The summarized results of the page
@@ -729,11 +699,9 @@ class MediaWiki(object):
             Args:
                 category (str): Category name
                 results (int): Number of result
-                subcategories (bool): Include subcategories (**True**) or not \
-                                      (**False**)
+                subcategories (bool): Include subcategories (**True**) or not (**False**)
             Returns:
-                Tuple or List: Either a tuple ([pages], [subcategories]) or \
-                               just the list of pages
+                Tuple or List: Either a tuple ([pages], [subcategories]) or just the list of pages
             Note:
                 Set results to **None** to get all results """
         self._check_query(category, "Category must be specified")
@@ -765,7 +733,7 @@ class MediaWiki(object):
                 elif rec["type"] == "subcat":
                     tmp = rec["title"]
                     if tmp.startswith(self.category_prefix):
-                        tmp = tmp[len(self.category_prefix) + 1:]
+                        tmp = tmp[len(self.category_prefix) + 1 :]
                     subcats.append(tmp)
 
             cont = raw_res.get("query-continue", False)
@@ -802,8 +770,7 @@ class MediaWiki(object):
             Note:
                 Set depth to **None** to get the whole tree
             Note:
-                Return Data Structure: Subcategory contains the same \
-                recursive structure
+                Return Data Structure: Subcategory contains the same recursive structure
 
                 >>> {
                         'category': {
@@ -829,9 +796,7 @@ class MediaWiki(object):
             self.__cat_tree_rec(cat, depth, results, 0, categories, links)
         return results
 
-    def page(
-        self, title=None, pageid=None, auto_suggest=True, redirect=True, preload=False
-    ):
+    def page(self, title=None, pageid=None, auto_suggest=True, redirect=True, preload=False):
         """ Get MediaWiki page based on the provided title or pageid
 
             Args:
@@ -841,11 +806,9 @@ class MediaWiki(object):
                 redirect (bool): **True:** Follow page redirects
                 preload (bool): **True:** Load most page properties
             Raises:
-                ValueError: when title is blank or None and no pageid is \
-                            provided
+                ValueError: when title is blank or None and no pageid is provided
             Raises:
-                :py:func:`mediawiki.exceptions.PageError`: if page does \
-                not exist
+                :py:func:`mediawiki.exceptions.PageError`: if page does not exist
             Note:
                 Title takes precedence over pageid if both are provided """
         if (title is None or title.strip() == "") and pageid is None:
@@ -891,11 +854,8 @@ class MediaWiki(object):
 
     # Protected functions
     def _get_site_info(self):
-        """ Parse out the Wikimedia site information including
-        API Version and Extensions """
-        response = self.wiki_request(
-            {"meta": "siteinfo", "siprop": "extensions|general"}
-        )
+        """ Parse out the Wikimedia site information including API Version and Extensions """
+        response = self.wiki_request({"meta": "siteinfo", "siprop": "extensions|general"})
 
         # parse what we need out here!
         query = response.get("query", None)
@@ -963,10 +923,7 @@ class MediaWiki(object):
             raise ValueError(msg)
 
         if depth is not None and depth < 1:
-            msg = (
-                "CategoryTree: Parameter 'depth' must be either None "
-                "(for the full tree) or be greater than 0"
-            )
+            msg = "CategoryTree: Parameter 'depth' must be either None " "(for the full tree) or be greater than 0"
             raise ValueError(msg)
 
     def __cat_tree_rec(self, cat, depth, tree, level, categories, links):
@@ -987,9 +944,7 @@ class MediaWiki(object):
                     pag = self.page("{0}:{1}".format(self.category_prefix, cat))
                     categories[cat] = pag
                     parent_cats = categories[cat].categories
-                    links[cat] = self.categorymembers(
-                        cat, results=None, subcategories=True
-                    )
+                    links[cat] = self.categorymembers(cat, results=None, subcategories=True)
                     break
                 except PageError:
                     raise PageError("{0}:{1}".format(self.category_prefix, cat))
@@ -1010,24 +965,22 @@ class MediaWiki(object):
         else:
             for ctg in links[cat][1]:
                 self.__cat_tree_rec(
-                    ctg,
-                    depth,
-                    tree[cat]["sub-categories"],
-                    level + 1,
-                    categories,
-                    links,
+                    ctg, depth, tree[cat]["sub-categories"], level + 1, categories, links,
                 )
 
     def _get_response(self, params):
         """ wrap the call to the requests package """
-        return self._session.get(
-            self._api_url, params=params, timeout=self._timeout
-        ).json()
+        try:
+            return self._session.get(self._api_url, params=params, timeout=self._timeout).json()
+        except JSONDecodeError:
+            return {}
 
     def _post_response(self, params):
         """ wrap a post call to the requests package """
-        return self._session.post(
-            self._api_url, data=params, timeout=self._timeout
-        ).json()
+        try:
+            return self._session.post(self._api_url, data=params, timeout=self._timeout).json()
+        except JSONDecodeError:
+            return {}
+
 
 # end MediaWiki class

@@ -157,18 +157,12 @@ pep8 mediawiki
 
 A special thanks to all the code contributors to `pymediawiki`!
 
-[@barrust](https://github.com/barrust) (Maintainer)
-
-[@dan-blanchard](https://github.com/dan-blanchard) - Default URL conforms to passed in language [#26](https://github.com/barrust/mediawiki/pull/26)
-
-[@nagash91](https://github.com/nagash91) - Pull section titles without additional markup [#42](https://github.com/barrust/mediawiki/issues/42)
-
-[@flamableconcrete](https://github.com/flamableconcrete) - Added `allpages` functionality [#75](https://github.com/barrust/mediawiki/pull/75)
-
-[@shnela](https://github.com/shnela) - Added `langlinks` property [#65](https://github.com/barrust/mediawiki/issues/65)
-
-[@rubabredwan](https://github.com/rubabredwan) - Fix for `suggest` [#85](https://github.com/barrust/mediawiki/pull/85)
-
-[@ldorigo](https://github.com/ldorigo) - Pulling links for header sections [#90](https://github.com/barrust/mediawiki/pull/90)
-
-[@tbm](https://github.com/tbm) - `categorymember` improvements [PPR #100](https://github.com/barrust/mediawiki/pull/100)
+* [@barrust](https://github.com/barrust) (Maintainer)
+* [@dan-blanchard](https://github.com/dan-blanchard) - Default URL conforms to passed in language [#26](https://github.com/barrust/mediawiki/pull/26)
+* [@nagash91](https://github.com/nagash91) - Pull section titles without additional markup [#42](https://github.com/barrust/mediawiki/issues/42)
+* [@flamableconcrete](https://github.com/flamableconcrete) - Added `allpages` functionality [#75](https://github.com/barrust/mediawiki/pull/75)
+* [@shnela](https://github.com/shnela) - Added `langlinks` property [#65](https://github.com/barrust/mediawiki/issues/65)
+* [@rubabredwan](https://github.com/rubabredwan) - Fix for `suggest` [#85](https://github.com/barrust/mediawiki/pull/85)
+* [@ldorigo](https://github.com/ldorigo) - Pulling links for header sections [#90](https://github.com/barrust/mediawiki/pull/90)
+* [@tbm](https://github.com/tbm) - `categorymember` improvements [PR #100](https://github.com/barrust/mediawiki/pull/100)
+* [@dnanto](https://github.com/dnanto) - Determining `available_languages` [PR #116](https://github.com/barrust/mediawiki/pull/116)

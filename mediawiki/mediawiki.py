@@ -63,6 +63,7 @@ class MediaWiki(object):
         "_api_version_str",
         "_base_url",
         "__supported_languages",
+        "__available_languages",
         "_cache",
         "_refresh_interval",
         "_use_cache",
@@ -111,6 +112,7 @@ class MediaWiki(object):
         self._api_version_str = None
         self._base_url = None
         self.__supported_languages = None
+        self.__available_languages = None
 
         # for memoized results
         self._cache = dict()
@@ -393,6 +395,7 @@ class MediaWiki(object):
                 self.login(username, password)
             self._get_site_info()
             self.__supported_languages = None  # reset this
+            self.__available_languages = None  # reset this
         except (requests.exceptions.ConnectTimeout, MediaWikiException):
             # reset api url and lang in the event that the exception was caught
             self._api_url = old_api_url
@@ -430,6 +433,23 @@ class MediaWiki(object):
             supported = {lang["code"]: lang["*"] for lang in tmp}
             self.__supported_languages = supported
         return self.__supported_languages
+
+    @property
+    def available_languages(self):
+        """ dict: All available language prefixes on the MediaWiki site
+
+            Note:
+                Not Settable """
+        if self.__available_languages is None:
+            available = {}
+            for lang in self.supported_languages:
+                try:
+                    MediaWiki(lang=lang)
+                    available[lang] = True
+                except Exception:
+                    available[lang] = False
+            self.__available_languages = available
+        return self.__available_languages
 
     @property
     def logged_in(self):

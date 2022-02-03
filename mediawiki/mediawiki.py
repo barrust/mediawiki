@@ -10,7 +10,7 @@ from decimal import Decimal, DecimalException
 from json import JSONDecodeError
 
 import requests
-from requests.exceptions import ConnectionError, ConnectTimeout
+import requests.exceptions as rex
 
 from .exceptions import (
     HTTPTimeoutError,
@@ -386,7 +386,7 @@ class MediaWiki(object):
             self._get_site_info()
             self.__supported_languages = None  # reset this
             self.__available_languages = None  # reset this
-        except (ConnectTimeout, MediaWikiException):
+        except (rex.ConnectTimeout, MediaWikiException):
             # reset api url and lang in the event that the exception was caught
             self._api_url = old_api_url
             self._lang = old_lang
@@ -436,7 +436,7 @@ class MediaWiki(object):
                 try:
                     MediaWiki(lang=lang)
                     available[lang] = True
-                except (ConnectionError, ConnectTimeout, MediaWikiException, MediaWikiAPIURLError):
+                except (rex.ConnectionError, rex.ConnectTimeout, MediaWikiException, MediaWikiAPIURLError):
                     available[lang] = False
             self.__available_languages = available
         return self.__available_languages

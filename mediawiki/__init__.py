@@ -22,7 +22,8 @@ __license__ = "MIT"
 __version__ = VERSION
 __credits__ = ["Jonathan Goldsmith"]
 __url__ = URL
-__bugtrack_url__ = "{0}/issues".format(URL)
+__bugtrack_url__ = "{0}/issues".format(__url__)
+__download_url__ = "{0}/tarball/v{1}".format(__url__, __version__)
 
 __all__ = [
     "MediaWiki",

@@ -843,7 +843,7 @@ class MediaWiki(object):
         if limit and last_call and last_call + self._min_wait > datetime.now():
             # call time to quick for rate limited api requests, wait
             wait_time = (last_call + self._min_wait) - datetime.now()
-            time.sleep(int(wait_time.total_seconds()))
+            time.sleep(wait_time.total_seconds())
 
         req = self._get_response(params)
 

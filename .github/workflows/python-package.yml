@@ -33,9 +33,10 @@ jobs:
     - name: Test with pytest
       run: |
         # Run tests while also generating coverage statistics
-        pytest --cov=./ --cov-report=xml
+        pytest --cov . --cov-report xml:/home/runner/coverage.xml
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
-        file: ./coverage.xml
+        file: /home/runner/coverage.xml
         fail_ci_if_error: true
+        verbose: true

@@ -1,6 +1,6 @@
 # MediaWiki Changelog
 
-## Future Version
+## Version 0.7.2
 
 * Add `page_preview` property to simulate the page preview hover [PR #114](https://github.com/barrust/mediawiki/pull/114)
 * Add `available_languages` property [PR #116](https://github.com/barrust/mediawiki/pull/116)

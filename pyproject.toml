@@ -7,3 +7,11 @@ requires = [
     "beautifulsoup4"
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 120
+target-version = ['py36']
+include = '\.pyi?$'

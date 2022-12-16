@@ -92,3 +92,6 @@ ENV/
 
 # PyPi
 .pypirc
+
+# vscode
+.vscode/

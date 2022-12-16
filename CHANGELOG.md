@@ -2,7 +2,7 @@
 
 ## Future Release
 
-* Add `unordered_options` to the `DisambiguationError` to attempt to get options in the order presented on the page; [issue #125](https://github.com/barrust/mediawiki/issues/125)
+* Add `unordered_options` to the `DisambiguationError` to attempt to get options in the order presented on the page; [issue #124](https://github.com/barrust/mediawiki/issues/124)
 
 ## Version 0.7.2
 

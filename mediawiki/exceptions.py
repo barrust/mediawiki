@@ -3,7 +3,6 @@ MediaWiki Exceptions
 """
 from .utilities import str_or_unicode
 
-
 ODD_ERROR_MESSAGE = (
     "This should not happen. If the MediaWiki site you are "
     "querying is available, then please report this issue on "
@@ -128,6 +127,7 @@ class DisambiguationError(MediaWikiBaseException):
 
     def __init__(self, title, may_refer_to, url, details=None):
         self._title = title
+        self._unordered_options = may_refer_to
         self._options = sorted(may_refer_to)
         self._details = details
         self._url = url
@@ -150,6 +150,11 @@ class DisambiguationError(MediaWikiBaseException):
     def options(self):
         """ list: The list of possible page titles """
         return self._options
+
+    @property
+    def unordered_options(self):
+        """list: The list of possible page titles, un-sorted in an attempt to get them as they showup on the page"""
+        return self._unordered_options
 
     @property
     def details(self):

@@ -1,5 +1,9 @@
 # MediaWiki Changelog
 
+## Future Release
+
+* Add `unordered_options` to the `DisambiguationError` to attempt to get options in the order presented on the page; [issue #124](https://github.com/barrust/mediawiki/issues/124)
+
 ## Version 0.7.2
 
 * Add `page_preview` property to simulate the page preview hover [PR #114](https://github.com/barrust/mediawiki/pull/114)

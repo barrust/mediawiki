@@ -25,7 +25,7 @@ from .mediawikipage import MediaWikiPage
 from .utilities import memoize
 
 URL = "https://github.com/barrust/mediawiki"
-VERSION = "0.7.2"
+VERSION = "0.7.3"
 
 
 class MediaWiki(object):
@@ -67,6 +67,7 @@ class MediaWiki(object):
         "_use_cache",
         "_is_logged_in",
         "_proxies",
+        "_verify_ssl",
     ]
 
     def __init__(
@@ -81,6 +82,7 @@ class MediaWiki(object):
         username=None,
         password=None,
         proxies=None,
+        verify_ssl=True,
     ):
         """ Init Function """
         self._version = VERSION
@@ -94,6 +96,8 @@ class MediaWiki(object):
         self._session = None
         self._user_agent = ("python-mediawiki/VERSION-{0}" "/({1})/BOT").format(VERSION, URL)
         self._proxies = None
+        self._verify_ssl = None
+        self.verify_ssl = verify_ssl
         # set libary parameters
         if user_agent is not None:
             self.user_agent = user_agent
@@ -226,6 +230,19 @@ class MediaWiki(object):
             self._timeout = None  # no timeout
             return
         self._timeout = float(timeout)  # allow the exception to be raised
+
+    @property
+    def verify_ssl(self):
+        """ bool | str: Verify SSL when using requests or path to cert file """
+        return self._verify_ssl
+
+    @verify_ssl.setter
+    def verify_ssl(self, verify_ssl):
+        """ Set request verify SSL parameter; defaults to True if issue """
+        self._verify_ssl = True
+        if isinstance(verify_ssl, (bool, str)):
+            self._verify_ssl = verify_ssl
+        self._reset_session()
 
     @property
     def language(self):
@@ -403,6 +420,7 @@ class MediaWiki(object):
         self._session.headers.update(headers)
         if self._proxies is not None:
             self._session.proxies.update(self._proxies)
+        self._session.verify = self._verify_ssl
         self._is_logged_in = False
 
     def clear_memoized(self):

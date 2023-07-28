@@ -1,8 +1,9 @@
 # MediaWiki Changelog
 
-## Future Release
+## Version 0.7.3
 
 * Add `unordered_options` to the `DisambiguationError` to attempt to get options in the order presented on the page; [issue #124](https://github.com/barrust/mediawiki/issues/124)
+* Add [verify SSL support](https://requests.readthedocs.io/en/latest/user/advanced/#ssl-cert-verification) by passing info directly to the requests library.
 
 ## Version 0.7.2
 

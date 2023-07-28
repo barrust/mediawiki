@@ -25,7 +25,7 @@ from .mediawikipage import MediaWikiPage
 from .utilities import memoize
 
 URL = "https://github.com/barrust/mediawiki"
-VERSION = "0.7.2"
+VERSION = "0.7.3"
 
 
 class MediaWiki(object):
@@ -67,6 +67,7 @@ class MediaWiki(object):
         "_use_cache",
         "_is_logged_in",
         "_proxies",
+        "_verify_ssl",
     ]
 
     def __init__(
@@ -81,6 +82,7 @@ class MediaWiki(object):
         username=None,
         password=None,
         proxies=None,
+        verify_ssl=True,
     ):
         """ Init Function """
         self._version = VERSION
@@ -94,6 +96,8 @@ class MediaWiki(object):
         self._session = None
         self._user_agent = ("python-mediawiki/VERSION-{0}" "/({1})/BOT").format(VERSION, URL)
         self._proxies = None
+        self._verify_ssl = None
+        self.verify_ssl = verify_ssl
         # set libary parameters
         if user_agent is not None:
             self.user_agent = user_agent
@@ -226,6 +230,16 @@ class MediaWiki(object):
             self._timeout = None  # no timeout
             return
         self._timeout = float(timeout)  # allow the exception to be raised
+
+    @property
+    def verify_ssl(self):
+        """ bool: Verify SSL when using requests """
+        return self._verify_ssl
+
+    @verify_ssl.setter
+    def verify_ssl(self, verify_ssl):
+        """ Set request verify SSL parameter """
+        self._verify_ssl = bool(verify_ssl)
 
     @property
     def language(self):
@@ -971,14 +985,14 @@ class MediaWiki(object):
     def _get_response(self, params):
         """ wrap the call to the requests package """
         try:
-            return self._session.get(self._api_url, params=params, timeout=self._timeout).json()
+            return self._session.get(self._api_url, params=params, timeout=self._timeout, verify=self._verify_ssl).json()
         except JSONDecodeError:
             return {}
 
     def _post_response(self, params):
         """ wrap a post call to the requests package """
         try:
-            return self._session.post(self._api_url, data=params, timeout=self._timeout).json()
+            return self._session.post(self._api_url, data=params, timeout=self._timeout, verify=self._verify_ssl).json()
         except JSONDecodeError:
             return {}
 

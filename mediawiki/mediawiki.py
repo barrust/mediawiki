@@ -233,13 +233,16 @@ class MediaWiki(object):
 
     @property
     def verify_ssl(self):
-        """ bool: Verify SSL when using requests """
+        """ bool | str: Verify SSL when using requests or path to cert file """
         return self._verify_ssl
 
     @verify_ssl.setter
     def verify_ssl(self, verify_ssl):
-        """ Set request verify SSL parameter """
-        self._verify_ssl = bool(verify_ssl)
+        """ Set request verify SSL parameter; defaults to True if issue """
+        self._verify_ssl = True
+        if isinstance(verify_ssl, (bool, str)):
+            self._verify_ssl = verify_ssl
+        self._reset_session()
 
     @property
     def language(self):
@@ -417,6 +420,7 @@ class MediaWiki(object):
         self._session.headers.update(headers)
         if self._proxies is not None:
             self._session.proxies.update(self._proxies)
+        self._session.verify = self._verify_ssl
         self._is_logged_in = False
 
     def clear_memoized(self):
@@ -985,14 +989,14 @@ class MediaWiki(object):
     def _get_response(self, params):
         """ wrap the call to the requests package """
         try:
-            return self._session.get(self._api_url, params=params, timeout=self._timeout, verify=self._verify_ssl).json()
+            return self._session.get(self._api_url, params=params, timeout=self._timeout).json()
         except JSONDecodeError:
             return {}
 
     def _post_response(self, params):
         """ wrap a post call to the requests package """
         try:
-            return self._session.post(self._api_url, data=params, timeout=self._timeout, verify=self._verify_ssl).json()
+            return self._session.post(self._api_url, data=params, timeout=self._timeout).json()
         except JSONDecodeError:
             return {}
 

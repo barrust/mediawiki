@@ -43,7 +43,8 @@ class MediaWiki(object):
                 library's default user-agent string
             username (str): The username to use to log into the MediaWiki
             password (str): The password to use to log into the MediaWiki
-            proxies (str): A dictionary of specific proxies to use in the Requests libary."""
+            proxies (str): A dictionary of specific proxies to use in the Requests libary
+            verify_ssl (bool|str): Verify SSL Certificates to be passed directly into the Requests library"""
 
     __slots__ = [
         "_version",
@@ -582,6 +583,8 @@ class MediaWiki(object):
                 list: A listing of page titles
             Note:
                 The Geosearch API does not support pulling more than the maximum of 500
+            Note:
+                If the page doesn't match the provided title, try setting auto_suggest to `False`
             Raises:
                 ValueError: If either the passed latitude or longitude are not coercible to a Decimal
         """
@@ -706,7 +709,9 @@ class MediaWiki(object):
                 str: The summarized results of the page
             Note:
                 Precedence for parameters: sentences then chars; if both are \
-                0 then the entire first section is returned """
+                0 then the entire first section is returned
+            Note:
+                If the page doesn't match the provided title, try setting auto_suggest to `False`"""
         page_info = self.page(title, auto_suggest=auto_suggest, redirect=redirect)
         return page_info.summarize(sentences, chars)
 
@@ -828,7 +833,9 @@ class MediaWiki(object):
             Raises:
                 :py:func:`mediawiki.exceptions.PageError`: if page does not exist
             Note:
-                Title takes precedence over pageid if both are provided """
+                Title takes precedence over pageid if both are provided
+            Note:
+                If the page doesn't match the provided title, try setting auto_suggest to `False`"""
         if (title is None or title.strip() == "") and pageid is None:
             raise ValueError("Either a title or a pageid must be specified")
         if title:

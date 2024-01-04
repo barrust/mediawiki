@@ -1,16 +1,21 @@
 '''
 Generate data for tests
 '''
-import sys
-import os
-from datetime import timedelta
 import json
+import os
+import sys
+from datetime import timedelta
 from decimal import Decimal
-sys.path.insert(0, '../mediawiki')
-from mediawiki import (MediaWiki, PageError, RedirectError,
-                       DisambiguationError, MediaWikiAPIURLError,
-                       MediaWikiGeoCoordError)
 
+sys.path.insert(0, '../mediawiki')
+from mediawiki import (
+    DisambiguationError,
+    MediaWiki,
+    MediaWikiAPIURLError,
+    MediaWikiGeoCoordError,
+    PageError,
+    RedirectError,
+)
 
 # set up the json objects
 REQUESTS_FILE = './tests/mock_requests.json'

@@ -1,9 +1,9 @@
 """
 Utility functions
 """
-import sys
 import functools
 import inspect
+import sys
 import time
 
 

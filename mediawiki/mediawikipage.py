@@ -4,19 +4,21 @@ MediaWikiPage class module
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
-from decimal import Decimal
 import re
 from collections import OrderedDict
+from decimal import Decimal
+
 from bs4 import BeautifulSoup, Tag
-from .utilities import str_or_unicode, is_relative_url
+
 from .exceptions import (
+    ODD_ERROR_MESSAGE,
+    DisambiguationError,
     MediaWikiBaseException,
     MediaWikiException,
     PageError,
     RedirectError,
-    DisambiguationError,
-    ODD_ERROR_MESSAGE,
 )
+from .utilities import is_relative_url, str_or_unicode
 
 
 class MediaWikiPage(object):

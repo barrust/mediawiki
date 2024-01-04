@@ -8,7 +8,7 @@ import time
 from datetime import datetime, timedelta
 from decimal import Decimal, DecimalException
 from json import JSONDecodeError
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import requests
 import requests.exceptions as rex
@@ -233,12 +233,12 @@ class MediaWiki(object):
         self._timeout = float(timeout)  # allow the exception to be raised
 
     @property
-    def verify_ssl(self) -> bool:
+    def verify_ssl(self) -> Union[bool, str]:
         """bool | str: Verify SSL when using requests or path to cert file"""
         return self._verify_ssl
 
     @verify_ssl.setter
-    def verify_ssl(self, verify_ssl: bool | str):
+    def verify_ssl(self, verify_ssl: Union[bool, str]):
         """Set request verify SSL parameter; defaults to True if issue"""
         self._verify_ssl = True
         if isinstance(verify_ssl, (bool, str)):
@@ -467,7 +467,7 @@ class MediaWiki(object):
         """bool: Returns if logged into the MediaWiki site"""
         return self._is_logged_in
 
-    def random(self, pages: int = 1) -> str | List[str]:
+    def random(self, pages: int = 1) -> Union[str, List[str]]:
         """Request a random page title or list of random titles
 
         Args:
@@ -510,7 +510,9 @@ class MediaWiki(object):
         return titles
 
     @memoize
-    def search(self, query: str, results: int = 10, suggestion: bool = False) -> List[str] | Tuple[List[str], str]:
+    def search(
+        self, query: str, results: int = 10, suggestion: bool = False
+    ) -> Union[List[str], Tuple[List[str], str]]:
         """Search for similar titles
 
         Args:
@@ -570,8 +572,8 @@ class MediaWiki(object):
     @memoize
     def geosearch(
         self,
-        latitude: Decimal | float | None = None,
-        longitude: Decimal | float | None = None,
+        latitude: Union[Decimal, float, None] = None,
+        longitude: Union[Decimal, float, None] = None,
         radius: int = 1000,
         title: str = None,
         auto_suggest: bool = True,
@@ -726,7 +728,7 @@ class MediaWiki(object):
     @memoize
     def categorymembers(
         self, category: str, results: int = 10, subcategories: bool = True
-    ) -> List[str] | Tuple[List[str], List[str]]:
+    ) -> Union[List[str], Tuple[List[str], List[str]]]:
         """Get information about a category: pages and subcategories
 
         Args:

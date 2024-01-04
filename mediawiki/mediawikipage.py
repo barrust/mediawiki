@@ -37,7 +37,8 @@ class MediaWikiPage:
     Raises:
         :py:func:`mediawiki.exceptions.DisambiguationError`: if page provided is a disambiguation page
     Raises:
-        :py:func:`mediawiki.exceptions.RedirectError`: if redirect is **False** and the pageid or title provided redirects to another page
+        :py:func:`mediawiki.exceptions.RedirectError`: if redirect is **False** and the pageid or title \
+            provided redirects to another page
     Warning:
         This should never need to be used directly! Please use :func:`mediawiki.MediaWiki.page`"""
 
@@ -394,7 +395,8 @@ class MediaWikiPage:
 
     @property
     def langlinks(self) -> Dict[str, str]:
-        """dict: Names of the page in other languages for which page is where the key is the language code and the page name is the name of the page in that language.
+        """dict: Names of the page in other languages for which page is where the key is the language code
+        and the page name is the name of the page in that language.
 
         Note:
             Not settable
@@ -502,7 +504,8 @@ class MediaWikiPage:
         Note:
             Use **None** if the header section is desired
         Note:
-            Returns **None** if section title is not found; only text between title and next section or sub-section title is returned
+            Returns **None** if section title is not found; only text between title and next \
+                section or sub-section title is returned
         Note:
             Side effect is to also pull the content which can be slow
         Note:
@@ -543,7 +546,8 @@ class MediaWikiPage:
         """Parse all links within a section
 
         Args:
-            section_title (str): Name of the section to pull or, if  None is provided, the links between the main heading and the first section
+            section_title (str): Name of the section to pull or, if  None is provided, \
+                the links between the main heading and the first section
         Returns:
             list: List of (title, url) tuples
         Note:
@@ -725,7 +729,7 @@ class MediaWikiPage:
                 continue
             if node.get("role", "") == "navigation":
                 continue
-            elif "infobox" in node.get("class", []):
+            if "infobox" in node.get("class", []):
                 continue
 
             # If the classname contains "toc", the element is a table of contents.

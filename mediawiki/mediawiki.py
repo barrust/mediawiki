@@ -128,8 +128,8 @@ class MediaWiki:
 
         try:
             self._get_site_info()
-        except MediaWikiException:
-            raise MediaWikiAPIURLError(url)
+        except MediaWikiException as exc:
+            raise MediaWikiAPIURLError(url) from exc
 
     # non-settable properties
     @property
@@ -406,11 +406,11 @@ class MediaWiki:
             self._get_site_info()
             self.__supported_languages = None  # reset this
             self.__available_languages = None  # reset this
-        except (rex.ConnectTimeout, MediaWikiException):
+        except (rex.ConnectTimeout, MediaWikiException) as exc:
             # reset api url and lang in the event that the exception was caught
             self._api_url = old_api_url
             self._lang = old_lang
-            raise MediaWikiAPIURLError(api_url)
+            raise MediaWikiAPIURLError(api_url) from exc
         self.clear_memoized()
 
     def _reset_session(self):
@@ -609,8 +609,8 @@ class MediaWiki:
                 )
                 try:
                     return Decimal(val)
-                except (DecimalException, TypeError):
-                    raise ValueError(error)
+                except (DecimalException, TypeError) as exc:
+                    raise ValueError(error) from exc
             return val
 
         # end local function
@@ -985,10 +985,10 @@ class MediaWiki:
                     parent_cats = categories[cat].categories
                     links[cat] = self.categorymembers(cat, results=None, subcategories=True)
                     break
-                except PageError:
-                    raise PageError(f"{self.category_prefix}:{cat}")
-                except KeyboardInterrupt:
-                    raise
+                except PageError as exc:
+                    raise PageError(f"{self.category_prefix}:{cat}") from exc
+                except KeyboardInterrupt as exc:
+                    raise exc
                 except Exception:
                     tries = tries + 1
                     time.sleep(1)

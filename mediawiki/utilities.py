@@ -10,7 +10,7 @@ from typing import Any, Callable, Dict
 
 def parse_all_arguments(func: Callable) -> Dict[str, Any]:
     """determine all positional and named arguments as a dict"""
-    args = dict()
+    args = {}
 
     func_args = inspect.signature(func)
     for itm in list(func_args.parameters)[1:]:
@@ -38,15 +38,15 @@ def memoize(func: Callable) -> Callable:
             return func(*args, **kwargs)
 
         if func.__name__ not in cache:
-            cache[func.__name__] = dict()
+            cache[func.__name__] = {}
             if "defaults" not in cache:
-                cache["defaults"] = dict()
+                cache["defaults"] = {}
             cache["defaults"][func.__name__] = parse_all_arguments(func)
         # build a key; should also consist of the default values
         defaults = cache["defaults"][func.__name__].copy()
         for key, val in kwargs.items():
             defaults[key] = val
-        tmp = list()
+        tmp = []
         tmp.extend(args[1:])
         for k in sorted(defaults.keys()):
             tmp.append(f"({k}: {defaults[k]})")

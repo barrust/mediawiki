@@ -7,7 +7,7 @@ MediaWikiPage class module
 import re
 from collections import OrderedDict
 from decimal import Decimal
-from typing import Any, Dict, Generator, List, Optional, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 from bs4 import BeautifulSoup, Tag
 
@@ -252,7 +252,7 @@ class MediaWikiPage:
         Note:
             Not settable"""
         if self._images is None:
-            self._images = list()
+            self._images = []
             params = {
                 "generator": "images",
                 "gimlimit": "max",
@@ -276,7 +276,7 @@ class MediaWikiPage:
         Note:
             This is a parsing operation and not part of the standard API"""
         if self._logos is None:
-            self._logos = list()
+            self._logos = []
             # Cache the results of parsing the html, so that multiple calls happen much faster
             if not self._soup:
                 self._soup = BeautifulSoup(self.html, "html.parser")
@@ -298,14 +298,14 @@ class MediaWikiPage:
         Note:
             This is a parsing operation and not part of the standard API"""
         if self._hatnotes is None:
-            self._hatnotes = list()
+            self._hatnotes = []
             # Cache the results of parsing the html, so that multiple calls happen much faster
             if not self._soup:
                 self._soup = BeautifulSoup(self.html, "html.parser")
             notes = self._soup.find_all("div", class_="hatnote")
             if notes is not None:
                 for note in notes:
-                    tmp = list()
+                    tmp = []
                     for child in note.children:
                         if hasattr(child, "text"):
                             tmp.append(child.text)
@@ -322,7 +322,7 @@ class MediaWikiPage:
         Note
             May include external links within page that are not technically cited anywhere"""
         if self._references is None:
-            self._references = list()
+            self._references = []
             self.__pull_combined_properties()
         return self._references
 
@@ -333,7 +333,7 @@ class MediaWikiPage:
         Note:
             Not settable"""
         if self._categories is None:
-            self._categories = list()
+            self._categories = []
             self.__pull_combined_properties()
         return self._categories
 
@@ -357,7 +357,7 @@ class MediaWikiPage:
         Note:
             Not settable"""
         if self._links is None:
-            self._links = list()
+            self._links = []
             self.__pull_combined_properties()
         return self._links
 
@@ -368,7 +368,7 @@ class MediaWikiPage:
         Note:
             Not settable"""
         if self._redirects is None:
-            self._redirects = list()
+            self._redirects = []
             self.__pull_combined_properties()
         return self._redirects
 
@@ -379,7 +379,7 @@ class MediaWikiPage:
         Note:
             Not settable"""
         if self._backlinks is None:
-            self._backlinks = list()
+            self._backlinks = []
             params = {
                 "action": "query",
                 "list": "backlinks",
@@ -406,7 +406,7 @@ class MediaWikiPage:
             params = {"prop": "langlinks", "cllimit": "max"}
             query_result = self._continued_query(params)
 
-            langlinks = dict()
+            langlinks = {}
             for lang_info in query_result:
                 langlinks[lang_info["lang"]] = lang_info["*"]
             self._langlinks = langlinks
@@ -430,7 +430,7 @@ class MediaWikiPage:
                 "titles": self.title,
             }
             raw = self.mediawiki.wiki_request(params)
-            self._preview = raw.get("query", dict()).get("pages", list())[0]
+            self._preview = raw.get("query", {}).get("pages", [])[0]
         return self._preview
 
     @property
@@ -626,13 +626,13 @@ class MediaWikiPage:
         html = request["query"]["pages"][pageid]["revisions"][0]["*"]
 
         lis = BeautifulSoup(html, "html.parser").find_all("li")
-        filtered_lis = [li for li in lis if "tocsection" not in "".join(li.get("class", list()))]
+        filtered_lis = [li for li in lis if "tocsection" not in "".join(li.get("class", []))]
         may_refer_to = [li.a.get_text() for li in filtered_lis if li.a]
 
-        disambiguation = list()
+        disambiguation = []
         for lis_item in filtered_lis:
             item = lis_item.find_all("a")
-            one_disambiguation = dict()
+            one_disambiguation = {}
             one_disambiguation["description"] = lis_item.text
             if item and item[0].has_attr("title"):
                 one_disambiguation["title"] = item[0]["title"]
@@ -675,12 +675,12 @@ class MediaWikiPage:
         else:
             raise RedirectError(getattr(self, "title", page["title"]))
 
-    def _continued_query(self, query_params: Dict[str, Any], key: str = "pages"):
+    def _continued_query(self, query_params: Dict[str, Any], key: str = "pages") -> Iterator[Dict[Any, Any]]:
         """Based on
         https://www.mediawiki.org/wiki/API:Query#Continuing_queries"""
         query_params.update(self.__title_query_param())
 
-        last_cont = dict()
+        last_cont = {}
         prop = query_params.get("prop")
 
         while True:
@@ -694,23 +694,20 @@ class MediaWikiPage:
 
             pages = request["query"][key]
             if "generator" in query_params:
-                for datum in pages.values():
-                    yield datum
+                yield from pages.values()
             elif isinstance(pages, list):
-                for datum in list(enumerate(pages)):
-                    yield datum[1]
+                yield from [v for x, v in enumerate(pages)]
             else:
-                for datum in pages[self.pageid].get(prop, list()):
-                    yield datum
+                yield from pages[self.pageid].get(prop, [])
 
             if "continue" not in request or request["continue"] == last_cont:
                 break
 
             last_cont = request["continue"]
 
-    def _parse_section_links(self, id_tag: str) -> List[str]:
+    def _parse_section_links(self, id_tag: Optional[str]) -> List[str]:
         """given a section id, parse the links in the unordered list"""
-        all_links = list()
+        all_links = []
 
         if id_tag is None:
             root = self._soup.find("div", {"class": "mw-parser-output"})
@@ -771,12 +768,12 @@ class MediaWikiPage:
                 tmp = tmp[elm]
             tmp[sec] = OrderedDict()
 
-        self._sections = list()
+        self._sections = []
         section_regexp = r"\n==* .* ==*\n"  # '== {STUFF_NOT_\n} =='
         found_obj = re.findall(section_regexp, self.content)
 
         res = OrderedDict()
-        path = list()
+        path = []
         last_depth = 0
         for obj in found_obj:
             depth = obj.count("=") / 2  # this gets us to the single side...
@@ -821,7 +818,7 @@ class MediaWikiPage:
         query_params = {
             "titles": self.title,
             "prop": "extracts|redirects|links|coordinates|categories|extlinks",
-            "continue": dict(),
+            "continue": {},
             # summary
             "explaintext": "",
             "exintro": "",  # full first section for the summary!
@@ -840,8 +837,8 @@ class MediaWikiPage:
             "ellimit": "max",
         }
 
-        last_cont = dict()
-        results = dict()
+        last_cont = {}
+        results = {}
         idx = 0
         while True:
             params = query_params.copy()
@@ -878,14 +875,14 @@ class MediaWikiPage:
             last_cont = new_cont
 
         # redirects
-        tmp = [link["title"] for link in results.get("redirects", list())]
+        tmp = [link["title"] for link in results.get("redirects", [])]
         self._redirects = sorted(tmp)
 
         # summary
         self._summary = results.get("extract")
 
         # links
-        tmp = [link["title"] for link in results.get("links", list())]
+        tmp = [link["title"] for link in results.get("links", [])]
         self._links = sorted(tmp)
 
         # categories
@@ -896,7 +893,7 @@ class MediaWikiPage:
                 return tmp[len(self.mediawiki.category_prefix) + 1 :]
             return tmp
 
-        tmp = [_get_cat(link) for link in results.get("categories", list())]
+        tmp = [_get_cat(link) for link in results.get("categories", [])]
         self._categories = sorted(tmp)
 
         # coordinates
@@ -907,5 +904,5 @@ class MediaWikiPage:
             )
 
         # references
-        tmp = [link["*"] for link in results.get("extlinks", list())]
+        tmp = [link["*"] for link in results.get("extlinks", [])]
         self._references = sorted(tmp)

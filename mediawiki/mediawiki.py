@@ -96,7 +96,7 @@ class MediaWiki:
         self.timeout = timeout
         # requests library parameters
         self._session = None
-        self._user_agent = ("python-mediawiki/VERSION-{}" "/({})/BOT").format(VERSION, URL)
+        self._user_agent = f"python-mediawiki/VERSION-{VERSION}/({URL})/BOT"
         self._proxies = None
         self._verify_ssl = None
         self.verify_ssl = verify_ssl
@@ -117,7 +117,7 @@ class MediaWiki:
         self.__available_languages = None
 
         # for memoized results
-        self._cache = dict()
+        self._cache = {}
         self._refresh_interval = None
         self._use_cache = True
 
@@ -665,7 +665,7 @@ class MediaWiki:
 
         self._check_error_response(results, query)
 
-        res = list()
+        res = []
         for i, item in enumerate(results[1]):
             res.append((item, results[2][i], results[3][i]))
         return res
@@ -749,11 +749,11 @@ class MediaWiki:
             "cmlimit": (min(results, max_pull) if results is not None else max_pull),
             "cmtitle": f"{self.category_prefix}:{category}",
         }
-        pages = list()
-        subcats = list()
+        pages = []
+        subcats = []
         returned_results = 0
         finished = False
-        last_cont = dict()
+        last_cont = {}
         while not finished:
             params = search_params.copy()
             params.update(last_cont)
@@ -823,9 +823,9 @@ class MediaWiki:
 
         self.__category_parameter_verification(cats, depth, category)
 
-        results = dict()
-        categories = dict()
-        links = dict()
+        results = {}
+        categories = {}
+        links = {}
 
         for cat in [x for x in cats if x]:
             self.__cat_tree_rec(cat, depth, results, 0, categories, links)
@@ -955,22 +955,24 @@ class MediaWiki:
             msg = (
                 "CategoryTree: Parameter 'category' must either "
                 "be a list of one or more categories or a string; "
-                "provided: '{}'".format(category)
+                f"provided: '{category}'"
             )
             raise ValueError(msg)
 
         if depth is not None and depth < 1:
-            msg = "CategoryTree: Parameter 'depth' must be either None " "(for the full tree) or be greater than 0"
+            msg = "CategoryTree: Parameter 'depth' must be either None (for the full tree) or be greater than 0"
             raise ValueError(msg)
 
-    def __cat_tree_rec(self, cat, depth, tree, level, categories, links):
+    def __cat_tree_rec(
+        self, cat: str, depth: int, tree: Dict[str, Any], level: int, categories: List[str], links: List[str]
+    ):
         """recursive function to build out the tree"""
-        tree[cat] = dict()
+        tree[cat] = {}
         tree[cat]["depth"] = level
-        tree[cat]["sub-categories"] = dict()
-        tree[cat]["links"] = list()
-        tree[cat]["parent-categories"] = list()
-        parent_cats = list()
+        tree[cat]["sub-categories"] = {}
+        tree[cat]["links"] = []
+        tree[cat]["parent-categories"] = []
+        parent_cats = []
 
         if cat not in categories:
             tries = 0

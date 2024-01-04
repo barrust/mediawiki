@@ -42,7 +42,7 @@ class MediaWikiException(MediaWikiBaseException):
 
     def __init__(self, error: str):
         self._error = error
-        msg = ('An unknown error occurred: "{}". Please report it on GitHub!').format(self.error)
+        msg = f'An unknown error occurred: "{self.error}". Please report it on GitHub!'
         super().__init__(msg)
 
     @property
@@ -61,13 +61,13 @@ class PageError(MediaWikiBaseException):
     def __init__(self, title: Optional[str] = None, pageid: Optional[int] = None):
         if title:
             self._title = title
-            msg = ('"{}" does not match any pages. Try another query!').format(self.title)
+            msg = f'"{self.title}" does not match any pages. Try another query!'
         elif pageid:
             self._pageid = pageid
-            msg = ('Page id "{}" does not match any pages. Try another id!').format(self.pageid)
+            msg = f'Page id "{self.pageid}" does not match any pages. Try another id!'
         else:
             self._title = ""
-            msg = ('"{}" does not match any pages. Try another query!').format(self.title)
+            msg = f'"{self.title}" does not match any pages. Try another query!'
         super().__init__(msg)
 
     @property
@@ -94,8 +94,8 @@ class RedirectError(MediaWikiBaseException):
     def __init__(self, title: str):
         self._title = title
         msg = (
-            '"{}" resulted in a redirect. Set the redirect property to True ' "to allow automatic redirects."
-        ).format(self.title)
+            f'"{self.title}" resulted in a redirect. Set the redirect property to True ' "to allow automatic redirects."
+        )
 
         super().__init__(msg)
 
@@ -124,7 +124,8 @@ class DisambiguationError(MediaWikiBaseException):
         self._options = sorted(may_refer_to)
         self._details = details
         self._url = url
-        msg = ('\n"{}" may refer to: \n  ' "{}").format(self.title, "\n  ".join(self.options))
+        options_str = "\n  ".join(self.options)
+        msg = f'\n"{self.title}" may refer to: \n  {options_str}'
         super().__init__(msg)
 
     @property
@@ -162,10 +163,10 @@ class HTTPTimeoutError(MediaWikiBaseException):
     def __init__(self, query: str):
         self._query = query
         msg = (
-            'Searching for "{}" resulted in a timeout. '
+            f'Searching for "{self.query}" resulted in a timeout. '
             "Try again in a few seconds, and ensure you have rate limiting "
             "set to True."
-        ).format(self.query)
+        )
         super().__init__(msg)
 
     @property
@@ -201,9 +202,9 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
     def __init__(self, error: str):
         self._error = error
         msg = (
-            "GeoData search resulted in the following error: {}"
+            f"GeoData search resulted in the following error: {self.error}"
             " - Please use valid coordinates or a proper page title."
-        ).format(self.error)
+        )
         super().__init__(msg)
 
     @property
@@ -222,11 +223,9 @@ class MediaWikiCategoryTreeError(MediaWikiBaseException):
     def __init__(self, category: str):
         self._category = category
         msg = (
-            "Categorytree threw an exception for trying to get the "
-            "same category '{}' too many times. Please try again later "
-            "and perhaps use the rate limiting "
-            "option."
-        ).format(self._category)
+            f"Categorytree threw an exception for trying to get the same category '{self._category}' "
+            "too many times. Please try again later and perhaps use the rate limiting option."
+        )
         super().__init__(msg)
 
     @property

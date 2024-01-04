@@ -480,7 +480,7 @@ class MediaWikiPage(object):
         return self._sections
 
     @property
-    def table_of_contents(self) -> OrderedDict[str, Any]:
+    def table_of_contents(self) -> Dict[str, Any]:
         """OrderedDict: Dictionary of sections and sub-sections
 
         Note:

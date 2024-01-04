@@ -809,7 +809,7 @@ class MediaWikiPage(object):
 
         self._table_of_contents = res
 
-    def __title_query_param(self) -> Dict[str, str | int]:
+    def __title_query_param(self) -> Dict[str, Any]:
         """util function to determine which parameter method to use"""
         if getattr(self, "title", None) is not None:
             return {"titles": self.title}

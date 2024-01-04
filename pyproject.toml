@@ -4,7 +4,7 @@ requires = [
     "wheel",
     "setuptools_scm>=6.2",
     "requests>=2.0.0,<3.0.0",
-    "beautifulsoup4"
+    "beautifulsoup4",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -13,5 +13,5 @@ profile = "black"
 
 [tool.black]
 line-length = 120
-target-version = ['py36']
+target-version = ['py38']
 include = '\.pyi?$'

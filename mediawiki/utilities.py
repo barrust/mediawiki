@@ -49,7 +49,7 @@ def memoize(func: Callable) -> Callable:
         tmp = list()
         tmp.extend(args[1:])
         for k in sorted(defaults.keys()):
-            tmp.append("({0}: {1})".format(k, defaults[k]))
+            tmp.append(f"({k}: {defaults[k]})")
 
         tmp = [str(x) for x in tmp]
         key = " - ".join(tmp)

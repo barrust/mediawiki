@@ -22,7 +22,7 @@ from mediawiki.exceptions import (
 from mediawiki.utilities import is_relative_url, str_or_unicode
 
 
-class MediaWikiPage(object):
+class MediaWikiPage:
     """MediaWiki Page Instance
 
     Args:
@@ -135,7 +135,7 @@ class MediaWikiPage(object):
 
     def __unicode__(self):
         """python 2.7 unicode"""
-        return """<MediaWikiPage '{0}'>""".format(self.title)
+        return f"""<MediaWikiPage '{self.title}'>"""
 
     def __str__(self):
         """python > 3 unicode python 2.7 byte str"""
@@ -516,7 +516,7 @@ class MediaWikiPage(object):
             except IndexError:
                 pass
         else:
-            section = "== {0} ==".format(section_title)
+            section = f"== {section_title} =="
             try:
                 content = self.content
                 index = content.index(section) + len(section)
@@ -755,9 +755,9 @@ class MediaWikiPage(object):
         txt = link.string or href
         is_rel = is_relative_url(href)
         if is_rel is True:
-            tmp = "{0}{1}".format(self.mediawiki.base_url, href)
+            tmp = f"{self.mediawiki.base_url}{href}"
         elif is_rel is None:
-            tmp = "{0}{1}".format(self.url, href)
+            tmp = f"{self.url}{href}"
         else:
             tmp = href
         return txt, tmp

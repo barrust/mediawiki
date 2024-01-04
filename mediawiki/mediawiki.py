@@ -29,7 +29,7 @@ URL: str = "https://github.com/barrust/mediawiki"
 VERSION: str = "0.7.3"
 
 
-class MediaWiki(object):
+class MediaWiki:
     """MediaWiki API Wrapper Instance
 
     Args:
@@ -96,7 +96,7 @@ class MediaWiki(object):
         self.timeout = timeout
         # requests library parameters
         self._session = None
-        self._user_agent = ("python-mediawiki/VERSION-{0}" "/({1})/BOT").format(VERSION, URL)
+        self._user_agent = ("python-mediawiki/VERSION-{}" "/({})/BOT").format(VERSION, URL)
         self._proxies = None
         self._verify_ssl = None
         self.verify_ssl = verify_ssl
@@ -263,7 +263,7 @@ class MediaWiki(object):
             return
 
         url = self._api_url
-        tmp = url.replace("/{0}.".format(self._lang), "/{0}.".format(lang))
+        tmp = url.replace(f"/{self._lang}.", f"/{lang}.")
 
         self._api_url = tmp
         self._lang = lang
@@ -371,7 +371,7 @@ class MediaWiki(object):
         self._is_logged_in = False
         reason = res["login"]["reason"]
         if strict:
-            msg = "MediaWiki login failure: {}".format(reason)
+            msg = f"MediaWiki login failure: {reason}"
             raise MediaWikiLoginError(msg)
         return False
 
@@ -625,7 +625,7 @@ class MediaWiki(object):
         else:
             lat = test_lat_long(latitude)
             lon = test_lat_long(longitude)
-            params["gscoord"] = "{0}|{1}".format(lat, lon)
+            params["gscoord"] = f"{lat}|{lon}"
 
         raw_results = self.wiki_request(params)
 
@@ -747,7 +747,7 @@ class MediaWiki(object):
             "cmprop": "ids|title|type",
             "cmtype": ("page|subcat|file" if subcategories else "page|file"),
             "cmlimit": (min(results, max_pull) if results is not None else max_pull),
-            "cmtitle": "{0}:{1}".format(self.category_prefix, category),
+            "cmtitle": f"{self.category_prefix}:{category}",
         }
         pages = list()
         subcats = list()
@@ -916,9 +916,9 @@ class MediaWiki(object):
         if tmp.startswith("http://") or tmp.startswith("https://"):
             self._base_url = tmp
         elif gen["base"].startswith("https:"):
-            self._base_url = "https:{}".format(tmp)
+            self._base_url = f"https:{tmp}"
         else:
-            self._base_url = "http:{}".format(tmp)
+            self._base_url = f"http:{tmp}"
 
         self._extensions = [ext["name"] for ext in query["extensions"]]
         self._extensions = sorted(list(set(self._extensions)))
@@ -978,13 +978,13 @@ class MediaWiki(object):
                 if tries > 10:
                     raise MediaWikiCategoryTreeError(cat)
                 try:
-                    pag = self.page("{0}:{1}".format(self.category_prefix, cat))
+                    pag = self.page(f"{self.category_prefix}:{cat}")
                     categories[cat] = pag
                     parent_cats = categories[cat].categories
                     links[cat] = self.categorymembers(cat, results=None, subcategories=True)
                     break
                 except PageError:
-                    raise PageError("{0}:{1}".format(self.category_prefix, cat))
+                    raise PageError(f"{self.category_prefix}:{cat}")
                 except KeyboardInterrupt:
                     raise
                 except Exception:

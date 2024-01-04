@@ -20,7 +20,7 @@ class MediaWikiBaseException(Exception):
 
     def __init__(self, message: str):
         self._message = message
-        super(MediaWikiBaseException, self).__init__(self.message)
+        super().__init__(self.message)
 
     def __unicode__(self):
         return self.message
@@ -42,8 +42,8 @@ class MediaWikiException(MediaWikiBaseException):
 
     def __init__(self, error: str):
         self._error = error
-        msg = ('An unknown error occurred: "{0}". Please report it on GitHub!').format(self.error)
-        super(MediaWikiException, self).__init__(msg)
+        msg = ('An unknown error occurred: "{}". Please report it on GitHub!').format(self.error)
+        super().__init__(msg)
 
     @property
     def error(self) -> str:
@@ -61,14 +61,14 @@ class PageError(MediaWikiBaseException):
     def __init__(self, title: Optional[str] = None, pageid: Optional[int] = None):
         if title:
             self._title = title
-            msg = ('"{0}" does not match any pages. Try another query!').format(self.title)
+            msg = ('"{}" does not match any pages. Try another query!').format(self.title)
         elif pageid:
             self._pageid = pageid
-            msg = ('Page id "{0}" does not match any pages. Try another id!').format(self.pageid)
+            msg = ('Page id "{}" does not match any pages. Try another id!').format(self.pageid)
         else:
             self._title = ""
-            msg = ('"{0}" does not match any pages. Try another query!').format(self.title)
-        super(PageError, self).__init__(msg)
+            msg = ('"{}" does not match any pages. Try another query!').format(self.title)
+        super().__init__(msg)
 
     @property
     def title(self) -> str:
@@ -94,10 +94,10 @@ class RedirectError(MediaWikiBaseException):
     def __init__(self, title: str):
         self._title = title
         msg = (
-            '"{0}" resulted in a redirect. Set the redirect property to True ' "to allow automatic redirects."
+            '"{}" resulted in a redirect. Set the redirect property to True ' "to allow automatic redirects."
         ).format(self.title)
 
-        super(RedirectError, self).__init__(msg)
+        super().__init__(msg)
 
     @property
     def title(self) -> str:
@@ -124,8 +124,8 @@ class DisambiguationError(MediaWikiBaseException):
         self._options = sorted(may_refer_to)
         self._details = details
         self._url = url
-        msg = ('\n"{0}" may refer to: \n  ' "{1}").format(self.title, "\n  ".join(self.options))
-        super(DisambiguationError, self).__init__(msg)
+        msg = ('\n"{}" may refer to: \n  ' "{}").format(self.title, "\n  ".join(self.options))
+        super().__init__(msg)
 
     @property
     def url(self) -> str:
@@ -162,11 +162,11 @@ class HTTPTimeoutError(MediaWikiBaseException):
     def __init__(self, query: str):
         self._query = query
         msg = (
-            'Searching for "{0}" resulted in a timeout. '
+            'Searching for "{}" resulted in a timeout. '
             "Try again in a few seconds, and ensure you have rate limiting "
             "set to True."
         ).format(self.query)
-        super(HTTPTimeoutError, self).__init__(msg)
+        super().__init__(msg)
 
     @property
     def query(self) -> str:
@@ -182,8 +182,8 @@ class MediaWikiAPIURLError(MediaWikiBaseException):
 
     def __init__(self, api_url: str):
         self._api_url = api_url
-        msg = "{0} is not a valid MediaWiki API URL".format(self.api_url)
-        super(MediaWikiAPIURLError, self).__init__(msg)
+        msg = f"{self.api_url} is not a valid MediaWiki API URL"
+        super().__init__(msg)
 
     @property
     def api_url(self) -> str:
@@ -201,10 +201,10 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
     def __init__(self, error: str):
         self._error = error
         msg = (
-            "GeoData search resulted in the following error: {0}"
+            "GeoData search resulted in the following error: {}"
             " - Please use valid coordinates or a proper page title."
         ).format(self.error)
-        super(MediaWikiGeoCoordError, self).__init__(msg)
+        super().__init__(msg)
 
     @property
     def error(self) -> str:
@@ -227,7 +227,7 @@ class MediaWikiCategoryTreeError(MediaWikiBaseException):
             "and perhaps use the rate limiting "
             "option."
         ).format(self._category)
-        super(MediaWikiCategoryTreeError, self).__init__(msg)
+        super().__init__(msg)
 
     @property
     def category(self) -> str:
@@ -244,7 +244,7 @@ class MediaWikiLoginError(MediaWikiBaseException):
 
     def __init__(self, error: str):
         self._error = error
-        super(MediaWikiLoginError, self).__init__(error)
+        super().__init__(error)
 
     @property
     def error(self) -> str:

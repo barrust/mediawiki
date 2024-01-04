@@ -5,10 +5,11 @@ import functools
 import inspect
 import sys
 import time
+from typing import Any, Callable, Dict
 
 
-def parse_all_arguments(func):
-    """ determine all positional and named arguments as a dict """
+def parse_all_arguments(func: Callable) -> Dict[str, Any]:
+    """determine all positional and named arguments as a dict"""
     args = dict()
 
     func_args = inspect.signature(func)
@@ -19,15 +20,15 @@ def parse_all_arguments(func):
     return args
 
 
-def memoize(func):
-    """ quick memoize decorator for class instance methods
-        NOTE: this assumes that the class that the functions to be
-        memoized already has a memoized and refresh_interval
-        property """
+def memoize(func: Callable) -> Callable:
+    """quick memoize decorator for class instance methods
+    NOTE: this assumes that the class that the functions to be
+    memoized already has a memoized and refresh_interval
+    property"""
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        """ wrap it up and store info in a cache """
+        """wrap it up and store info in a cache"""
         cache = args[0].memoized
         refresh = args[0].refresh_interval
         use_cache = args[0].use_cache
@@ -66,14 +67,14 @@ def memoize(func):
     return wrapper
 
 
-def str_or_unicode(text):
-    """ handle python 3 unicode """
+def str_or_unicode(text: str) -> str:
+    """handle python 3 unicode"""
     encoding = sys.stdout.encoding
     return text.encode(encoding).decode(encoding)
 
 
-def is_relative_url(url):
-    """ simple method to determine if a url is relative or absolute """
+def is_relative_url(url: str) -> bool:
+    """simple method to determine if a url is relative or absolute"""
     if url.startswith("#"):
         return None
     if url.find("://") > 0 or url.startswith("//"):

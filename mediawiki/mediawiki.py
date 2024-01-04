@@ -12,7 +12,7 @@ from json import JSONDecodeError
 import requests
 import requests.exceptions as rex
 
-from .exceptions import (
+from mediawiki.exceptions import (
     HTTPTimeoutError,
     MediaWikiAPIURLError,
     MediaWikiCategoryTreeError,
@@ -21,6 +21,7 @@ from .exceptions import (
     MediaWikiLoginError,
     PageError,
 )
+
 from .mediawikipage import MediaWikiPage
 from .utilities import memoize
 
@@ -85,7 +86,7 @@ class MediaWiki(object):
         proxies=None,
         verify_ssl=True,
     ):
-        """ Init Function """
+        """Init Function"""
         self._version = VERSION
         self._lang = lang.lower()
         self._api_url = url.format(lang=self._lang)
@@ -133,57 +134,57 @@ class MediaWiki(object):
     # non-settable properties
     @property
     def version(self):
-        """ str: The version of the pymediawiki library
+        """str: The version of the pymediawiki library
 
-            Note:
-                Not settable """
+        Note:
+            Not settable"""
         return self._version
 
     @property
     def api_version(self):
-        """ str: API Version of the MediaWiki site
+        """str: API Version of the MediaWiki site
 
-            Note:
-                Not settable """
+        Note:
+            Not settable"""
         return self._api_version_str
 
     @property
     def base_url(self):
-        """ str: Base URL for the MediaWiki site
+        """str: Base URL for the MediaWiki site
 
-            Note:
-                Not settable """
+        Note:
+            Not settable"""
         return self._base_url
 
     @property
     def extensions(self):
-        """ list: Extensions installed on the MediaWiki site
+        """list: Extensions installed on the MediaWiki site
 
-            Note:
-                Not settable """
+        Note:
+            Not settable"""
         return self._extensions
 
     # settable properties
     @property
     def rate_limit(self):
-        """ bool: Turn on or off Rate Limiting """
+        """bool: Turn on or off Rate Limiting"""
         return self._rate_limit
 
     @rate_limit.setter
     def rate_limit(self, rate_limit):
-        """ Turn on or off rate limiting """
+        """Turn on or off rate limiting"""
         self._rate_limit = bool(rate_limit)
         self._rate_limit_last_call = None
         self.clear_memoized()
 
     @property
     def proxies(self):
-        """ dict: Turn on, off, or set proxy use with the Requests library """
+        """dict: Turn on, off, or set proxy use with the Requests library"""
         return self._proxies
 
     @proxies.setter
     def proxies(self, proxies):
-        """ Turn on, off, or set proxy use through the Requests library """
+        """Turn on, off, or set proxy use through the Requests library"""
         if proxies and isinstance(proxies, dict):
             self._proxies = proxies
         else:
@@ -198,34 +199,34 @@ class MediaWiki(object):
 
     @use_cache.setter
     def use_cache(self, use_cache):
-        """ toggle using the cache or not """
+        """toggle using the cache or not"""
         self._use_cache = bool(use_cache)
 
     @property
     def rate_limit_min_wait(self):
-        """ timedelta: Time to wait between calls
+        """timedelta: Time to wait between calls
 
-            Note:
-                 Only used if rate_limit is **True** """
+        Note:
+             Only used if rate_limit is **True**"""
         return self._min_wait
 
     @rate_limit_min_wait.setter
     def rate_limit_min_wait(self, min_wait):
-        """ Set minimum wait to use for rate limiting """
+        """Set minimum wait to use for rate limiting"""
         self._min_wait = min_wait
         self._rate_limit_last_call = None
 
     @property
     def timeout(self):
-        """ float: Response timeout for API requests
+        """float: Response timeout for API requests
 
-            Note:
-                Use **None** for no response timeout """
+        Note:
+            Use **None** for no response timeout"""
         return self._timeout
 
     @timeout.setter
     def timeout(self, timeout):
-        """ Set request timeout in seconds (or fractions of a second) """
+        """Set request timeout in seconds (or fractions of a second)"""
 
         if timeout is None:
             self._timeout = None  # no timeout
@@ -234,12 +235,12 @@ class MediaWiki(object):
 
     @property
     def verify_ssl(self):
-        """ bool | str: Verify SSL when using requests or path to cert file """
+        """bool | str: Verify SSL when using requests or path to cert file"""
         return self._verify_ssl
 
     @verify_ssl.setter
     def verify_ssl(self, verify_ssl):
-        """ Set request verify SSL parameter; defaults to True if issue """
+        """Set request verify SSL parameter; defaults to True if issue"""
         self._verify_ssl = True
         if isinstance(verify_ssl, (bool, str)):
             self._verify_ssl = verify_ssl
@@ -259,7 +260,7 @@ class MediaWiki(object):
 
     @language.setter
     def language(self, lang):
-        """ Set the language to use; attempts to change the API URL """
+        """Set the language to use; attempts to change the API URL"""
         lang = lang.lower()
         if self._lang == lang:
             return
@@ -273,15 +274,15 @@ class MediaWiki(object):
 
     @property
     def category_prefix(self):
-        """ str: The category prefix to use when using category based functions
+        """str: The category prefix to use when using category based functions
 
-            Note:
-                Use the correct category name for the language selected """
+        Note:
+            Use the correct category name for the language selected"""
         return self._cat_prefix
 
     @category_prefix.setter
     def category_prefix(self, prefix):
-        """ Set the category prefix correctly """
+        """Set the category prefix correctly"""
         if prefix[-1:] == ":":
             prefix = prefix[:-1]
         self._cat_prefix = prefix
@@ -305,29 +306,29 @@ class MediaWiki(object):
 
     @property
     def api_url(self):
-        """ str: API URL of the MediaWiki site
+        """str: API URL of the MediaWiki site
 
-            Note:
-                Not settable; See :py:func:`mediawiki.MediaWiki.set_api_url`"""
+        Note:
+            Not settable; See :py:func:`mediawiki.MediaWiki.set_api_url`"""
         return self._api_url
 
     @property
     def memoized(self):
-        """ dict: Return the memoize cache
+        """dict: Return the memoize cache
 
-            Note:
-                Not settable; see
-                :py:func:`mediawiki.MediaWiki.clear_memoized` """
+        Note:
+            Not settable; see
+            :py:func:`mediawiki.MediaWiki.clear_memoized`"""
         return self._cache
 
     @property
     def refresh_interval(self):
-        """ int: The interval at which the memoize cache is to be refresh """
+        """int: The interval at which the memoize cache is to be refresh"""
         return self._refresh_interval
 
     @refresh_interval.setter
     def refresh_interval(self, refresh_interval):
-        """ Set the new cache refresh interval """
+        """Set the new cache refresh interval"""
         if isinstance(refresh_interval, int) and refresh_interval > 0:
             self._refresh_interval = refresh_interval
         else:
@@ -380,7 +381,11 @@ class MediaWiki(object):
 
     # non-properties
     def set_api_url(
-        self, api_url="https://{lang}.wikipedia.org/w/api.php", lang="en", username=None, password=None,
+        self,
+        api_url="https://{lang}.wikipedia.org/w/api.php",
+        lang="en",
+        username=None,
+        password=None,
     ):
         """ Set the API URL and language
 
@@ -412,7 +417,7 @@ class MediaWiki(object):
         self.clear_memoized()
 
     def _reset_session(self):
-        """ Set session information """
+        """Set session information"""
         if self._session:
             self._session.close()
 
@@ -425,17 +430,17 @@ class MediaWiki(object):
         self._is_logged_in = False
 
     def clear_memoized(self):
-        """ Clear memoized (cached) values """
+        """Clear memoized (cached) values"""
         if hasattr(self, "_cache"):
             self._cache.clear()
 
     # non-setup functions
     @property
     def supported_languages(self):
-        """ dict: All supported language prefixes on the MediaWiki site
+        """dict: All supported language prefixes on the MediaWiki site
 
-            Note:
-                Not Settable """
+        Note:
+            Not Settable"""
         if self.__supported_languages is None:
             res = self.wiki_request({"meta": "siteinfo", "siprop": "languages"})
             tmp = res["query"]["languages"]
@@ -445,10 +450,10 @@ class MediaWiki(object):
 
     @property
     def available_languages(self):
-        """ dict: All available language prefixes on the MediaWiki site
+        """dict: All available language prefixes on the MediaWiki site
 
-            Note:
-                Not Settable """
+        Note:
+            Not Settable"""
         if self.__available_languages is None:
             available = {}
             for lang in self.supported_languages:
@@ -462,16 +467,16 @@ class MediaWiki(object):
 
     @property
     def logged_in(self):
-        """ bool: Returns if logged into the MediaWiki site """
+        """bool: Returns if logged into the MediaWiki site"""
         return self._is_logged_in
 
     def random(self, pages=1):
-        """ Request a random page title or list of random titles
+        """Request a random page title or list of random titles
 
-            Args:
-                pages (int): Number of random pages to return
-            Returns:
-                list or int: A list of random page titles or a random page title if pages = 1 """
+        Args:
+            pages (int): Number of random pages to return
+        Returns:
+            list or int: A list of random page titles or a random page title if pages = 1"""
         if pages is None or pages < 1:
             raise ValueError("Number of pages must be greater than 0")
 
@@ -486,15 +491,15 @@ class MediaWiki(object):
 
     @memoize
     def allpages(self, query="", results=10):
-        """ Request all pages from mediawiki instance
+        """Request all pages from mediawiki instance
 
-            Args:
-                query (str): Search string to use for pulling pages
-                results (int): The number of pages to return
-            Returns:
-                list: The pages that meet the search query
-            Note:
-                Could add ability to continue past the limit of 500
+        Args:
+            query (str): Search string to use for pulling pages
+            results (int): The number of pages to return
+        Returns:
+            list: The pages that meet the search query
+        Note:
+            Could add ability to continue past the limit of 500
         """
         max_pull = 500
         limit = min(results, max_pull) if results is not None else max_pull
@@ -509,16 +514,16 @@ class MediaWiki(object):
 
     @memoize
     def search(self, query, results=10, suggestion=False):
-        """ Search for similar titles
+        """Search for similar titles
 
-            Args:
-                query (str): Page title
-                results (int): Number of pages to return
-                suggestion (bool): Use suggestion
-            Returns:
-                tuple or list: tuple (list results, suggestion) if suggestion is **True**; list of results otherwise
-            Note:
-                Could add ability to continue past the limit of 500
+        Args:
+            query (str): Page title
+            results (int): Number of pages to return
+            suggestion (bool): Use suggestion
+        Returns:
+            tuple or list: tuple (list results, suggestion) if suggestion is **True**; list of results otherwise
+        Note:
+            Could add ability to continue past the limit of 500
         """
 
         self._check_query(query, "Query must be specified")
@@ -550,13 +555,13 @@ class MediaWiki(object):
 
     @memoize
     def suggest(self, query):
-        """ Gather suggestions based on the provided title or None if no
-            suggestions found
+        """Gather suggestions based on the provided title or None if no
+        suggestions found
 
-            Args:
-                query (str): Page title
-            Returns:
-                String or None: Suggested page title or **None** if no suggestion found
+        Args:
+            query (str): Page title
+        Returns:
+            String or None: Suggested page title or **None** if no suggestion found
         """
         res, suggest = self.search(query, results=1, suggestion=True)
         try:
@@ -567,30 +572,36 @@ class MediaWiki(object):
 
     @memoize
     def geosearch(
-        self, latitude=None, longitude=None, radius=1000, title=None, auto_suggest=True, results=10,
+        self,
+        latitude=None,
+        longitude=None,
+        radius=1000,
+        title=None,
+        auto_suggest=True,
+        results=10,
     ):
-        """ Search for pages that relate to the provided geocoords or near
-            the page
+        """Search for pages that relate to the provided geocoords or near
+        the page
 
-            Args:
-                latitude (Decimal or None): Latitude geocoord; must be coercible to decimal
-                longitude (Decimal or None): Longitude geocoord; must be coercible to decimal
-                radius (int): Radius around page or geocoords to pull back; in meters
-                title (str): Page title to use as a geocoordinate; this has precedence over lat/long
-                auto_suggest (bool): Auto-suggest the page title
-                results (int): Number of pages within the radius to return
-            Returns:
-                list: A listing of page titles
-            Note:
-                The Geosearch API does not support pulling more than the maximum of 500
-            Note:
-                If the page doesn't match the provided title, try setting auto_suggest to `False`
-            Raises:
-                ValueError: If either the passed latitude or longitude are not coercible to a Decimal
+        Args:
+            latitude (Decimal or None): Latitude geocoord; must be coercible to decimal
+            longitude (Decimal or None): Longitude geocoord; must be coercible to decimal
+            radius (int): Radius around page or geocoords to pull back; in meters
+            title (str): Page title to use as a geocoordinate; this has precedence over lat/long
+            auto_suggest (bool): Auto-suggest the page title
+            results (int): Number of pages within the radius to return
+        Returns:
+            list: A listing of page titles
+        Note:
+            The Geosearch API does not support pulling more than the maximum of 500
+        Note:
+            If the page doesn't match the provided title, try setting auto_suggest to `False`
+        Raises:
+            ValueError: If either the passed latitude or longitude are not coercible to a Decimal
         """
 
         def test_lat_long(val):
-            """ handle testing lat and long """
+            """handle testing lat and long"""
             if not isinstance(val, Decimal):
                 error = (
                     "Latitude and Longitude must be specified either as "
@@ -625,18 +636,18 @@ class MediaWiki(object):
 
     @memoize
     def opensearch(self, query, results=10, redirect=True):
-        """ Execute a MediaWiki opensearch request, similar to search box
-            suggestions and conforming to the OpenSearch specification
+        """Execute a MediaWiki opensearch request, similar to search box
+        suggestions and conforming to the OpenSearch specification
 
-            Args:
-                query (str): Title to search for
-                results (int): Number of pages within the radius to return
-                redirect (bool): If **False** return the redirect itself, otherwise resolve redirects
-            Returns:
-                List: List of results that are stored in a tuple (Title, Summary, URL)
-            Note:
-                The Opensearch API does not support pulling more than the maximum of 500
-            Raises:
+        Args:
+            query (str): Title to search for
+            results (int): Number of pages within the radius to return
+            redirect (bool): If **False** return the redirect itself, otherwise resolve redirects
+        Returns:
+            List: List of results that are stored in a tuple (Title, Summary, URL)
+        Note:
+            The Opensearch API does not support pulling more than the maximum of 500
+        Raises:
         """
 
         self._check_query(query, "Query must be specified")
@@ -717,16 +728,16 @@ class MediaWiki(object):
 
     @memoize
     def categorymembers(self, category, results=10, subcategories=True):
-        """ Get information about a category: pages and subcategories
+        """Get information about a category: pages and subcategories
 
-            Args:
-                category (str): Category name
-                results (int): Number of result
-                subcategories (bool): Include subcategories (**True**) or not (**False**)
-            Returns:
-                Tuple or List: Either a tuple ([pages], [subcategories]) or just the list of pages
-            Note:
-                Set results to **None** to get all results """
+        Args:
+            category (str): Category name
+            results (int): Number of result
+            subcategories (bool): Include subcategories (**True**) or not (**False**)
+        Returns:
+            Tuple or List: Either a tuple ([pages], [subcategories]) or just the list of pages
+        Note:
+            Set results to **None** to get all results"""
         self._check_query(category, "Category must be specified")
 
         max_pull = 500
@@ -783,28 +794,28 @@ class MediaWiki(object):
         return pages
 
     def categorytree(self, category, depth=5):
-        """ Generate the Category Tree for the given categories
+        """Generate the Category Tree for the given categories
 
-            Args:
-                category(str or list of strings): Category name(s)
-                depth(int): Depth to traverse the tree
-            Returns:
-                dict: Category tree structure
-            Note:
-                Set depth to **None** to get the whole tree
-            Note:
-                Return Data Structure: Subcategory contains the same recursive structure
+        Args:
+            category(str or list of strings): Category name(s)
+            depth(int): Depth to traverse the tree
+        Returns:
+            dict: Category tree structure
+        Note:
+            Set depth to **None** to get the whole tree
+        Note:
+            Return Data Structure: Subcategory contains the same recursive structure
 
-                >>> {
-                        'category': {
-                            'depth': Number,
-                            'links': list,
-                            'parent-categories': list,
-                            'sub-categories': dict
-                        }
+            >>> {
+                    'category': {
+                        'depth': Number,
+                        'links': list,
+                        'parent-categories': list,
+                        'sub-categories': dict
                     }
+                }
 
-            .. versionadded:: 0.3.10 """
+        .. versionadded:: 0.3.10"""
 
         # make it simple to use both a list or a single category term
         cats = [category] if not isinstance(category, list) else category
@@ -820,22 +831,22 @@ class MediaWiki(object):
         return results
 
     def page(self, title=None, pageid=None, auto_suggest=True, redirect=True, preload=False):
-        """ Get MediaWiki page based on the provided title or pageid
+        """Get MediaWiki page based on the provided title or pageid
 
-            Args:
-                title (str): Page title
-                pageid (int): MediaWiki page identifier
-                auto-suggest (bool): **True:** Allow page title auto-suggest
-                redirect (bool): **True:** Follow page redirects
-                preload (bool): **True:** Load most page properties
-            Raises:
-                ValueError: when title is blank or None and no pageid is provided
-            Raises:
-                :py:func:`mediawiki.exceptions.PageError`: if page does not exist
-            Note:
-                Title takes precedence over pageid if both are provided
-            Note:
-                If the page doesn't match the provided title, try setting auto_suggest to `False`"""
+        Args:
+            title (str): Page title
+            pageid (int): MediaWiki page identifier
+            auto-suggest (bool): **True:** Allow page title auto-suggest
+            redirect (bool): **True:** Follow page redirects
+            preload (bool): **True:** Load most page properties
+        Raises:
+            ValueError: when title is blank or None and no pageid is provided
+        Raises:
+            :py:func:`mediawiki.exceptions.PageError`: if page does not exist
+        Note:
+            Title takes precedence over pageid if both are provided
+        Note:
+            If the page doesn't match the provided title, try setting auto_suggest to `False`"""
         if (title is None or title.strip() == "") and pageid is None:
             raise ValueError("Either a title or a pageid must be specified")
         if title:
@@ -879,7 +890,7 @@ class MediaWiki(object):
 
     # Protected functions
     def _get_site_info(self):
-        """ Parse out the Wikimedia site information including API Version and Extensions """
+        """Parse out the Wikimedia site information including API Version and Extensions"""
         response = self.wiki_request({"meta": "siteinfo", "siprop": "extensions|general"})
 
         # parse what we need out here!
@@ -915,7 +926,7 @@ class MediaWiki(object):
 
     @staticmethod
     def _check_error_response(response, query):
-        """ check for default error messages and throw correct exception """
+        """check for default error messages and throw correct exception"""
         if "error" in response:
             http_error = ["HTTP request timed out.", "Pool queue is full"]
             geo_error = [
@@ -932,7 +943,7 @@ class MediaWiki(object):
 
     @staticmethod
     def _check_query(value, message):
-        """ check if the query is 'valid' """
+        """check if the query is 'valid'"""
         if value is None or value.strip() == "":
             raise ValueError(message)
 
@@ -952,7 +963,7 @@ class MediaWiki(object):
             raise ValueError(msg)
 
     def __cat_tree_rec(self, cat, depth, tree, level, categories, links):
-        """ recursive function to build out the tree """
+        """recursive function to build out the tree"""
         tree[cat] = dict()
         tree[cat]["depth"] = level
         tree[cat]["sub-categories"] = dict()
@@ -990,18 +1001,23 @@ class MediaWiki(object):
         else:
             for ctg in links[cat][1]:
                 self.__cat_tree_rec(
-                    ctg, depth, tree[cat]["sub-categories"], level + 1, categories, links,
+                    ctg,
+                    depth,
+                    tree[cat]["sub-categories"],
+                    level + 1,
+                    categories,
+                    links,
                 )
 
     def _get_response(self, params):
-        """ wrap the call to the requests package """
+        """wrap the call to the requests package"""
         try:
             return self._session.get(self._api_url, params=params, timeout=self._timeout).json()
         except JSONDecodeError:
             return {}
 
     def _post_response(self, params):
-        """ wrap a post call to the requests package """
+        """wrap a post call to the requests package"""
         try:
             return self._session.post(self._api_url, data=params, timeout=self._timeout).json()
         except JSONDecodeError:

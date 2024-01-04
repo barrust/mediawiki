@@ -2,19 +2,27 @@
 '''
 Unittest class
 '''
+import json
 import time
 import unittest
-import json
-from datetime import (timedelta)
-from decimal import (Decimal)
+from datetime import timedelta
+from decimal import Decimal
 
-from mediawiki import (MediaWiki, MediaWikiPage, PageError, RedirectError,
-                       DisambiguationError, MediaWikiAPIURLError,
-                       MediaWikiGeoCoordError, HTTPTimeoutError,
-                       MediaWikiException, MediaWikiCategoryTreeError,
-                       MediaWikiLoginError)
 import mediawiki
-from .utilities import find_depth, FunctionUseCounter
+from mediawiki import (
+    DisambiguationError,
+    HTTPTimeoutError,
+    MediaWiki,
+    MediaWikiAPIURLError,
+    MediaWikiCategoryTreeError,
+    MediaWikiException,
+    MediaWikiGeoCoordError,
+    MediaWikiLoginError,
+    MediaWikiPage,
+    PageError,
+    RedirectError,
+)
+from tests.utilities import FunctionUseCounter, find_depth
 
 
 class MediaWikiOverloaded(MediaWiki):

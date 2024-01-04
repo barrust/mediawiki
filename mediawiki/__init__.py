@@ -1,7 +1,7 @@
 """
 mediawiki module initialization
 """
-from .exceptions import (
+from mediawiki.exceptions import (
     DisambiguationError,
     HTTPTimeoutError,
     MediaWikiAPIURLError,
@@ -12,8 +12,8 @@ from .exceptions import (
     PageError,
     RedirectError,
 )
-from .mediawiki import URL, VERSION, MediaWiki
-from .mediawikipage import MediaWikiPage
+from mediawiki.mediawiki import URL, VERSION, MediaWiki
+from mediawiki.mediawikipage import MediaWikiPage
 
 __author__ = "Tyler Barrus"
 __maintainer__ = "Tyler Barrus"

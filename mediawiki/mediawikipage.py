@@ -92,7 +92,7 @@ class MediaWikiPage:
         self._content: Optional[str] = None
         self._revision_id: Optional[int] = None
         self._parent_id: Optional[int] = None
-        self._html: Union[bool, str, None] = False  # None signifies nothing returned...
+        self._html: Union[bool, str] = False  # None signifies nothing returned...
         self._images: Optional[List[str]] = None
         self._references: Optional[List[str]] = None
         self._categories: Optional[List[str]] = None
@@ -208,7 +208,7 @@ class MediaWikiPage:
         return self._parent_id  # type: ignore
 
     @property
-    def html(self) -> Optional[str]:
+    def html(self) -> str:
         """str: HTML representation of the page
 
         Note:
@@ -216,7 +216,7 @@ class MediaWikiPage:
         Warning:
             This can be slow for very large pages"""
         if self._html is False:
-            self._html = None
+            self._html = ""
             query_params = {
                 "prop": "revisions",
                 "rvprop": "content",
@@ -278,8 +278,6 @@ class MediaWikiPage:
             This is a parsing operation and not part of the standard API"""
         if self._logos is None:
             self._logos = []
-            if not self.html:
-                return self._logos
             # Cache the results of parsing the html, so that multiple calls happen much faster
             if not self._soup:
                 self._soup = BeautifulSoup(self.html, "html.parser")
@@ -302,8 +300,6 @@ class MediaWikiPage:
             This is a parsing operation and not part of the standard API"""
         if self._hatnotes is None:
             self._hatnotes = []
-            if not self.html:
-                return self._hatnotes
             # Cache the results of parsing the html, so that multiple calls happen much faster
             if not self._soup:
                 self._soup = BeautifulSoup(self.html, "html.parser")
@@ -728,8 +724,6 @@ class MediaWikiPage:
         """given a section id, parse the links in the unordered list"""
         all_links: List[Tuple[str, str]] = []
 
-        if not self.html:
-            return all_links
         if not self._soup:
             self._soup = BeautifulSoup(self.html, "html.parser")
 

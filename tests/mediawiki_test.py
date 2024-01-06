@@ -1177,10 +1177,9 @@ class TestMediaWikiPage(unittest.TestCase):
         """test a page returning a section"""
         self.assertEqual(self.pag.section("A Game of Thrones"), self.response["arya"]["section_a_game_of_thrones"])
 
-    def test_page_section_header(self):
-        """test a page returning the section header"""
+    def test_page_top_section_header(self):
+        """test a page returning the top section header"""
         res = self.pag.section(None)
-        print(res)
         self.assertEqual(self.pag.section(None), self.response["arya"]["section_a_game_of_thrones"])
 
     def test_page_last_section(self):

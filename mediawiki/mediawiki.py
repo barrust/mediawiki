@@ -84,41 +84,41 @@ class MediaWiki:
         username: Optional[str] = None,
         password: Optional[str] = None,
         proxies: Optional[Dict] = None,
-        verify_ssl: bool = True,
+        verify_ssl: Union[bool, str] = True,
     ):
         """Init Function"""
         self._version = VERSION
         self._lang = lang.lower()
         self._api_url = url.format(lang=self._lang)
-        self._cat_prefix = None
+        self._cat_prefix = ""
         self.category_prefix = cat_prefix
-        self._timeout = None
+        self._timeout = 15.0
         self.timeout = timeout
         # requests library parameters
-        self._session = None
+        self._session: Optional[requests.Session] = None
         self._user_agent = f"python-mediawiki/VERSION-{VERSION}/({URL})/BOT"
-        self._proxies = None
-        self._verify_ssl = None
+        self._proxies: Optional[Dict] = None
+        self._verify_ssl: Union[bool, str] = True
         self.verify_ssl = verify_ssl
         # set libary parameters
         if user_agent is not None:
             self.user_agent = user_agent
         self.proxies = proxies  # this will call self._reset_session()
 
-        self._rate_limit = None
+        self._rate_limit = False
         self.rate_limit = bool(rate_limit)
-        self._rate_limit_last_call = None
+        self._rate_limit_last_call: Optional[datetime] = None
         self._min_wait = rate_limit_wait
         self._extensions = None
         self._api_version = None
         self._api_version_str = None
         self._base_url = None
-        self.__supported_languages = None
-        self.__available_languages = None
+        self.__supported_languages: Optional[Dict[str, str]] = None
+        self.__available_languages: Optional[Dict[str, bool]] = None
 
         # for memoized results
-        self._cache = {}
-        self._refresh_interval = None
+        self._cache: Dict = {}
+        self._refresh_interval: Optional[int] = None
         self._use_cache = True
 
         # for login information
@@ -141,7 +141,7 @@ class MediaWiki:
         return self._version
 
     @property
-    def api_version(self) -> str:
+    def api_version(self) -> Optional[str]:
         """str: API Version of the MediaWiki site
 
         Note:
@@ -154,7 +154,7 @@ class MediaWiki:
 
         Note:
             Not settable"""
-        return self._base_url
+        return self._base_url if self._base_url else ""
 
     @property
     def extensions(self) -> List[str]:
@@ -162,7 +162,7 @@ class MediaWiki:
 
         Note:
             Not settable"""
-        return self._extensions
+        return self._extensions if self._extensions else []
 
     # settable properties
     @property
@@ -185,7 +185,7 @@ class MediaWiki:
     @proxies.setter
     def proxies(self, proxies: Optional[Dict]):
         """Turn on, off, or set proxy use through the Requests library"""
-        if proxies and isinstance(proxies, dict):
+        if isinstance(proxies, dict):
             self._proxies = proxies
         else:
             self._proxies = None
@@ -317,7 +317,7 @@ class MediaWiki:
         return self._cache
 
     @property
-    def refresh_interval(self) -> int:
+    def refresh_interval(self) -> Optional[int]:
         """int: The interval at which the memoize cache is to be refresh"""
         return self._refresh_interval
 
@@ -512,7 +512,7 @@ class MediaWiki:
     @memoize
     def search(
         self, query: str, results: int = 10, suggestion: bool = False
-    ) -> Union[List[str], Tuple[List[str], str]]:
+    ) -> Union[List[str], Tuple[List[str], Optional[str]]]:
         """Search for similar titles
 
         Args:
@@ -575,9 +575,9 @@ class MediaWiki:
         latitude: Union[Decimal, float, None] = None,
         longitude: Union[Decimal, float, None] = None,
         radius: int = 1000,
-        title: str = None,
+        title: Optional[str] = None,
         auto_suggest: bool = True,
-        results: str = 10,
+        results: int = 10,
     ) -> List[str]:
         """Search for pages that relate to the provided geocoords or near
         the page
@@ -629,12 +629,12 @@ class MediaWiki:
 
         raw_results = self.wiki_request(params)
 
-        self._check_error_response(raw_results, title)
+        self._check_error_response(raw_results, title if title else "Page Title Not Provided")
 
         return [d["title"] for d in raw_results["query"]["geosearch"]]
 
     @memoize
-    def opensearch(self, query: str, results: int = 10, redirect: bool = True) -> List[str]:
+    def opensearch(self, query: str, results: int = 10, redirect: bool = True) -> List[Tuple[str, str, str]]:
         """Execute a MediaWiki opensearch request, similar to search box
         suggestions and conforming to the OpenSearch specification
 
@@ -661,13 +661,13 @@ class MediaWiki:
             "namespace": "",
         }
 
-        results = self.wiki_request(query_params)
+        out = self.wiki_request(query_params)
 
-        self._check_error_response(results, query)
+        self._check_error_response(out, query)
 
-        res = []
-        for i, item in enumerate(results[1]):
-            res.append((item, results[2][i], results[3][i]))
+        res: List[Tuple[str, str, str]] = []
+        for i, item in enumerate(out[1]):
+            res.append((item, out[2][i], out[3][i]))
         return res
 
     @memoize
@@ -753,7 +753,7 @@ class MediaWiki:
         subcats = []
         returned_results = 0
         finished = False
-        last_cont = {}
+        last_cont: Dict = {}
         while not finished:
             params = search_params.copy()
             params.update(last_cont)
@@ -823,9 +823,9 @@ class MediaWiki:
 
         self.__category_parameter_verification(cats, depth, category)
 
-        results = {}
-        categories = {}
-        links = {}
+        results: Dict = {}
+        categories: Dict = {}
+        links: Dict = {}
 
         for cat in [x for x in cats if x]:
             self.__cat_tree_rec(cat, depth, results, 0, categories, links)
@@ -859,7 +859,7 @@ class MediaWiki:
             return MediaWikiPage(self, title, redirect=redirect, preload=preload)
         return MediaWikiPage(self, pageid=pageid, preload=preload)
 
-    def wiki_request(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def wiki_request(self, params: Dict[str, Any]) -> Dict[Any, Any]:
         """ Make a request to the MediaWiki API using the given search
             parameters
 
@@ -890,7 +890,7 @@ class MediaWiki:
         return req
 
     # Protected functions
-    def _get_site_info(self) -> List[str]:
+    def _get_site_info(self):
         """Parse out the Wikimedia site information including API Version and Extensions"""
         response = self.wiki_request({"meta": "siteinfo", "siprop": "extensions|general"})
 
@@ -949,7 +949,7 @@ class MediaWiki:
             raise ValueError(message)
 
     @staticmethod
-    def __category_parameter_verification(cats: str, depth: int, category: str):
+    def __category_parameter_verification(cats: list[str], depth: int, category: str):
         # parameter verification
         if len(cats) == 1 and (cats[0] is None or cats[0] == ""):
             msg = (
@@ -964,7 +964,7 @@ class MediaWiki:
             raise ValueError(msg)
 
     def __cat_tree_rec(
-        self, cat: str, depth: int, tree: Dict[str, Any], level: int, categories: List[str], links: List[str]
+        self, cat: str, depth: int, tree: Dict[str, Any], level: int, categories: Dict[str, Any], links: Dict[str, Any]
     ):
         """recursive function to build out the tree"""
         tree[cat] = {}
@@ -1015,14 +1015,18 @@ class MediaWiki:
     def _get_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """wrap the call to the requests package"""
         try:
-            return self._session.get(self._api_url, params=params, timeout=self._timeout).json()
+            if self._session is not None:
+                return self._session.get(self._api_url, params=params, timeout=self._timeout).json()
+            return {}
         except JSONDecodeError:
             return {}
 
     def _post_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """wrap a post call to the requests package"""
         try:
-            return self._session.post(self._api_url, data=params, timeout=self._timeout).json()
+            if self._session is not None:
+                return self._session.post(self._api_url, data=params, timeout=self._timeout).json()
+            return {}
         except JSONDecodeError:
             return {}
 

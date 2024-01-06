@@ -7,9 +7,9 @@ MediaWikiPage class module
 import re
 from collections import OrderedDict
 from decimal import Decimal
-from typing import Any, Dict, Iterator, List, Optional, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, NavigableString, Tag
 
 from mediawiki.exceptions import (
     ODD_ERROR_MESSAGE,
@@ -89,26 +89,26 @@ class MediaWikiPage:
         else:
             raise ValueError("Either a title or a pageid must be specified")
 
-        self._content = None
-        self._revision_id = None
-        self._parent_id = None
-        self._html = False  # None signifies nothing returned...
-        self._images = None
-        self._references = None
-        self._categories = None
-        self._coordinates = False  # None signifies nothing returned...
-        self._links = None
-        self._redirects = None
-        self._backlinks = None
-        self._langlinks = None
-        self._summary = None
-        self._sections = None
-        self._table_of_contents = None
-        self._logos = None
-        self._hatnotes = None
-        self._soup = None
-        self._wikitext = None
-        self._preview = None
+        self._content: Optional[str] = None
+        self._revision_id: Optional[int] = None
+        self._parent_id: Optional[int] = None
+        self._html: Union[bool, str, None] = False  # None signifies nothing returned...
+        self._images: Optional[List[str]] = None
+        self._references: Optional[List[str]] = None
+        self._categories: Optional[List[str]] = None
+        self._coordinates: Union[bool, None, Tuple[Decimal, Decimal]] = False  # None signifies nothing returned...
+        self._links: Optional[List[str]] = None
+        self._redirects: Optional[List[str]] = None
+        self._backlinks: Optional[List[str]] = None
+        self._langlinks: Optional[Dict[str, str]] = None
+        self._summary: Optional[str] = None
+        self._sections: Optional[List[str]] = None
+        self._table_of_contents: Optional[Dict[str, Any]] = None
+        self._logos: Optional[List[str]] = None
+        self._hatnotes: Optional[List[str]] = None
+        self._soup: Optional[BeautifulSoup] = None
+        self._wikitext: Optional[str] = None
+        self._preview: Optional[Dict[str, str]] = None
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -150,7 +150,7 @@ class MediaWikiPage:
             return False
 
     # Properties
-    def _pull_content_revision_parent(self) -> Tuple[str, int, int]:
+    def _pull_content_revision_parent(self) -> Tuple[Optional[str], Optional[int], Optional[int]]:
         """combine the pulling of these three properties"""
 
         if self._revision_id is None:
@@ -181,7 +181,7 @@ class MediaWikiPage:
             Side effect is to also get revision_id and parent_id"""
         if self._content is None:
             self._pull_content_revision_parent()
-        return self._content
+        return self._content  # type: ignore
 
     @property
     def revision_id(self) -> int:
@@ -193,7 +193,7 @@ class MediaWikiPage:
             Side effect is to also get content and parent_id"""
         if self._revision_id is None:
             self._pull_content_revision_parent()
-        return self._revision_id
+        return self._revision_id  # type: ignore
 
     @property
     def parent_id(self) -> int:
@@ -205,10 +205,10 @@ class MediaWikiPage:
             Side effect is to also get content and revision_id"""
         if self._parent_id is None:
             self._pull_content_revision_parent()
-        return self._parent_id
+        return self._parent_id  # type: ignore
 
     @property
-    def html(self) -> str:
+    def html(self) -> Optional[str]:
         """str: HTML representation of the page
 
         Note:
@@ -227,7 +227,7 @@ class MediaWikiPage:
             request = self.mediawiki.wiki_request(query_params)
             page = request["query"]["pages"][self.pageid]
             self._html = page["revisions"][0]["*"]
-        return self._html
+        return self._html  # type: ignore
 
     @property
     def wikitext(self) -> str:
@@ -278,6 +278,8 @@ class MediaWikiPage:
             This is a parsing operation and not part of the standard API"""
         if self._logos is None:
             self._logos = []
+            if not self.html:
+                return self._logos
             # Cache the results of parsing the html, so that multiple calls happen much faster
             if not self._soup:
                 self._soup = BeautifulSoup(self.html, "html.parser")
@@ -300,6 +302,8 @@ class MediaWikiPage:
             This is a parsing operation and not part of the standard API"""
         if self._hatnotes is None:
             self._hatnotes = []
+            if not self.html:
+                return self._hatnotes
             # Cache the results of parsing the html, so that multiple calls happen much faster
             if not self._soup:
                 self._soup = BeautifulSoup(self.html, "html.parser")
@@ -436,13 +440,15 @@ class MediaWikiPage:
         return self._preview
 
     @property
-    def summary(self) -> str:
+    def summary(self) -> Optional[str]:
         """str: Default page summary
 
         Note:
             Not settable"""
         if self._summary is None:
             self.__pull_combined_properties()
+            if self._summary is None:
+                self._summary = ""
         return self._summary
 
     def summarize(self, sentences: int = 0, chars: int = 0) -> str:
@@ -456,7 +462,7 @@ class MediaWikiPage:
             str: The summary of the MediaWiki page
         Note:
             Precedence for parameters: sentences then chars; if both are 0 then the entire first section is returned"""
-        query_params = {"prop": "extracts", "explaintext": "", "titles": self.title}
+        query_params: Dict[str, Any] = {"prop": "extracts", "explaintext": "", "titles": self.title}
         if sentences:
             query_params["exsentences"] = 10 if sentences > 10 else sentences
         elif chars:
@@ -479,6 +485,8 @@ class MediaWikiPage:
         #       `non-decorated` name instead of using the query api!
         if self._sections is None:
             self._parse_sections()
+            if self._sections is None:
+                self._sections = []
         return self._sections
 
     @property
@@ -492,6 +500,8 @@ class MediaWikiPage:
 
         if self._table_of_contents is None:
             self._parse_sections()
+            if self._table_of_contents is None:
+                self._table_of_contents = {}
         return self._table_of_contents
 
     def section(self, section_title: str) -> Optional[str]:
@@ -542,7 +552,7 @@ class MediaWikiPage:
 
         return self.content[index:next_index].lstrip("=").strip()
 
-    def parse_section_links(self, section_title: str) -> List[Tuple[str, str]]:
+    def parse_section_links(self, section_title: str) -> Optional[List[Tuple[str, str]]]:
         """Parse all links within a section
 
         Args:
@@ -559,6 +569,8 @@ class MediaWikiPage:
         Note:
             This is a parsing operation and not part of the standard API"""
         # Cache the results of parsing the html, so that multiple calls happen much faster
+        if not self.html:
+            return None
         if not self._soup:
             self._soup = BeautifulSoup(self.html, "html.parser")
 
@@ -709,13 +721,18 @@ class MediaWikiPage:
 
             last_cont = request["continue"]
 
-    def _parse_section_links(self, id_tag: Optional[str]) -> List[str]:
+    def _parse_section_links(self, id_tag: Optional[str]) -> List[Tuple[str, str]]:
         """given a section id, parse the links in the unordered list"""
-        all_links = []
+        all_links: List[Tuple[str, str]] = []
+
+        if not self.html:
+            return all_links
+        if not self._soup:
+            self._soup = BeautifulSoup(self.html, "html.parser")
 
         if id_tag is None:
             root = self._soup.find("div", {"class": "mw-parser-output"})
-            if root is None:
+            if root is None or isinstance(root, NavigableString):
                 return all_links
             candidates = root.children
         else:

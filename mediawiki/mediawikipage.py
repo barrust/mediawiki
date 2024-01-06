@@ -284,7 +284,7 @@ class MediaWikiPage:
             if not self._soup:
                 self._soup = BeautifulSoup(self.html, "html.parser")
             info = self._soup.find("table", {"class": "infobox"})
-            if info is not None:
+            if info is not None and isinstance(info, Tag):
                 children = info.find_all("a", class_="image")
                 for child in children:
                     self._logos.append("https:" + child.img["src"])
@@ -353,7 +353,7 @@ class MediaWikiPage:
         if self._coordinates is False:
             self._coordinates = None
             self.__pull_combined_properties()
-        return self._coordinates
+        return self._coordinates  # type: ignore
 
     @property
     def links(self) -> List[str]:
@@ -632,7 +632,7 @@ class MediaWikiPage:
             raise PageError(title=self.title)
         raise PageError(pageid=self.pageid)
 
-    def _raise_disambiguation_error(self, page: str, pageid: int):
+    def _raise_disambiguation_error(self, page: Dict, pageid: int):
         """parse and throw a disambiguation error"""
         query_params = {
             "prop": "revisions",
@@ -666,7 +666,7 @@ class MediaWikiPage:
             disambiguation,
         )
 
-    def _handle_redirect(self, redirect: bool, preload: bool, query: str, page: Dict[str, Any]):
+    def _handle_redirect(self, redirect: bool, preload: bool, query: Dict, page: Dict[str, Any]):
         """handle redirect"""
         if redirect:
             redirects = query["redirects"][0]
@@ -685,7 +685,7 @@ class MediaWikiPage:
                 raise MediaWikiException(ODD_ERROR_MESSAGE)
 
             # change the title and reload the whole object
-            self.__init__(
+            self.__init__(  # type: ignore
                 self.mediawiki,
                 title=redirects["to"],
                 redirect=redirect,
@@ -699,7 +699,7 @@ class MediaWikiPage:
         https://www.mediawiki.org/wiki/API:Query#Continuing_queries"""
         query_params.update(self.__title_query_param())
 
-        last_cont = {}
+        last_cont: Dict = {}
         prop = query_params.get("prop")
 
         while True:
@@ -742,20 +742,23 @@ class MediaWikiPage:
             root = self._soup.find("span", {"id": id_tag})
             if root is None:
                 return all_links
-            candidates = self._soup.find(id=id_tag).parent.next_siblings
+            candidates = self._soup.find(id=id_tag).parent.next_siblings  # type: ignore
 
         for node in candidates:
             if not isinstance(node, Tag):
                 continue
             if node.get("role", "") == "navigation":
                 continue
-            if "infobox" in node.get("class", []):
+            classes = node.get("class", [])
+            if not isinstance(classes, list):
+                classes = [classes if classes else ""]
+            if "infobox" in classes:
                 continue
 
             # If the classname contains "toc", the element is a table of contents.
             # The comprehension is necessary because there are several possible
             # types of tocs: "toclevel", "toc", ...
-            toc_classnames = [cname for cname in node.get("class", []) if "toc" in cname]
+            toc_classnames = [cname for cname in classes if "toc" in cname]
             if toc_classnames:
                 continue
 
@@ -775,6 +778,7 @@ class MediaWikiPage:
         href = link.get("href", "")
         if isinstance(href, list):
             href = href[0]
+        href = "" if href is None else href
         txt = link.string or href
         is_rel = is_relative_url(href)
         if is_rel is True:

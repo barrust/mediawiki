@@ -739,9 +739,7 @@ class MediaWikiPage:
             candidates = self._soup.find(id=id_tag).parent.next_siblings  # type: ignore
 
         for node in candidates:
-            if not isinstance(node, Tag):
-                continue
-            if node.get("role", "") == "navigation":
+            if not isinstance(node, Tag) or node.get("role", "") == "navigation":
                 continue
             classes = node.get("class", [])
             if not isinstance(classes, list):

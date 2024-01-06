@@ -1,2 +1,4 @@
+sphinx>=3.0
+sphinx-rtd-theme
 requests>=2.0.0,<3.0.0
 beautifulsoup4

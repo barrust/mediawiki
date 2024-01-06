@@ -1,5 +1,9 @@
 # MediaWiki Changelog
 
+## Version 0.7.4
+
+* Add typing support
+
 ## Version 0.7.3
 
 * Add `unordered_options` to the `DisambiguationError` to attempt to get options in the order presented on the page; [issue #124](https://github.com/barrust/mediawiki/issues/124)
@@ -118,7 +122,7 @@ documentation
 ### Version 0.3.11
 
 * Re-factor MediaWikiPage into its own file
-* Remove setting properties outside of __init__()
+* Remove setting properties outside of **init**()
 * Better Unicode support
 * Add CONTRIBUTING.md file
 
@@ -130,19 +134,17 @@ documentation
 ### Version 0.3.9
 
 * Fix infinite loop on continued queries: [issue #15](https://github.com/barrust/mediawiki/issues/15)
- * Check by looking at the continue variable over time; if it is the same, exit
+* Check by looking at the continue variable over time; if it is the same, exit
 * Fix image with no url: [issue #14](https://github.com/barrust/mediawiki/issues/14)
 
 ### Version 0.3.8
 
 * Fix empty disambiguation list items
 
-
 ### Version 0.3.7
 
 * Memoize support default parameters
 * Add support test for Python 3.6
-
 
 ### Version 0.3.6
 
@@ -150,14 +152,12 @@ documentation
 * Fix badges in Readme file
 * Additional test coverage
 
-
 ### Version 0.3.5
 
 * Add documentation to README
   * Quickstart information
   * pip install instructions [pypi - pymediawiki](https://pypi.python.org/pypi/pymediawiki/)
   * Additional testing
-
 
 ### Version 0.3.4
 
@@ -169,26 +169,23 @@ documentation
 ### Version 0.3.3
 
 * Improve testing strategy
- * Move tests to json from pickle
+* Move tests to json from pickle
 * Improve parameter checking for geosearch
 * Code standardization
- * Pep8
- * Pylint
- * Single quote strings
-
+* Pep8
+* Pylint
+* Single quote strings
 
 ### Version 0.3.2
 
 * OpenSearch functionality
 * PrefixSearch functionality
 
-
 ### Version 0.3.1
 
 * Page Summary
 * Page Sections
 * Enforce sorting of page properties
-
 
 ### Pre-Version 0.3.1
 

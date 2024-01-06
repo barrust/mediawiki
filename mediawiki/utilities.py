@@ -77,7 +77,4 @@ def is_relative_url(url: str) -> Optional[bool]:
     """simple method to determine if a url is relative or absolute"""
     if url.startswith("#"):
         return None
-    if url.find("://") > 0 or url.startswith("//"):
-        # either 'http(s)://...' or '//cdn...' and therefore absolute
-        return False
-    return True
+    return url.find("://") <= 0 and not url.startswith("//")

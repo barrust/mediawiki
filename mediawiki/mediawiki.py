@@ -185,10 +185,7 @@ class MediaWiki:
     @proxies.setter
     def proxies(self, proxies: Optional[Dict]):
         """Turn on, off, or set proxy use through the Requests library"""
-        if isinstance(proxies, dict):
-            self._proxies = proxies
-        else:
-            self._proxies = None
+        self._proxies = proxies if isinstance(proxies, dict) else None
         self._reset_session()
 
     @property
@@ -227,10 +224,7 @@ class MediaWiki:
     def timeout(self, timeout: float):
         """Set request timeout in seconds (or fractions of a second)"""
 
-        if timeout is None:
-            self._timeout = None  # no timeout
-            return
-        self._timeout = float(timeout)  # allow the exception to be raised
+        self._timeout = None if timeout is None else float(timeout)
 
     @property
     def verify_ssl(self) -> Union[bool, str]:
@@ -240,9 +234,7 @@ class MediaWiki:
     @verify_ssl.setter
     def verify_ssl(self, verify_ssl: Union[bool, str]):
         """Set request verify SSL parameter; defaults to True if issue"""
-        self._verify_ssl = True
-        if isinstance(verify_ssl, (bool, str)):
-            self._verify_ssl = verify_ssl
+        self._verify_ssl = verify_ssl if isinstance(verify_ssl, (bool, str)) else True
         self._reset_session()
 
     @property
@@ -280,9 +272,7 @@ class MediaWiki:
     @category_prefix.setter
     def category_prefix(self, prefix: str):
         """Set the category prefix correctly"""
-        if prefix[-1:] == ":":
-            prefix = prefix[:-1]
-        self._cat_prefix = prefix
+        self._cat_prefix = prefix[:-1] if prefix[-1:] == ":" else prefix
 
     @property
     def user_agent(self) -> str:
@@ -324,10 +314,9 @@ class MediaWiki:
     @refresh_interval.setter
     def refresh_interval(self, refresh_interval: int):
         """Set the new cache refresh interval"""
-        if isinstance(refresh_interval, int) and refresh_interval > 0:
-            self._refresh_interval = refresh_interval
-        else:
-            self._refresh_interval = None
+        self._refresh_interval = (
+            refresh_interval if isinstance(refresh_interval, int) and refresh_interval > 0 else None
+        )
 
     def login(self, username: str, password: str, strict: bool = True) -> bool:
         """Login as specified user
@@ -371,8 +360,7 @@ class MediaWiki:
         self._is_logged_in = False
         reason = res["login"]["reason"]
         if strict:
-            msg = f"MediaWiki login failure: {reason}"
-            raise MediaWikiLoginError(msg)
+            raise MediaWikiLoginError(f"MediaWiki login failure: {reason}")
         return False
 
     # non-properties
@@ -482,9 +470,7 @@ class MediaWiki:
         request = self.wiki_request(query_params)
         titles = [page["title"] for page in request["query"]["random"]]
 
-        if len(titles) == 1:
-            return titles[0]
-        return titles
+        return titles[0] if len(titles) == 1 else titles
 
     @memoize
     def allpages(self, query: str = "", results: int = 10) -> List[str]:
@@ -506,8 +492,7 @@ class MediaWiki:
 
         self._check_error_response(request, query)
 
-        titles = [page["title"] for page in request["query"]["allpages"]]
-        return titles
+        return [page["title"] for page in request["query"]["allpages"]]
 
     @memoize
     def search(
@@ -546,9 +531,7 @@ class MediaWiki:
         search_results = [d["title"] for d in raw_results["query"]["search"]]
 
         if suggestion:
-            sug = None
-            if raw_results["query"].get("searchinfo"):
-                sug = raw_results["query"]["searchinfo"]["suggestion"]
+            sug = raw_results["query"]["searchinfo"]["suggestion"] if raw_results["query"].get("searchinfo") else None
             return search_results, sug
         return search_results
 
@@ -665,10 +648,7 @@ class MediaWiki:
 
         self._check_error_response(out, query)
 
-        res: List[Tuple[str, str, str]] = []
-        for i, item in enumerate(out[1]):
-            res.append((item, out[2][i], out[3][i]))
-        return res
+        return [(item, out[2][i], out[3][i]) for i, item in enumerate(out[1])]
 
     @memoize
     def prefixsearch(self, prefix: str, results: int = 10) -> List[str]:
@@ -790,9 +770,7 @@ class MediaWiki:
                 search_params["cmlimit"] = results - returned_results
         # end while loop
 
-        if subcategories:
-            return pages, subcats
-        return pages
+        return (pages, subcats) if subcategories else pages
 
     def categorytree(self, category: str, depth: int = 5) -> Dict[str, Any]:
         """Generate the Category Tree for the given categories

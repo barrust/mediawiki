@@ -260,9 +260,11 @@ class MediaWikiPage:
                 "prop": "imageinfo",  # this will be replaced by fileinfo
                 "iiprop": "url",
             }
-            for page in self._continued_query(params):
-                if "imageinfo" in page and "url" in page["imageinfo"][0]:
-                    self._images.append(page["imageinfo"][0]["url"])
+            self._images.extend(
+                page["imageinfo"][0]["url"]
+                for page in self._continued_query(params)
+                if "imageinfo" in page and "url" in page["imageinfo"][0]
+            )
             self._images = sorted(self._images)
         return self._images
 
@@ -284,8 +286,7 @@ class MediaWikiPage:
             info = self._soup.find("table", {"class": "infobox"})
             if info is not None and isinstance(info, Tag):
                 children = info.find_all("a", class_="image")
-                for child in children:
-                    self._logos.append("https:" + child.img["src"])
+                self._logos.extend("https:" + child.img["src"] for child in children)
         return self._logos
 
     @property
@@ -460,15 +461,14 @@ class MediaWikiPage:
             Precedence for parameters: sentences then chars; if both are 0 then the entire first section is returned"""
         query_params: Dict[str, Any] = {"prop": "extracts", "explaintext": "", "titles": self.title}
         if sentences:
-            query_params["exsentences"] = 10 if sentences > 10 else sentences
+            query_params["exsentences"] = min(sentences, 10)
         elif chars:
-            query_params["exchars"] = 1 if chars < 1 else chars
+            query_params["exchars"] = max(chars, 1)
         else:
             query_params["exintro"] = ""
 
         request = self.mediawiki.wiki_request(query_params)
-        summary = request["query"]["pages"][self.pageid].get("extract")
-        return summary
+        return request["query"]["pages"][self.pageid].get("extract")
 
     @property
     def sections(self) -> List[str]:
@@ -586,9 +586,7 @@ class MediaWikiPage:
                 id_tag = headline.get("id")
                 break
 
-        if id_tag is not None:
-            return self._parse_section_links(id_tag)
-        return None
+        return self._parse_section_links(id_tag) if id_tag is not None else None
 
     # Protected Methods
     def __load(self, redirect: bool = True, preload: bool = False):
@@ -664,31 +662,31 @@ class MediaWikiPage:
 
     def _handle_redirect(self, redirect: bool, preload: bool, query: Dict, page: Dict[str, Any]):
         """handle redirect"""
-        if redirect:
-            redirects = query["redirects"][0]
-
-            if "normalized" in query:
-                normalized = query["normalized"][0]
-                if normalized["from"] != self.title:
-                    raise MediaWikiException(ODD_ERROR_MESSAGE)
-                from_title = normalized["to"]
-            else:
-                if not getattr(self, "title", None):
-                    self.title = redirects["from"]
-                    delattr(self, "pageid")
-                from_title = self.title
-            if redirects["from"] != from_title:
-                raise MediaWikiException(ODD_ERROR_MESSAGE)
-
-            # change the title and reload the whole object
-            self.__init__(  # type: ignore
-                self.mediawiki,
-                title=redirects["to"],
-                redirect=redirect,
-                preload=preload,
-            )
-        else:
+        if not redirect:
             raise RedirectError(getattr(self, "title", page["title"]))
+
+        redirects = query["redirects"][0]
+
+        if "normalized" in query:
+            normalized = query["normalized"][0]
+            if normalized["from"] != self.title:
+                raise MediaWikiException(ODD_ERROR_MESSAGE)
+            from_title = normalized["to"]
+        else:
+            if not getattr(self, "title", None):
+                self.title = redirects["from"]
+                delattr(self, "pageid")
+            from_title = self.title
+        if redirects["from"] != from_title:
+            raise MediaWikiException(ODD_ERROR_MESSAGE)
+
+        # change the title and reload the whole object
+        self.__init__(  # type: ignore
+            self.mediawiki,
+            title=redirects["to"],
+            redirect=redirect,
+            preload=preload,
+        )
 
     def _continued_query(self, query_params: Dict[str, Any], key: str = "pages") -> Iterator[Dict[Any, Any]]:
         """Based on
@@ -761,8 +759,7 @@ class MediaWikiPage:
             if node.name == "a":
                 all_links.append(self.__parse_link_info(node))
             else:
-                for link in node.find_all("a"):
-                    all_links.append(self.__parse_link_info(link))
+                all_links.extend(self.__parse_link_info(link) for link in node.find_all("a"))
         return all_links
 
     def __parse_link_info(self, link: Tag) -> Tuple[str, str]:

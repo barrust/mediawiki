@@ -1,19 +1,19 @@
 """
 mediawiki module initialization
 """
-from .mediawiki import MediaWiki, URL, VERSION
-from .mediawikipage import MediaWikiPage
-from .exceptions import (
-    MediaWikiException,
-    PageError,
-    MediaWikiGeoCoordError,
-    RedirectError,
+from mediawiki.exceptions import (
     DisambiguationError,
-    MediaWikiAPIURLError,
     HTTPTimeoutError,
+    MediaWikiAPIURLError,
     MediaWikiCategoryTreeError,
+    MediaWikiException,
+    MediaWikiGeoCoordError,
     MediaWikiLoginError,
+    PageError,
+    RedirectError,
 )
+from mediawiki.mediawiki import URL, VERSION, MediaWiki
+from mediawiki.mediawikipage import MediaWikiPage
 
 __author__ = "Tyler Barrus"
 __maintainer__ = "Tyler Barrus"
@@ -22,8 +22,8 @@ __license__ = "MIT"
 __version__ = VERSION
 __credits__ = ["Jonathan Goldsmith"]
 __url__ = URL
-__bugtrack_url__ = "{0}/issues".format(__url__)
-__download_url__ = "{0}/tarball/v{1}".format(__url__, __version__)
+__bugtrack_url__ = f"{__url__}/issues"
+__download_url__ = f"{__url__}/tarball/v{__version__}"
 
 __all__ = [
     "MediaWiki",

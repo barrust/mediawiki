@@ -1,15 +1,16 @@
 """
 Utility functions
 """
-import sys
 import functools
 import inspect
+import sys
 import time
+from typing import Any, Callable, Dict, Optional
 
 
-def parse_all_arguments(func):
-    """ determine all positional and named arguments as a dict """
-    args = dict()
+def parse_all_arguments(func: Callable) -> Dict[str, Any]:
+    """determine all positional and named arguments as a dict"""
+    args = {}
 
     func_args = inspect.signature(func)
     for itm in list(func_args.parameters)[1:]:
@@ -19,15 +20,15 @@ def parse_all_arguments(func):
     return args
 
 
-def memoize(func):
-    """ quick memoize decorator for class instance methods
-        NOTE: this assumes that the class that the functions to be
-        memoized already has a memoized and refresh_interval
-        property """
+def memoize(func: Callable) -> Callable:
+    """quick memoize decorator for class instance methods
+    NOTE: this assumes that the class that the functions to be
+    memoized already has a memoized and refresh_interval
+    property"""
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        """ wrap it up and store info in a cache """
+        """wrap it up and store info in a cache"""
         cache = args[0].memoized
         refresh = args[0].refresh_interval
         use_cache = args[0].use_cache
@@ -37,18 +38,18 @@ def memoize(func):
             return func(*args, **kwargs)
 
         if func.__name__ not in cache:
-            cache[func.__name__] = dict()
+            cache[func.__name__] = {}
             if "defaults" not in cache:
-                cache["defaults"] = dict()
+                cache["defaults"] = {}
             cache["defaults"][func.__name__] = parse_all_arguments(func)
         # build a key; should also consist of the default values
         defaults = cache["defaults"][func.__name__].copy()
         for key, val in kwargs.items():
             defaults[key] = val
-        tmp = list()
+        tmp = []
         tmp.extend(args[1:])
         for k in sorted(defaults.keys()):
-            tmp.append("({0}: {1})".format(k, defaults[k]))
+            tmp.append(f"({k}: {defaults[k]})")
 
         tmp = [str(x) for x in tmp]
         key = " - ".join(tmp)
@@ -66,14 +67,14 @@ def memoize(func):
     return wrapper
 
 
-def str_or_unicode(text):
-    """ handle python 3 unicode """
+def str_or_unicode(text: str) -> str:
+    """handle python 3 unicode"""
     encoding = sys.stdout.encoding
     return text.encode(encoding).decode(encoding)
 
 
-def is_relative_url(url):
-    """ simple method to determine if a url is relative or absolute """
+def is_relative_url(url: str) -> Optional[bool]:
+    """simple method to determine if a url is relative or absolute"""
     if url.startswith("#"):
         return None
     if url.find("://") > 0 or url.startswith("//"):

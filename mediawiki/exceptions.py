@@ -1,7 +1,9 @@
 """
 MediaWiki Exceptions
 """
-from .utilities import str_or_unicode
+from typing import Dict, List, Optional
+
+from mediawiki.utilities import str_or_unicode
 
 ODD_ERROR_MESSAGE = (
     "This should not happen. If the MediaWiki site you are "
@@ -11,14 +13,14 @@ ODD_ERROR_MESSAGE = (
 
 
 class MediaWikiBaseException(Exception):
-    """ Base MediaWikiException
+    """Base MediaWikiException
 
-        Args:
-            message: The message of the exception """
+    Args:
+        message: The message of the exception"""
 
-    def __init__(self, message):
+    def __init__(self, message: str):
         self._message = message
-        super(MediaWikiBaseException, self).__init__(self.message)
+        super().__init__(self.message)
 
     def __unicode__(self):
         return self.message
@@ -27,63 +29,55 @@ class MediaWikiBaseException(Exception):
         return str_or_unicode(self.__unicode__())
 
     @property
-    def message(self):
-        """ str: The MediaWiki exception message """
+    def message(self) -> str:
+        """str: The MediaWiki exception message"""
         return self._message
 
 
 class MediaWikiException(MediaWikiBaseException):
-    """ MediaWiki Exception Class
+    """MediaWiki Exception Class
 
-        Args:
-            error (str): The error message that the MediaWiki site returned """
+    Args:
+        error (str): The error message that the MediaWiki site returned"""
 
-    def __init__(self, error):
+    def __init__(self, error: str):
         self._error = error
-        msg = ('An unknown error occurred: "{0}". Please report it on GitHub!').format(
-            self.error
-        )
-        super(MediaWikiException, self).__init__(msg)
+        msg = f'An unknown error occurred: "{self.error}". Please report it on GitHub!'
+        super().__init__(msg)
 
     @property
-    def error(self):
-        """ str: The error message that the MediaWiki site returned """
+    def error(self) -> str:
+        """str: The error message that the MediaWiki site returned"""
         return self._error
 
 
 class PageError(MediaWikiBaseException):
-    """ Exception raised when no MediaWiki page matched a query
+    """Exception raised when no MediaWiki page matched a query
 
-        Args:
-            title (str): Title of the page
-            pageid (int): MediaWiki page id of the page"""
+    Args:
+        title (str): Title of the page
+        pageid (int): MediaWiki page id of the page"""
 
-    def __init__(self, title=None, pageid=None):
+    def __init__(self, title: Optional[str] = None, pageid: Optional[int] = None):
         if title:
             self._title = title
-            msg = ('"{0}" does not match any pages. Try another query!').format(
-                self.title
-            )
+            msg = f'"{self.title}" does not match any pages. Try another query!'
         elif pageid:
             self._pageid = pageid
-            msg = ('Page id "{0}" does not match any pages. Try another id!').format(
-                self.pageid
-            )
+            msg = f'Page id "{self.pageid}" does not match any pages. Try another id!'
         else:
             self._title = ""
-            msg = ('"{0}" does not match any pages. Try another query!').format(
-                self.title
-            )
-        super(PageError, self).__init__(msg)
+            msg = f'"{self.title}" does not match any pages. Try another query!'
+        super().__init__(msg)
 
     @property
-    def title(self):
-        """ str: The title that caused the page error """
+    def title(self) -> str:
+        """str: The title that caused the page error"""
         return self._title
 
     @property
-    def pageid(self):
-        """ int: The page id that caused the page error """
+    def pageid(self) -> int:
+        """int: The page id that caused the page error"""
         return self._pageid
 
 
@@ -97,18 +91,17 @@ class RedirectError(MediaWikiBaseException):
             This should only occur if both auto_suggest and redirect \
             are set to **False** """
 
-    def __init__(self, title):
+    def __init__(self, title: str):
         self._title = title
         msg = (
-            '"{0}" resulted in a redirect. Set the redirect property to True '
-            "to allow automatic redirects."
-        ).format(self.title)
+            f'"{self.title}" resulted in a redirect. Set the redirect property to True ' "to allow automatic redirects."
+        )
 
-        super(RedirectError, self).__init__(msg)
+        super().__init__(msg)
 
     @property
-    def title(self):
-        """ str: The title that was redirected """
+    def title(self) -> str:
+        """str: The title that was redirected"""
         return self._title
 
 
@@ -125,78 +118,77 @@ class DisambiguationError(MediaWikiBaseException):
             `options` only includes titles that link to valid \
             MediaWiki pages """
 
-    def __init__(self, title, may_refer_to, url, details=None):
+    def __init__(self, title: str, may_refer_to: List[str], url: str, details: Optional[List[Dict]] = None):
         self._title = title
         self._unordered_options = may_refer_to
         self._options = sorted(may_refer_to)
         self._details = details
         self._url = url
-        msg = ('\n"{0}" may refer to: \n  ' "{1}").format(
-            self.title, "\n  ".join(self.options)
-        )
-        super(DisambiguationError, self).__init__(msg)
+        options_str = "\n  ".join(self.options)
+        msg = f'\n"{self.title}" may refer to: \n  {options_str}'
+        super().__init__(msg)
 
     @property
-    def url(self):
-        """ str: The url, if possible, of the disambiguation page """
+    def url(self) -> str:
+        """str: The url, if possible, of the disambiguation page"""
         return self._url
 
     @property
-    def title(self):
-        """ str: The title of the page """
+    def title(self) -> str:
+        """str: The title of the page"""
         return self._title
 
     @property
-    def options(self):
-        """ list: The list of possible page titles """
+    def options(self) -> List[str]:
+        """list: The list of possible page titles"""
         return self._options
 
     @property
-    def unordered_options(self):
+    def unordered_options(self) -> List[str]:
         """list: The list of possible page titles, un-sorted in an attempt to get them as they showup on the page"""
         return self._unordered_options
 
     @property
-    def details(self):
-        """ list: The details of the proposed non-disambigous pages """
+    def details(self) -> Optional[List[Dict]]:
+        """list: The details of the proposed non-disambigous pages"""
         return self._details
 
 
 class HTTPTimeoutError(MediaWikiBaseException):
-    """ Exception raised when a request to the Mediawiki site times out.
+    """Exception raised when a request to the Mediawiki site times out.
 
-        Args:
-            query (str): The query that timed out"""
+    Args:
+        query (str): The query that timed out"""
 
-    def __init__(self, query):
+    def __init__(self, query: str):
         self._query = query
         msg = (
-            'Searching for "{0}" resulted in a timeout. '
+            f'Searching for "{self.query}" resulted in a timeout. '
             "Try again in a few seconds, and ensure you have rate limiting "
             "set to True."
-        ).format(self.query)
-        super(HTTPTimeoutError, self).__init__(msg)
+        )
+        super().__init__(msg)
 
     @property
-    def query(self):
-        """ str: The query that timed out """
+    def query(self) -> str:
+        """str: The query that timed out"""
         return self._query
 
 
 class MediaWikiAPIURLError(MediaWikiBaseException):
-    """ Exception raised when the MediaWiki server does not support the API
+    """Exception raised when the MediaWiki server does not support the API
 
-        Args:
-            api_url (str): The API URL that was not recognized """
+    Args:
+        api_url (str): The API URL that was not recognized"""
 
-    def __init__(self, api_url):
+    def __init__(self, api_url: str):
         self._api_url = api_url
-        msg = "{0} is not a valid MediaWiki API URL".format(self.api_url)
-        super(MediaWikiAPIURLError, self).__init__(msg)
+        msg = f"{self.api_url} is not a valid MediaWiki API URL"
+        super().__init__(msg)
 
     @property
-    def api_url(self):
-        """ str: The api url that raised the exception """
+    def api_url(self) -> str:
+        """str: The api url that raised the exception"""
         return self._api_url
 
 
@@ -207,55 +199,53 @@ class MediaWikiGeoCoordError(MediaWikiBaseException):
             error (str): Error message from the MediaWiki site related to \
                          GeoCoordinates """
 
-    def __init__(self, error):
+    def __init__(self, error: str):
         self._error = error
         msg = (
-            "GeoData search resulted in the following error: {0}"
+            f"GeoData search resulted in the following error: {self.error}"
             " - Please use valid coordinates or a proper page title."
-        ).format(self.error)
-        super(MediaWikiGeoCoordError, self).__init__(msg)
+        )
+        super().__init__(msg)
 
     @property
-    def error(self):
-        """ str: The error that was thrown when pulling GeoCoordinates """
+    def error(self) -> str:
+        """str: The error that was thrown when pulling GeoCoordinates"""
         return self._error
 
 
 class MediaWikiCategoryTreeError(MediaWikiBaseException):
-    """ Exception when the category tree is unable to complete for an unknown
-        reason
+    """Exception when the category tree is unable to complete for an unknown
+    reason
 
-        Args:
-            category (str): The category that threw an exception """
+    Args:
+        category (str): The category that threw an exception"""
 
-    def __init__(self, category):
+    def __init__(self, category: str):
         self._category = category
         msg = (
-            "Categorytree threw an exception for trying to get the "
-            "same category '{}' too many times. Please try again later "
-            "and perhaps use the rate limiting "
-            "option."
-        ).format(self._category)
-        super(MediaWikiCategoryTreeError, self).__init__(msg)
+            f"Categorytree threw an exception for trying to get the same category '{self._category}' "
+            "too many times. Please try again later and perhaps use the rate limiting option."
+        )
+        super().__init__(msg)
 
     @property
-    def category(self):
+    def category(self) -> str:
         """ str: The category that threw an exception during category tree \
                  generation """
         return self._category
 
 
 class MediaWikiLoginError(MediaWikiBaseException):
-    """ Exception raised when unable to login to the MediaWiki site
+    """Exception raised when unable to login to the MediaWiki site
 
-        Args:
-            error (str): The error message that the MediaWiki site returned """
+    Args:
+        error (str): The error message that the MediaWiki site returned"""
 
-    def __init__(self, error):
+    def __init__(self, error: str):
         self._error = error
-        super(MediaWikiLoginError, self).__init__(error)
+        super().__init__(error)
 
     @property
-    def error(self):
-        """ str: The error message that the MediaWiki site returned """
+    def error(self) -> str:
+        """str: The error message that the MediaWiki site returned"""
         return self._error

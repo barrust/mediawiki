@@ -949,7 +949,7 @@ class MediaWiki:
             raise ValueError(message)
 
     @staticmethod
-    def __category_parameter_verification(cats: list[str], depth: int, category: str):
+    def __category_parameter_verification(cats, depth, category):
         # parameter verification
         if len(cats) == 1 and (cats[0] is None or cats[0] == ""):
             msg = (

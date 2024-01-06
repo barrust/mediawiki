@@ -5,7 +5,7 @@ import functools
 import inspect
 import sys
 import time
-from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict, Optional
 
 
 def parse_all_arguments(func: Callable) -> Dict[str, Any]:
@@ -73,7 +73,7 @@ def str_or_unicode(text: str) -> str:
     return text.encode(encoding).decode(encoding)
 
 
-def is_relative_url(url: str) -> bool:
+def is_relative_url(url: str) -> Optional[bool]:
     """simple method to determine if a url is relative or absolute"""
     if url.startswith("#"):
         return None

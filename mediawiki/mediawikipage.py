@@ -504,7 +504,7 @@ class MediaWikiPage:
                 self._table_of_contents = {}
         return self._table_of_contents
 
-    def section(self, section_title: str) -> Optional[str]:
+    def section(self, section_title: Optional[str]) -> Optional[str]:
         """Plain text section content
 
         Args:
@@ -550,7 +550,10 @@ class MediaWikiPage:
         except ValueError:
             next_index = len(self.content)
 
-        return self.content[index:next_index].lstrip("=").strip()
+        val = self.content[index:next_index].lstrip("=").strip()
+        if val == "":
+            return None
+        return val
 
     def parse_section_links(self, section_title: str) -> Optional[List[Tuple[str, str]]]:
         """Parse all links within a section
@@ -767,9 +770,11 @@ class MediaWikiPage:
                     all_links.append(self.__parse_link_info(link))
         return all_links
 
-    def __parse_link_info(self, link: str) -> Tuple[str, str]:
+    def __parse_link_info(self, link: Tag) -> Tuple[str, str]:
         """parse the <a> tag for the link"""
         href = link.get("href", "")
+        if isinstance(href, list):
+            href = href[0]
         txt = link.string or href
         is_rel = is_relative_url(href)
         if is_rel is True:

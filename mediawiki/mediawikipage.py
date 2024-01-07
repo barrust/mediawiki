@@ -253,18 +253,17 @@ class MediaWikiPage:
         Note:
             Not settable"""
         if self._images is None:
-            self._images = []
             params = {
                 "generator": "images",
                 "gimlimit": "max",
                 "prop": "imageinfo",  # this will be replaced by fileinfo
                 "iiprop": "url",
             }
-            self._images.extend(
+            self._images = [
                 page["imageinfo"][0]["url"]
                 for page in self._continued_query(params)
                 if "imageinfo" in page and "url" in page["imageinfo"][0]
-            )
+            ]
             self._images = sorted(self._images)
         return self._images
 
@@ -527,6 +526,7 @@ class MediaWikiPage:
         else:
             section = f"== {section_title} =="
             try:
+                # TODO, move index to find to remove exceptions
                 content = self.content
                 index = content.index(section) + len(section)
 

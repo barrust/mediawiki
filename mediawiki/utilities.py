@@ -75,6 +75,4 @@ def str_or_unicode(text: str) -> str:
 
 def is_relative_url(url: str) -> Optional[bool]:
     """simple method to determine if a url is relative or absolute"""
-    if url.startswith("#"):
-        return None
-    return url.find("://") <= 0 and not url.startswith("//")
+    return url.find("://") <= 0 and not url.startswith("//") if not url.startswith("#") else None

@@ -223,7 +223,6 @@ class MediaWiki:
     @timeout.setter
     def timeout(self, timeout: float):
         """Set request timeout in seconds (or fractions of a second)"""
-
         self._timeout = None if timeout is None else float(timeout)
 
     @property
@@ -881,9 +880,8 @@ class MediaWiki:
 
         api_version = gen["generator"].split(" ")[1].split("-")[0]
 
-        major_minor = api_version.split(".")
-        for i, item in enumerate(major_minor):
-            major_minor[i] = int(item)
+        major_minor = [int(i) for i in api_version.split(".")]
+
         self._api_version = tuple(major_minor)
         self._api_version_str = ".".join([str(x) for x in self._api_version])
 
@@ -969,6 +967,7 @@ class MediaWiki:
                     raise exc
                 except Exception:
                     tries = tries + 1
+                    # TODO: Should this really sleep?
                     time.sleep(1)
         else:
             parent_cats = categories[cat].categories

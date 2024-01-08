@@ -98,11 +98,8 @@ class Configuration:
 
     @lang.setter
     def lang(self, lang: str):
-        print(f"lang setter: {lang}")
         t_lang = lang.lower()
-        print(f"t_lang setter: {t_lang}")
         if self._lang == t_lang:
-            print("non-change")
             return
         url = self._api_url
         tmp = url.replace(f"/{self._lang}.", f"/{t_lang}.")

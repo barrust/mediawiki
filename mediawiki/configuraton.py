@@ -98,14 +98,17 @@ class Configuration:
 
     @lang.setter
     def lang(self, lang: str):
-        lang = lang.lower()
-        if self._lang == lang:
+        print(f"lang setter: {lang}")
+        t_lang = lang.lower()
+        print(f"t_lang setter: {t_lang}")
+        if self._lang == t_lang:
+            print("non-change")
             return
         url = self._api_url
-        tmp = url.replace(f"/{self._lang}.", f"/{lang}.")
+        tmp = url.replace(f"/{self._lang}.", f"/{t_lang}.")
 
         self.api_url = tmp
-        self._lang = lang
+        self._lang = t_lang
         self._clear_memoized - True
 
     @property

@@ -78,7 +78,7 @@ class MediaWiki:
         url.format(lang=lang.lower())
         self._config = Configuration(
             lang=lang,
-            api_url=url.format(lang=lang),
+            api_url=url.format(lang=lang.lower()),
             category_prefix=cat_prefix,
             timeout=timeout,
             proxies=proxies,
@@ -235,7 +235,8 @@ class MediaWiki:
     @language.setter
     def language(self, lang: str):
         """Set the language to use; attempts to change the API URL"""
-        self._config.lang == lang
+        print(f"language setter: {lang}")
+        self._config.lang = lang
         if self._config._clear_memoized:
             self.clear_memoized()
             self._config._clear_memoized = False

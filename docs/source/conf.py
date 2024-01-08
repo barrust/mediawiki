@@ -15,6 +15,7 @@
 
 import os
 import sys
+from typing import Dict, List
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -88,7 +89,7 @@ language = "en"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
+exclude_patterns: List[str] = []
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -224,7 +225,7 @@ htmlhelp_basename = "mediawikidoc"
 
 # -- Options for LaTeX output ---------------------------------------------
 
-latex_elements = {
+latex_elements: Dict[str, str] = {
     # The paper size ('letterpaper' or 'a4paper').
     #'papersize': 'letterpaper',
     # The font size ('10pt', '11pt' or '12pt').

@@ -2,13 +2,14 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Dict, Optional, Union
 
-from mediawiki.mediawiki import URL, VERSION
+URL: str = "https://github.com/barrust/mediawiki"
+VERSION: str = "0.7.4"
 
 
 @dataclass
 class Configuration:
     _lang: str = field(default="en", init=False, repr=False)
-    _api_url: str = field(default="https://{lang}.wikipedia.org/w/api.php", init=False, repr=False)
+    _api_url: str = field(default="https://en.wikipedia.org/w/api.php", init=False, repr=False)
     _category_prefix: str = field(default="Category", init=False, repr=False)
     _timeout: Optional[float] = field(default=15.0, init=False, repr=False)
     _user_agent: str = field(default=f"python-mediawiki/VERSION-{VERSION}/({URL})/BOT", init=False, repr=False)
@@ -78,6 +79,9 @@ class Configuration:
 
         if use_cache:
             self.use_cache = use_cache
+
+        if timeout:
+            self.timeout = timeout
 
     def __repr__(self):
         keys = [
@@ -195,7 +199,7 @@ class Configuration:
 
     @property
     def refresh_interval(self) -> Optional[int]:
-        return self._rate_limit
+        return self._refresh_interval
 
     @refresh_interval.setter
     def refresh_interval(self, refresh_interval: Optional[int]):

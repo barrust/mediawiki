@@ -203,7 +203,7 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded()
         site.rate_limit = True
         self.assertEqual(site.rate_limit, True)
-        self.assertEqual(site._rate_limit_last_call, None)
+        self.assertEqual(site._config._rate_limit_last_call, None)
         self.assertEqual(site.rate_limit_min_wait, timedelta(milliseconds=50))
 
     def test_rate_limit_min_wait(self):
@@ -211,15 +211,15 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded()
         site.rate_limit_min_wait = timedelta(milliseconds=150)
         self.assertEqual(site.rate_limit, False)
-        self.assertEqual(site._rate_limit_last_call, None)
+        self.assertEqual(site._config._rate_limit_last_call, None)
         self.assertEqual(site.rate_limit_min_wait, timedelta(milliseconds=150))
 
     def test_rate_limit_min_wait_reset(self):
         """test setting rate limiting"""
         site = MediaWikiOverloaded(rate_limit=True)
-        self.assertNotEqual(site._rate_limit_last_call, None)  # should be set
+        self.assertNotEqual(site._config._rate_limit_last_call, None)  # should be set
         site.rate_limit_min_wait = timedelta(milliseconds=150)
-        self.assertEqual(site._rate_limit_last_call, None)
+        self.assertEqual(site._config._rate_limit_last_call, None)
         self.assertEqual(site.rate_limit, True)
         self.assertEqual(site.rate_limit_min_wait, timedelta(milliseconds=150))
 
@@ -1026,16 +1026,16 @@ class TestMediaWikiRequests(unittest.TestCase):
     def test_wiki_request(self):
         """test wiki request by testing the timing...."""
         site = MediaWikiOverloaded()
-        # self.assertEqual(site._rate_limit_last_call, None)
+        # self.assertEqual(site._config._rate_limit_last_call, None)
         site.rate_limit = True
         site.rate_limit_min_wait = timedelta(seconds=2)
         site.search("chest set")
-        start_time = site._rate_limit_last_call
+        start_time = site._config._rate_limit_last_call
         site.opensearch("new york")
         site.prefixsearch("ar")
-        end_time = site._rate_limit_last_call
+        end_time = site._config._rate_limit_last_call
         self.assertGreater(end_time - start_time, timedelta(seconds=2))
-        self.assertNotEqual(site._rate_limit_last_call, None)
+        self.assertNotEqual(site._config._rate_limit_last_call, None)
 
 
 class TestMediaWikiPage(unittest.TestCase):

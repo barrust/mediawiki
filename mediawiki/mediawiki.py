@@ -81,18 +81,21 @@ class MediaWiki:
             api_url=url.format(lang=lang.lower()),
             category_prefix=cat_prefix,
             timeout=timeout,
-            proxies=proxies,
             user_agent=user_agent,
+            proxies=proxies,
             verify_ssl=verify_ssl,
             rate_limit=rate_limit,
             rate_limit_wait=rate_limit_wait,
+            username=username,
+            password=password,
+            # refresh_interval=None,
+            # use_cache=True,
         )
 
         # requests library parameters
         self._session: Optional[requests.Session] = None
 
-        # set libary parameters
-
+        # reset libary parameters
         self._extensions = None
         self._api_version = None
         self._api_version_str = None
@@ -105,8 +108,8 @@ class MediaWiki:
 
         # for login information
         self._is_logged_in = False
-        if password is not None and username is not None:
-            self.login(username, password)
+        if self._config.username is not None and self._config.password is not None:
+            self.login(self._config.username, self._config.password)
 
         try:
             self._get_site_info()
@@ -170,7 +173,6 @@ class MediaWiki:
         self._config.proxies = proxies
         if self._config._reset_session:
             self._reset_session()
-            self._config._reset_session = False
 
     @property
     def use_cache(self) -> bool:
@@ -220,7 +222,6 @@ class MediaWiki:
         self._config.verify_ssl = verify_ssl
         if self._config._reset_session:
             self._reset_session()
-            self._config._reset_session = False
 
     @property
     def language(self) -> str:
@@ -239,7 +240,6 @@ class MediaWiki:
         self._config.lang = lang
         if self._config._clear_memoized:
             self.clear_memoized()
-            self._config._clear_memoized = False
 
     @property
     def category_prefix(self) -> str:
@@ -365,11 +365,12 @@ class MediaWiki:
         old_lang = self._config.lang
         self._config.lang = lang.lower()
         self._config.api_url = api_url.format(lang=self._config.lang)
-
+        self._config.username = username
+        self._config.password = password
         self._is_logged_in = False
         try:
-            if username is not None and password is not None:
-                self.login(username, password)
+            if self._config.username is not None and self._config.password is not None:
+                self.login(self._config.username, self._config.password)
             self._get_site_info()
             self.__supported_languages = None  # reset this
             self.__available_languages = None  # reset this
@@ -391,12 +392,15 @@ class MediaWiki:
         if self._config.proxies is not None:
             self._session.proxies.update(self._config.proxies)
         self._session.verify = self._config.verify_ssl
+
         self._is_logged_in = False
+        self._config._reset_session = False
 
     def clear_memoized(self):
         """Clear memoized (cached) values"""
         if hasattr(self, "_cache"):
             self._cache.clear()
+        self._config._clear_memoized = False
 
     # non-setup functions
     @property

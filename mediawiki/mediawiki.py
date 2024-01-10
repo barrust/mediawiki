@@ -88,8 +88,8 @@ class MediaWiki:
             rate_limit_wait=rate_limit_wait,
             username=username,
             password=password,
-            # refresh_interval=None,
-            # use_cache=True,
+            refresh_interval=None,
+            use_cache=True,
         )
 
         # requests library parameters
@@ -114,7 +114,7 @@ class MediaWiki:
         try:
             self._get_site_info()
         except MediaWikiException as exc:
-            raise MediaWikiAPIURLError(url) from exc
+            raise MediaWikiAPIURLError(self._config.api_url) from exc
 
     # non-settable properties
     @property
@@ -853,8 +853,9 @@ class MediaWiki:
     # Protected functions
     def _get_site_info(self):
         """Parse out the Wikimedia site information including API Version and Extensions"""
-        response = self.wiki_request({"meta": "siteinfo", "siprop": "extensions|general"})
 
+        response = self.wiki_request({"meta": "siteinfo", "siprop": "extensions|general"})
+        print(response)
         # parse what we need out here!
         query = response.get("query", None)
         if query is None or query.get("general", None) is None:

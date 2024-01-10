@@ -93,7 +93,7 @@ class MediaWiki:
         )
 
         # requests library parameters
-        self._session: Optional[requests.Session] = None
+        self._session: requests.Session = requests.Session()
 
         # reset libary parameters
         self._extensions = None
@@ -198,7 +198,6 @@ class MediaWiki:
     def rate_limit_min_wait(self, min_wait: timedelta):
         """Set minimum wait to use for rate limiting"""
         self._config.rate_limit_min_wait = min_wait
-        self._config._rate_limit_last_call = None
 
     @property
     def timeout(self) -> Optional[float]:
@@ -978,18 +977,14 @@ class MediaWiki:
     def _get_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """wrap the call to the requests package"""
         try:
-            if self._session is not None:
-                return self._session.get(self._config.api_url, params=params, timeout=self._config.timeout).json()
-            return {}
+            return self._session.get(self._config.api_url, params=params, timeout=self._config.timeout).json()
         except JSONDecodeError:
             return {}
 
     def _post_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """wrap a post call to the requests package"""
         try:
-            if self._session is not None:
-                return self._session.post(self._config.api_url, data=params, timeout=self._config.timeout).json()
-            return {}
+            return self._session.post(self._config.api_url, data=params, timeout=self._config.timeout).json()
         except JSONDecodeError:
             return {}
 

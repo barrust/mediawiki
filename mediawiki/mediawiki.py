@@ -106,6 +106,8 @@ class MediaWiki:
         # for memoized results
         self._cache: Dict = {}
 
+        self._reset_session()
+
         # for login information
         self._is_logged_in = False
         if self._config.username is not None and self._config.password is not None:
@@ -236,7 +238,6 @@ class MediaWiki:
     @language.setter
     def language(self, lang: str):
         """Set the language to use; attempts to change the API URL"""
-        print(f"language setter: {lang}")
         self._config.lang = lang
         if self._config._clear_memoized:
             self.clear_memoized()
@@ -855,7 +856,7 @@ class MediaWiki:
         """Parse out the Wikimedia site information including API Version and Extensions"""
 
         response = self.wiki_request({"meta": "siteinfo", "siprop": "extensions|general"})
-        print(response)
+
         # parse what we need out here!
         query = response.get("query", None)
         if query is None or query.get("general", None) is None:

@@ -109,15 +109,14 @@ class Configuration:
     @lang.setter
     def lang(self, language: str):
         """Set the language to use; attempts to change the API URL"""
-        t_lang = language.lower()
-        if self._lang == t_lang:
+        if self._lang == language.lower():
             return
         url = self._api_url
-        tmp = url.replace(f"/{self._lang}.", f"/{t_lang}.")
+        tmp = url.replace(f"/{self._lang}.", f"/{language.lower()}.")
 
         self.api_url = tmp
-        self._lang = t_lang
-        self._clear_memoized - True
+        self._lang = language.lower()
+        self._clear_memoized = True
 
     @property
     def api_url(self) -> str:

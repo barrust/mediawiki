@@ -335,6 +335,7 @@ class MediaWiki:
         res = self._post_response(params)
         if res["login"]["result"] == "Success":
             self._is_logged_in = True
+            self._config._login = False
             return True
         self._is_logged_in = False
         reason = res["login"]["reason"]

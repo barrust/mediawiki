@@ -37,6 +37,10 @@ class MediaWikiOverloaded(MediaWiki):
         rate_limit_wait=timedelta(milliseconds=50),
         cat_prefix="Category",
         user_agent=None,
+        username=None,
+        password=None,
+        proxies=None,
+        verify_ssl=True,
     ):
         """new init"""
 
@@ -55,7 +59,14 @@ class MediaWikiOverloaded(MediaWiki):
             rate_limit_wait=rate_limit_wait,
             cat_prefix=cat_prefix,
             user_agent=user_agent,
+            username=username,
+            password=password,
+            proxies=proxies,
+            verify_ssl=verify_ssl,
         )
+
+    def __repr__(self):
+        return super().__repr__()
 
     def _get_response(self, params):
         """override the __get_response method"""
@@ -150,6 +161,18 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded()
         response = site.responses[site.api_url]
         self.assertEqual(site.extensions, response["extensions"])
+
+    def test_repr_function(self):
+        """test the config repr function"""
+        site = MediaWikiOverloaded()
+        res = (
+            "Configuration(api_url=https://en.wikipedia.org/w/api.php, category_prefix=Category, "
+            "lang=en, password=None, proxies=None, rate_limit=False, rate_limit_min_wait=0:00:00.050000, "
+            "refresh_interval=None, timeout=15.0, use_cache=True, "
+            "user_agent=python-mediawiki/VERSION-0.7.4/(https://github.com/barrust/mediawiki)/BOT, username=None, verify_ssl=True)"
+        )
+        print(str(site._config))
+        self.assertEqual(str(site._config), res)
 
     def test_change_api_url(self):
         """test switching the api url"""
@@ -346,6 +369,11 @@ class TestMediaWikiLogin(unittest.TestCase):
         res = site.login("username", "fakepassword")
         self.assertEqual(site.logged_in, True)
         self.assertEqual(res, True)
+
+    def test_successful_login_on_load(self):
+        """test login success on load!"""
+        site = MediaWikiOverloaded(username="username", password="fakepassword")
+        self.assertEqual(site.logged_in, True)
 
     def test_failed_login(self):
         """test that login failure throws the correct exception"""

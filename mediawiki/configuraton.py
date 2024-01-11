@@ -29,7 +29,6 @@ class Configuration:
     _reset_session: bool = field(default=True, init=False, repr=False)
     _clear_memoized: bool = field(default=False, init=False, repr=False)
     _rate_limit_last_call: Optional[datetime] = field(default=None, init=False, repr=False)
-    _login: bool = field(default=False, init=False, repr=False)
 
     def __init__(
         self,
@@ -91,7 +90,7 @@ class Configuration:
         keys = [
             x.replace("_", "", 1)
             for x in sorted(asdict(self).keys())
-            if x not in ["_login", "_rate_limit_last_call", "_clear_memoized", "_reset_session"]
+            if x not in ["_rate_limit_last_call", "_clear_memoized", "_reset_session"]
         ]
         full = [f"{x}={self.__getattribute__(x)}" for x in keys]
         return f"Configuration({', '.join(full)})"
@@ -224,8 +223,6 @@ class Configuration:
     def username(self, username: Optional[str]):
         """set the username, if needed, to log into the mediawiki site"""
         self._username = username
-        if self.username and self.password:
-            self._login = True
 
     @property
     def password(self) -> Optional[str]:
@@ -236,8 +233,6 @@ class Configuration:
     def password(self, password: Optional[str]):
         """set the password, if needed, to log into the mediawiki site"""
         self._password = password
-        if self.username and self.password:
-            self._login = True
 
     @property
     def refresh_interval(self) -> Optional[int]:

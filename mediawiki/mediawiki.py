@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import requests
 import requests.exceptions as rex
 
+from mediawiki.configuraton import VERSION, Configuration
 from mediawiki.exceptions import (
     HTTPTimeoutError,
     MediaWikiAPIURLError,
@@ -24,9 +25,6 @@ from mediawiki.exceptions import (
 )
 from mediawiki.mediawikipage import MediaWikiPage
 from mediawiki.utilities import memoize
-
-URL: str = "https://github.com/barrust/mediawiki"
-VERSION: str = "0.7.4"
 
 
 class MediaWiki:
@@ -49,27 +47,16 @@ class MediaWiki:
 
     __slots__ = [
         "_version",
-        "_lang",
-        "_api_url",
-        "_cat_prefix",
-        "_timeout",
-        "_user_agent",
+        "_config",
         "_session",
-        "_rate_limit",
-        "_rate_limit_last_call",
-        "_min_wait",
         "_extensions",
         "_api_version",
         "_api_version_str",
         "_base_url",
         "__supported_languages",
         "__available_languages",
-        "_cache",
-        "_refresh_interval",
-        "_use_cache",
         "_is_logged_in",
-        "_proxies",
-        "_verify_ssl",
+        "_cache",
     ]
 
     def __init__(
@@ -88,27 +75,27 @@ class MediaWiki:
     ):
         """Init Function"""
         self._version = VERSION
-        self._lang = lang.lower()
-        self._api_url = url.format(lang=self._lang)
-        self._cat_prefix = ""
-        self.category_prefix = cat_prefix
-        self._timeout = 15.0
-        self.timeout = timeout
-        # requests library parameters
-        self._session: Optional[requests.Session] = None
-        self._user_agent = f"python-mediawiki/VERSION-{VERSION}/({URL})/BOT"
-        self._proxies: Optional[Dict] = None
-        self._verify_ssl: Union[bool, str] = True
-        self.verify_ssl = verify_ssl
-        # set libary parameters
-        if user_agent is not None:
-            self.user_agent = user_agent
-        self.proxies = proxies  # this will call self._reset_session()
+        url.format(lang=lang.lower())
+        self._config = Configuration(
+            lang=lang,
+            api_url=url.format(lang=lang.lower()),
+            category_prefix=cat_prefix,
+            timeout=timeout,
+            user_agent=user_agent,
+            proxies=proxies,
+            verify_ssl=verify_ssl,
+            rate_limit=rate_limit,
+            rate_limit_wait=rate_limit_wait,
+            username=username,
+            password=password,
+            refresh_interval=None,
+            use_cache=True,
+        )
 
-        self._rate_limit = False
-        self.rate_limit = bool(rate_limit)
-        self._rate_limit_last_call: Optional[datetime] = None
-        self._min_wait = rate_limit_wait
+        # requests library parameters
+        self._session: requests.Session = requests.Session()
+
+        # reset libary parameters
         self._extensions = None
         self._api_version = None
         self._api_version_str = None
@@ -118,18 +105,18 @@ class MediaWiki:
 
         # for memoized results
         self._cache: Dict = {}
-        self._refresh_interval: Optional[int] = None
-        self._use_cache = True
+
+        self._reset_session()
 
         # for login information
         self._is_logged_in = False
-        if password is not None and username is not None:
-            self.login(username, password)
+        if self._config.username is not None and self._config.password is not None:
+            self.login(self._config.username, self._config.password)
 
         try:
             self._get_site_info()
         except MediaWikiException as exc:
-            raise MediaWikiAPIURLError(url) from exc
+            raise MediaWikiAPIURLError(self._config.api_url) from exc
 
     # non-settable properties
     @property
@@ -168,35 +155,36 @@ class MediaWiki:
     @property
     def rate_limit(self) -> bool:
         """bool: Turn on or off Rate Limiting"""
-        return self._rate_limit
+        return self._config.rate_limit
 
     @rate_limit.setter
     def rate_limit(self, rate_limit: bool):
         """Turn on or off rate limiting"""
-        self._rate_limit = bool(rate_limit)
-        self._rate_limit_last_call = None
-        self.clear_memoized()
+        self._config.rate_limit = rate_limit
+        if self._config._clear_memoized:
+            self.clear_memoized()
 
     @property
     def proxies(self) -> Optional[Dict]:
         """dict: Turn on, off, or set proxy use with the Requests library"""
-        return self._proxies
+        return self._config.proxies
 
     @proxies.setter
     def proxies(self, proxies: Optional[Dict]):
         """Turn on, off, or set proxy use through the Requests library"""
-        self._proxies = proxies if isinstance(proxies, dict) else None
-        self._reset_session()
+        self._config.proxies = proxies
+        if self._config._reset_session:
+            self._reset_session()
 
     @property
     def use_cache(self) -> bool:
         """bool: Whether caching should be used; on (**True**) or off (**False**)"""
-        return self._use_cache
+        return self._config.use_cache
 
     @use_cache.setter
     def use_cache(self, use_cache: bool):
         """toggle using the cache or not"""
-        self._use_cache = bool(use_cache)
+        self._config.use_cache = use_cache
 
     @property
     def rate_limit_min_wait(self) -> timedelta:
@@ -204,37 +192,37 @@ class MediaWiki:
 
         Note:
              Only used if rate_limit is **True**"""
-        return self._min_wait
+        return self._config.rate_limit_min_wait
 
     @rate_limit_min_wait.setter
     def rate_limit_min_wait(self, min_wait: timedelta):
         """Set minimum wait to use for rate limiting"""
-        self._min_wait = min_wait
-        self._rate_limit_last_call = None
+        self._config.rate_limit_min_wait = min_wait
 
     @property
-    def timeout(self) -> float:
+    def timeout(self) -> Optional[float]:
         """float: Response timeout for API requests
 
         Note:
             Use **None** for no response timeout"""
-        return self._timeout
+        return self._config.timeout
 
     @timeout.setter
-    def timeout(self, timeout: float):
+    def timeout(self, timeout: Optional[float]):
         """Set request timeout in seconds (or fractions of a second)"""
-        self._timeout = None if timeout is None else float(timeout)
+        self._config.timeout = timeout
 
     @property
     def verify_ssl(self) -> Union[bool, str]:
         """bool | str: Verify SSL when using requests or path to cert file"""
-        return self._verify_ssl
+        return self._config.verify_ssl
 
     @verify_ssl.setter
     def verify_ssl(self, verify_ssl: Union[bool, str]):
         """Set request verify SSL parameter; defaults to True if issue"""
-        self._verify_ssl = verify_ssl if isinstance(verify_ssl, (bool, str)) else True
-        self._reset_session()
+        self._config.verify_ssl = verify_ssl
+        if self._config._reset_session:
+            self._reset_session()
 
     @property
     def language(self) -> str:
@@ -244,21 +232,14 @@ class MediaWiki:
             Use correct language titles with the updated API URL
         Note:
             Some API URLs do not encode language; unable to update if this is the case"""
-        return self._lang
+        return self._config.lang
 
     @language.setter
     def language(self, lang: str):
         """Set the language to use; attempts to change the API URL"""
-        lang = lang.lower()
-        if self._lang == lang:
-            return
-
-        url = self._api_url
-        tmp = url.replace(f"/{self._lang}.", f"/{lang}.")
-
-        self._api_url = tmp
-        self._lang = lang
-        self.clear_memoized()
+        self._config.lang = lang
+        if self._config._clear_memoized:
+            self.clear_memoized()
 
     @property
     def category_prefix(self) -> str:
@@ -266,27 +247,28 @@ class MediaWiki:
 
         Note:
             Use the correct category name for the language selected"""
-        return self._cat_prefix
+        return self._config.category_prefix
 
     @category_prefix.setter
     def category_prefix(self, prefix: str):
         """Set the category prefix correctly"""
-        self._cat_prefix = prefix[:-1] if prefix[-1:] == ":" else prefix
+        self._config.category_prefix = prefix
 
     @property
     def user_agent(self) -> str:
         """str: User agent string
 
         Note: If using in as part of another project, this should be changed"""
-        return self._user_agent
+        return self._config.user_agent
 
     @user_agent.setter
     def user_agent(self, user_agent: str):
         """Set the new user agent string
 
         Note: Will need to re-log into the MediaWiki if user agent string is changed"""
-        self._user_agent = user_agent
-        self._reset_session()
+        self._config.user_agent = user_agent
+        if self._config._reset_session:
+            self._reset_session()
 
     @property
     def api_url(self) -> str:
@@ -294,7 +276,7 @@ class MediaWiki:
 
         Note:
             Not settable; See :py:func:`mediawiki.MediaWiki.set_api_url`"""
-        return self._api_url
+        return self._config.api_url
 
     @property
     def memoized(self) -> Dict[Any, Any]:
@@ -308,14 +290,12 @@ class MediaWiki:
     @property
     def refresh_interval(self) -> Optional[int]:
         """int: The interval at which the memoize cache is to be refresh"""
-        return self._refresh_interval
+        return self._config.refresh_interval
 
     @refresh_interval.setter
     def refresh_interval(self, refresh_interval: int):
         """Set the new cache refresh interval"""
-        self._refresh_interval = (
-            refresh_interval if isinstance(refresh_interval, int) and refresh_interval > 0 else None
-        )
+        self._config.refresh_interval = refresh_interval
 
     def login(self, username: str, password: str, strict: bool = True) -> bool:
         """Login as specified user
@@ -355,6 +335,7 @@ class MediaWiki:
         res = self._post_response(params)
         if res["login"]["result"] == "Success":
             self._is_logged_in = True
+            self._config._login = False
             return True
         self._is_logged_in = False
         reason = res["login"]["reason"]
@@ -381,22 +362,23 @@ class MediaWiki:
             :py:func:`mediawiki.exceptions.MediaWikiAPIURLError`: if the \
                 url is not a valid MediaWiki site or login fails
         """
-        old_api_url = self._api_url
-        old_lang = self._lang
-        self._lang = lang.lower()
-        self._api_url = api_url.format(lang=self._lang)
-
+        old_api_url = self._config.api_url
+        old_lang = self._config.lang
+        self._config.lang = lang.lower()
+        self._config.api_url = api_url.format(lang=self._config.lang)
+        self._config.username = username
+        self._config.password = password
         self._is_logged_in = False
         try:
-            if username is not None and password is not None:
-                self.login(username, password)
+            if self._config.username is not None and self._config.password is not None:
+                self.login(self._config.username, self._config.password)
             self._get_site_info()
             self.__supported_languages = None  # reset this
             self.__available_languages = None  # reset this
         except (rex.ConnectTimeout, MediaWikiException) as exc:
             # reset api url and lang in the event that the exception was caught
-            self._api_url = old_api_url
-            self._lang = old_lang
+            self._config.api_url = old_api_url
+            self._config.lang = old_lang
             raise MediaWikiAPIURLError(api_url) from exc
         self.clear_memoized()
 
@@ -405,18 +387,21 @@ class MediaWiki:
         if self._session:
             self._session.close()
 
-        headers = {"User-Agent": self._user_agent}
+        headers = {"User-Agent": self._config.user_agent}
         self._session = requests.Session()
         self._session.headers.update(headers)
-        if self._proxies is not None:
-            self._session.proxies.update(self._proxies)
-        self._session.verify = self._verify_ssl
+        if self._config.proxies is not None:
+            self._session.proxies.update(self._config.proxies)
+        self._session.verify = self._config.verify_ssl
+
         self._is_logged_in = False
+        self._config._reset_session = False
 
     def clear_memoized(self):
         """Clear memoized (cached) values"""
         if hasattr(self, "_cache"):
             self._cache.clear()
+        self._config._clear_memoized = False
 
     # non-setup functions
     @property
@@ -852,23 +837,24 @@ class MediaWiki:
         if "action" not in params:
             params["action"] = "query"
 
-        limit = self._rate_limit
-        last_call = self._rate_limit_last_call
-        if limit and last_call and last_call + self._min_wait > datetime.now():
+        limit = self._config.rate_limit
+        last_call = self._config._rate_limit_last_call
+        if limit and last_call and last_call + self._config.rate_limit_min_wait > datetime.now():
             # call time to quick for rate limited api requests, wait
-            wait_time = (last_call + self._min_wait) - datetime.now()
+            wait_time = (last_call + self._config.rate_limit_min_wait) - datetime.now()
             time.sleep(wait_time.total_seconds())
 
         req = self._get_response(params)
 
-        if self._rate_limit:
-            self._rate_limit_last_call = datetime.now()
+        if self._config.rate_limit:
+            self._config._rate_limit_last_call = datetime.now()
 
         return req
 
     # Protected functions
     def _get_site_info(self):
         """Parse out the Wikimedia site information including API Version and Extensions"""
+
         response = self.wiki_request({"meta": "siteinfo", "siprop": "extensions|general"})
 
         # parse what we need out here!
@@ -992,18 +978,14 @@ class MediaWiki:
     def _get_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """wrap the call to the requests package"""
         try:
-            if self._session is not None:
-                return self._session.get(self._api_url, params=params, timeout=self._timeout).json()
-            return {}
+            return self._session.get(self._config.api_url, params=params, timeout=self._config.timeout).json()
         except JSONDecodeError:
             return {}
 
     def _post_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """wrap a post call to the requests package"""
         try:
-            if self._session is not None:
-                return self._session.post(self._api_url, data=params, timeout=self._timeout).json()
-            return {}
+            return self._session.post(self._config.api_url, data=params, timeout=self._config.timeout).json()
         except JSONDecodeError:
             return {}
 

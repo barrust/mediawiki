@@ -1,5 +1,10 @@
 # MediaWiki Changelog
 
+## Version 0.7.5
+
+* Move configuration items to a configuration data class
+  * Will allow for the deprication of some top level properties in lieu of changing against the `Configuration` class
+
 ## Version 0.7.4
 
 * Add typing support

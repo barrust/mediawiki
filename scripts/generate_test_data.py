@@ -269,12 +269,12 @@ if PULL_ALL is True or PULL_CATEGORYMEMBERS is True:
 
 if PULL_ALL is True or PULL_CATEGORYTREE is True:
     site.rate_limit = True
-    ct = site.categorytree(["Chess", "Ebola"], depth=None)
+    ct = site.categorytree(["Chess", "Ebola"], depth=None)  # type: ignore
     with open(CATTREE_FILE, "w") as fp:
         json.dump(ct, fp, ensure_ascii=False, sort_keys=True)
 
     try:
-        site.categorytree("Chess Ebola", depth=None)
+        site.categorytree("Chess Ebola", depth=None)  # type: ignore
     except Exception as ex:
         responses[site.api_url]["missing_categorytree"] = str(ex)
     site.rate_limit = False

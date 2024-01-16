@@ -30,8 +30,8 @@ def memoize(func: Callable) -> Callable:
     def wrapper(*args, **kwargs):
         """wrap it up and store info in a cache"""
         cache = args[0].memoized
-        refresh = args[0].refresh_interval
-        use_cache = args[0].use_cache
+        refresh = args[0]._config.refresh_interval
+        use_cache = args[0]._config.use_cache
 
         # short circuit if not using cache
         if use_cache is False:

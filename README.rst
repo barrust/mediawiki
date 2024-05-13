@@ -61,7 +61,7 @@ To install ``mediawiki``, simply clone the `repository on GitHub
 
     $ python setup.py install
 
-``mediawiki`` supports python versions 3.5 - 3.9
+``mediawiki`` supports python versions 3.7 - 3.12
 
 For *python 2.7* support, install `release 0.6.7 <https://github.com/barrust/mediawiki/releases/tag/v0.6.7>`__
 

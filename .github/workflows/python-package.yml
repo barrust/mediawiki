@@ -36,11 +36,12 @@ jobs:
         # Run tests while also generating coverage statistics
         pytest --cov . --cov-report xml:/home/runner/coverage.xml
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         file: /home/runner/coverage.xml
         fail_ci_if_error: true
         verbose: true
+        token: ${{ secrets.CODECOV_TOKEN }} # required
 
   build-verification:
 

@@ -1,6 +1,7 @@
 """
 MediaWiki Exceptions
 """
+
 from typing import Dict, List, Optional
 
 from mediawiki.utilities import str_or_unicode
@@ -249,3 +250,11 @@ class MediaWikiLoginError(MediaWikiBaseException):
     def error(self) -> str:
         """str: The error message that the MediaWiki site returned"""
         return self._error
+
+
+class MediaWikiForbidden(MediaWikiBaseException):
+    """Exception raised when a forbidden status code is returned"""
+
+    def __init__(self, error: str):
+        self._error = error
+        super().__init__(self._error)

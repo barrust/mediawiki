@@ -1,6 +1,7 @@
 """
 mediawiki module initialization
 """
+
 from mediawiki.configuraton import URL, VERSION
 from mediawiki.exceptions import (
     DisambiguationError,
@@ -8,6 +9,7 @@ from mediawiki.exceptions import (
     MediaWikiAPIURLError,
     MediaWikiCategoryTreeError,
     MediaWikiException,
+    MediaWikiForbidden,
     MediaWikiGeoCoordError,
     MediaWikiLoginError,
     PageError,
@@ -38,4 +40,5 @@ __all__ = [
     "MediaWikiGeoCoordError",
     "MediaWikiCategoryTreeError",
     "MediaWikiLoginError",
+    "MediaWikiForbidden",
 ]

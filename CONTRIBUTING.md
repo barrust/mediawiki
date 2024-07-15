@@ -1,5 +1,5 @@
 
-## Welcome!!
+## Welcome
 
 Welcome to the pymediawiki: a python MediaWiki API wrapper project. I hope that
 you have found the project to be useful. If you are here, you must want to help

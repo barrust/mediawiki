@@ -1,6 +1,7 @@
 """
 MediaWiki class module
 """
+
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
@@ -19,6 +20,7 @@ from mediawiki.exceptions import (
     MediaWikiAPIURLError,
     MediaWikiCategoryTreeError,
     MediaWikiException,
+    MediaWikiForbidden,
     MediaWikiGeoCoordError,
     MediaWikiLoginError,
     PageError,
@@ -335,7 +337,6 @@ class MediaWiki:
         res = self._post_response(params)
         if res["login"]["result"] == "Success":
             self._is_logged_in = True
-            self._config._login = False
             return True
         self._is_logged_in = False
         reason = res["login"]["reason"]
@@ -978,14 +979,20 @@ class MediaWiki:
     def _get_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """wrap the call to the requests package"""
         try:
-            return self._session.get(self._config.api_url, params=params, timeout=self._config.timeout).json()
+            r = self._session.get(self._config.api_url, params=params, timeout=self._config.timeout)
+            if r.status_code == 403:
+                raise MediaWikiForbidden(f"{self.api_url} return a 403 Forbidden; likely need to login!")
+            return r.json()
         except JSONDecodeError:
             return {}
 
     def _post_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """wrap a post call to the requests package"""
         try:
-            return self._session.post(self._config.api_url, data=params, timeout=self._config.timeout).json()
+            r = self._session.post(self._config.api_url, data=params, timeout=self._config.timeout)
+            if r.status_code == 403:
+                raise MediaWikiForbidden(f"{self.api_url} return a 403 Forbidden; likely need to login!")
+            return r.json()
         except JSONDecodeError:
             return {}
 

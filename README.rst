@@ -13,7 +13,7 @@ MediaWiki
 .. image:: https://codecov.io/gh/barrust/mediawiki/branch/master/graph/badge.svg?token=OdETiNgz9k
     :target: https://codecov.io/gh/barrust/mediawiki
     :alt: Test Coverage
-.. image:: https://app.codacy.com/project/badge/Grade/34162198611f4aa0bde630d1dab72ce8    
+.. image:: https://app.codacy.com/project/badge/Grade/34162198611f4aa0bde630d1dab72ce8
     :target: https://www.codacy.com/gh/barrust/mediawiki/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=barrust/mediawiki&amp;utm_campaign=Badge_Grade
     :alt: Codacy Review
 .. image:: https://badge.fury.io/py/pymediawiki.svg
@@ -61,7 +61,7 @@ To install ``mediawiki``, simply clone the `repository on GitHub
 
     $ python setup.py install
 
-``mediawiki`` supports python versions 3.7 - 3.12
+``mediawiki`` supports python versions 3.7 - 3.13
 
 For *python 2.7* support, install `release 0.6.7 <https://github.com/barrust/mediawiki/releases/tag/v0.6.7>`__
 

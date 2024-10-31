@@ -4,6 +4,7 @@
 
 * Move configuration items to a configuration data class
   * Will allow for the deprication of some top level properties in lieu of changing against the `Configuration` class
+* Added HTTPAuthenticator for web server authentication; [PR #141](https://github.com/barrust/mediawiki/pull/141) Thanks [gbenson](https://github.com/gbenson)
 
 ## Version 0.7.4
 

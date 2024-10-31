@@ -1,10 +1,11 @@
 """Configuration module"""
+
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from typing import Any, Callable, Dict, Optional, Tuple, Union
 
 URL: str = "https://github.com/barrust/mediawiki"
-VERSION: str = "0.7.4"
+VERSION: str = "0.7.5"
 
 HTTPAuthenticator = Union[Tuple[str, str], Callable[[Any], Any]]
 

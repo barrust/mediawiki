@@ -166,3 +166,4 @@ A special thanks to all the code contributors to `pymediawiki`!
 * [@ldorigo](https://github.com/ldorigo) - Pulling links for header sections [#90](https://github.com/barrust/mediawiki/pull/90)
 * [@tbm](https://github.com/tbm) - `categorymember` improvements [PR #100](https://github.com/barrust/mediawiki/pull/100)
 * [@dnanto](https://github.com/dnanto) - Determining `available_languages` [PR #116](https://github.com/barrust/mediawiki/pull/116)
+* [gbenson](https://github.com/gbenson) -  HTTPAutenticator [PR #141](https://github.com/barrust/mediawiki/pull/141)

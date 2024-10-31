@@ -21,6 +21,7 @@ from mediawiki import (
     MediaWikiPage,
     PageError,
     RedirectError,
+    __version__,
 )
 from tests.utilities import FunctionUseCounter, find_depth
 
@@ -169,10 +170,9 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded()
         res = (
             "Configuration(api_url=https://en.wikipedia.org/w/api.php, category_prefix=Category, "
-            "http_auth=None, "
-            "lang=en, password=None, proxies=None, rate_limit=False, rate_limit_min_wait=0:00:00.050000, "
+            "http_auth=None, lang=en, password=None, proxies=None, rate_limit=False, rate_limit_min_wait=0:00:00.050000, "
             "refresh_interval=None, timeout=15.0, use_cache=True, "
-            "user_agent=python-mediawiki/VERSION-0.7.4/(https://github.com/barrust/mediawiki)/BOT, username=None, verify_ssl=True)"
+            f"user_agent=python-mediawiki/VERSION-{__version__}/(https://github.com/barrust/mediawiki)/BOT, username=None, verify_ssl=True)"
         )
         print(str(site._config))
         self.assertEqual(str(site._config), res)
@@ -276,7 +276,7 @@ class TestMediaWiki(unittest.TestCase):
         self.assertIs(site.http_auth, None)
         self.assertIs(site._session.auth, None)
 
-    def test_init_user_agent(self):
+    def test_init_http_auth(self):
         """test initializing the HTTP authenticator"""
         auth_func = lambda http_request: http_request
         site = MediaWikiOverloaded(http_auth=auth_func)

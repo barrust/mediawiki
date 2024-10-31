@@ -1,10 +1,12 @@
 """Configuration module"""
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
-from typing import Dict, Optional, Union
+from typing import Any, Callable, Dict, Optional, Tuple, Union
 
 URL: str = "https://github.com/barrust/mediawiki"
 VERSION: str = "0.7.4"
+
+HTTPAuthenticator = Union[Tuple[str, str], Callable[[Any], Any]]
 
 
 @dataclass
@@ -24,6 +26,7 @@ class Configuration:
     _password: Optional[str] = field(default=None, init=False, repr=False)
     _refresh_interval: Optional[int] = field(default=None, init=False, repr=False)
     _use_cache: bool = field(default=True, init=False, repr=False)
+    _http_auth: Optional[HTTPAuthenticator] = field(default=None, init=False, repr=False)
 
     #  not in repr
     _reset_session: bool = field(default=True, init=False, repr=False)
@@ -45,6 +48,7 @@ class Configuration:
         password: Optional[str] = None,
         refresh_interval: Optional[int] = None,
         use_cache: bool = True,
+        http_auth: Optional[HTTPAuthenticator] = None,
     ):
         if api_url:
             self._api_url = api_url
@@ -84,6 +88,9 @@ class Configuration:
 
         if timeout:
             self.timeout = timeout
+
+        if http_auth:
+            self.http_auth = http_auth
 
     def __repr__(self):
         """repr"""
@@ -268,3 +275,13 @@ class Configuration:
     def timeout(self, timeout: Optional[float]):
         """Set request timeout in seconds (or fractions of a second)"""
         self._timeout = None if timeout is None else float(timeout)
+
+    @property
+    def http_auth(self) -> Optional[HTTPAuthenticator]:
+        """tuple|callable: HTTP authenticator to use to access the mediawiki site"""
+        return self._http_auth
+
+    @http_auth.setter
+    def http_auth(self, http_auth: Optional[HTTPAuthenticator]):
+        """Set the HTTP authenticator, if needed, to use to access the mediawiki site"""
+        self._http_auth = http_auth

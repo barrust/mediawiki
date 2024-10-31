@@ -41,6 +41,7 @@ class MediaWikiOverloaded(MediaWiki):
         password=None,
         proxies=None,
         verify_ssl=True,
+        http_auth=None,
     ):
         """new init"""
 
@@ -63,6 +64,7 @@ class MediaWikiOverloaded(MediaWiki):
             password=password,
             proxies=proxies,
             verify_ssl=verify_ssl,
+            http_auth=http_auth,
         )
 
     def __repr__(self):
@@ -167,6 +169,7 @@ class TestMediaWiki(unittest.TestCase):
         site = MediaWikiOverloaded()
         res = (
             "Configuration(api_url=https://en.wikipedia.org/w/api.php, category_prefix=Category, "
+            "http_auth=None, "
             "lang=en, password=None, proxies=None, rate_limit=False, rate_limit_min_wait=0:00:00.050000, "
             "refresh_interval=None, timeout=15.0, use_cache=True, "
             "user_agent=python-mediawiki/VERSION-0.7.4/(https://github.com/barrust/mediawiki)/BOT, username=None, verify_ssl=True)"
@@ -266,6 +269,35 @@ class TestMediaWiki(unittest.TestCase):
     def test_set_timeout_bad(self):
         """test that we raise the ValueError"""
         self.assertRaises(ValueError, lambda: MediaWikiOverloaded(timeout="foo"))
+
+    def test_default_http_auth(self):
+        """test default HTTP authenticator"""
+        site = MediaWikiOverloaded()
+        self.assertIs(site.http_auth, None)
+        self.assertIs(site._session.auth, None)
+
+    def test_init_user_agent(self):
+        """test initializing the HTTP authenticator"""
+        auth_func = lambda http_request: http_request
+        site = MediaWikiOverloaded(http_auth=auth_func)
+        self.assertIs(site.http_auth, auth_func)
+        self.assertIs(site._session.auth, auth_func)
+
+    def test_set_http_auth(self):
+        """test setting HTTP authenticator"""
+        site = MediaWikiOverloaded()
+        auth_tuple = ("username", "password")
+        site.http_auth = auth_tuple
+        self.assertIs(site.http_auth, auth_tuple)
+        self.assertIs(site._session.auth, auth_tuple)
+
+    def test_set_http_auth_none(self):
+        """test setting HTTP authenticator to None"""
+        auth_func = lambda http_request: http_request
+        site = MediaWikiOverloaded(http_auth=auth_func)
+        site.http_auth = None
+        self.assertIs(site.http_auth, None)
+        self.assertIs(site._session.auth, None)
 
     def test_memoized(self):
         """test returning the memoized cache"""

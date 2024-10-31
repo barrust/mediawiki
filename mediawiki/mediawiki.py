@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import requests
 import requests.exceptions as rex
 
-from mediawiki.configuraton import VERSION, Configuration
+from mediawiki.configuraton import VERSION, Configuration, HTTPAuthenticator
 from mediawiki.exceptions import (
     HTTPTimeoutError,
     MediaWikiAPIURLError,
@@ -45,7 +45,8 @@ class MediaWiki:
         username (str): The username to use to log into the MediaWiki
         password (str): The password to use to log into the MediaWiki
         proxies (str): A dictionary of specific proxies to use in the Requests libary
-        verify_ssl (bool|str): Verify SSL Certificates to be passed directly into the Requests library"""
+        verify_ssl (bool|str): Verify SSL Certificates to be passed directly into the Requests library
+        http_auth (tuple|callable): HTTP authenticator to be passed directly into the Requests library"""
 
     __slots__ = [
         "_version",
@@ -74,6 +75,7 @@ class MediaWiki:
         password: Optional[str] = None,
         proxies: Optional[Dict] = None,
         verify_ssl: Union[bool, str] = True,
+        http_auth: Optional[HTTPAuthenticator] = None,
     ):
         """Init Function"""
         self._version = VERSION
@@ -92,6 +94,7 @@ class MediaWiki:
             password=password,
             refresh_interval=None,
             use_cache=True,
+            http_auth=http_auth,
         )
 
         # requests library parameters
@@ -299,6 +302,17 @@ class MediaWiki:
         """Set the new cache refresh interval"""
         self._config.refresh_interval = refresh_interval
 
+    @property
+    def http_auth(self) -> Optional[HTTPAuthenticator]:
+        """tuple|callable: HTTP authenticator to use to access the mediawiki site"""
+        return self._config.http_auth
+
+    @http_auth.setter
+    def http_auth(self, http_auth: Optional[HTTPAuthenticator]):
+        """Set the HTTP authenticator, if needed, to use to access the mediawiki site"""
+        self._config.http_auth = http_auth
+        self._session.auth = http_auth
+
     def login(self, username: str, password: str, strict: bool = True) -> bool:
         """Login as specified user
 
@@ -390,6 +404,7 @@ class MediaWiki:
 
         headers = {"User-Agent": self._config.user_agent}
         self._session = requests.Session()
+        self._session.auth = self._config.http_auth
         self._session.headers.update(headers)
         if self._config.proxies is not None:
             self._session.proxies.update(self._config.proxies)

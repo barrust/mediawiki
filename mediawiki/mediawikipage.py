@@ -1,6 +1,7 @@
 """
 MediaWikiPage class module
 """
+
 # MIT License
 # Author: Tyler Barrus (barrust@gmail.com)
 
@@ -808,16 +809,17 @@ class MediaWikiPage:
                 path.append(sec)
                 _list_to_dict(res, path, sec)
             elif depth < last_depth:
-                # path.pop()
                 while last_depth > depth:
                     path.pop()
                     last_depth -= 1
-                path.pop()
+                if len(path):
+                    path.pop()
                 path.append(sec)
                 _list_to_dict(res, path, sec)
                 last_depth = depth
             else:
-                path.pop()
+                if len(path):
+                    path.pop()
                 path.append(sec)
                 _list_to_dict(res, path, sec)
                 last_depth = depth

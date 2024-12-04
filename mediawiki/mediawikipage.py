@@ -812,13 +812,13 @@ class MediaWikiPage:
                 while last_depth > depth:
                     path.pop()
                     last_depth -= 1
-                if len(path):
+                if path:
                     path.pop()
                 path.append(sec)
                 _list_to_dict(res, path, sec)
                 last_depth = depth
             else:
-                if len(path):
+                if path:
                     path.pop()
                 path.append(sec)
                 _list_to_dict(res, path, sec)

@@ -339,6 +339,8 @@ class MediaWiki:
         token_res = self._get_response(params)
         if "query" in token_res and "tokens" in token_res["query"]:
             token = token_res["query"]["tokens"]["logintoken"]
+        else:
+            return False
 
         params = {
             "action": "login",

@@ -422,7 +422,7 @@ class MediaWikiPage:
             params = {
                 "action": "query",
                 "formatversion": "2",
-                "prop": "info|extracts|pageimages|revisions|pageterms|coordinates",
+                "prop": "info|extracts|pageimages|revisions|pageterms|coordinates|pageviews",
                 "exsentences": "5",
                 "explaintext": "true",
                 "piprop": "thumbnail|original",

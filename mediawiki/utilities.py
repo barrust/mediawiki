@@ -1,14 +1,15 @@
 """
 Utility functions
 """
+
 import functools
 import inspect
 import sys
 import time
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Optional
 
 
-def parse_all_arguments(func: Callable) -> Dict[str, Any]:
+def parse_all_arguments(func: Callable) -> dict[str, Any]:
     """determine all positional and named arguments as a dict"""
     args = {}
 

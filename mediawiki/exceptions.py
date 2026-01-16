@@ -2,7 +2,7 @@
 MediaWiki Exceptions
 """
 
-from typing import Dict, List, Optional
+from typing import Optional
 
 from mediawiki.utilities import str_or_unicode
 
@@ -119,7 +119,7 @@ class DisambiguationError(MediaWikiBaseException):
             `options` only includes titles that link to valid \
             MediaWiki pages """
 
-    def __init__(self, title: str, may_refer_to: List[str], url: str, details: Optional[List[Dict]] = None):
+    def __init__(self, title: str, may_refer_to: list[str], url: str, details: Optional[list[dict]] = None):
         self._title = title
         self._unordered_options = may_refer_to
         self._options = sorted(may_refer_to)
@@ -140,17 +140,17 @@ class DisambiguationError(MediaWikiBaseException):
         return self._title
 
     @property
-    def options(self) -> List[str]:
+    def options(self) -> list[str]:
         """list: The list of possible page titles"""
         return self._options
 
     @property
-    def unordered_options(self) -> List[str]:
+    def unordered_options(self) -> list[str]:
         """list: The list of possible page titles, un-sorted in an attempt to get them as they showup on the page"""
         return self._unordered_options
 
     @property
-    def details(self) -> Optional[List[Dict]]:
+    def details(self) -> Optional[list[dict]]:
         """list: The details of the proposed non-disambigous pages"""
         return self._details
 

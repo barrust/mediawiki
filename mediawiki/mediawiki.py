@@ -9,7 +9,7 @@ import time
 from datetime import datetime, timedelta
 from decimal import Decimal, DecimalException
 from json import JSONDecodeError
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import requests
 import requests.exceptions as rex
@@ -73,7 +73,7 @@ class MediaWiki:
         user_agent: Optional[str] = None,
         username: Optional[str] = None,
         password: Optional[str] = None,
-        proxies: Optional[Dict] = None,
+        proxies: Optional[dict] = None,
         verify_ssl: Union[bool, str] = True,
         http_auth: Optional[HTTPAuthenticator] = None,
     ):
@@ -105,11 +105,11 @@ class MediaWiki:
         self._api_version = None
         self._api_version_str = None
         self._base_url = None
-        self.__supported_languages: Optional[Dict[str, str]] = None
-        self.__available_languages: Optional[Dict[str, bool]] = None
+        self.__supported_languages: Optional[dict[str, str]] = None
+        self.__available_languages: Optional[dict[str, bool]] = None
 
         # for memoized results
-        self._cache: Dict = {}
+        self._cache: dict = {}
 
         self._reset_session()
 
@@ -149,7 +149,7 @@ class MediaWiki:
         return self._base_url if self._base_url else ""
 
     @property
-    def extensions(self) -> List[str]:
+    def extensions(self) -> list[str]:
         """list: Extensions installed on the MediaWiki site
 
         Note:
@@ -170,12 +170,12 @@ class MediaWiki:
             self.clear_memoized()
 
     @property
-    def proxies(self) -> Optional[Dict]:
+    def proxies(self) -> Optional[dict]:
         """dict: Turn on, off, or set proxy use with the Requests library"""
         return self._config.proxies
 
     @proxies.setter
-    def proxies(self, proxies: Optional[Dict]):
+    def proxies(self, proxies: Optional[dict]):
         """Turn on, off, or set proxy use through the Requests library"""
         self._config.proxies = proxies
         if self._config._reset_session:
@@ -284,7 +284,7 @@ class MediaWiki:
         return self._config.api_url
 
     @property
-    def memoized(self) -> Dict[Any, Any]:
+    def memoized(self) -> dict[Any, Any]:
         """dict: Return the memoize cache
 
         Note:
@@ -423,7 +423,7 @@ class MediaWiki:
 
     # non-setup functions
     @property
-    def supported_languages(self) -> Dict[str, str]:
+    def supported_languages(self) -> dict[str, str]:
         """dict: All supported language prefixes on the MediaWiki site
 
         Note:
@@ -436,7 +436,7 @@ class MediaWiki:
         return self.__supported_languages
 
     @property
-    def available_languages(self) -> Dict[str, bool]:
+    def available_languages(self) -> dict[str, bool]:
         """dict: All available language prefixes on the MediaWiki site
 
         Note:
@@ -457,7 +457,7 @@ class MediaWiki:
         """bool: Returns if logged into the MediaWiki site"""
         return self._is_logged_in
 
-    def random(self, pages: int = 1) -> Union[str, List[str]]:
+    def random(self, pages: int = 1) -> Union[str, list[str]]:
         """Request a random page title or list of random titles
 
         Args:
@@ -475,7 +475,7 @@ class MediaWiki:
         return titles[0] if len(titles) == 1 else titles
 
     @memoize
-    def allpages(self, query: str = "", results: int = 10) -> List[str]:
+    def allpages(self, query: str = "", results: int = 10) -> list[str]:
         """Request all pages from mediawiki instance
 
         Args:
@@ -499,7 +499,7 @@ class MediaWiki:
     @memoize
     def search(
         self, query: str, results: int = 10, suggestion: bool = False
-    ) -> Union[List[str], Tuple[List[str], Optional[str]]]:
+    ) -> Union[list[str], tuple[list[str], Optional[str]]]:
         """Search for similar titles
 
         Args:
@@ -563,7 +563,7 @@ class MediaWiki:
         title: Optional[str] = None,
         auto_suggest: bool = True,
         results: int = 10,
-    ) -> List[str]:
+    ) -> list[str]:
         """Search for pages that relate to the provided geocoords or near
         the page
 
@@ -619,7 +619,7 @@ class MediaWiki:
         return [d["title"] for d in raw_results["query"]["geosearch"]]
 
     @memoize
-    def opensearch(self, query: str, results: int = 10, redirect: bool = True) -> List[Tuple[str, str, str]]:
+    def opensearch(self, query: str, results: int = 10, redirect: bool = True) -> list[tuple[str, str, str]]:
         """Execute a MediaWiki opensearch request, similar to search box
         suggestions and conforming to the OpenSearch specification
 
@@ -653,7 +653,7 @@ class MediaWiki:
         return [(item, out[2][i], out[3][i]) for i, item in enumerate(out[1])]
 
     @memoize
-    def prefixsearch(self, prefix: str, results: int = 10) -> List[str]:
+    def prefixsearch(self, prefix: str, results: int = 10) -> list[str]:
         """ Perform a prefix search using the provided prefix string
 
             Args:
@@ -710,7 +710,7 @@ class MediaWiki:
     @memoize
     def categorymembers(
         self, category: str, results: int = 10, subcategories: bool = True
-    ) -> Union[List[str], Tuple[List[str], List[str]]]:
+    ) -> Union[list[str], tuple[list[str], list[str]]]:
         """Get information about a category: pages and subcategories
 
         Args:
@@ -735,7 +735,7 @@ class MediaWiki:
         subcats = []
         returned_results = 0
         finished = False
-        last_cont: Dict = {}
+        last_cont: dict = {}
         while not finished:
             params = search_params.copy()
             params.update(last_cont)
@@ -774,7 +774,7 @@ class MediaWiki:
 
         return (pages, subcats) if subcategories else pages
 
-    def categorytree(self, category: str, depth: int = 5) -> Dict[str, Any]:
+    def categorytree(self, category: str, depth: int = 5) -> dict[str, Any]:
         """Generate the Category Tree for the given categories
 
         Args:
@@ -803,9 +803,9 @@ class MediaWiki:
 
         self.__category_parameter_verification(cats, depth, category)
 
-        results: Dict = {}
-        categories: Dict = {}
-        links: Dict = {}
+        results: dict = {}
+        categories: dict = {}
+        links: dict = {}
 
         for cat in [x for x in cats if x]:
             self.__cat_tree_rec(cat, depth, results, 0, categories, links)
@@ -839,7 +839,7 @@ class MediaWiki:
             return MediaWikiPage(self, title, redirect=redirect, preload=preload)
         return MediaWikiPage(self, pageid=pageid, preload=preload)
 
-    def wiki_request(self, params: Dict[str, Any]) -> Dict[Any, Any]:
+    def wiki_request(self, params: dict[str, Any]) -> dict[Any, Any]:
         """ Make a request to the MediaWiki API using the given search
             parameters
 
@@ -944,7 +944,7 @@ class MediaWiki:
             raise ValueError(msg)
 
     def __cat_tree_rec(
-        self, cat: str, depth: int, tree: Dict[str, Any], level: int, categories: Dict[str, Any], links: Dict[str, Any]
+        self, cat: str, depth: int, tree: dict[str, Any], level: int, categories: dict[str, Any], links: dict[str, Any]
     ):
         """recursive function to build out the tree"""
         tree[cat] = {}
@@ -993,7 +993,7 @@ class MediaWiki:
                     links,
                 )
 
-    def _get_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def _get_response(self, params: dict[str, Any]) -> dict[str, Any]:
         """wrap the call to the requests package"""
         try:
             r = self._session.get(self._config.api_url, params=params, timeout=self._config.timeout)
@@ -1003,7 +1003,7 @@ class MediaWiki:
         except JSONDecodeError:
             return {}
 
-    def _post_response(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def _post_response(self, params: dict[str, Any]) -> dict[str, Any]:
         """wrap a post call to the requests package"""
         try:
             r = self._session.post(self._config.api_url, data=params, timeout=self._config.timeout)

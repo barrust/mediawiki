@@ -7,8 +7,9 @@ MediaWikiPage class module
 
 import re
 from collections import OrderedDict
+from collections.abc import Iterator
 from decimal import Decimal
-from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 
@@ -94,22 +95,22 @@ class MediaWikiPage:
         self._revision_id: Optional[int] = None
         self._parent_id: Optional[int] = None
         self._html: Union[bool, str] = False  # None signifies nothing returned...
-        self._images: Optional[List[str]] = None
-        self._references: Optional[List[str]] = None
-        self._categories: Optional[List[str]] = None
-        self._coordinates: Union[bool, None, Tuple[Decimal, Decimal]] = False  # None signifies nothing returned...
-        self._links: Optional[List[str]] = None
-        self._redirects: Optional[List[str]] = None
-        self._backlinks: Optional[List[str]] = None
-        self._langlinks: Optional[Dict[str, str]] = None
+        self._images: Optional[list[str]] = None
+        self._references: Optional[list[str]] = None
+        self._categories: Optional[list[str]] = None
+        self._coordinates: Union[bool, None, tuple[Decimal, Decimal]] = False  # None signifies nothing returned...
+        self._links: Optional[list[str]] = None
+        self._redirects: Optional[list[str]] = None
+        self._backlinks: Optional[list[str]] = None
+        self._langlinks: Optional[dict[str, str]] = None
         self._summary: Optional[str] = None
-        self._sections: Optional[List[str]] = None
-        self._table_of_contents: Optional[Dict[str, Any]] = None
-        self._logos: Optional[List[str]] = None
-        self._hatnotes: Optional[List[str]] = None
+        self._sections: Optional[list[str]] = None
+        self._table_of_contents: Optional[dict[str, Any]] = None
+        self._logos: Optional[list[str]] = None
+        self._hatnotes: Optional[list[str]] = None
         self._soup: Optional[BeautifulSoup] = None
         self._wikitext: Optional[str] = None
-        self._preview: Optional[Dict[str, str]] = None
+        self._preview: Optional[dict[str, str]] = None
 
         self.__load(redirect=redirect, preload=preload)
 
@@ -151,7 +152,7 @@ class MediaWikiPage:
             return False
 
     # Properties
-    def _pull_content_revision_parent(self) -> Tuple[Optional[str], Optional[int], Optional[int]]:
+    def _pull_content_revision_parent(self) -> tuple[Optional[str], Optional[int], Optional[int]]:
         """combine the pulling of these three properties"""
 
         if self._revision_id is None:
@@ -248,7 +249,7 @@ class MediaWikiPage:
         return self._wikitext
 
     @property
-    def images(self) -> List[str]:
+    def images(self) -> list[str]:
         """list: Images on the page
 
         Note:
@@ -269,7 +270,7 @@ class MediaWikiPage:
         return self._images
 
     @property
-    def logos(self) -> List[str]:
+    def logos(self) -> list[str]:
         """list: Parse images within the infobox signifying either the main image or logo
 
         Note:
@@ -290,7 +291,7 @@ class MediaWikiPage:
         return self._logos
 
     @property
-    def hatnotes(self) -> List[str]:
+    def hatnotes(self) -> list[str]:
         """list: Parse hatnotes from the HTML
 
         Note:
@@ -317,7 +318,7 @@ class MediaWikiPage:
         return self._hatnotes
 
     @property
-    def references(self) -> List[str]:
+    def references(self) -> list[str]:
         """list: External links, or references, listed anywhere on the MediaWiki page
         Note:
             Not settable
@@ -329,7 +330,7 @@ class MediaWikiPage:
         return self._references
 
     @property
-    def categories(self) -> List[str]:
+    def categories(self) -> list[str]:
         """list: Non-hidden categories on the page
 
         Note:
@@ -340,7 +341,7 @@ class MediaWikiPage:
         return self._categories
 
     @property
-    def coordinates(self) -> Optional[Tuple[Decimal, Decimal]]:
+    def coordinates(self) -> Optional[tuple[Decimal, Decimal]]:
         """Tuple: GeoCoordinates of the place referenced; results in lat/long tuple or None if no geocoordinates present
 
         Note:
@@ -353,7 +354,7 @@ class MediaWikiPage:
         return self._coordinates  # type: ignore
 
     @property
-    def links(self) -> List[str]:
+    def links(self) -> list[str]:
         """list: List of all MediaWiki page links on the page
 
         Note:
@@ -364,7 +365,7 @@ class MediaWikiPage:
         return self._links
 
     @property
-    def redirects(self) -> List[str]:
+    def redirects(self) -> list[str]:
         """list: List of all redirects to this page; **i.e.,** the titles listed here will redirect to this page title
 
         Note:
@@ -375,7 +376,7 @@ class MediaWikiPage:
         return self._redirects
 
     @property
-    def backlinks(self) -> List[str]:
+    def backlinks(self) -> list[str]:
         """list: Pages that link to this page
 
         Note:
@@ -395,7 +396,7 @@ class MediaWikiPage:
         return self._backlinks
 
     @property
-    def langlinks(self) -> Dict[str, str]:
+    def langlinks(self) -> dict[str, str]:
         """dict: Names of the page in other languages for which page is where the key is the language code
         and the page name is the name of the page in that language.
 
@@ -416,7 +417,7 @@ class MediaWikiPage:
         return self._langlinks
 
     @property
-    def preview(self) -> Dict[str, str]:
+    def preview(self) -> dict[str, str]:
         """dict: Page preview information that builds the preview hover"""
         if self._preview is None:
             params = {
@@ -459,7 +460,7 @@ class MediaWikiPage:
             str: The summary of the MediaWiki page
         Note:
             Precedence for parameters: sentences then chars; if both are 0 then the entire first section is returned"""
-        query_params: Dict[str, Any] = {"prop": "extracts", "explaintext": "", "titles": self.title}
+        query_params: dict[str, Any] = {"prop": "extracts", "explaintext": "", "titles": self.title}
         if sentences:
             query_params["exsentences"] = min(sentences, 10)
         elif chars:
@@ -471,7 +472,7 @@ class MediaWikiPage:
         return request["query"]["pages"][self.pageid].get("extract")
 
     @property
-    def sections(self) -> List[str]:
+    def sections(self) -> list[str]:
         """list: Table of contents sections
 
         Note:
@@ -486,7 +487,7 @@ class MediaWikiPage:
         return self._sections
 
     @property
-    def table_of_contents(self) -> Dict[str, Any]:
+    def table_of_contents(self) -> dict[str, Any]:
         """OrderedDict: Dictionary of sections and sub-sections
 
         Note:
@@ -552,7 +553,7 @@ class MediaWikiPage:
             return None
         return val
 
-    def parse_section_links(self, section_title: str) -> Optional[List[Tuple[str, str]]]:
+    def parse_section_links(self, section_title: str) -> Optional[list[tuple[str, str]]]:
         """Parse all links within a section
 
         Args:
@@ -627,7 +628,7 @@ class MediaWikiPage:
             raise PageError(title=self.title)
         raise PageError(pageid=self.pageid)
 
-    def _raise_disambiguation_error(self, page: Dict, pageid: int):
+    def _raise_disambiguation_error(self, page: dict, pageid: int):
         """parse and throw a disambiguation error"""
         query_params = {
             "prop": "revisions",
@@ -661,7 +662,7 @@ class MediaWikiPage:
             disambiguation,
         )
 
-    def _handle_redirect(self, redirect: bool, preload: bool, query: Dict, page: Dict[str, Any]):
+    def _handle_redirect(self, redirect: bool, preload: bool, query: dict, page: dict[str, Any]):
         """handle redirect"""
         if not redirect:
             raise RedirectError(getattr(self, "title", page["title"]))
@@ -689,12 +690,12 @@ class MediaWikiPage:
             preload=preload,
         )
 
-    def _continued_query(self, query_params: Dict[str, Any], key: str = "pages") -> Iterator[Dict[Any, Any]]:
+    def _continued_query(self, query_params: dict[str, Any], key: str = "pages") -> Iterator[dict[Any, Any]]:
         """Based on
         https://www.mediawiki.org/wiki/API:Query#Continuing_queries"""
         query_params.update(self.__title_query_param())
 
-        last_cont: Dict = {}
+        last_cont: dict = {}
         prop = query_params.get("prop")
 
         while True:
@@ -719,9 +720,9 @@ class MediaWikiPage:
 
             last_cont = request["continue"]
 
-    def _parse_section_links(self, id_tag: Optional[str]) -> List[Tuple[str, str]]:
+    def _parse_section_links(self, id_tag: Optional[str]) -> list[tuple[str, str]]:
         """given a section id, parse the links in the unordered list"""
-        all_links: List[Tuple[str, str]] = []
+        all_links: list[tuple[str, str]] = []
 
         if not self._soup:
             self._soup = BeautifulSoup(self.html, "html.parser")
@@ -763,7 +764,7 @@ class MediaWikiPage:
                 all_links.extend(self.__parse_link_info(link) for link in node.find_all("a"))
         return all_links
 
-    def __parse_link_info(self, link: Tag) -> Tuple[str, str]:
+    def __parse_link_info(self, link: Tag) -> tuple[str, str]:
         """parse the <a> tag for the link"""
         href = link.get("href", "")
         if isinstance(href, list):
@@ -827,7 +828,7 @@ class MediaWikiPage:
 
         self._table_of_contents = res
 
-    def __title_query_param(self) -> Dict[str, Any]:
+    def __title_query_param(self) -> dict[str, Any]:
         """util function to determine which parameter method to use"""
         if getattr(self, "title", None) is not None:
             return {"titles": self.title}

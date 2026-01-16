@@ -2,12 +2,12 @@
 
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Callable, Dict, Optional, Tuple, Union
+from typing import Any, Callable, Optional, Union
 
 URL: str = "https://github.com/barrust/mediawiki"
 VERSION: str = "0.7.5"
 
-HTTPAuthenticator = Union[Tuple[str, str], Callable[[Any], Any]]
+HTTPAuthenticator = Union[tuple[str, str], Callable[[Any], Any]]
 
 
 @dataclass
@@ -19,7 +19,7 @@ class Configuration:
     _category_prefix: str = field(default="Category", init=False, repr=False)
     _timeout: Optional[float] = field(default=15.0, init=False, repr=False)
     _user_agent: str = field(default=f"python-mediawiki/VERSION-{VERSION}/({URL})/BOT", init=False, repr=False)
-    _proxies: Optional[Dict] = field(default=None, init=False, repr=False)
+    _proxies: Optional[dict] = field(default=None, init=False, repr=False)
     _verify_ssl: Union[bool, str] = field(default=True, init=False, repr=False)
     _rate_limit: bool = field(default=False, init=False, repr=False)
     _rate_limit_min_wait: timedelta = field(default=timedelta(milliseconds=50), init=False, repr=False)
@@ -41,7 +41,7 @@ class Configuration:
         category_prefix: Optional[str] = None,
         timeout: Optional[float] = None,
         user_agent: Optional[str] = None,
-        proxies: Optional[Dict] = None,
+        proxies: Optional[dict] = None,
         verify_ssl: Union[bool, str, None] = None,
         rate_limit: bool = False,
         rate_limit_wait: Optional[timedelta] = None,
@@ -170,13 +170,16 @@ class Configuration:
             Will need to re-log into the MediaWiki if user agent string is changed"""
         self._user_agent = user_agent
 
+        # reset session
+        self._reset_session = True
+
     @property
-    def proxies(self) -> Optional[Dict]:
+    def proxies(self) -> Optional[dict]:
         """dict: Turn on, off, or set proxy use with the Requests library"""
         return self._proxies
 
     @proxies.setter
-    def proxies(self, proxies: Optional[Dict]):
+    def proxies(self, proxies: Optional[dict]):
         """Turn on, off, or set proxy use through the Requests library"""
         self._proxies = proxies if isinstance(proxies, dict) else None
 
